@@ -1,0 +1,111 @@
+<?php
+declare(encoding = "utf-8");
+/**
+ * This file is part of ForwardFW a web application framework.
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ *
+ * PHP version 5
+ *
+ * @category   Request
+ * @package    ForwardFW
+ * @subpackage Main
+ * @author     Alexander Opitz <opitz.alexander@primacom.net>
+ * @copyright  2009 The Authors
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
+ * @version    SVN: $Id: $
+ * @link       http://forwardfw.sourceforge.net
+ * @since      File available since Release 0.0.1
+ */
+
+require_once 'ForwardFW/Object/Timer.php';
+
+/**
+ * This class represents the Response to the browser.
+ *
+ * @category   Request
+ * @package    ForwardFW
+ * @subpackage Main
+ * @author     Alexander Opitz <opitz.alexander@primacom.net>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
+ * @link       http://forwardfw.sourceforge.net
+ */
+class ForwardFW_Response
+{
+    /**
+     * Holds every Log message as string.
+     *
+     * @var ForwardFW_Object_Timer
+     */
+    private $logTimer = null;
+
+    /**
+     * Holds every Error message as string.
+     *
+     * @var ForwardFW_Object_Timer
+     */
+    private $errorTimer = null;
+
+    public function __construct() {
+        $this->logTimer   = new ForwardFW_Object_Timer();
+        $this->errorTimer = clone $this->logTimer;
+    }
+
+    /**
+     * Adds an entry to the log array.
+     *
+     * @param string $strEntry The entry as string.
+     *
+     * @return void
+     */
+    public function addLog($strEntry)
+    {
+        $this->logTimer->addEntry($strEntry);
+    }
+
+    /**
+     * Adds an entry to the error array.
+     *
+     * @param string $strEntry The entry as string.
+     *
+     * @return void
+     */
+    public function addError($strEntry)
+    {
+        $this->errorTimer->addEntry($strEntry);
+    }
+
+    /**
+     * Returns the array with all its log entries.
+     *
+     * @return ForwardFW_Object_Timer The entries in a Timer Object.
+     */
+    public function getErrors()
+    {
+        return $this->errorTimer;
+    }
+
+    /**
+     * Returns the array with all its log entries.
+     *
+     * @return ForwardFW_Object_Timer The entries in a Timer Object.
+     */
+    public function getLogs()
+    {
+        return $this->logTimer;
+    }
+}
+
+?>
