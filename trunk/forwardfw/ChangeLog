@@ -1,0 +1,20 @@
+2010-01-02 Alexander Opitz <opi@gmx.at>
+* Implement getConfigParameter
+* Implement simple getParameter
+* Fix false controller constructor
+* Releasing 0.0.3
+
+2009-12-14 Alexander Opitz <opi@gmx.at>
+* Add Twig Templater
+
+2009-12-07 Alexander Opitz <opi@gmx.at>
+* Add templatizing
+* Releasing 0.0.2
+
+2009-11-10 Alexander Opitz <opi@gmx.at>
+* Add missing Start file.
+* Add Release notes and install informations.
+* Releasing 0.0.1.1
+
+2009-11-09 Alexander Opitz <opi@gmx.at>
+* Releasing 0.0.1

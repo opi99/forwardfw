@@ -1,0 +1,13 @@
+---------------------------------
+ The ForwardFW licensing conditions
+ 2009, Alexander Opitz <opitz.alexander@primacom.net>
+ Document version 1.0.0, 08-2009
+---------------------------------
+
+The ForwardFW project is free software under the terms of the
+GNU General Public License version 2 or any later version.
+The GNU/GPL license (version 2) is found in the file GPL.txt
+
+If you have questions to this license, then take a look into
+http://www.fsf.org/licensing/licenses/gpl-faq.html
+---------------------------------
