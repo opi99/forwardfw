@@ -91,8 +91,12 @@ class ForwardFW_Controller_View extends ForwardFW_Controller
     public function processView()
     {
         $templater = ForwardFW_Templater::factory($this->application);
-        $templater->setTemplateFile('demo.tpl');
-        echo $templater->getCompiled();
+        try {
+            $templater->setTemplateFile('demo.tpl');
+            echo $templater->getCompiled();
+        } catch (Exception $e) {
+            $this->application->response->addError($e->getMessage());
+        }
     }
 }
 ?>
