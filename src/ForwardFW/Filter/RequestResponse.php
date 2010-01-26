@@ -142,7 +142,7 @@ class ForwardFW_Filter_RequestResponse extends ForwardFW_Filter
         ForwardFW_Response $_response
     ) {
         $filter = null;
-        $arConfig = $GLOBALS[get_class()];
+        $arConfig = $GLOBALS[get_class($this)];
         if (is_array($arConfig)) {
             $arConfig = array_reverse($arConfig);
             foreach ($arConfig as $strFilter) {

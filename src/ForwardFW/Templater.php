@@ -75,7 +75,7 @@ class ForwardFW_Templater
     ) {
         if (isset($GLOBALS['ForwardFW_Templater'])) {
             $strTemplaterName = $application->request->getConfigParameter(
-                'Templater', get_class()
+                'Templater', get_class($this)
             );
             include_once str_replace('_', '/', $strTemplaterName) . '.php';
             $templater = new $strTemplaterName($application);

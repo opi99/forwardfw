@@ -69,14 +69,14 @@ class ForwardFW_Controller
     function getParameter($strParameterName)
     {
         return $this->application->request->getParameter(
-            $strParameterName, get_class(), $this->application->getApplicationName()
+            $strParameterName, get_class($this), $this->application->getApplicationName()
         );
     }
 
     function getConfigParameter($strParameterName)
     {
         return $this->application->request->getConfigParameter(
-            $strParameterName, get_class(), $this->application->getApplicationName()
+            $strParameterName, get_class($this), $this->application->getApplicationName()
         );
     }
 }
