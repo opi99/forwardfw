@@ -70,12 +70,12 @@ class ForwardFW_Templater
         return self::$instance;
     }
 
-    static private function createTemplater(
+    final static private function createTemplater(
         ForwardFW_Controller_Application $application
     ) {
         if (isset($GLOBALS['ForwardFW_Templater'])) {
             $strTemplaterName = $application->request->getConfigParameter(
-                'Templater', get_class($this)
+                'Templater', get_class()
             );
             include_once str_replace('_', '/', $strTemplaterName) . '.php';
             $templater = new $strTemplaterName($application);
