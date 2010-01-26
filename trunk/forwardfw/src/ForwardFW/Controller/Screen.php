@@ -59,7 +59,7 @@ class ForwardFW_Controller_Screen extends ForwardFW_Controller
     /**
      * Constructor
      *
-     * @param ForwardFW_Controller_Application The running application.
+     * @param ForwardFW_Controller_Application $_application The running application.
      *
      * @return void
      */
@@ -75,7 +75,7 @@ class ForwardFW_Controller_Screen extends ForwardFW_Controller
      */
     public function process()
     {
-        $this->application->response->addLog('Processing '.get_class());
+        $this->application->response->addLog('Processing ' . get_class($this));
         $this->controlInput();
         $this->processInput();
         $this->controlView();

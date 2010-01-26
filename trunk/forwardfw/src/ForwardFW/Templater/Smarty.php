@@ -62,7 +62,7 @@ class ForwardFW_Templater_Smarty extends ForwardFW_Controller
     ) {
         parent::__construct($application);
 
-        $arConfig = $GLOBALS[get_class()];
+        $arConfig = $GLOBALS[get_class($this)];
 
         $strCompilePath = $arConfig['CompilePath'];
         if (!is_dir($strCompilePath)) {

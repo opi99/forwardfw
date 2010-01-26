@@ -66,7 +66,7 @@ class ForwardFW_Templater_Twig extends ForwardFW_Controller
 
         Twig_Autoloader::register();
 
-        $arConfig = $GLOBALS[get_class()];
+        $arConfig = $GLOBALS[get_class($this)];
 
         $strCompilePath = $arConfig['CompilePath'];
         if (!is_dir($strCompilePath)) {
