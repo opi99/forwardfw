@@ -98,7 +98,7 @@ class ForwardFW_Controller_Application extends ForwardFW_Controller
         parent::__construct($this);
 
         $this->arScreens = $this->getConfigParameter('screens');
-print_r($this->arScreens);
+
         if (count($this->arScreens) === 0) {
             die(
                 'No Screen defined for application: ' . $this->strApplicationName
@@ -114,7 +114,6 @@ print_r($this->arScreens);
     function run()
     {
         $strProcessScreen = $this->getProcessScreen();
-var_dump($this->arScreens);
 
         try {
             $screen = $this->getScreen($strProcessScreen);
