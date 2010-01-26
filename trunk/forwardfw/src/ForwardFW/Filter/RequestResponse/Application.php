@@ -62,7 +62,6 @@ class ForwardFW_Filter_RequestResponse_Application
                 $this->request,
                 $this->response
             );
-            die('K');
             $application->run();
         } else {
             $this->response->addError('No Application');
