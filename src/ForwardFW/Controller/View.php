@@ -59,6 +59,7 @@ class ForwardFW_Controller_View extends ForwardFW_Controller
     public function __construct(ForwardFW_Controller_Application $_application)
     {
         parent::__construct($_application);
+        $this->strViewName = get_class($this);
     }
 
     /**
@@ -92,11 +93,26 @@ class ForwardFW_Controller_View extends ForwardFW_Controller
     {
         $templater = ForwardFW_Templater::factory($this->application);
         try {
-            $templater->setTemplateFile('demo.tpl');
+            $templater->setTemplateFile($this->getTemplateName() . '.tpl');
             echo $templater->getCompiled();
         } catch (Exception $e) {
             $this->application->response->addError($e->getMessage());
         }
+    }
+
+    protected function getTemplateName()
+    {
+        $strTemplateName = '';
+        $nLength = strlen($this->strViewName);
+        $nLastPart = strrpos($this->strViewName, '_');
+        $nPreviewsPart = strrpos($this->strViewName, '_', - ($nLength - $nLastPart + 1) );
+        if ($nPreviewsPart === false) {
+            $nPreviewsPart = -1;
+        }
+        $strTemplateName  = substr ($this->strViewName,  $nPreviewsPart + 1, $nLastPart - $nPreviewsPart - 1);
+        $strTemplateName .= '/';
+        $strTemplateName .= substr ($this->strViewName,  $nLastPart + 1 );
+        return $strTemplateName;
     }
 }
 ?>
