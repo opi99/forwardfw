@@ -105,7 +105,7 @@ class ForwardFW_Controller_Screen extends ForwardFW_Controller
 
     /**
      * Loads Data for views and defines which views to use.
-     * Depends on Viewer, the Views will be processed in order.
+     * strView is used.
      *
      * @return boolean True if screen wants to be viewed. Necessary for MultiApps.
      */
