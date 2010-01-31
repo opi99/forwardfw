@@ -66,6 +66,7 @@ class ForwardFW_Controller_Screen extends ForwardFW_Controller
     public function __construct(ForwardFW_Controller_Application $_application)
     {
         parent::__construct($_application);
+        $this->strView = 'ForwardFW_Controller_View';
     }
 
     /**
@@ -110,7 +111,9 @@ class ForwardFW_Controller_Screen extends ForwardFW_Controller
      */
     public function controlView()
     {
-        $view = new ForwardFW_Controller_View($this->application);
+        $strFile = str_replace('_', '/', $this->strView) . '.php';
+        include_once $strFile;
+        $view = new $this->strView($this->application);
         $this->addView($view);
         return true;
     }
