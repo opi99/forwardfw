@@ -1,3 +1,11 @@
+2010-02-03 Alexander Opitz <opi@gmx.at>
+* Reorganize SVN #14
+* Startable on Windows #17
+* Fix template naming #16
+* Screen needs different views #18
+* SimpleFormDemo #15
+* Releasing 0.0.4
+
 2010-01-02 Alexander Opitz <opi@gmx.at>
 * Implement getConfigParameter
 * Implement simple getParameter
