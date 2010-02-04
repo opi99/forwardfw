@@ -1,8 +1,14 @@
-This is the third runable Release, which won't help you much but will demonstrate
+This is the fourth runable Release, which won't help you much but will demonstrate
 the technics behind this project.
-BaseController, Request/Response, Templater should now on the shape of alpha basics.
-So it would be possible to do small demon applications.
-You'll need the FirePHPCore extension, which you can find on http://www.firephp.org.
-You can use Smarty Template Engine (Version 2 or 3), which you can find on
+How you can see in the demo application most things should now on the shape of alpha basics.
+So it would be possible to play with small applications.
+
+Requirements:
+
+- PHP 5.2.6 or newer
+
+- You'll need the FirePHPCore extension, which you can find on http://www.firephp.org.
+
+- You can use Smarty Template Engine (Version 2 or 3), which you can find on
 http://www.smarty.net or the Twig Template Engine (0.9.5 or newer), which you can
 find on http://www.twig-project.org.
