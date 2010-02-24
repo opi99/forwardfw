@@ -51,7 +51,7 @@ require_once 'ForwardFW/Response.php';
  * @link       http://forwardfw.sourceforge.net
  */
 class ForwardFW_Controller_Application extends ForwardFW_Controller
-    implements ForwardFW_Intervace_Application
+    implements ForwardFW_Interface_Application
 {
     /**
      * Configuration name of application
