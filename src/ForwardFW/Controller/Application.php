@@ -34,6 +34,7 @@ declare(encoding = "utf-8");
  *
  */
 require_once 'ForwardFW/Controller.php';
+require_once 'ForwardFW/Interface/Application.php';
 require_once 'ForwardFW/Request.php';
 require_once 'ForwardFW/Response.php';
 //require_once 'ForwardFW/Exception/Screen.php';
@@ -50,6 +51,7 @@ require_once 'ForwardFW/Response.php';
  * @link       http://forwardfw.sourceforge.net
  */
 class ForwardFW_Controller_Application extends ForwardFW_Controller
+    implements ForwardFW_Intervace_Application
 {
     /**
      * Configuration name of application
