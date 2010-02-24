@@ -47,27 +47,6 @@ declare(encoding = "utf-8");
 interface ForwardFW_Interface_Application
 {
     /**
-     * Configuration name of application
-     *
-     * @var String
-     */
-    protected $strApplicationName;
-
-    /**
-     * The request object.
-     *
-     * @var ForwardFW_Request
-     */
-    public $request;
-
-    /**
-     * The response object.
-     *
-     * @var ForwardFW_Response
-     */
-    public $response;
-
-    /**
      * Constructor
      *
      * @param string             $_strApplicationName Name of application.
@@ -95,9 +74,6 @@ interface ForwardFW_Interface_Application
      *
      * @return string
      */
-    public function getApplicationName()
-    {
-        return $this->strApplicationName;
-    }
+    public function getApplicationName();
 }
 ?>
