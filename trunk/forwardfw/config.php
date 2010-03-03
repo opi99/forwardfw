@@ -34,4 +34,6 @@ $GLOBALS['ForwardFW_Templater_Twig']         = array(
 $GLOBALS['ShortDemo']['screens']             = array(
     'Hello' => 'ForwardFW_Controller_Screen'
 );
+
+date_default_timezone_set('CET');
 ?>
