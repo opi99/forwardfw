@@ -33,7 +33,7 @@ declare(encoding = "utf-8");
 /**
  *
  */
-require_once 'ForwardFW/Controller/Application.php';
+require_once 'ForwardFW/Interface/Application.php';
 
 /**
  * This class holds basic functions for controllers.
@@ -50,18 +50,18 @@ class ForwardFW_Controller
     /**
      * The application object.
      *
-     * @var ForwardFW_Controller_Application
+     * @var ForwardFW_Interface_Application
      */
     protected $application;
 
     /**
      * Constructor
      *
-     * @param ForwardFW_Controller_Application The running application.
+     * @param ForwardFW_Interface_Application The running application.
      *
      * @return void
      */
-    public function __construct(ForwardFW_Controller_Application $_application)
+    public function __construct(ForwardFW_Interface_Application $_application)
     {
         $this->application = $_application;
     }

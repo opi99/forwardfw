@@ -34,7 +34,7 @@ declare(encoding = "utf-8");
  *
  */
 require_once 'ForwardFW/Controller.php';
-require_once 'ForwardFW/Controller/Application.php';
+require_once 'ForwardFW/Interface/Application.php';
 require_once 'ForwardFW/Templater.php';
 
 /**
@@ -52,11 +52,11 @@ class ForwardFW_Controller_View extends ForwardFW_Controller
     /**
      * Constructor
      *
-     * @param ForwardFW_Controller_Application $_application The running application.
+     * @param ForwardFW_Interface_Application $_application The running application.
      *
      * @return void
      */
-    public function __construct(ForwardFW_Controller_Application $_application)
+    public function __construct(ForwardFW_Interface_Application $_application)
     {
         parent::__construct($_application);
         $this->strViewName = get_class($this);
