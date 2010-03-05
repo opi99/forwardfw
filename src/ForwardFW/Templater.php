@@ -74,13 +74,13 @@ class ForwardFW_Templater
         ForwardFW_Controller_Application $application
     ) {
         if (isset($GLOBALS['ForwardFW_Templater'])) {
-            $strTemplaterName = $application->request->getConfigParameter(
+            $strTemplaterName = $application->getRequest()->getConfigParameter(
                 'Templater', get_class()
             );
             include_once str_replace('_', '/', $strTemplaterName) . '.php';
             $templater = new $strTemplaterName($application);
         } else {
-            $this->application->response->addError('No Templater');
+            $this->application->getResponse()->addError('No Templater');
         }
         return $templater;
     }
