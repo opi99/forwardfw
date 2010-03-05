@@ -75,5 +75,20 @@ interface ForwardFW_Interface_Application
      * @return string
      */
     public function getApplicationName();
+
+
+    /**
+     * Returns the request object
+     *
+     * @return ForwardFW_Request
+     */
+    public function getRequest();
+
+    /**
+     * Returns the response object
+     *
+     * @return ForwardFW_Response
+     */
+    public function getResponse();
 }
 ?>

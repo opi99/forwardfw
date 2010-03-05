@@ -77,7 +77,7 @@ class ForwardFW_Controller_Screen extends ForwardFW_Controller_View
      */
     public function process()
     {
-        $this->application->response->addLog('Processing ' . get_class($this));
+        $this->application->getResponse()->addLog('Processing ' . get_class($this));
         $this->controlInput();
         $this->processInput();
         $this->controlView();

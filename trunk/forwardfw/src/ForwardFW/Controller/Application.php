@@ -65,14 +65,14 @@ class ForwardFW_Controller_Application extends ForwardFW_Controller_View
      *
      * @var ForwardFW_Request
      */
-    public $request;
+    protected $request;
 
     /**
      * The response object.
      *
      * @var ForwardFW_Response
      */
-    public $response;
+    protected $response;
 
     /**
      * screens for this application
@@ -179,6 +179,26 @@ class ForwardFW_Controller_Application extends ForwardFW_Controller_View
     public function getApplicationName()
     {
         return $this->strApplicationName;
+    }
+
+    /**
+     * Returns the request object
+     *
+     * @return ForwardFW_Request
+     */
+    public function getRequest()
+    {
+        return $this->request;
+    }
+
+    /**
+     * Returns the response object
+     *
+     * @return ForwardFW_Response
+     */
+    public function getResponse()
+    {
+        return $this->response;
     }
 }
 ?>
