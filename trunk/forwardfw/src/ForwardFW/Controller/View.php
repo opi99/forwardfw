@@ -91,6 +91,7 @@ class ForwardFW_Controller_View extends ForwardFW_Controller
      */
     public function processView()
     {
+        $this->application->getResponse()->addLog('Processing: ' . $this->getTemplateName() . '.tpl');
         $templater = ForwardFW_Templater::factory($this->application);
         try {
             $templater->setTemplateFile($this->getTemplateName() . '.tpl');

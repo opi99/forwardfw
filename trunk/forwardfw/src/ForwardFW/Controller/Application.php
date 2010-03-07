@@ -122,9 +122,6 @@ class ForwardFW_Controller_Application extends ForwardFW_Controller_View
             if (!is_null($screen)) {
                 $screen->process();
                 // @TODO evaluate State of Screen
-
-                // @TODO Nake List
-                $screen->getViews()->process();
             }
         } catch (Exception $e) {
             // Logging
