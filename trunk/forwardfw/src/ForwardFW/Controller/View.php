@@ -65,13 +65,13 @@ class ForwardFW_Controller_View extends ForwardFW_Controller
     /**
      * Processes the View.
      *
-     * @return void
+     * @return string
      */
     public function process()
     {
         $this->application->response->addLog('Processing ' . get_class($this));
         $this->controlView();
-        $this->processView();
+        return $this->processView();
     }
 
     /**
@@ -95,7 +95,7 @@ class ForwardFW_Controller_View extends ForwardFW_Controller
         $templater = ForwardFW_Templater::factory($this->application);
         try {
             $templater->setTemplateFile($this->getTemplateName() . '.tpl');
-            echo $templater->getCompiled();
+            return $templater->getCompiled();
         } catch (Exception $e) {
             $this->application->response->addError($e->getMessage());
         }

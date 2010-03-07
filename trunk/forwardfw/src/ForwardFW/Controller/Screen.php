@@ -130,7 +130,7 @@ class ForwardFW_Controller_Screen extends ForwardFW_Controller_View
     {
         $templater = ForwardFW_Templater::factory($this->application);
         $templater->setVar('VIEW', $this->getViews()->process());
-        parent::processView();
+        echo parent::processView();
     }
 
     /**
