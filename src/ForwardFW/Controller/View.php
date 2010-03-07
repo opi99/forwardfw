@@ -100,6 +100,12 @@ class ForwardFW_Controller_View extends ForwardFW_Controller
         }
     }
 
+    /**
+     * Returns the template name depending on the strViewName
+     * It replaces the underscore with path_slashes.
+     *
+     * @return string Name of the template
+     */
     protected function getTemplateName()
     {
         $strTemplateName = '';
