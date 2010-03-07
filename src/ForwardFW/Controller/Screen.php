@@ -81,6 +81,7 @@ class ForwardFW_Controller_Screen extends ForwardFW_Controller_View
         $this->controlInput();
         $this->processInput();
         $this->controlView();
+        $this->processView();
     }
 
     /**
@@ -116,7 +117,20 @@ class ForwardFW_Controller_Screen extends ForwardFW_Controller_View
         include_once $strFile;
         $view = new $this->strView($this->application);
         $this->addView($view);
+        parent::controlView();
         return true;
+    }
+
+    /**
+     * Processes the View.
+     *
+     * @return void
+     */
+    public function processView()
+    {
+        $templater = ForwardFW_Templater::factory($this->application);
+        $templater->setVar('VIEW', $this->getViews()->process());
+        parent::processView();
     }
 
     /**
