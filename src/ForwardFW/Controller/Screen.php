@@ -73,7 +73,7 @@ class ForwardFW_Controller_Screen extends ForwardFW_Controller_View
     /**
      * Processes the Screen.
      *
-     * @return void
+     * @return string result of View
      */
     public function process()
     {
@@ -81,7 +81,7 @@ class ForwardFW_Controller_Screen extends ForwardFW_Controller_View
         $this->controlInput();
         $this->processInput();
         $this->controlView();
-        $this->processView();
+        return $this->processView();
     }
 
     /**
@@ -124,13 +124,13 @@ class ForwardFW_Controller_Screen extends ForwardFW_Controller_View
     /**
      * Processes the View.
      *
-     * @return void
+     * @return string what to view
      */
     public function processView()
     {
         $templater = ForwardFW_Templater::factory($this->application);
         $templater->setVar('VIEW', $this->getViews()->process());
-        echo parent::processView();
+        return parent::processView();
     }
 
     /**
