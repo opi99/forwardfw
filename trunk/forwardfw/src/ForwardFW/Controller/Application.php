@@ -118,10 +118,10 @@ class ForwardFW_Controller_Application extends ForwardFW_Controller_View
         $strProcessScreen = $this->getProcessScreen();
 
         try {
-            $screen = $this->getScreen($strProcessScreen);
-            if (!is_null($screen)) {
-                $screen->process();
+            $this->screen = $this->getScreen($strProcessScreen);
+            if (!is_null($this->screen)) {
                 // @TODO evaluate State of Screen
+                echo $this->processView();
             }
         } catch (Exception $e) {
             // Logging
@@ -163,9 +163,23 @@ class ForwardFW_Controller_Application extends ForwardFW_Controller_View
                     = new $this->arScreens[$strScreen]($this);
             }
         } else {
-            $this->response->addError('Screen Controller File "'.htmlspecialchars($strFile).'" not found');
+            $this->response->addError(
+                'Screen Controller File "'.htmlspecialchars($strFile).'" not found'
+            );
         }
         return $screenController;
+    }
+
+    /**
+     * Processes the View.
+     *
+     * @return string what to view
+     */
+    public function processView()
+    {
+        $templater = ForwardFW_Templater::factory($this->application);
+        $templater->setVar('SCREEN', $this->screen->process());
+        return parent::processView();
     }
 
     /**
