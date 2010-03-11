@@ -1,10 +1,17 @@
+2010-03-11 Alexander Opitz <opi@gmx.at>
+* Let application and screen instance of view #22
+* Extend application interface #26
+* Use view in application and screen #25
+* Update SimpleFormDemo #24
+* Releasing 0.0.5 #23
+
 2010-02-03 Alexander Opitz <opi@gmx.at>
 * Reorganize SVN #14
 * Startable on Windows #17
 * Fix template naming #16
 * Screen needs different views #18
 * SimpleFormDemo #15
-* Releasing 0.0.4
+* Releasing 0.0.4 #19
 
 2010-01-02 Alexander Opitz <opi@gmx.at>
 * Implement getConfigParameter

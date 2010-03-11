@@ -1,7 +1,7 @@
-This is the fourth runable Release, which won't help you much but will demonstrate
+This is the fifth runable Release, which won't help you much but will demonstrate
 the technics behind this project.
-How you can see in the demo application most things should now on the shape of alpha basics.
-So it would be possible to play with small applications.
+How you can see in the demo application most things should now on the shape of pre-alpha quality.
+So it would be possible to play with it in small applications.
 
 Requirements:
 
