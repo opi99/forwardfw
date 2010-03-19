@@ -1,3 +1,6 @@
+2010-03-19 Alexander Opitz <opi@gmx.at>
+* add Twig Templates #27
+
 2010-03-11 Alexander Opitz <opi@gmx.at>
 * Let application and screen instance of view #22
 * Extend application interface #26

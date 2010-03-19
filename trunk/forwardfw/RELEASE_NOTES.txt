@@ -10,5 +10,5 @@ Requirements:
 - You'll need the FirePHPCore extension, which you can find on http://www.firephp.org.
 
 - You can use Smarty Template Engine (Version 2 or 3), which you can find on
-http://www.smarty.net or the Twig Template Engine (0.9.5 or newer), which you can
+http://www.smarty.net or the Twig Template Engine (0.9.6 or newer), which you can
 find on http://www.twig-project.org.
