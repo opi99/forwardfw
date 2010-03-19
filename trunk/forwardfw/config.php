@@ -23,12 +23,12 @@ $GLOBALS['ForwardFW_Templater']              = array(
 
 $GLOBALS['ForwardFW_Templater_Smarty']       = array(
     'CompilePath'  => getcwd() . '/cache/',
-    'TemplatePath' => getcwd() . '/data/'
+    'TemplatePath' => getcwd() . '/data/templates/smarty'
 );
 
 $GLOBALS['ForwardFW_Templater_Twig']         = array(
     'CompilePath'  => getcwd() . '/cache/',
-    'TemplatePath' => getcwd() . '/data/'
+    'TemplatePath' => getcwd() . '/data/templates/twig'
 );
 
 $GLOBALS['ShortDemo']['screens']             = array(
