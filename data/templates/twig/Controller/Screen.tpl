@@ -1,0 +1,3 @@
+<body>
+{{VIEW}}
+</body>
