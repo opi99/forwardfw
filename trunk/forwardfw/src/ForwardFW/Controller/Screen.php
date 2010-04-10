@@ -53,9 +53,9 @@ class ForwardFW_Controller_Screen extends ForwardFW_Controller_View
     /**
      * The View which should be used.
      *
-     * @var ForwardFW_Controller_View
+     * @var ArrayObject of ForwardFW_Controller_View
      */
-    private $view;
+    private $views;
 
     /**
      * Constructor
@@ -67,6 +67,7 @@ class ForwardFW_Controller_Screen extends ForwardFW_Controller_View
     public function __construct(ForwardFW_Interface_Application $_application)
     {
         parent::__construct($_application);
+        $this->views = new ArrayObject();
         $this->strView = 'ForwardFW_Controller_View';
     }
 
@@ -129,22 +130,25 @@ class ForwardFW_Controller_Screen extends ForwardFW_Controller_View
     public function processView()
     {
         $templater = ForwardFW_Templater::factory($this->application);
-        $templater->setVar('VIEW', $this->getViews()->process());
+        foreach ($this->views as $view) {
+            $templater->setVar(
+                'VIEW_' . strtoupper($view->strViewName),
+                $view->process()
+            );
+        }
         return parent::processView();
     }
 
     /**
      * Adds a view to the list of views.
      *
-     * @param ForwardFW_Controller_View $_view The view to add.
+     * @param ForwardFW_Controller_View $view The view to add.
      *
      * @return ForwardFW_Controller_Screen This Screen.
-     *
-     * @TODO Implement as List.
      */
-    protected function addView(ForwardFW_Controller_View $_view)
+    protected function addView(ForwardFW_Controller_View $view)
     {
-        $this->view = $_view;
+        $this->views->append($view);
         return $this;
     }
 
@@ -152,13 +156,11 @@ class ForwardFW_Controller_Screen extends ForwardFW_Controller_View
     /**
      * Returns the list of views to show.
      *
-     * @return ForwardFW_Controller_View The list of views.
-     *
-     * @TODO Implement as List.
+     * @return ArrayObject of ForwardFW_Controller_View The list of views.
      */
     public function getViews()
     {
-        return $this->view;
+        return $this->views;
     }
 }
 ?>
