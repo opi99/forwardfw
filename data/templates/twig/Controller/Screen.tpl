@@ -1,3 +1,3 @@
 <body>
-{{VIEW}}
+{{VIEW_FORWARDFW_CONTROLLER_VIEW}}
 </body>
