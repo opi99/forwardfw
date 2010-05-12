@@ -111,7 +111,7 @@ class ForwardFW_Controller_Application extends ForwardFW_Controller_View
     /**
      * Run screen and return generated content
      *
-     * @return string generated content form screens
+     * @return void
      */
     function run()
     {
@@ -121,12 +121,13 @@ class ForwardFW_Controller_Application extends ForwardFW_Controller_View
             $this->screen = $this->getScreen($strProcessScreen);
             if (!is_null($this->screen)) {
                 // @TODO evaluate State of Screen
-                echo $this->processView();
+                $strResult = $this->processView();
             }
         } catch (Exception $e) {
             // Logging
             throw $e;
         }
+        $this->response->addContent($strResult);
     }
 
     /**
