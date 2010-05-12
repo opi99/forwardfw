@@ -11,5 +11,6 @@ $response = new ForwardFW_Response();
 ob_start();
 ForwardFW_Filter_RequestResponse::getFilters($request, $response)
     ->doFilter();
+echo $response->getContent();
 ob_flush();
 ?>
