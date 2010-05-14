@@ -137,7 +137,10 @@ class ForwardFW_Controller_Application extends ForwardFW_Controller_View
      */
     function getProcessScreen()
     {
-        $strProcessScreen = reset(array_keys($this->arScreens));
+        $strProcessScreen = $this->getParameter('screen');
+        if (!isset($this->arScreens[$strProcessScreen])) {
+            $strProcessScreen = reset(array_keys($this->arScreens));
+        }
         return $strProcessScreen;
     }
 
