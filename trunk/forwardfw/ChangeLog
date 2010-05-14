@@ -1,3 +1,13 @@
+2010-05-12 Alexander Opitz <opi@gmx.at>
+* Add loadView Function for Screens. #35
+* Multiple Screens. #30
+
+2010-05-12 Alexander Opitz <opi@gmx.at>
+* Move content output out of application #34
+
+2010-04-10 Alexander Opitz <opi@gmx.at>
+* Multiple Views per Screen #29
+
 2010-04-10 Alexander Opitz <opi@gmx.at>
 * Multiple Views per Screen #29
 
