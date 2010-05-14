@@ -114,9 +114,7 @@ class ForwardFW_Controller_Screen extends ForwardFW_Controller_View
      */
     public function controlView()
     {
-        $strFile = str_replace('_', '/', $this->strView) . '.php';
-        include_once $strFile;
-        $view = new $this->strView($this->application);
+        $view = $this->loadView($this->strView);
         $this->addView($view);
         parent::controlView();
         return true;
@@ -152,6 +150,20 @@ class ForwardFW_Controller_Screen extends ForwardFW_Controller_View
         return $this;
     }
 
+    /**
+     * Loads the view by its Name.
+     *
+     * @param String $strView Name of the View.
+     *
+     * @return ForwardFW_Controller_View The instance of the view.
+     */
+    protected function loadView($strView)
+    {
+        $strFile = str_replace('_', '/', $strView) . '.php';
+        include_once $strFile;
+        $view = new $strView($this->application);
+        return $view;
+    }
 
     /**
      * Returns the list of views to show.
