@@ -1,7 +1,9 @@
-This is the fifth runable Release, which won't help you much but will demonstrate
+This is the sixth runable Release, which won't help you much but will demonstrate
 the technics behind this project.
 How you can see in the demo application most things should now on the shape of pre-alpha quality.
 So it would be possible to play with it in small applications.
+Every application can have now multiple screens and every screen can have multiple views.
+The next Version should be able to use DataLoaders.
 
 Requirements:
 
