@@ -47,7 +47,7 @@ declare(encoding = "utf-8");
 interface ForwardFW_Interface_DataLoader {
 
     public function __construct(
-        ForwardFW_Controller_Application $application
+        ForwardFW_Interface_Application $_application)
     );
 
     /**
@@ -60,7 +60,7 @@ interface ForwardFW_Interface_DataLoader {
      * @return mixed The response Data
      */
     public function loadFromCached(
-        $strConnection, array $options, $nCacheTimeout = -1
+        $strConnection, array $arOptions, $nCacheTimeout = -1
     );
 
     /**
@@ -71,8 +71,7 @@ interface ForwardFW_Interface_DataLoader {
      *
      * @return mixed The response Data
      */
-    public function loadFrom($strConnection, array $options);
-
+    public function loadFrom($strConnection, array $arOptions);
 
     /**
      * Save method.
@@ -83,7 +82,7 @@ interface ForwardFW_Interface_DataLoader {
      * @return boolean 
      */
     public function saveTo($strConnection, array $options);
-    
+
     /**
      * Initialize the given connection.
      *
