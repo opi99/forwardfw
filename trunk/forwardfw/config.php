@@ -31,6 +31,17 @@ $GLOBALS['ForwardFW_Templater_Twig']         = array(
     'TemplatePath' => getcwd() . '/data/templates/twig'
 );
 
+$GLOBALS['ForwardFW_Controller_DataLoader']  = array(
+    'default' => array(
+        'type' => 'MDB2',
+        'config' => array(
+            'dsn' => 'mysql://root@localhost/forwardfw',
+            'options' => array(),
+            'prefix'  => '',
+        ),
+    ),
+);
+
 $GLOBALS['ShortDemo']['screens']             = array(
     'Hello' => 'ForwardFW_Controller_Screen'
 );
