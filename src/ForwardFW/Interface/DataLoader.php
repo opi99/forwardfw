@@ -44,10 +44,11 @@ declare(encoding = "utf-8");
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @link       http://forwardfw.sourceforge.net
  */
-interface ForwardFW_Interface_DataLoader {
+interface ForwardFW_Interface_DataLoader
+{
 
     public function __construct(
-        ForwardFW_Interface_Application $_application)
+        ForwardFW_Interface_Application $_application
     );
 
     /**
@@ -90,6 +91,6 @@ interface ForwardFW_Interface_DataLoader {
      *
      * @return void
      */
-    protected function init($strConnection);
+    public function init($strConnection);
 }
 ?>
