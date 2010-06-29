@@ -35,7 +35,7 @@ $GLOBALS['ForwardFW_Controller_DataLoader']  = array(
     'default' => array(
         'type' => 'MDB2',
         'config' => array(
-            'dsn' => 'mysql://root@localhost/forwardfw',
+            'dsn' => 'mysql://john:doe@localhost/forwardfw',
             'options' => array(),
             'prefix'  => '',
         ),
