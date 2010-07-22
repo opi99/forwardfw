@@ -44,7 +44,7 @@ declare(encoding = "utf-8");
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @link       http://forwardfw.sourceforge.net
  */
-interface ForwardFW_Interface_DataLoader
+interface ForwardFW_Interface_DataHandler
 {
 
     public function __construct(
