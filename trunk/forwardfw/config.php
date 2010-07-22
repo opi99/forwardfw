@@ -31,14 +31,22 @@ $GLOBALS['ForwardFW_Templater_Twig']         = array(
     'TemplatePath' => getcwd() . '/data/templates/twig'
 );
 
-$GLOBALS['ForwardFW_Controller_DataLoader']  = array(
+$GLOBALS['ForwardFW_Controller_DataHandler']  = array(
     'default' => array(
-        'type' => 'MDB2',
+        'handler' => 'ForwardFW_Controller_DataHandler_MDB2',
         'config' => array(
             'dsn' => 'mysql://john:doe@localhost/forwardfw',
             'options' => array(),
             'prefix'  => '',
         ),
+    ),
+);
+
+$GLOBALS['ForwardFW_Controller_DataHandler_MDB2']  = array(
+    'default' => array(
+        'dsn' => 'mysql://john:doe@localhost/forwardfw',
+        'options' => array(),
+        'prefix'  => null,
     ),
 );
 

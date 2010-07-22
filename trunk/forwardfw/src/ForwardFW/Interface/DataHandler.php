@@ -67,8 +67,8 @@ interface ForwardFW_Interface_DataHandler
     /**
      * Load method.
      *
-     * @param string  $strConnection Name of connection defined in conf.
-     * @param array   $options       Operations for this load.
+     * @param string $strConnection Name of connection defined in conf.
+     * @param array  $options       Operations for this load.
      *
      * @return mixed The response Data
      */
@@ -77,8 +77,8 @@ interface ForwardFW_Interface_DataHandler
     /**
      * Save method.
      *
-     * @param string  $strConnection Name of connection defined in conf.
-     * @param array   $options       Operations for the saving.
+     * @param string $strConnection Name of connection defined in conf.
+     * @param array  $options       Operations for the saving.
      *
      * @return boolean 
      */
@@ -87,10 +87,10 @@ interface ForwardFW_Interface_DataHandler
     /**
      * Initialize the given connection.
      *
-     * @param string  $strConnection Name of connection defined in conf.
+     * @param string $strConnection Name of connection defined in conf.
      *
      * @return void
      */
-    public function init($strConnection);
+    public function initConnection($strConnection);
 }
 ?>
