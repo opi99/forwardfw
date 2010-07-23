@@ -215,5 +215,15 @@ class ForwardFW_Controller_Application extends ForwardFW_Controller_View
     {
         return $this->response;
     }
+
+    /**
+     * Returns the screen configuration for this application.
+     *
+     * @return array With the config entry
+     */
+    public function getScreens()
+    {
+        return $this->arScreens;
+    }
 }
 ?>
