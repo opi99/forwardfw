@@ -1,1 +1,1 @@
-Simple Demo version 0.0.6
+Simple Demo version: {$ForwardFW_Version}

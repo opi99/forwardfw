@@ -6,6 +6,10 @@ ini_set('display_errors', true);
 ini_set('include_path', dirname(__FILE__) . DIRECTORY_SEPARATOR . 'src' . PATH_SEPARATOR . ini_get('include_path'));
 ini_set('include_path', dirname(__FILE__) . DIRECTORY_SEPARATOR . 'libs' . PATH_SEPARATOR . ini_get('include_path'));
 
+$GLOBALS['ForwardFW'] = array(
+    'Version' => '0.0.7',
+);
+
 $GLOBALS['ForwardFW_Filter_RequestResponse'] = array(
     'ForwardFW_Filter_RequestResponse_FirePHP',
     'ForwardFW_Filter_RequestResponse_Application',

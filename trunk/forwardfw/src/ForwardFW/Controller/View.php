@@ -93,6 +93,7 @@ class ForwardFW_Controller_View extends ForwardFW_Controller
     {
         $this->application->getResponse()->addLog('Processing: ' . $this->getTemplateName() . '.tpl');
         $templater = ForwardFW_Templater::factory($this->application);
+        $templater->setVar('ForwardFW_Version', $GLOBALS['ForwardFW']['Version']);
         try {
             $templater->setTemplateFile($this->getTemplateName() . '.tpl');
             return $templater->getCompiled();
