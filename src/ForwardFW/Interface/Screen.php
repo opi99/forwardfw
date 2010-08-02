@@ -49,11 +49,11 @@ interface ForwardFW_Interface_Screen
     /**
      * Constructor
      *
-     * @param ForwardFW_Interface_Application $_application The running application.
+     * @param ForwardFW_Interface_Application $application The running application.
      *
      * @return void
      */
-    public function __construct(ForwardFW_Interface_Application $_application);
+    public function __construct(ForwardFW_Interface_Application $application);
 
 }
 ?>

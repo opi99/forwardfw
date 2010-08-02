@@ -65,7 +65,13 @@ class ForwardFW_Response
      */
     private $strContent = '';
 
-    public function __construct() {
+    /**
+     * Constructor
+     *
+     * @return void
+     */
+    public function __construct()
+    {
         $this->logTimer   = new ForwardFW_Object_Timer();
         $this->errorTimer = clone $this->logTimer;
     }

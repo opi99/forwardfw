@@ -57,26 +57,30 @@ class ForwardFW_Controller
     /**
      * Constructor
      *
-     * @param ForwardFW_Interface_Application The running application.
+     * @param ForwardFW_Interface_Application $application The running application.
      *
      * @return void
      */
-    public function __construct(ForwardFW_Interface_Application $_application)
+    public function __construct(ForwardFW_Interface_Application $application)
     {
-        $this->application = $_application;
+        $this->application = $application;
     }
 
     function getParameter($strParameterName)
     {
         return $this->application->getRequest()->getParameter(
-            $strParameterName, get_class($this), $this->application->getApplicationName()
+            $strParameterName,
+            get_class($this),
+            $this->application->getName()
         );
     }
 
     function getConfigParameter($strParameterName)
     {
         return $this->application->getRequest()->getConfigParameter(
-            $strParameterName, get_class($this), $this->application->getApplicationName()
+            $strParameterName,
+            get_class($this),
+            $this->application->getName()
         );
     }
 }

@@ -23,7 +23,7 @@ declare(encoding = "utf-8");
  * @package    ForwardFW
  * @subpackage Controller
  * @author     Alexander Opitz <opitz.alexander@primacom.net>
- * @copyright  2009, 2010 The Authors
+ * @copyright  2009-2010 The Authors
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @version    SVN: $Id: $
  * @link       http://forwardfw.sourceforge.net
@@ -49,27 +49,37 @@ require_once 'ForwardFW/Interface/Application.php';
 class ForwardFW_Controller_DataHandler extends ForwardFW_Controller
     implements ForwardFW_Interface_DataHandler
 {
+    /**
+     * @var array Cache of connections
+     */
     var $arConnectionCache = array();
 
     /**
      * Constructor
      *
-     * @param ForwardFW_Interface_Application $_application The running application.
+     * @param ForwardFW_Interface_Application $application The running application.
      *
      * @return void
      */
-    public function __construct(ForwardFW_Interface_Application $_application)
+    public function __construct(ForwardFW_Interface_Application $application)
     {
-        parent::__construct($_application);
+        parent::__construct($application);
     }
 
-    public static function getInstance(ForwardFW_Interface_Application $_application)
+    /**
+     * Returns an instance of configured DataHandler.
+     *
+     * @param ForwardFW_Interface_Application $application The running application.
+     *
+     * @return void
+     */
+    public static function getInstance(ForwardFW_Interface_Application $application)
     {
         if (isset($GLOBALS['DataLoader']['instance'][$application])) {
-            $return = $GLOBALS['DataLoader']['instance'][$application];
+            $return = $GLOBALS['DataLoader']['instance'][$application->getName()];
         } else {
-            $return = new ForwardFW_Controller_DataHandler($_application);
-            $GLOBALS['DataLoader']['instance'][$application] = $return;
+            $return = new ForwardFW_Controller_DataHandler($application);
+            $GLOBALS['DataLoader']['instance'][$application->getName()] = $return;
         }
         return $return;
     }
@@ -123,10 +133,8 @@ class ForwardFW_Controller_DataHandler extends ForwardFW_Controller
             );
         }
 
-
         $this->arConnectionCache[$strConnection] = $handler;
     }
-
 }
 
 ?>

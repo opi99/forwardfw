@@ -23,7 +23,7 @@ declare(encoding = "utf-8");
  * @package    ForwardFW
  * @subpackage Interface
  * @author     Alexander Opitz <opitz.alexander@primacom.net>
- * @copyright  2009 The Authors
+ * @copyright  2009-2010 The Authors
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @version    SVN: $Id: $
  * @link       http://forwardfw.sourceforge.net
@@ -49,16 +49,16 @@ interface ForwardFW_Interface_Application
     /**
      * Constructor
      *
-     * @param string             $_strApplicationName Name of application.
-     * @param ForwardFW_Request  $_request            The ForwardFW request object.
-     * @param ForwardFW_Response $_response           The ForwardFW response object.
+     * @param string             $strName  Name of application.
+     * @param ForwardFW_Request  $request  The ForwardFW request object.
+     * @param ForwardFW_Response $response The ForwardFW response object.
      *
      * @return void
      */
     public function __construct(
-        $_strApplicationName,
-        ForwardFW_Request $_request,
-        ForwardFW_Response $_response
+        $strName,
+        ForwardFW_Request $request,
+        ForwardFW_Response $response
     );
 
     /**
@@ -74,7 +74,7 @@ interface ForwardFW_Interface_Application
      *
      * @return string
      */
-    public function getApplicationName();
+    public function getName();
 
 
     /**

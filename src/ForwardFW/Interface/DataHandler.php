@@ -46,16 +46,22 @@ declare(encoding = "utf-8");
  */
 interface ForwardFW_Interface_DataHandler
 {
-
+    /**
+     * Constructor
+     *
+     * @param ForwardFW_Interface_Application $application The running application
+     *
+     * @return void
+     */
     public function __construct(
-        ForwardFW_Interface_Application $_application
+        ForwardFW_Interface_Application $application
     );
 
     /**
      * Calls the loading if it isn't in cache or cache timed out.
      *
      * @param string  $strConnection Name of connection defined in conf.
-     * @param array   $options       Operations for this load.
+     * @param array   $arOptions     Operations for this load.
      * @param integer $nCacheTimeout Cache lifetime, -1 to use default.
      *
      * @return mixed The response Data
@@ -68,7 +74,7 @@ interface ForwardFW_Interface_DataHandler
      * Load method.
      *
      * @param string $strConnection Name of connection defined in conf.
-     * @param array  $options       Operations for this load.
+     * @param array  $arOptions     Operations for this load.
      *
      * @return mixed The response Data
      */
