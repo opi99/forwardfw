@@ -23,7 +23,7 @@ declare(encoding = "utf-8");
  * @package    ForwardFW
  * @subpackage Templater
  * @author     Alexander Opitz <opitz.alexander@primacom.net>
- * @copyright  2009 The Authors
+ * @copyright  2009-2010 The Authors
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @version    SVN: $Id: $
  * @link       http://forwardfw.sourceforge.net
@@ -53,12 +53,30 @@ require_once 'Twig/Autoloader.php';
 class ForwardFW_Templater_Twig extends ForwardFW_Controller
     implements ForwardFW_Interface_Templater
 {
-
+    /**
+     * @var Twig_Environment The Twig instance
+     */
     private $twigEnvironment = null;
+
+    /**
+     * @var Twig_Template The loaded template
+     */
     private $twigTemplate = null;
+
+    /**
+     * @var array The array of vars for the template
+     */
     private $arVars = array();
+
     private $arShowBlocks = array();
 
+    /**
+     * Constructor
+     *
+     * @param ForwardFW_Controller_Application $application The running application
+     *
+     * @return void
+     */
     public function __construct(
         ForwardFW_Controller_Application $application
     ) {
