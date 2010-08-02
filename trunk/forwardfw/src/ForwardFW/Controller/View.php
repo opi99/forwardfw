@@ -91,7 +91,9 @@ class ForwardFW_Controller_View extends ForwardFW_Controller
      */
     public function processView()
     {
-        $this->application->getResponse()->addLog('Processing: ' . $this->getTemplateName() . '.tpl');
+        $this->application->getResponse()->addLog(
+            'Processing: ' . $this->getTemplateName() . '.tpl'
+        );
         $templater = ForwardFW_Templater::factory($this->application);
         $templater->setVar('ForwardFW_Version', $GLOBALS['ForwardFW']['Version']);
         try {
@@ -113,13 +115,17 @@ class ForwardFW_Controller_View extends ForwardFW_Controller
         $strTemplateName = '';
         $nLength = strlen($this->strViewName);
         $nLastPart = strrpos($this->strViewName, '_');
-        $nPreviewsPart = strrpos($this->strViewName, '_', - ($nLength - $nLastPart + 1) );
+        $nPreviewsPart = strrpos(
+            $this->strViewName, '_', -($nLength - $nLastPart + 1)
+        );
         if ($nPreviewsPart === false) {
             $nPreviewsPart = -1;
         }
-        $strTemplateName  = substr ($this->strViewName,  $nPreviewsPart + 1, $nLastPart - $nPreviewsPart - 1);
+        $strTemplateName  = substr(
+            $this->strViewName, $nPreviewsPart + 1, $nLastPart - $nPreviewsPart - 1
+        );
         $strTemplateName .= '/';
-        $strTemplateName .= substr ($this->strViewName,  $nLastPart + 1 );
+        $strTemplateName .= substr($this->strViewName, $nLastPart + 1);
         return $strTemplateName;
     }
 }

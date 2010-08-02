@@ -44,10 +44,10 @@ declare(encoding = "utf-8");
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @link       http://forwardfw.sourceforge.net
  */
-interface ForwardFW_Interface_Templater {
-
+interface ForwardFW_Interface_Templater
+{
     public function __construct(
-        ForwardFW_Controller_Application $application
+        ForwardFW_Interface_Application $application
     );
 
     public function setTemplateFile($_strFile);

@@ -23,7 +23,7 @@ declare(encoding = "utf-8");
  * @package    ForwardFW
  * @subpackage Controller
  * @author     Alexander Opitz <opitz.alexander@primacom.net>
- * @copyright  2009 The Authors
+ * @copyright  2009-2010 The Authors
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @version    SVN: $Id: $
  * @link       http://forwardfw.sourceforge.net
@@ -58,7 +58,7 @@ class ForwardFW_Controller_Application extends ForwardFW_Controller_View
      *
      * @var String
      */
-    protected $strApplicationName;
+    protected $strName;
 
     /**
      * The request object.
@@ -84,18 +84,20 @@ class ForwardFW_Controller_Application extends ForwardFW_Controller_View
     /**
      * Constructor
      *
-     * @param string $_strApplicationName name of application
+     * @param string             $strName  Name of application
+     * @param ForwardFW_Request  $request  The request object.
+     * @param ForwardFW_Response $response The request object.
      *
      * @return void
      */
     public function __construct(
-        $_strApplicationName,
-        ForwardFW_Request $_request,
-        ForwardFW_Response $_response
+        $strName,
+        ForwardFW_Request $request,
+        ForwardFW_Response $response
     ) {
-        $this->strApplicationName = $_strApplicationName;
-        $this->request            = $_request;
-        $this->response           = $_response;
+        $this->strName = $strName;
+        $this->request            = $request;
+        $this->response           = $response;
 
         parent::__construct($this);
 
@@ -103,7 +105,7 @@ class ForwardFW_Controller_Application extends ForwardFW_Controller_View
 
         if (count($this->arScreens) === 0) {
             die(
-                'No Screen defined for application: ' . $this->strApplicationName
+                'No Screen defined for application: ' . $this->strName
             );
         }
     }
@@ -191,9 +193,9 @@ class ForwardFW_Controller_Application extends ForwardFW_Controller_View
      *
      * @return string
      */
-    public function getApplicationName()
+    public function getName()
     {
-        return $this->strApplicationName;
+        return $this->strName;
     }
 
     /**

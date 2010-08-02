@@ -23,7 +23,7 @@ declare(encoding = "utf-8");
  * @package    ForwardFW
  * @subpackage RequestResponse
  * @author     Alexander Opitz <opitz.alexander@primacom.net>
- * @copyright  2009 The Authors
+ * @copyright  2009-2010 The Authors
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @version    SVN: $Id: $
  * @link       http://forwardfw.sourceforge.net
@@ -51,7 +51,8 @@ class ForwardFW_Filter_RequestResponse_Application
      *
      * @return void
      */
-    public function doIncomingFilter() {
+    public function doIncomingFilter()
+    {
         $this->response->addLog('Start Application');
         if (isset($GLOBALS['ForwardFW_Application'])) {
             $strApplicationClass = $GLOBALS['ForwardFW_Application']['class'];
@@ -73,7 +74,8 @@ class ForwardFW_Filter_RequestResponse_Application
      *
      * @return void
      */
-    public function doOutgoingFilter() {
+    public function doOutgoingFilter()
+    {
         $this->response->addLog('End Application');
     }
 }

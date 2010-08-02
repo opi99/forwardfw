@@ -23,7 +23,7 @@ declare(encoding = "utf-8");
  * @package    ForwardFW
  * @subpackage Controller/DataHandler
  * @author     Alexander Opitz <opitz.alexander@primacom.net>
- * @copyright  2009, 2010 The Authors
+ * @copyright  2009-2010 The Authors
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @version    SVN: $Id: $
  * @link       http://forwardfw.sourceforge.net
@@ -113,7 +113,6 @@ class ForwardFW_Controller_DataHandler_MDB2 extends ForwardFW_Controller_DataHan
 
     public function initConnection($strConnection)
     {
-//        $this->arScreens = $this->getConfigParameter('screens');
         $strTablePrefix = $this->getConfigParameter('options');// @TODO depends on connectionName
 
         $arConfig = $this->getConfigParameter($strConnection);

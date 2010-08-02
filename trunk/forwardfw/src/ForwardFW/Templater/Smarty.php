@@ -63,12 +63,12 @@ class ForwardFW_Templater_Smarty extends ForwardFW_Controller
     /**
      * Constructor
      *
-     * @param ForwardFW_Controller_Application $application The running application
+     * @param ForwardFW_Interface_Application $application The running application
      *
      * @return void
      */
     public function __construct(
-        ForwardFW_Controller_Application $application
+        ForwardFW_Interface_Application $application
     ) {
         parent::__construct($application);
 

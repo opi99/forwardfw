@@ -23,7 +23,7 @@ declare(encoding = "utf-8");
  * @package    ForwardFW
  * @subpackage Object
  * @author     Alexander Opitz <opitz.alexander@primacom.net>
- * @copyright  2009 The Authors
+ * @copyright  2009-2010 The Authors
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @version    SVN: $Id: $
  * @link       http://forwardfw.sourceforge.net
@@ -75,22 +75,21 @@ class ForwardFW_Object_Timer extends ForwardFW_Object
     /**
      * Starts the timer
      *
-     * @param string $_strName
+     * @param string $strName Name to identify Timer on output
      *
-     * @return new instance
+     * @return void
      */
-    public function __construct($_strName = '') {
+    public function __construct($strName = '')
+    {
         parent::__construct();
-        $this->strName = $_strName;
+        $this->strName = $strName;
         $this->nTimeStart = microtime(true);
     }
 
     /**
      * Set new start time and resets entries
      *
-     * @param string $_strName
-     *
-     * @return ForwardFW_Object_Timer
+     * @return ForwardFW_Object_Timer The timer object
      */
     public function reStart()
     {
