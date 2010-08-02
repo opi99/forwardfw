@@ -23,7 +23,7 @@ declare(encoding = "utf-8");
  * @package    ForwardFW
  * @subpackage Templater
  * @author     Alexander Opitz <opitz.alexander@primacom.net>
- * @copyright  2009 The Authors
+ * @copyright  2009-2010 The Authors
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @version    SVN: $Id: $
  * @link       http://forwardfw.sourceforge.net
@@ -53,10 +53,20 @@ require_once 'Smarty/Smarty.class.php';
 class ForwardFW_Templater_Smarty extends ForwardFW_Controller
     implements ForwardFW_Interface_Templater
 {
-
+    /**
+     * @var Smarty The smarty instance
+     */
     private $smarty = null;
+
     private $arShowBlocks = array();
 
+    /**
+     * Constructor
+     *
+     * @param ForwardFW_Controller_Application $application The running application
+     *
+     * @return void
+     */
     public function __construct(
         ForwardFW_Controller_Application $application
     ) {
