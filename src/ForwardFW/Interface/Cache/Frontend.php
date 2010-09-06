@@ -36,6 +36,7 @@ declare(encoding = "utf-8");
 require_once 'ForwardFW/Config/CacheData.php';
 require_once 'ForwardFW/Config/CacheSystem.php';
 require_once 'ForwardFW/Interface/Application.php';
+require_once 'ForwardFW/Interface/Cache/Backend.php';
 
 /**
  * Interface for a Cache.
@@ -47,20 +48,23 @@ require_once 'ForwardFW/Interface/Application.php';
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @link       http://forwardfw.sourceforge.net
  */
-interface ForwardFW_Interface_Cache
+interface ForwardFW_Interface_Cache_Frontend
 {
     /**
      * Constructor
      *
-     * @param ForwardFW_Interface_Application $application The running application
+     * @param ForwardFW_Interface_Application   $application The running application.
+     * @param ForwardFW_Interface_Cache_Backend $backend     Backend for storing
+     *                                                       cache data.
      *
      * @return void
      */
     public function __construct(
-        ForwardFW_Interface_Application $application
+        ForwardFW_Interface_Application $application,
+        ForwardFW_Interface_Cache_Backend $backend
     );
 
-    public function getInstance(
+    static public function getInstance(
         ForwardFW_Interface_Application $application,
         ForwardFW_Config_CacheSystem $config
     );

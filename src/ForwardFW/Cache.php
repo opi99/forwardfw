@@ -36,7 +36,8 @@ declare(encoding = "utf-8");
 require_once 'ForwardFW/Config/CacheData.php';
 require_once 'ForwardFW/Config/CacheSystem.php';
 require_once 'ForwardFW/Interface/Application.php';
-require_once 'ForwardFW/Interface/Cache.php';
+require_once 'ForwardFW/Interface/Cache/Frontend.php';
+require_once 'ForwardFW/Interface/Cache/Backend.php';
 
 /**
  * Interface for a Cache.
@@ -48,7 +49,7 @@ require_once 'ForwardFW/Interface/Cache.php';
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @link       http://forwardfw.sourceforge.net
  */
-class ForwardFW_Cache implements ForwardFW_Interface_Cache
+class ForwardFW_Cache implements ForwardFW_Interface_Cache_Frontend
 {
     /**
      * Constructor
@@ -58,20 +59,49 @@ class ForwardFW_Cache implements ForwardFW_Interface_Cache
      * @return void
      */
     public function __construct(
-        ForwardFW_Interface_Application $application
+        ForwardFW_Interface_Application $application,
+        ForwardFW_Interface_Cache_Backend $backend
     ) {
         $this->application = $application;
+        $this->config = $config;
     }
 
-    public function getInstance(
+    static public function getInstance(
         ForwardFW_Interface_Application $application,
         ForwardFW_Config_CacheSystem $config
     ) {
-        if (isset($GLOBALS['Cache']['instance'][$application])) {
-            $return = $GLOBALS['Cache']['instance'][$application->getName()];
+        $backend = self::getBackend($application, $config);
+        $frontend = self::getFrontend($application, $config, $backend);
+        return $frontend;
+    }
+
+    static public function getBackend(
+        ForwardFW_Interface_Application $application,
+        ForwardFW_Config_CacheSystem $config
+    ) {
+        $class = $config->getCacheBackend();
+        if (isset($GLOBALS['Cache']['backend'][$class])) {
+            $return = $GLOBALS['Cache']['backend'][$class];
         } else {
-            $return = new $config->strCacheFrontend($application);
-            $GLOBALS['Cache']['instance'][$application->getName()] = $return;
+            include_once str_replace('_', '/', $class) . '.php';
+            $return = new $class($application, $backend);
+            $GLOBALS['Cache']['backend'][$class] = $return;
+        }
+        return $return;
+    }
+
+    static public function getFrontend(
+        ForwardFW_Interface_Application $application,
+        ForwardFW_Config_CacheSystem $config,
+        ForwardFW_Interface_Cache_Backend $backend
+    ) {
+        $class = $config->getCacheFrontend();
+        if (isset($GLOBALS['Cache']['frontend'][$class])) {
+            $return = $GLOBALS['Cache']['frontend'][$class];
+        } else {
+            include_once str_replace('_', '/', $class) . '.php';
+            $return = new $class($application, $backend);
+            $GLOBALS['Cache']['frontend'][$class] = $return;
         }
         return $return;
     }

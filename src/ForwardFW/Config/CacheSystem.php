@@ -47,9 +47,46 @@ require_once 'ForwardFW/Config.php';
  */
 class ForwardFW_Config_CacheSystem extends ForwardFW_Config
 {
-    public $strCacheFrontend;
-    public $strCacheBackend;
-    public $arFrontendConfig;
-    public $arBackendConfig;
+    /**
+     * @var string Class Name of Cache Frontend
+     */
+    private $strCacheFrontend = '';
+
+    /**
+     * @var string Class Name of Cache Backend
+     */
+    private $strCacheBackend = '';
+
+    /**
+     * @var ForwardFW_Config_Cache_Frontend Configuration for Cache Frontend
+     */
+    private $arFrontendConfig = null;
+
+    /**
+     * @var ForwardFW_Config_Cache_Backend Configuration for Cache Backend
+     */
+    private $arBackendConfig = null;
+
+    public function setCacheFrontend($strCacheFrontend)
+    {
+        $this->strCacheFrontend = $strCacheFrontend;
+        return $this;
+    }
+
+    public function setCacheBackend($strCacheBackend)
+    {
+        $this->strCacheBackend = $strCacheBackend;
+        return $this;
+    }
+
+    public function getCacheFrontend()
+    {
+        return $this->strCacheFrontend;
+    }
+
+    public function getCacheBackend()
+    {
+        return $this->strCacheBackend;
+    }
 }
 ?>

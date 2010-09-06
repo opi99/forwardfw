@@ -21,9 +21,9 @@ declare(encoding = "utf-8");
  *
  * @category   Cache
  * @package    ForwardFW
- * @subpackage Main
+ * @subpackage Interface
  * @author     Alexander Opitz <opitz.alexander@primacom.net>
- * @copyright  2009-2010 The Authors
+ * @copyright  2009 The Authors
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @version    SVN: $Id: $
  * @link       http://forwardfw.sourceforge.net
@@ -33,27 +33,35 @@ declare(encoding = "utf-8");
 /**
  *
  */
-require_once 'ForwardFW/Config/FunctionCacheData.php';
 require_once 'ForwardFW/Config/CacheSystem.php';
 require_once 'ForwardFW/Interface/Application.php';
-require_once 'ForwardFW/Cache.php';
 
 /**
- * Implementation of a Cache.
+ * Interface for a Cache.
  *
  * @category   Cache
  * @package    ForwardFW
- * @subpackage Main
+ * @subpackage Interface
  * @author     Alexander Opitz <opitz.alexander@primacom.net>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @link       http://forwardfw.sourceforge.net
  */
-class ForwardFW_Cache_Frontend_Function extends ForwardFW_Cache
+interface ForwardFW_Interface_Cache_Backend
 {
-    public function getCache(
-        ForwardFW_Config_CacheData $config = null
-    ) {
-        return 'getFunctionCache';
-    }
+    /**
+     * Constructor
+     *
+     * @param ForwardFW_Interface_Application   $application The running application.
+     *
+     * @return void
+     */
+    public function __construct(
+        ForwardFW_Interface_Application $application
+    );
+
+    public function getInstance(
+        ForwardFW_Interface_Application $application,
+        ForwardFW_Config_CacheSystem $config
+    );
 }
 ?>

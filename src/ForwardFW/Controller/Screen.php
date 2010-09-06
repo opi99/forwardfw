@@ -131,7 +131,9 @@ class ForwardFW_Controller_Screen extends ForwardFW_Controller_View
     public function processView()
     {
         $configCacheSystem = new ForwardFW_Config_CacheSystem();
-        $configCacheSystem->strCacheFrontend = 'ForwardFW_Cache_Frontend_Function';
+        $configCacheSystem
+            ->setCacheBackend('ForwardFW_Cache_Backend_Session')
+            ->setCacheFrontend('ForwardFW_Cache_Frontend_Function');
         $cache = ForwardFW_Cache::getInstance($this->application, $configCacheSystem);
         var_dump($cache->getCache(null));
         
