@@ -47,6 +47,17 @@ require_once 'ForwardFW/Config/CacheData.php';
  */
 class ForwardFW_Config_FunctionCacheData extends ForwardFW_Config_CacheData
 {
-    public $callback2;
+    private $callback;
+    
+    public function setCallback($callback)
+    {
+        $this->callback = $callback;
+        return $this;
+    }
+    
+    public function getCallback()
+    {
+        return $this->callback;
+    }
 }
 ?>

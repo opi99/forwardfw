@@ -49,6 +49,5 @@ class ForwardFW_Config_CacheData extends ForwardFW_Config
 {
     public $nTimeout;
     public $bReserveOld;
-    public $callback;
 }
 ?>
