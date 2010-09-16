@@ -67,8 +67,12 @@ class ForwardFW_Callback
      */
     public function __construct($callback, array $arParameters = null)
     {
-        $this->callback = $callback;
-        $this->setParameters($arParameters);
+        if (is_callable($callback, true)) {
+            $this->callback = $callback;
+            $this->setParameters($arParameters);
+        } else {
+            // @TODO throw
+        }
     }
 
     /**
