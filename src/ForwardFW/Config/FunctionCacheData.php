@@ -23,7 +23,7 @@ declare(encoding = "utf-8");
  * @package    ForwardFW
  * @subpackage Config
  * @author     Alexander Opitz <opitz.alexander@primacom.net>
- * @copyright  2009 The Authors
+ * @copyright  2009, 2010 The Authors
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @version    SVN: $Id: $
  * @link       http://forwardfw.sourceforge.net
@@ -47,14 +47,17 @@ require_once 'ForwardFW/Config/CacheData.php';
  */
 class ForwardFW_Config_FunctionCacheData extends ForwardFW_Config_CacheData
 {
+    /**
+     * @var ForwardFW_Callback The callback function object.
+     */
     private $callback;
-    
-    public function setCallback($callback)
+
+    public function setCallback(ForwardFW_Callback $callback)
     {
         $this->callback = $callback;
         return $this;
     }
-    
+
     public function getCallback()
     {
         return $this->callback;
