@@ -68,6 +68,9 @@ class ForwardFW_Templater_Twig extends ForwardFW_Controller
      */
     private $arVars = array();
 
+    /**
+     * @var array Blocks to show
+     */
     private $arShowBlocks = array();
 
     /**
@@ -99,18 +102,40 @@ class ForwardFW_Templater_Twig extends ForwardFW_Controller
         );
     }
 
+    /**
+     * Sets file to use for templating
+     *
+     * @param string $_strFile Complete path and filename.
+     *
+     * @return ForwardFW_Templater_Twig The instance.
+     */
     public function setTemplateFile($_strFile)
     {
         $this->twigTemplate = $this->twigEnvironment->loadTemplate(
             $_strFile
         );
+        return $this;
     }
 
+    /**
+     * Sets a var in the template to a value
+     *
+     * @param string $_strName Name of template var.
+     * @param mixed  $_mValue  Value of template var.
+     *
+     * @return ForwardFW_Templater_Twig The instance.
+     */
     public function setVar($_strName, $_mValue)
     {
         $this->arVars[$_strName] = $_mValue;
+        return $this;
     }
 
+    /**
+     * Returns compiled template for outputing.
+     *
+     * @return string Content of template after compiling.
+     */
     public function getCompiled()
     {
         $result = $this->twigTemplate->render(
