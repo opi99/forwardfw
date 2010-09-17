@@ -23,7 +23,7 @@ declare(encoding = "utf-8");
  * @package    ForwardFW
  * @subpackage Main
  * @author     Alexander Opitz <opitz.alexander@primacom.net>
- * @copyright  2009 The Authors
+ * @copyright  2009,2010 The Authors
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @version    SVN: $Id: $
  * @link       http://forwardfw.sourceforge.net
@@ -66,6 +66,13 @@ class ForwardFW_Controller
         $this->application = $application;
     }
 
+    /**
+     * Returns content of the given parameter for this class.
+     *
+     * @param string $strParameterName Name of parameter.
+     *
+     * @return mixed
+     */
     function getParameter($strParameterName)
     {
         return $this->application->getRequest()->getParameter(
@@ -75,6 +82,13 @@ class ForwardFW_Controller
         );
     }
 
+    /**
+     * Returns configuration of the given parameter for this class.
+     *
+     * @param string $strParameterName Name of parameter.
+     *
+     * @return mixed
+     */
     function getConfigParameter($strParameterName)
     {
         return $this->application->getRequest()->getConfigParameter(

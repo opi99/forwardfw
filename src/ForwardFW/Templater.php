@@ -23,7 +23,7 @@ declare(encoding = "utf-8");
  * @package    ForwardFW
  * @subpackage Main
  * @author     Alexander Opitz <opitz.alexander@primacom.net>
- * @copyright  2009 The Authors
+ * @copyright  2009,2010 The Authors
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @version    SVN: $Id: $
  * @link       http://forwardfw.sourceforge.net
@@ -61,6 +61,13 @@ class ForwardFW_Templater
     {
     }
 
+    /**
+     * Factory method to get Templater from config.
+     *
+     * @param ForwardFW_Controller_Application $application The running application
+     *
+     * @return ForwardFW_Templater
+     */
     static public function factory(
         ForwardFW_Controller_Application $application
     ) {
@@ -70,6 +77,13 @@ class ForwardFW_Templater
         return self::$instance;
     }
 
+    /**
+     * Creation method of Templater from config.
+     *
+     * @param ForwardFW_Controller_Application $application The running application
+     *
+     * @return ForwardFW_Templater
+     */
     final static private function createTemplater(
         ForwardFW_Controller_Application $application
     ) {
