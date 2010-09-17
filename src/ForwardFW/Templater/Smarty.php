@@ -58,6 +58,9 @@ class ForwardFW_Templater_Smarty extends ForwardFW_Controller
      */
     private $smarty = null;
 
+    /**
+     * @var array Blocks to show
+     */
     private $arShowBlocks = array();
 
     /**
@@ -87,16 +90,38 @@ class ForwardFW_Templater_Smarty extends ForwardFW_Controller
         $this->strTemplatePath = $arConfig['TemplatePath'];
     }
 
+    /**
+     * Sets file to use for templating
+     *
+     * @param string $_strFile Complete path and filename.
+     *
+     * @return ForwardFW_Templater_Smarty The instance.
+     */
     public function setTemplateFile($_strFile)
     {
         $this->strFile = $_strFile;
+        return $this;
     }
 
+    /**
+     * Sets a var in the template to a value
+     *
+     * @param string $_strName Name of template var.
+     * @param mixed  $_mValue  Value of template var.
+     *
+     * @return ForwardFW_Templater_Smarty The instance.
+     */
     public function setVar($_strName, $_mValue)
     {
         $this->smarty->assign($_strName, $_mValue);
+        return $this;
     }
 
+    /**
+     * Returns compiled template for outputing.
+     *
+     * @return string Content of template after compiling.
+     */
     public function getCompiled()
     {
         // Catch Exceptions and clear output cache
@@ -111,21 +136,37 @@ class ForwardFW_Templater_Smarty extends ForwardFW_Controller
         return $result;
     }
 
+    /**
+     * Defines blocks in template.
+     * Deprecated or should be used for template engines without conditions?
+     */
     public function defineBlock($strBlockName)
     {
         $this->arShowBlocks[$strBlockName] = 0;
     }
 
+    /**
+     * Shows block in template.
+     * Deprecated or should be used for template engines without conditions?
+     */
     public function showBlock($strBlockName)
     {
         $this->arShowBlocks[$strBlockName] = 1;
     }
 
+    /**
+     * Hide block in template.
+     * Deprecated or should be used for template engines without conditions?
+     */
     public function hideBlock($strBlockName)
     {
         $this->arShowBlocks[$strBlockName] = 0;
     }
 
+    /**
+     * Block implementation for smarty.
+     * Deprecated or should be used for template engines without conditions?
+     */
     public function __block($params, $content, &$smarty, &$repeat)
     {
         $name = $params['name'];
@@ -135,6 +176,10 @@ class ForwardFW_Templater_Smarty extends ForwardFW_Controller
         return '';
     }
 
+    /**
+     * Texter implementation for smarty.
+     * More later, if it exists.
+     */
     public function __texter($params, &$smarty)
     {
         $strTextKey = $params['key'];
