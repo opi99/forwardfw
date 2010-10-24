@@ -23,21 +23,18 @@ declare(encoding = "utf-8");
  * @package    ForwardFW
  * @subpackage Main
  * @author     Alexander Opitz <opitz.alexander@primacom.net>
- * @copyright  2009 The Authors
+ * @copyright  2009, 2010 The Authors
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @version    SVN: $Id: $
  * @link       http://forwardfw.sourceforge.net
  * @since      File available since Release 0.0.8
  */
 
-/**
- *
- */
 require_once 'ForwardFW/Config/CacheData.php';
 require_once 'ForwardFW/Config/CacheSystem.php';
 require_once 'ForwardFW/Interface/Application.php';
-require_once 'ForwardFW/Interface/Cache/Frontend.php';
 require_once 'ForwardFW/Interface/Cache/Backend.php';
+require_once 'ForwardFW/Interface/Cache/Frontend.php';
 
 /**
  * Interface for a Cache.
@@ -54,7 +51,8 @@ class ForwardFW_Cache implements ForwardFW_Interface_Cache_Frontend
     /**
      * Constructor
      *
-     * @param ForwardFW_Interface_Application $application The running application
+     * @param ForwardFW_Interface_Application   $application The running application
+     * @param ForwardFW_Interface_Cache_Backend $backend     Backend instance.
      *
      * @return void
      */
@@ -63,9 +61,17 @@ class ForwardFW_Cache implements ForwardFW_Interface_Cache_Frontend
         ForwardFW_Interface_Cache_Backend $backend
     ) {
         $this->application = $application;
-        $this->config = $config;
+        $this->backend = $backend;
     }
 
+    /**
+     * Builds an instance of cache
+     *
+     * @param ForwardFW_Interface_Application $application The running application
+     * @param ForwardFW_Config_CacheSystem    $config      Configuration of caching
+     *
+     * @return ForwardFW_Interface_Cache_Frontend The cache Frontend
+     */
     static public function getInstance(
         ForwardFW_Interface_Application $application,
         ForwardFW_Config_CacheSystem $config
@@ -75,6 +81,14 @@ class ForwardFW_Cache implements ForwardFW_Interface_Cache_Frontend
         return $frontend;
     }
 
+    /**
+     * Builds Backend of a cache configuration
+     *
+     * @param ForwardFW_Interface_Application $application The running application
+     * @param ForwardFW_Config_CacheSystem    $config      Configuration of caching
+     *
+     * @return ForwardFW_Interface_Cache_Backend Caching Backend.
+     */
     static public function getBackend(
         ForwardFW_Interface_Application $application,
         ForwardFW_Config_CacheSystem $config
@@ -90,6 +104,15 @@ class ForwardFW_Cache implements ForwardFW_Interface_Cache_Frontend
         return $return;
     }
 
+    /**
+     * Builds Backend of a cache configuration
+     *
+     * @param ForwardFW_Interface_Application   $application The running application
+     * @param ForwardFW_Config_CacheSystem      $config      Configuration of caching
+     * @param ForwardFW_Interface_Cache_Backend $backend     Backend for the frontend
+     *
+     * @return ForwardFW_Interface_Cache_Frontend Caching Frontend.
+     */
     static public function getFrontend(
         ForwardFW_Interface_Application $application,
         ForwardFW_Config_CacheSystem $config,
@@ -106,6 +129,13 @@ class ForwardFW_Cache implements ForwardFW_Interface_Cache_Frontend
         return $return;
     }
 
+    /**
+     * Returns content from cache or gathers the data
+     *
+     * @param ForwardFW_Config_CacheData $config What data should be get from cache
+     *
+     * @return mixed The data you requested.
+     */
     public function getCache(
         ForwardFW_Config_CacheData $config = null
     ) {

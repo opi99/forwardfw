@@ -23,20 +23,17 @@ declare(encoding = "utf-8");
  * @package    ForwardFW
  * @subpackage Main
  * @author     Alexander Opitz <opitz.alexander@primacom.net>
- * @copyright  2009-2010 The Authors
+ * @copyright  2009, 2010 The Authors
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @version    SVN: $Id: $
  * @link       http://forwardfw.sourceforge.net
  * @since      File available since Release 0.0.8
  */
 
-/**
- *
- */
-require_once 'ForwardFW/Config/FunctionCacheData.php';
-require_once 'ForwardFW/Config/CacheSystem.php';
-require_once 'ForwardFW/Interface/Application.php';
 require_once 'ForwardFW/Cache.php';
+require_once 'ForwardFW/Config/CacheSystem.php';
+require_once 'ForwardFW/Config/FunctionCacheData.php';
+require_once 'ForwardFW/Interface/Application.php';
 
 /**
  * Implementation of a Cache.
@@ -50,6 +47,14 @@ require_once 'ForwardFW/Cache.php';
  */
 class ForwardFW_Cache_Frontend_Function extends ForwardFW_Cache
 {
+
+    /**
+     * Returns content from cache or gathers the data
+     *
+     * @param ForwardFW_Config_CacheData $config What data should be get from cache
+     *
+     * @return mixed The data you requested.
+     */
     public function getCache(
         ForwardFW_Config_CacheData $config = null
     ) {

@@ -23,16 +23,13 @@ declare(encoding = "utf-8");
  * @package    ForwardFW
  * @subpackage Config
  * @author     Alexander Opitz <opitz.alexander@primacom.net>
- * @copyright  2009 The Authors
+ * @copyright  2009, 2010 The Authors
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @version    SVN: $Id: $
  * @link       http://forwardfw.sourceforge.net
  * @since      File available since Release 0.0.8
  */
 
-/**
- *
- */
 require_once 'ForwardFW/Config.php';
 
 /**
@@ -47,7 +44,60 @@ require_once 'ForwardFW/Config.php';
  */
 class ForwardFW_Config_CacheData extends ForwardFW_Config
 {
-    public $nTimeout;
-    public $bReserveOld;
+    /**
+     * @var integer Timeout of the cache in seconds.
+     */
+    protected $nTimeout = 0;
+
+    /**
+     * @var boolean Should old data be returned if an error occours on fetching data.
+     */
+    protected $bReserveOld = false;
+
+    /**
+     * Sets the timeout
+     *
+     * @param integer Timeout in seconds.
+     *
+     * @return ForwardFW_Config_CacheData
+     */
+    public function setTimeout($nTimeout)
+    {
+        $this->nTimeout = $nTimeout;
+        return $this;
+    }
+
+    /**
+     * Sets the flag if Old data should be used on error while fetching data.
+     *
+     * @param boolean $bReserveOld If old data should be reserved.
+     *
+     * @return ForwardFW_Config
+     */
+    public function setReserveOld($bReserveOld)
+    {
+        $this->bReserveOld= $bReserveOld;
+        return $this;
+    }
+
+    /**
+     * Gets the timeout
+     *
+     * @return integer The timeout in seconds.
+     */
+    public function getTimeout()
+    {
+        return $this->nTimeout;
+    }
+
+    /**
+     * Gets the flag for old data handling.
+     *
+     * @return boolean State of the flag.
+     */
+    public function getReserveOld()
+    {
+        return $this->bReserveOld;
+    }
 }
 ?>
