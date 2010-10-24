@@ -30,9 +30,6 @@ declare(encoding = "utf-8");
  * @since      File available since Release 0.0.8
  */
 
-/**
- *
- */
 require_once 'ForwardFW/Config/CacheData.php';
 
 /**
@@ -50,14 +47,26 @@ class ForwardFW_Config_FunctionCacheData extends ForwardFW_Config_CacheData
     /**
      * @var ForwardFW_Callback The callback function object.
      */
-    private $callback;
+    protected $callback = null;
 
+    /**
+     * Sets the callback
+     *
+     * @param ForwardFW_Callback $callback The callback configuration
+     *
+     * @return ForwardFW_Config_FunctionCacheData
+     */
     public function setCallback(ForwardFW_Callback $callback)
     {
         $this->callback = $callback;
         return $this;
     }
 
+    /**
+     * Gets the callback configuration
+     *
+     * @return ForwardFW_Callback
+     */
     public function getCallback()
     {
         return $this->callback;
