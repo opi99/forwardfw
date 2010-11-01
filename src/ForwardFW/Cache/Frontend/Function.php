@@ -55,10 +55,13 @@ class ForwardFW_Cache_Frontend_Function extends ForwardFW_Cache
      *
      * @return mixed The data you requested.
      */
-    public function getCache(
-        ForwardFW_Config_CacheData $config = null
-    ) {
-        return 'getFunctionCache';
+    public function getCache(ForwardFW_Config_CacheData $config) {
+        return parent::getCache($config);
+    }
+
+    protected function getDataToCache(ForwardFW_Config_CacheData $config)
+    {
+        return $config->getCallback()->doCallback();
     }
 }
 ?>

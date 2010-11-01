@@ -30,6 +30,7 @@ declare(encoding = "utf-8");
  * @since      File available since Release 0.0.8
  */
 
+require_once 'ForwardFW/Callback.php';
 require_once 'ForwardFW/Config/CacheData.php';
 
 /**
