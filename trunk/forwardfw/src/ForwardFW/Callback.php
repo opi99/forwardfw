@@ -31,10 +31,6 @@ declare(encoding = "utf-8");
  */
 
 /**
- *
- */
-
-/**
  * Config for a Cache.
  *
  * @category   Config
@@ -94,7 +90,11 @@ class ForwardFW_Callback
      */
     public function doCallback()
     {
-        return call_user_func_array($this->callback, $this->arParameters);
+        if (is_null($this->arParameters)) {
+            return call_user_func($this->callback);
+        } else {
+            return call_user_func_array($this->callback, $this->arParameters);
+        }
     }
 }
 ?>

@@ -136,10 +136,25 @@ class ForwardFW_Cache implements ForwardFW_Interface_Cache_Frontend
      *
      * @return mixed The data you requested.
      */
-    public function getCache(
-        ForwardFW_Config_CacheData $config = null
-    ) {
-        return 'getCache';
+    public function getCache(ForwardFW_Config_CacheData $config) {
+        return $this->getDataToCache($config);
+    }
+
+    protected function getDataToCache($config)
+    {
+        // throw exception that this needs to be implemented by cache
+    }
+
+    /**
+     * Calculates a hash by serialize and md5.
+     *
+     * @param mixed $mValue The data from which the hash should be gathered.
+     *
+     * @return string The hash.
+     */
+    public function getHash($mValue)
+    {
+        return md5(serialize($mValue));
     }
 }
 ?>

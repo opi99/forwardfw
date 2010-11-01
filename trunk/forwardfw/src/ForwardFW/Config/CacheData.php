@@ -76,7 +76,7 @@ class ForwardFW_Config_CacheData extends ForwardFW_Config
      */
     public function setReserveOld($bReserveOld)
     {
-        $this->bReserveOld= $bReserveOld;
+        $this->bReserveOld = $bReserveOld;
         return $this;
     }
 
