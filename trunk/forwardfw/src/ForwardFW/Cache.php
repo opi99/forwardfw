@@ -46,7 +46,7 @@ require_once 'ForwardFW/Interface/Cache/Frontend.php';
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @link       http://forwardfw.sourceforge.net
  */
-class ForwardFW_Cache implements ForwardFW_Interface_Cache_Frontend
+abstract class ForwardFW_Cache implements ForwardFW_Interface_Cache_Frontend
 {
     /**
      * Constructor
@@ -136,14 +136,31 @@ class ForwardFW_Cache implements ForwardFW_Interface_Cache_Frontend
      *
      * @return mixed The data you requested.
      */
-    public function getCache(ForwardFW_Config_CacheData $config) {
-        return $this->getDataToCache($config);
+    public function getCache(ForwardFW_Config_CacheData $config)
+    {
+        $strHash = $this->calculateHash($config);
+        switch ($config->getTimeout()) {
+        case -1:
+            $nTime = 0;
+            break;
+        case 0:
+            $nTime = time();
+            break;
+        default:
+            $nTime = time() - $config->getTimeout();
+        }
+        try {
+            $mData = $this->backend->getData($strHash, $nTime);
+        } catch (Exception $e) {
+            $mData = $this->getDataToCache($config);
+            $this->backend->setData($strHash, $mData);
+        }
+        return $mData;
     }
 
-    protected function getDataToCache($config)
-    {
-        // throw exception that this needs to be implemented by cache
-    }
+    abstract protected function calculateHash(ForwardFW_Config_CacheData $config);
+
+    abstract protected function getDataToCache(ForwardFW_Config_CacheData $config);
 
     /**
      * Calculates a hash by serialize and md5.

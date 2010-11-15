@@ -56,7 +56,7 @@ class ForwardFW_Callback
      * Constructor with validation of $callback
      *
      * @param Callback $callback     The callback function.
-     * @param Array    $arParameters Parameters for function call.
+     * @param array    $arParameters Parameters for function call.
      *
      * @return void
      * @throws ForwardFW_Exception_NoCallbackFunction
@@ -74,13 +74,26 @@ class ForwardFW_Callback
     /**
      * Sets the parameters array for callback.
      *
-     * @param Array $arParameters Parameters for function call.
+     * @param array $arParameters Parameters for function call.
      *
      * @return ForwrdFW_Callback
      */
     public function setParameters(array $arParameters = null)
     {
         $this->arParameters = $arParameters;
+
+        return $this;
+    }
+
+
+    /**
+     * Gets the parameters array for callback.
+     *
+     * @return array|null The parameters.
+     */
+    public function getParameters()
+    {
+        return $this->arParameters;
     }
 
     /**

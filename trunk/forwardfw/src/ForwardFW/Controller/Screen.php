@@ -141,7 +141,8 @@ class ForwardFW_Controller_Screen extends ForwardFW_Controller_View
 
         $configCacheData = new ForwardFW_Config_FunctionCacheData();
         $configCacheData
-            ->setCallback($cacheCallback);
+            ->setCallback($cacheCallback)
+            ->setTimeout(5);
         var_dump($cache->getCache($configCacheData));
         
         $templater = ForwardFW_Templater::factory($this->application);
