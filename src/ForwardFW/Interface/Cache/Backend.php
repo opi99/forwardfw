@@ -30,9 +30,6 @@ declare(encoding = "utf-8");
  * @since      File available since Release 0.0.8
  */
 
-/**
- *
- */
 require_once 'ForwardFW/Config/CacheSystem.php';
 require_once 'ForwardFW/Interface/Application.php';
 
@@ -63,5 +60,26 @@ interface ForwardFW_Interface_Cache_Backend
         ForwardFW_Interface_Application $application,
         ForwardFW_Config_CacheSystem $config
     );
+
+    /**
+     * Gets data from Cache.
+     *
+     * @param string  $strHash Hash for data.
+     * @param integer $nTime   Oldest Time of data in cache.
+     *
+     * @return mixed Data from cache
+     */
+    public function getData($strHash, $nTime);
+
+
+    /**
+     * Sets data from Cache.
+     *
+     * @param string $strHash Hash for data.
+     * @param mixed  $mData   Data to save into cache.
+     *
+     * @return void
+     */
+    public function setData($strHash, $mData);
 }
 ?>

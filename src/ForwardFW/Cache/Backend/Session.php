@@ -30,9 +30,6 @@ declare(encoding = "utf-8");
  * @since      File available since Release 0.0.8
  */
 
-/**
- *
- */
 require_once 'ForwardFW/Config/FunctionCacheData.php';
 require_once 'ForwardFW/Config/CacheSystem.php';
 require_once 'ForwardFW/Interface/Application.php';
@@ -53,6 +50,7 @@ class ForwardFW_Cache_Backend_Session implements ForwardFW_Interface_Cache_Backe
     public function __construct(
         ForwardFW_Interface_Application $application
     ) {
+        session_start();
         $this->application = $application;
     }
 
@@ -61,6 +59,46 @@ class ForwardFW_Cache_Backend_Session implements ForwardFW_Interface_Cache_Backe
         ForwardFW_Config_CacheSystem $config
     ) {
         // Not realy?
+    }
+
+    /**
+     * Gets data from Cache.
+     *
+     * @param string $strHash Hash for data.
+     * @param integer $nTime   Oldest Time of data in cache.
+     *
+     * @return mixed Data from cache
+     */
+    public function getData($strHash, $nTime)
+    {
+        if (isset($_SESSION[$strHash])) {
+            if ($_SESSION[$strHash]['time'] > $nTime) {
+                return $_SESSION[$strHash]['data'];
+            } else {
+                // Data but timed out exception
+                throw new Exception();
+            }
+        } else {
+            // No Data Exception
+            throw new Exception();
+        }
+    }
+
+
+    /**
+     * Sets data from Cache.
+     *
+     * @param string $strHash Hash for data.
+     * @param mixed  $mData   Data to save into cache.
+     *
+     * @return void
+     */
+    public function setData($strHash, $mData)
+    {
+        $_SESSION[$strHash] = array(
+            'data' => $mData,
+            'time' => time(),
+        );
     }
 }
 ?>

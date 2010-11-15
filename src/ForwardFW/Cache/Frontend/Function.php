@@ -47,7 +47,6 @@ require_once 'ForwardFW/Interface/Application.php';
  */
 class ForwardFW_Cache_Frontend_Function extends ForwardFW_Cache
 {
-
     /**
      * Returns content from cache or gathers the data
      *
@@ -57,6 +56,18 @@ class ForwardFW_Cache_Frontend_Function extends ForwardFW_Cache
      */
     public function getCache(ForwardFW_Config_CacheData $config) {
         return parent::getCache($config);
+    }
+
+    /**
+     * Returns hash for this config.
+     *
+     * @param ForwardFW_Config_CacheData $config For what the hash should calculated.
+     *
+     * @return string Hash for the config.
+     */
+    protected function calculateHash(ForwardFW_Config_CacheData  $config)
+    {
+        return $this->getHash($config->getCallback()->getParameters());
     }
 
     protected function getDataToCache(ForwardFW_Config_CacheData $config)
