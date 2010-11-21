@@ -1,7 +1,7 @@
 ---------------------------------
  The ForwardFW licensing conditions
- 2009, Alexander Opitz <opitz.alexander@primacom.net>
- Document version 1.0.0, 08-2009
+ 2009, 2010, Alexander Opitz <opitz.alexander@primacom.net>
+ Document version 1.0.0, 08-2010
 ---------------------------------
 
 The ForwardFW project is free software under the terms of the

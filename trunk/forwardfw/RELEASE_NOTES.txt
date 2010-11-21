@@ -1,12 +1,12 @@
-This is the seventh runable Release, which won't help you much but will demonstrate
+This is the eighth runable Release, which won't help you much but will demonstrate
 the technics behind this project.
 How you can see in the demo application most things should now on the shape of pre-alpha quality.
 So it would be possible to play with it in small applications. Which is also demonstrated in
 the ForwardDemo package.
-After the possibility of multiple screens and views now the DataHandler is introduced. As there
-are no basic objects or any object mapper. You can't do any real object oriented thing.
-The next release will bring a caching framework. Yes I know there are much caching FW out but
-nothing that suites my thoughts (cache looking, old cache data on loading problem).
+After the possibilities of the DataHandler now the caching framework is introduced. As the
+Exceptions aren't there yet, it isn't so useful as it will be. Also the looking mechanismus
+isn't there yet, but will be in the next release. So we are getting closer to the release
+of 0.1.0. But it may be, that I'll release 0.0.10 after 0.9.0.
 
 Requirements:
 
