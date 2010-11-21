@@ -7,7 +7,7 @@ ini_set('include_path', dirname(__FILE__) . DIRECTORY_SEPARATOR . 'src' . PATH_S
 ini_set('include_path', dirname(__FILE__) . DIRECTORY_SEPARATOR . 'libs' . PATH_SEPARATOR . ini_get('include_path'));
 
 $GLOBALS['ForwardFW'] = array(
-    'Version' => '0.0.7',
+    'Version' => '0.0.8',
 );
 
 $GLOBALS['ForwardFW_Filter_RequestResponse'] = array(
