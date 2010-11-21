@@ -37,10 +37,6 @@ require_once 'ForwardFW/Controller/View.php';
 require_once 'ForwardFW/Interface/Application.php';
 require_once 'ForwardFW/Interface/Screen.php';
 
-require_once 'ForwardFW/Cache.php';
-require_once 'ForwardFW/Callback.php';
-require_once 'ForwardFW/Cache/Frontend/Function.php';
-
 /**
  * This class is a basic Screen class.
  *
@@ -131,20 +127,6 @@ class ForwardFW_Controller_Screen extends ForwardFW_Controller_View
      */
     public function processView()
     {
-        $configCacheSystem = new ForwardFW_Config_CacheSystem();
-        $configCacheSystem
-            ->setCacheBackend('ForwardFW_Cache_Backend_Session')
-            ->setCacheFrontend('ForwardFW_Cache_Frontend_Function');
-        $cache = ForwardFW_Cache::getInstance($this->application, $configCacheSystem);
-
-        $cacheCallback = new ForwardFW_Callback(array($this, 'testCache'));
-
-        $configCacheData = new ForwardFW_Config_FunctionCacheData();
-        $configCacheData
-            ->setCallback($cacheCallback)
-            ->setTimeout(5);
-        var_dump($cache->getCache($configCacheData));
-        
         $templater = ForwardFW_Templater::factory($this->application);
         foreach ($this->views as $view) {
             $templater->setVar(
@@ -153,11 +135,6 @@ class ForwardFW_Controller_Screen extends ForwardFW_Controller_View
             );
         }
         return parent::processView();
-    }
-
-    public function testCache()
-    {
-        return 'Testdata';
     }
 
     /**
