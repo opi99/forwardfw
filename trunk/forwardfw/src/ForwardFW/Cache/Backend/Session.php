@@ -64,7 +64,7 @@ class ForwardFW_Cache_Backend_Session implements ForwardFW_Interface_Cache_Backe
     /**
      * Gets data from Cache.
      *
-     * @param string $strHash Hash for data.
+     * @param string  $strHash Hash for data.
      * @param integer $nTime   Oldest Time of data in cache.
      *
      * @return mixed Data from cache
