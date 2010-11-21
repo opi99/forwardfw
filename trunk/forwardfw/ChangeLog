@@ -1,3 +1,6 @@
+2010-11-21 Alexander Opitz <opi@gmx.at>
+* #42 Implement Caching Framework
+
 2010-07-29 Alexander Opitz <opi@gmx.at>
 * DataHandler FW #32
 * DataHandler for PEAR::MDB2 #33
