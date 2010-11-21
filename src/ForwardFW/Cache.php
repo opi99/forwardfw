@@ -152,9 +152,38 @@ abstract class ForwardFW_Cache implements ForwardFW_Interface_Cache_Frontend
         try {
             $mData = $this->backend->getData($strHash, $nTime);
         } catch (Exception $e) {
+            // @TODO Only true if Exception is timeout
+            $mData = $this->getRealData($config, true);
+        }
+
+        return $mData;
+    }
+
+
+    /**
+     * Returns the real data and add it to cache. If real data fails tries to
+     * get old data from cache if available.
+     *
+     * @param ForwardFW_Config_CacheData $config        What data should be get
+     *                                                  from cache.
+     * @param boolean                    $bOldAvailable True if backend has old
+     *                                                  data for hash.
+     *
+     * @return mixed The data you requested.
+     */
+    protected function getRealData(
+        ForwardFW_Config_CacheData $config,
+        $bOldAvailable
+    ) {
+        try {
             $mData = $this->getDataToCache($config);
             $this->backend->setData($strHash, $mData);
+        } catch (Exception $e) {
+            if ($config->getReserveOld() && $bOldAvailable) {
+                $mData = $this->backend->getData($strHash, 0);
+            }
         }
+
         return $mData;
     }
 
