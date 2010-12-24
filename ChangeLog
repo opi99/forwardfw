@@ -1,3 +1,7 @@
+2010-12-24 Alexander Opitz <opi@gmx.at>
+* #54 Cache looking
+* #51 Implement Exceptions
+
 2010-11-21 Alexander Opitz <opi@gmx.at>
 * #42 Implement Caching Framework
 * #44 Releasing 0.0.8
