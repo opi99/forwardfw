@@ -81,5 +81,14 @@ interface ForwardFW_Interface_Cache_Backend
      * @return void
      */
     public function setData($strHash, $mData);
+
+    /**
+     * Sets marker that cache will be generated yet.
+     *
+     * @param string $strHash Hash of cache which is generated.
+     *
+     * @return void
+     */
+    public function setGenerating($strHash);
 }
 ?>
