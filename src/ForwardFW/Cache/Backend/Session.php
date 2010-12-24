@@ -73,7 +73,12 @@ class ForwardFW_Cache_Backend_Session implements ForwardFW_Interface_Cache_Backe
     {
         if (isset($_SESSION[$strHash])) {
             if ($_SESSION[$strHash]['time'] > $nTime) {
-                return $_SESSION[$strHash]['data'];
+                if (!$_SESSION[$strHash]['generating']) {
+                    return $_SESSION[$strHash]['data'];
+                } else {
+                    // Data is generating
+                    throw new Exception();
+                }
             } else {
                 // Data but timed out exception
                 throw new Exception();
@@ -86,7 +91,7 @@ class ForwardFW_Cache_Backend_Session implements ForwardFW_Interface_Cache_Backe
 
 
     /**
-     * Sets data from Cache.
+     * Sets data into Cache.
      *
      * @param string $strHash Hash for data.
      * @param mixed  $mData   Data to save into cache.
@@ -98,6 +103,22 @@ class ForwardFW_Cache_Backend_Session implements ForwardFW_Interface_Cache_Backe
         $_SESSION[$strHash] = array(
             'data' => $mData,
             'time' => time(),
+            'generating' => false,
+        );
+    }
+
+    /**
+     * Sets marker that cache will be generated yet.
+     *
+     * @param string $strHash Hash of cache which is generated.
+     *
+     * @return void
+     */
+    public function setGenerating($strHash)
+    {
+        $_SESSION[$strHash] = array(
+            'time' => time(),
+            'generating' => true,
         );
     }
 }
