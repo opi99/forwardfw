@@ -35,6 +35,10 @@ require_once 'ForwardFW/Config/CacheSystem.php';
 require_once 'ForwardFW/Interface/Application.php';
 require_once 'ForwardFW/Interface/Cache/Backend.php';
 
+require_once 'ForwardFW/Cache/Exception/TimeOut.php';
+require_once 'ForwardFW/Cache/Exception/NoData.php';
+require_once 'ForwardFW/Cache/Exception/IsGenerating.php';
+
 /**
  * Implementation of a Cache Backend.
  *
@@ -77,15 +81,15 @@ class ForwardFW_Cache_Backend_Session implements ForwardFW_Interface_Cache_Backe
                     return $_SESSION[$strHash]['data'];
                 } else {
                     // Data is generating
-                    throw new Exception();
+                    throw new ForwardFW_Cache_Exception_IsGenerating();
                 }
             } else {
                 // Data but timed out exception
-                throw new Exception();
+                throw new ForwardFW_Cache_Exception_TimeOut();
             }
         } else {
             // No Data Exception
-            throw new Exception();
+            throw new ForwardFW_Cache_Exception_NoData();
         }
     }
 
