@@ -21,7 +21,7 @@ declare(encoding = "utf-8");
  *
  * @category   Cache
  * @package    ForwardFW
- * @subpackage Main
+ * @subpackage Cache/Backend
  * @author     Alexander Opitz <opitz.alexander@primacom.net>
  * @copyright  2009-2010 The Authors
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
@@ -33,7 +33,7 @@ declare(encoding = "utf-8");
 require_once 'ForwardFW/Config/FunctionCacheData.php';
 require_once 'ForwardFW/Config/CacheSystem.php';
 require_once 'ForwardFW/Interface/Application.php';
-require_once 'ForwardFW/Interface/Cache/Backend.php';
+require_once 'ForwardFW/Cache/Backend.php';
 
 require_once 'ForwardFW/Cache/Exception/TimeOut.php';
 require_once 'ForwardFW/Cache/Exception/NoData.php';
@@ -44,86 +44,49 @@ require_once 'ForwardFW/Cache/Exception/IsGenerating.php';
  *
  * @category   Cache
  * @package    ForwardFW
- * @subpackage Main
+ * @subpackage Cache/Backend
  * @author     Alexander Opitz <opitz.alexander@primacom.net>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @link       http://forwardfw.sourceforge.net
  */
-class ForwardFW_Cache_Backend_Session implements ForwardFW_Interface_Cache_Backend
+class ForwardFW_Cache_Backend_Session extends ForwardFW_Cache_Backend
 {
+    /**
+     * Constructor
+     *
+     * @param ForwardFW_Interface_Application $application The running application
+     */
     public function __construct(
         ForwardFW_Interface_Application $application
     ) {
         session_start();
-        $this->application = $application;
-    }
-
-    public function getInstance(
-        ForwardFW_Interface_Application $application,
-        ForwardFW_Config_CacheSystem $config
-    ) {
-        // Not realy?
+        parent::__construct($application);
     }
 
     /**
-     * Gets data from Cache.
+     * Writes data into the cache
      *
-     * @param string  $strHash Hash for data.
-     * @param integer $nTime   Oldest Time of data in cache.
-     *
-     * @return mixed Data from cache
-     */
-    public function getData($strHash, $nTime)
-    {
-        if (isset($_SESSION[$strHash])) {
-            if ($_SESSION[$strHash]['time'] > $nTime) {
-                if (!$_SESSION[$strHash]['generating']) {
-                    return $_SESSION[$strHash]['data'];
-                } else {
-                    // Data is generating
-                    throw new ForwardFW_Cache_Exception_IsGenerating();
-                }
-            } else {
-                // Data but timed out exception
-                throw new ForwardFW_Cache_Exception_TimeOut();
-            }
-        } else {
-            // No Data Exception
-            throw new ForwardFW_Cache_Exception_NoData();
-        }
-    }
-
-
-    /**
-     * Sets data into Cache.
      *
      * @param string $strHash Hash for data.
-     * @param mixed  $mData   Data to save into cache.
+     * @param array  $arData  Data to save into cache.
      *
      * @return void
      */
-    public function setData($strHash, $mData)
+    protected function writeData($strHash, array $arData)
     {
-        $_SESSION[$strHash] = array(
-            'data' => $mData,
-            'time' => time(),
-            'generating' => false,
-        );
+        $_SESSION[$strHash] = $arData;
     }
 
     /**
-     * Sets marker that cache will be generated yet.
+     * Reads data from the cache
      *
-     * @param string $strHash Hash of cache which is generated.
+     * @param string $strHash Hash for data.
      *
-     * @return void
+     * @return array Data from the storage
      */
-    public function setGenerating($strHash)
+    protected function readData($strHash)
     {
-        $_SESSION[$strHash] = array(
-            'time' => time(),
-            'generating' => true,
-        );
+        return $_SESSION[$strHash];
     }
 }
 ?>
