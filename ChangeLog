@@ -1,3 +1,8 @@
+2010-12-26 Alexander Opitz <opi@gmx.at>
+* #54 Complete Cache looking
+* #56 Disable autoescaping for Twig 0.9.10
+* #50 Refactor for more cache backends
+
 2010-12-24 Alexander Opitz <opi@gmx.at>
 * #54 Cache looking
 * #51 Implement Exceptions
