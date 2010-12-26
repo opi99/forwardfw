@@ -23,7 +23,7 @@ declare(encoding = "utf-8");
  * @package    ForwardFW
  * @subpackage Main
  * @author     Alexander Opitz <opitz.alexander@primacom.net>
- * @copyright  2009, 2010 The Authors
+ * @copyright  2009-2010 The Authors
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @version    SVN: $Id: $
  * @link       http://forwardfw.sourceforge.net
@@ -35,6 +35,10 @@ require_once 'ForwardFW/Config/CacheSystem.php';
 require_once 'ForwardFW/Interface/Application.php';
 require_once 'ForwardFW/Interface/Cache/Backend.php';
 require_once 'ForwardFW/Interface/Cache/Frontend.php';
+
+require_once 'ForwardFW/Cache/Exception/TimeOut.php';
+require_once 'ForwardFW/Cache/Exception/NoData.php';
+require_once 'ForwardFW/Cache/Exception/IsGenerating.php';
 
 /**
  * Interface for a Cache.
@@ -151,9 +155,13 @@ abstract class ForwardFW_Cache implements ForwardFW_Interface_Cache_Frontend
         }
         try {
             $mData = $this->backend->getData($strHash, $nTime);
-        } catch (Exception $e) {
-            // @TODO Only true if Exception is timeout
+        } catch (ForwardFW_Cache_Exception_NoData $eNoData) {
+            $mData = $this->getRealData($config, false);
+        } catch (ForwardFW_Cache_Exception_TimeOut $eTimeOut) {
             $mData = $this->getRealData($config, true);
+        } catch (ForwardFW_Cache_Exception_IsGenerating $eIsGenerating) {
+            usleep(500);
+            $mData = $this->getCache($config);
         }
 
         return $mData;
