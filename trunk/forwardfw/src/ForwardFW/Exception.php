@@ -21,6 +21,7 @@ declare(encoding = "utf-8");
  *
  * @category   Exception
  * @package    ForwardFW
+ * @subpackage Main
  * @author     Alexander Opitz <opitz.alexander@primacom.net>
  * @copyright  2009-2010 The Authors
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
@@ -34,11 +35,12 @@ declare(encoding = "utf-8");
  *
  * @category   Exception
  * @package    ForwardFW
+ * @subpackage Main
  * @author     Alexander Opitz <opitz.alexander@primacom.net>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @link       http://forwardfw.sourceforge.net
  */
-class ForwardFW_Exception
+class ForwardFW_Exception extends Exception
 {
 }
 ?>
