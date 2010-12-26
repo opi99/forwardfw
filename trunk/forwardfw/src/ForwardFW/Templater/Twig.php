@@ -97,7 +97,8 @@ class ForwardFW_Templater_Twig extends ForwardFW_Controller
         $twigLoader = new Twig_Loader_Filesystem($arConfig['TemplatePath']);
         $this->twigEnvironment = new Twig_Environment($twigLoader,
             array(
-                'cache' => $strCompilePath
+                'cache'      => $strCompilePath,
+                'autoescape' => false,
             )
         );
     }
