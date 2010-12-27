@@ -57,10 +57,11 @@ class ForwardFW_Cache_Backend_Session extends ForwardFW_Cache_Backend
      * @param ForwardFW_Interface_Application $application The running application
      */
     public function __construct(
-        ForwardFW_Interface_Application $application
+        ForwardFW_Interface_Application $application,
+        ForwardFW_Config_CacheSystem $config
     ) {
         session_start();
-        parent::__construct($application);
+        parent::__construct($application, $config);
     }
 
     /**
