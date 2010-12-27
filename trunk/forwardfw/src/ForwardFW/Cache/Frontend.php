@@ -50,7 +50,7 @@ require_once 'ForwardFW/Cache/Exception/IsGenerating.php';
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @link       http://forwardfw.sourceforge.net
  */
-abstract class ForwardFW_Cache implements ForwardFW_Interface_Cache_Frontend
+abstract class ForwardFW_Cache_Frontend implements ForwardFW_Interface_Cache_Frontend
 {
     /**
      * Constructor
@@ -102,7 +102,7 @@ abstract class ForwardFW_Cache implements ForwardFW_Interface_Cache_Frontend
             $return = $GLOBALS['Cache']['backend'][$class];
         } else {
             include_once str_replace('_', '/', $class) . '.php';
-            $return = new $class($application, $backend);
+            $return = new $class($application, $config);
             $GLOBALS['Cache']['backend'][$class] = $return;
         }
         return $return;

@@ -23,7 +23,7 @@ declare(encoding = "utf-8");
  * @package    ForwardFW
  * @subpackage Interface
  * @author     Alexander Opitz <opitz.alexander@primacom.net>
- * @copyright  2009,2010 The Authors
+ * @copyright  2009-2010 The Authors
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @version    SVN: $Id: $
  * @link       http://forwardfw.sourceforge.net
@@ -48,15 +48,12 @@ interface ForwardFW_Interface_Cache_Backend
     /**
      * Constructor
      *
-     * @param ForwardFW_Interface_Application   $application The running application.
+     * @param ForwardFW_Interface_Application $application The running application.
+     * @param ForwardFW_Config_CacheSystem    $config      Configuration of Backend.
      *
      * @return void
      */
     public function __construct(
-        ForwardFW_Interface_Application $application
-    );
-
-    public function getInstance(
         ForwardFW_Interface_Application $application,
         ForwardFW_Config_CacheSystem $config
     );

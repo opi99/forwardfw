@@ -23,14 +23,14 @@ declare(encoding = "utf-8");
  * @package    ForwardFW
  * @subpackage Main
  * @author     Alexander Opitz <opitz.alexander@primacom.net>
- * @copyright  2009, 2010 The Authors
+ * @copyright  2009-2010 The Authors
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @version    SVN: $Id: $
  * @link       http://forwardfw.sourceforge.net
  * @since      File available since Release 0.0.8
  */
 
-require_once 'ForwardFW/Cache.php';
+require_once 'ForwardFW/Cache/Frontend.php';
 require_once 'ForwardFW/Config/CacheSystem.php';
 require_once 'ForwardFW/Config/FunctionCacheData.php';
 require_once 'ForwardFW/Interface/Application.php';
@@ -45,7 +45,7 @@ require_once 'ForwardFW/Interface/Application.php';
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @link       http://forwardfw.sourceforge.net
  */
-class ForwardFW_Cache_Frontend_Function extends ForwardFW_Cache
+class ForwardFW_Cache_Frontend_Function extends ForwardFW_Cache_Frontend
 {
     /**
      * Returns content from cache or gathers the data
