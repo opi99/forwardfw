@@ -56,7 +56,7 @@ abstract class ForwardFW_Cache_Backend implements ForwardFW_Interface_Cache_Back
         ForwardFW_Config_CacheSystem $config
     ) {
         $this->application = $application;
-        $this->config = $config;
+        $this->config = $config->getBackendConfig();
     }
 
     /**

@@ -156,9 +156,9 @@ abstract class ForwardFW_Cache_Frontend implements ForwardFW_Interface_Cache_Fro
         try {
             $mData = $this->backend->getData($strHash, $nTime);
         } catch (ForwardFW_Cache_Exception_NoData $eNoData) {
-            $mData = $this->getRealData($config, false);
+            $mData = $this->getRealData($strHash, $config, false);
         } catch (ForwardFW_Cache_Exception_TimeOut $eTimeOut) {
-            $mData = $this->getRealData($config, true);
+            $mData = $this->getRealData($strHash, $config, true);
         } catch (ForwardFW_Cache_Exception_IsGenerating $eIsGenerating) {
             usleep(500);
             $mData = $this->getCache($config);
@@ -172,6 +172,7 @@ abstract class ForwardFW_Cache_Frontend implements ForwardFW_Interface_Cache_Fro
      * Returns the real data and add it to cache. If real data fails tries to
      * get old data from cache if available.
      *
+     * @param String                     $strHash       Hash of cache
      * @param ForwardFW_Config_CacheData $config        What data should be get
      *                                                  from cache.
      * @param boolean                    $bOldAvailable True if backend has old
@@ -180,6 +181,7 @@ abstract class ForwardFW_Cache_Frontend implements ForwardFW_Interface_Cache_Fro
      * @return mixed The data you requested.
      */
     protected function getRealData(
+        $strHash, 
         ForwardFW_Config_CacheData $config,
         $bOldAvailable
     ) {
