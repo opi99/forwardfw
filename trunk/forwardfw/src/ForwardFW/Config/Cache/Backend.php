@@ -23,11 +23,11 @@ declare(encoding = "utf-8");
  * @package    ForwardFW
  * @subpackage Config
  * @author     Alexander Opitz <opitz.alexander@primacom.net>
- * @copyright  2009, 2010 The Authors
+ * @copyright  2009-2010 The Authors
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @version    SVN: $Id: $
  * @link       http://forwardfw.sourceforge.net
- * @since      File available since Release 0.0.8
+ * @since      File available since Release 0.0.9
  */
 
 require_once 'ForwardFW/Config.php';
@@ -42,59 +42,7 @@ require_once 'ForwardFW/Config.php';
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @link       http://forwardfw.sourceforge.net
  */
-class ForwardFW_Config_CacheSystem extends ForwardFW_Config
+class ForwardFW_Config_Cache_Backend extends ForwardFW_Config
 {
-    /**
-     * @var string Class Name of Cache Frontend
-     */
-    private $strCacheFrontend = '';
-
-    /**
-     * @var string Class Name of Cache Backend
-     */
-    private $strCacheBackend = '';
-
-    /**
-     * @var ForwardFW_Config_Cache_Frontend Configuration for Cache Frontend
-     */
-    private $arFrontendConfig = null;
-
-    /**
-     * @var ForwardFW_Config_Cache_Backend Configuration for Cache Backend
-     */
-    private $backendConfig = null;
-
-    public function setCacheFrontend($strCacheFrontend)
-    {
-        $this->strCacheFrontend = $strCacheFrontend;
-        return $this;
-    }
-
-    public function setCacheBackend($strCacheBackend)
-    {
-        $this->strCacheBackend = $strCacheBackend;
-        return $this;
-    }
-
-    public function setBackendConfig($backendConfig)
-    {
-        $this->backendConfig = $backendConfig;
-        return $this;
-    }
-
-    public function getCacheFrontend()
-    {
-        return $this->strCacheFrontend;
-    }
-
-    public function getCacheBackend()
-    {
-        return $this->strCacheBackend;
-    }
-
-    public function getBackendConfig()
-    {
-        return $this->backendConfig;
-    }
 }
 ?>

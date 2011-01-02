@@ -74,7 +74,12 @@ class ForwardFW_Cache_Backend_File extends ForwardFW_Cache_Backend
      */
     protected function writeData($strHash, array $arData)
     {
-        $_SESSION[$strHash] = $arData;
+        $strPath = $this->config->strPath;
+        if (is_writeable($strPath)) {
+            return file_put_contents($strPath . $strHash, serialize($arData));
+        } else {
+            throw new ForwardFW_Cache_Exception('Not writeable');
+        }
     }
 
     /**
@@ -86,7 +91,11 @@ class ForwardFW_Cache_Backend_File extends ForwardFW_Cache_Backend
      */
     protected function readData($strHash)
     {
-        return $_SESSION[$strHash];
+        $strPath = $this->config->strPath;
+        if (is_readable($strPath . $strHash)) {
+            return unserialize(file_get_contents($strPath . $strHash));
+        }
+        return null;
     }
 }
 ?>
