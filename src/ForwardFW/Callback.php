@@ -30,6 +30,8 @@ declare(encoding = "utf-8");
  * @since      File available since Release 0.0.8
  */
 
+require_once 'ForwardFW/Exception/Callback.php';
+
 /**
  * Config for a Cache.
  *
@@ -59,7 +61,7 @@ class ForwardFW_Callback
      * @param array    $arParameters Parameters for function call.
      *
      * @return void
-     * @throws ForwardFW_Exception_NoCallbackFunction
+     * @throws ForwardFW_Exception_Callback
      */
     public function __construct($callback, array $arParameters = null)
     {
@@ -67,7 +69,7 @@ class ForwardFW_Callback
             $this->callback = $callback;
             $this->setParameters($arParameters);
         } else {
-            // @TODO throw
+            throw new ForwardFW_Exception_Callback('This is no callback function');
         }
     }
 
