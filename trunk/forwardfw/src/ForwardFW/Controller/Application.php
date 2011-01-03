@@ -125,8 +125,11 @@ class ForwardFW_Controller_Application extends ForwardFW_Controller_View
                 // @TODO evaluate State of Screen
                 $strResult = $this->processView();
             }
+        } catch (ForwardFW_Exception $e) {
+            // Todo Inner Exception Logging
+            throw $e;
         } catch (Exception $e) {
-            // Logging
+            // Todo Logging
             throw $e;
         }
         $this->response->addContent($strResult);
