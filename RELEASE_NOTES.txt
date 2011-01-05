@@ -1,12 +1,13 @@
-This is the eighth runable Release, which won't help you much but will demonstrate
-the technics behind this project.
-How you can see in the demo application most things should now on the shape of pre-alpha quality.
-So it would be possible to play with it in small applications. Which is also demonstrated in
-the ForwardDemo package.
-After the possibilities of the DataHandler now the caching framework is introduced. As the
-Exceptions aren't there yet, it isn't so useful as it will be. Also the looking mechanismus
-isn't there yet, but will be in the next release. So we are getting closer to the release
-of 0.1.0. But it may be, that I'll release 0.0.10 after 0.9.0.
+This is release 0.0.9 which finalize parts of the Caching System and is now ready
+to be used, but needs a clean up on the configuration part.
+How you can see in the demo application most things should now on the shape of
+pre-alpha quality. So it would be possible to play with it in small applications.
+This is also demonstrated in the ForwardDemo package.
+As the Caching System is now useable as it should be (Cache Looking, usage of 
+Exceptions) the next things to do are cleaning configuration of Caching System,
+use Caching System inside DataLoader, implement base object and data mapper.
+So we are getting closer to the release of 0.1.0. But there will be a 0.0.10 and
+maybe a 0.0.11 release before.
 
 Requirements:
 
