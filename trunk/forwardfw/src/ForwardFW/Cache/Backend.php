@@ -76,14 +76,23 @@ abstract class ForwardFW_Cache_Backend implements ForwardFW_Interface_Cache_Back
                     return $arData['data'];
                 } else {
                     // Data is generating
+                    $this->application->getResponse()->addLog(
+                        'Cache Backend: Data isGenerating'
+                    );
                     throw new ForwardFW_Cache_Exception_IsGenerating();
                 }
             } else {
                 // Data but timed out exception
+                $this->application->getResponse()->addLog(
+                    'Cache Backend: Data timed out'
+                );
                 throw new ForwardFW_Cache_Exception_TimeOut();
             }
         } else {
             // No Data Exception
+            $this->application->getResponse()->addLog(
+                'Cache Backend: No data available'
+            );
             throw new ForwardFW_Cache_Exception_NoData();
         }
     }
