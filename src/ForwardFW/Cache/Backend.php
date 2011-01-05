@@ -66,6 +66,9 @@ abstract class ForwardFW_Cache_Backend implements ForwardFW_Interface_Cache_Back
      * @param integer $nTime   Oldest Time of data in cache.
      *
      * @return mixed Data from cache
+     * @throws ForwardFW_Cache_Exception_IsGenerating
+     * @throws ForwardFW_Cache_Exception_TimeOut
+     * @throws ForwardFW_Cache_Exception_NoData
      */
     public function getData($strHash, $nTime)
     {
@@ -73,6 +76,9 @@ abstract class ForwardFW_Cache_Backend implements ForwardFW_Interface_Cache_Back
         if (!is_null($arData) && is_array($arData)) {
             if ($arData['time'] > $nTime) {
                 if (!$arData['generating']) {
+                    $this->application->getResponse()->addLog(
+                        'Cache Backend: Hit'
+                    );
                     return $arData['data'];
                 } else {
                     // Data is generating
