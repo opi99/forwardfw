@@ -30,14 +30,9 @@ declare(encoding = "utf-8");
  * @since      File available since Release 0.0.9
  */
 
-require_once 'ForwardFW/Config/FunctionCacheData.php';
 require_once 'ForwardFW/Config/CacheSystem.php';
 require_once 'ForwardFW/Interface/Application.php';
 require_once 'ForwardFW/Cache/Backend.php';
-
-require_once 'ForwardFW/Cache/Exception/TimeOut.php';
-require_once 'ForwardFW/Cache/Exception/NoData.php';
-require_once 'ForwardFW/Cache/Exception/IsGenerating.php';
 
 /**
  * Implementation of a File Cache Backend.
@@ -96,6 +91,21 @@ class ForwardFW_Cache_Backend_File extends ForwardFW_Cache_Backend
             return unserialize(file_get_contents($strPath . $strHash));
         }
         return null;
+    }
+
+    /**
+     * Removes data from the cache
+     *
+     * @param string $strHash Hash for data.
+     *
+     * @return void
+     */
+    protected function removeData($strHash)
+    {
+        $strPath = $this->config->strPath;
+        if (is_writeable($strPath . $strHash)) {
+            return unlink($strPath . $strHash);
+        }
     }
 }
 ?>

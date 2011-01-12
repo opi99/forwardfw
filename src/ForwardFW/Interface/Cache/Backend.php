@@ -68,7 +68,6 @@ interface ForwardFW_Interface_Cache_Backend
      */
     public function getData($strHash, $nTime);
 
-
     /**
      * Sets data from Cache.
      *
@@ -78,6 +77,15 @@ interface ForwardFW_Interface_Cache_Backend
      * @return void
      */
     public function setData($strHash, $mData);
+
+    /**
+     * Clears data from Cache.
+     *
+     * @param string $strHash Hash for data.
+     *
+     * @return void
+     */
+    public function unsetData($strHash);
 
     /**
      * Sets marker that cache will be generated yet.

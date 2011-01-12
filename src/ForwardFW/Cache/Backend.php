@@ -125,6 +125,20 @@ abstract class ForwardFW_Cache_Backend implements ForwardFW_Interface_Cache_Back
     }
 
     /**
+     * Clears data from Cache.
+     *
+     * @param string $strHash Hash for data.
+     *
+     * @return void
+     */
+    public function unsetData($strHash)
+    {
+        $this->removeData(
+            $strHash
+        );
+    }
+
+    /**
      * Sets marker that cache will be generated yet.
      *
      * @param string $strHash Hash of cache which is generated.
@@ -162,5 +176,14 @@ abstract class ForwardFW_Cache_Backend implements ForwardFW_Interface_Cache_Back
      * @return array Data from the storage
      */
     abstract protected function readData($strHash);
+
+    /**
+     * Removes data from the cache
+     *
+     * @param string $strHash Hash for data.
+     *
+     * @return array Data from the storage
+     */
+    abstract protected function removeData($strHash);
 }
 ?>
