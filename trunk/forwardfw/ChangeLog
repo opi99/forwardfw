@@ -1,3 +1,6 @@
+2011-01-13 Alexander Opitz <opi@gmx.at>
+* #57 Add function to remove explizit a hash
+
 2011-01-05 Alexander Opitz <opi@gmx.at>
 * #58 Add Logging output to Cache Backend
 * #55 Releasing 0.0.9
