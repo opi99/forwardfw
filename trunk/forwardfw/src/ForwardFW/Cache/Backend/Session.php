@@ -30,14 +30,9 @@ declare(encoding = "utf-8");
  * @since      File available since Release 0.0.8
  */
 
-require_once 'ForwardFW/Config/FunctionCacheData.php';
 require_once 'ForwardFW/Config/CacheSystem.php';
 require_once 'ForwardFW/Interface/Application.php';
 require_once 'ForwardFW/Cache/Backend.php';
-
-require_once 'ForwardFW/Cache/Exception/TimeOut.php';
-require_once 'ForwardFW/Cache/Exception/NoData.php';
-require_once 'ForwardFW/Cache/Exception/IsGenerating.php';
 
 /**
  * Implementation of a Cache Backend.
@@ -88,6 +83,18 @@ class ForwardFW_Cache_Backend_Session extends ForwardFW_Cache_Backend
     protected function readData($strHash)
     {
         return $_SESSION[$strHash];
+    }
+
+    /**
+     * Removes data from the cache
+     *
+     * @param string $strHash Hash for data.
+     *
+     * @return void
+     */
+    protected function removeData($strHash)
+    {
+        unset($_SESSION[$strHash]);
     }
 }
 ?>
