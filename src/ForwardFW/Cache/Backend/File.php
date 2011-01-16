@@ -98,13 +98,27 @@ class ForwardFW_Cache_Backend_File extends ForwardFW_Cache_Backend
      *
      * @param string $strHash Hash for data.
      *
-     * @return void
+     * @return boolean Returns true if data removed otherwise false.
      */
     protected function removeData($strHash)
     {
         $strPath = $this->config->strPath;
         if (is_writeable($strPath . $strHash)) {
             return unlink($strPath . $strHash);
+        }
+        return false;
+    }
+
+    /**
+     * Clear complete cache
+     *
+     * @return void
+     */
+    protected function clear()
+    {
+        $arFiles = glob($this->config->strPath);
+        foreach ($arFiles as $strFile) {
+            unlink($strFile);
         }
     }
 }

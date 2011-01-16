@@ -182,8 +182,15 @@ abstract class ForwardFW_Cache_Backend implements ForwardFW_Interface_Cache_Back
      *
      * @param string $strHash Hash for data.
      *
-     * @return array Data from the storage
+     * @return boolean Returns true if data removed otherwise false.
      */
     abstract protected function removeData($strHash);
+
+    /**
+     * Clear complete cache
+     *
+     * @return void
+     */
+    abstract protected function clear();
 }
 ?>
