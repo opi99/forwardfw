@@ -70,7 +70,7 @@ class ForwardFW_Cache_Backend_Session extends ForwardFW_Cache_Backend
      */
     protected function writeData($strHash, array $arData)
     {
-        $_SESSION[$strHash] = $arData;
+        $_SESSION['cache'][$strHash] = $arData;
     }
 
     /**
@@ -82,7 +82,7 @@ class ForwardFW_Cache_Backend_Session extends ForwardFW_Cache_Backend
      */
     protected function readData($strHash)
     {
-        return $_SESSION[$strHash];
+        return $_SESSION['cache'][$strHash];
     }
 
     /**
@@ -90,11 +90,23 @@ class ForwardFW_Cache_Backend_Session extends ForwardFW_Cache_Backend
      *
      * @param string $strHash Hash for data.
      *
-     * @return void
+     * @return boolean Returns true if data removed otherwise false.
      */
     protected function removeData($strHash)
     {
-        unset($_SESSION[$strHash]);
+        unset($_SESSION['cache'][$strHash]);
+        return true;
+    }
+
+    /**
+     * Clear complete cache
+     *
+     * @return void
+     */
+    protected function clear($strHash)
+    {
+        $_SESSION['cache'] = array();
+        return true;
     }
 }
 ?>
