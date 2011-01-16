@@ -30,9 +30,7 @@ declare(encoding = "utf-8");
  * @since      File available since Release 0.0.7
  */
 
-/**
- *
- */
+require_once 'ForwardFW/Exception/DataHandler.php';
 require_once 'ForwardFW/Controller/DataHandler.php';
 require_once 'ForwardFW/Interface/Application.php';
 require_once 'PEAR/MDB2.php';
@@ -49,25 +47,19 @@ require_once 'PEAR/MDB2.php';
  */
 class ForwardFW_Controller_DataHandler_MDB2 extends ForwardFW_Controller_DataHandler
 {
-    var $arTablePrefix = array();
     /**
-     * Constructor
-     *
-     * @param ForwardFW_Interface_Application $_application The running application.
-     *
-     * @return void
+     * @var array Prefix for tables
      */
-    public function __construct(ForwardFW_Interface_Application $_application)
-    {
-        parent::__construct($_application);
-    }
+    private $arTablePrefix = array();
 
-    public function loadFromCached($strConnection, array $arOptions, $nCacheTimeout = -1)
-    {
-        // @TODO Not yet implemented
-        return $this->loadFrom($strConnection, $arOptions);
-    }
-
+    /**
+     * Loads Data from a connection (DB, SOAP, File)
+     *
+     * @param string $strConnection Name of connection
+     * @param array  $arOptions     Options to load the data
+     *
+     * @return mixed Data from the connection.
+     */
     public function loadFrom($strConnection, array $arOptions)
     {
         $conMDB2 = $this->getConnection($strConnection);
@@ -97,8 +89,11 @@ class ForwardFW_Controller_DataHandler_MDB2 extends ForwardFW_Controller_DataHan
 
         if (PEAR::isError($resultMDB2)) {
             $this->application->getResponse()->addError($resultMDB2->getMessage() . $resultMDB2->getUserinfo());
-            return null;
-            // @TODO throw exception
+            throw new ForwardFW_Exception_DataHandler(
+                'Error while execute: '
+                . $resultMDB2->getMessage()
+                . $resultMDB2->getUserinfo()
+            );
         }
         while ($arRow = $resultMDB2->fetchRow(MDB2_FETCHMODE_ASSOC)) {
             array_push($arResult, $arRow);
@@ -106,15 +101,29 @@ class ForwardFW_Controller_DataHandler_MDB2 extends ForwardFW_Controller_DataHan
         return $arResult;
     }
 
+    /**
+     * Saves Data to a connection (DB, SOAP, File)
+     *
+     * @param string $strConnection Name of connection
+     * @param array  $arOptions     Options to load the data
+     *
+     * @return mixed Data from the connection.
+     */
     public function saveTo($strConnection, array $options)
     {
         // @TODO
     }
 
+
+    /**
+     * Loads and initialize the connection handler.
+     *
+     * @param string $strConnection Name of connection
+     *
+     * @return void
+     */
     public function initConnection($strConnection)
     {
-        $strTablePrefix = $this->getConfigParameter('options');// @TODO depends on connectionName
-
         $arConfig = $this->getConfigParameter($strConnection);
 
         if (isset($arConfig['prefix'])) {
@@ -125,10 +134,14 @@ class ForwardFW_Controller_DataHandler_MDB2 extends ForwardFW_Controller_DataHan
         $conMDB2 = MDB2::connect($arConfig['dsn'], $options);
 
         if (PEAR::isError($conMDB2)) {
-            $this->application->getResponse()->addError($conMDB2->getMessage() . $conMDB2->getUserinfo());
-            var_dump($conMDB2->getMessage() . $conMDB2->getUserinfo());
-            return null;
-            // @TODO throw exception
+            $this->application->getResponse()->addError(
+                $conMDB2->getMessage() . $conMDB2->getUserinfo()
+            );
+            throw new ForwardFW_Exception_DataHandler(
+                'Cannot initialize MDB Connection: '
+                . $conMDB2->getMessage()
+                . $conMDB2->getUserinfo()
+            );
         }
 
         $ret = $conMDB2->exec('set character set utf8');

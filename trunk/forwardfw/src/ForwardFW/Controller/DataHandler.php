@@ -30,9 +30,6 @@ declare(encoding = "utf-8");
  * @since      File available since Release 0.0.7
  */
 
-/**
- *
- */
 require_once 'ForwardFW/Interface/DataHandler.php';
 require_once 'ForwardFW/Interface/Application.php';
 
@@ -52,7 +49,7 @@ class ForwardFW_Controller_DataHandler extends ForwardFW_Controller
     /**
      * @var array Cache of connections
      */
-    var $arConnectionCache = array();
+    protected $arConnectionCache = array();
 
     /**
      * Constructor
@@ -84,24 +81,56 @@ class ForwardFW_Controller_DataHandler extends ForwardFW_Controller
         return $return;
     }
 
+    /**
+     * Loads Data from cache or from a connection (DB, SOAP, File) if cache failed.
+     *
+     * @param string $strConnection Name of connection
+     * @param array  $arOptions     Options to load the data
+     *
+     * @return mixed Data from the connection.
+     */
     public function loadFromCached($strConnection, array $arOptions, $nCacheTimeout = -1)
     {
-        // @TODO Not yet implemented
-        return $this->loadFrom($strConnection, $arOptions);
+        $handler = $this->getConnection($strConnection);
+        return $handler->loadFrom($strConnection, $arOptions);
     }
 
+    /**
+     * Loads Data from a connection (DB, SOAP, File)
+     *
+     * @param string $strConnection Name of connection
+     * @param array  $arOptions     Options to load the data
+     *
+     * @return mixed Data from the connection.
+     */
     public function loadFrom($strConnection, array $arOptions)
     {
         $handler = $this->getConnection($strConnection);
         return $handler->loadFrom($strConnection, $arOptions);
     }
 
+    /**
+     * Saves Data to a connection (DB, SOAP, File)
+     *
+     * @param string $strConnection Name of connection
+     * @param array  $arOptions     Options to load the data
+     *
+     * @return mixed Data from the connection.
+     */
     public function saveTo($strConnection, array $options)
     {
         $handler = $this->getConnection($strConnection);
         return $handler->saveTo($strConnection, $arOptions);
     }
 
+
+    /**
+     * Gets the connection handler.
+     *
+     * @param string $strConnection Name of connection
+     *
+     * @return mixed ConnectionHandler
+     */
     protected function getConnection($strConnection)
     {
         if (!isset($this->arConnectionCache[$strConnection])) {
@@ -111,6 +140,13 @@ class ForwardFW_Controller_DataHandler extends ForwardFW_Controller
         return $this->arConnectionCache[$strConnection];
     }
 
+    /**
+     * Loads and initialize the connection handler.
+     *
+     * @param string $strConnection Name of connection
+     *
+     * @return void
+     */
     public function initConnection($strConnection)
     {
         $arConfig = $this->getConfigParameter($strConnection);
