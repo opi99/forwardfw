@@ -1,3 +1,6 @@
+2011-01-22 Alexander Opitz <opi@gmx.at>
+* #53 Implement cache into DataLoader
+
 2011-01-16 Alexander Opitz <opi@gmx.at>
 * #57 Add cache clearing
 * #61 DataLoader/MDB2 Cleanup and use Exception
