@@ -120,7 +120,7 @@ class ForwardFW_Controller_DataHandler extends ForwardFW_Controller
         $configCacheData = new ForwardFW_Config_FunctionCacheData();
         $configCacheData
             ->setCallback($cacheCallback)
-            ->setTimeout(5);
+            ->setTimeout($nCacheTimeout);
 
         return $cache->getCache($configCacheData);
     }
