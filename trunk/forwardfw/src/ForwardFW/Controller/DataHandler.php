@@ -33,6 +33,11 @@ declare(encoding = "utf-8");
 require_once 'ForwardFW/Interface/DataHandler.php';
 require_once 'ForwardFW/Interface/Application.php';
 
+require_once 'ForwardFW/Callback.php';
+require_once 'ForwardFW/Cache/Frontend/Function.php';
+require_once 'ForwardFW/Config/Cache/Backend/File.php';
+
+
 /**
  * Managing DataLoading via PEAR::MDB
  *
@@ -92,7 +97,32 @@ class ForwardFW_Controller_DataHandler extends ForwardFW_Controller
     public function loadFromCached($strConnection, array $arOptions, $nCacheTimeout = -1)
     {
         $handler = $this->getConnection($strConnection);
-        return $handler->loadFrom($strConnection, $arOptions);
+
+        $backendConfig = new ForwardFW_Config_Cache_Backend_File();
+        $backendConfig->strPath = getcwd() . '/cache/';
+
+        $configCacheSystem = new ForwardFW_Config_CacheSystem();
+        $configCacheSystem
+            ->setCacheBackend('ForwardFW_Cache_Backend_File')
+            ->setBackendConfig($backendConfig)
+            ->setCacheFrontend('ForwardFW_Cache_Frontend_Function');
+
+        $cache = ForwardFW_Cache_Frontend::getInstance(
+            $this->application,
+            $configCacheSystem
+        );
+
+        $cacheCallback = new ForwardFW_Callback(
+            array($handler, 'loadFrom'),
+            array($strConnection, $arOptions)
+        );
+
+        $configCacheData = new ForwardFW_Config_FunctionCacheData();
+        $configCacheData
+            ->setCallback($cacheCallback)
+            ->setTimeout(5);
+
+        return $cache->getCache($configCacheData);
     }
 
     /**
