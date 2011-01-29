@@ -31,7 +31,7 @@ declare(encoding = "utf-8");
  */
 
 require_once 'ForwardFW/Config/CacheData.php';
-require_once 'ForwardFW/Config/CacheSystem.php';
+require_once 'ForwardFW/Config/Cache/Frontend.php';
 require_once 'ForwardFW/Interface/Application.php';
 require_once 'ForwardFW/Interface/Cache/Backend.php';
 require_once 'ForwardFW/Interface/Cache/Frontend.php';
@@ -72,15 +72,15 @@ abstract class ForwardFW_Cache_Frontend implements ForwardFW_Interface_Cache_Fro
      * Builds an instance of cache
      *
      * @param ForwardFW_Interface_Application $application The running application
-     * @param ForwardFW_Config_CacheSystem    $config      Configuration of caching
+     * @param ForwardFW_Config_Cache_Frontend $config      Configuration of caching
      *
      * @return ForwardFW_Interface_Cache_Frontend The cache Frontend
      */
-    static public function getInstance(
+    public static function getInstance(
         ForwardFW_Interface_Application $application,
-        ForwardFW_Config_CacheSystem $config
+        ForwardFW_Config_Cache_Frontend $config
     ) {
-        $backend = self::getBackend($application, $config);
+        $backend = self::getBackend($application, $config->getBackendConfig());
         $frontend = self::getFrontend($application, $config, $backend);
         return $frontend;
     }
@@ -89,13 +89,13 @@ abstract class ForwardFW_Cache_Frontend implements ForwardFW_Interface_Cache_Fro
      * Builds Backend of a cache configuration
      *
      * @param ForwardFW_Interface_Application $application The running application
-     * @param ForwardFW_Config_CacheSystem    $config      Configuration of caching
+     * @param ForwardFW_Config_Cache_Frontend $config      Configuration of caching
      *
      * @return ForwardFW_Interface_Cache_Backend Caching Backend.
      */
-    static public function getBackend(
+    public static function getBackend(
         ForwardFW_Interface_Application $application,
-        ForwardFW_Config_CacheSystem $config
+        ForwardFW_Config_Cache_Frontend $config
     ) {
         $class = $config->getCacheBackend();
         if (isset($GLOBALS['Cache']['backend'][$class])) {
@@ -117,9 +117,9 @@ abstract class ForwardFW_Cache_Frontend implements ForwardFW_Interface_Cache_Fro
      *
      * @return ForwardFW_Interface_Cache_Frontend Caching Frontend.
      */
-    static public function getFrontend(
+    public static function getFrontend(
         ForwardFW_Interface_Application $application,
-        ForwardFW_Config_CacheSystem $config,
+        ForwardFW_Config_Cache_Frontend $config,
         ForwardFW_Interface_Cache_Backend $backend
     ) {
         $class = $config->getCacheFrontend();
