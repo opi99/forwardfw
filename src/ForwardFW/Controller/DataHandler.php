@@ -98,19 +98,7 @@ class ForwardFW_Controller_DataHandler extends ForwardFW_Controller
     {
         $handler = $this->getConnection($strConnection);
 
-        $backendConfig = new ForwardFW_Config_Cache_Backend_File();
-        $backendConfig->strPath = getcwd() . '/cache/';
-
-        $configCacheSystem = new ForwardFW_Config_CacheSystem();
-        $configCacheSystem
-            ->setCacheBackend('ForwardFW_Cache_Backend_File')
-            ->setBackendConfig($backendConfig)
-            ->setCacheFrontend('ForwardFW_Cache_Frontend_Function');
-
-        $cache = ForwardFW_Cache_Frontend::getInstance(
-            $this->application,
-            $configCacheSystem
-        );
+        $this->getCacheSystem();
 
         $cacheCallback = new ForwardFW_Callback(
             array($handler, 'loadFrom'),
@@ -123,6 +111,34 @@ class ForwardFW_Controller_DataHandler extends ForwardFW_Controller
             ->setTimeout($nCacheTimeout);
 
         return $cache->getCache($configCacheData);
+    }
+
+
+    /**
+     * Initializes and returns the caching system depending on connection
+     * configuration.
+     *
+     * @param string $strConnection Name of connection
+     *
+     * @return ForwardFW_Cache_Frontend The Cache Frontend.
+     */
+    protected function getCacheSystem($strConnection)
+    {
+        $backendConfig = new ForwardFW_Config_Cache_Backend_File();
+        $backendConfig->strPath = getcwd() . '/cache/';
+
+        $configCacheFrontend = new ForwardFW_Config_Cache_Frontend();
+        $configCacheFrontend
+            ->setCacheBackend('ForwardFW_Cache_Backend_File')
+            ->setBackendConfig($backendConfig)
+            ->setCacheFrontend('ForwardFW_Cache_Frontend_Function');
+
+        $cache = ForwardFW_Cache_Frontend::getInstance(
+            $this->application,
+            $configCacheFrontend
+        );
+
+        return $cache;
     }
 
     /**
