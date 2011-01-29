@@ -42,7 +42,7 @@ require_once 'ForwardFW/Config.php';
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @link       http://forwardfw.sourceforge.net
  */
-class ForwardFW_Config_CacheSystem extends ForwardFW_Config
+class ForwardFW_Config_Cache_Frontend extends ForwardFW_Config
 {
     /**
      * @var string Class Name of Cache Frontend
@@ -59,34 +59,71 @@ class ForwardFW_Config_CacheSystem extends ForwardFW_Config
      */
     private $backendConfig = null;
 
+    /**
+     * Sets Name of FE Cache
+     *
+     * @param string $strCacheFrontend Name of the frontend cache.
+     *
+     * @return ForwardFW_Config_Cache_Frontend This.
+     */
     public function setCacheFrontend($strCacheFrontend)
     {
         $this->strCacheFrontend = $strCacheFrontend;
         return $this;
     }
 
+    /**
+     * Sets Name of BE Cache
+     *
+     * @param string $strCacheBackend Name of the backend cache.
+     *
+     * @return ForwardFW_Config_Cache_Frontend This.
+     */
     public function setCacheBackend($strCacheBackend)
     {
         $this->strCacheBackend = $strCacheBackend;
         return $this;
     }
 
-    public function setBackendConfig($backendConfig)
+    /**
+     * Config of the Backend
+     *
+     * @param ForwardFW_Config_Cache_Backend $backendConfig Config of the backend cache.
+     *
+     * @return ForwardFW_Config_Cache_Frontend This.
+     */
+    public function setBackendConfig(ForwardFW_Config_Cache_Backend $backendConfig)
     {
         $this->backendConfig = $backendConfig;
         return $this;
     }
 
+    /**
+     * Get Name of cache frontend.
+     *
+     * @return string Name of frontend cache
+     */
     public function getCacheFrontend()
     {
         return $this->strCacheFrontend;
     }
 
+    /**
+     * Get Name of cache backend.
+     *
+     * @return string Name of backend cache
+     */
     public function getCacheBackend()
     {
         return $this->strCacheBackend;
     }
 
+
+    /**
+     * Get config of cache backend.
+     *
+     * @return ForwardFW_Config_Cache_Backend Config of backend cache
+     */
     public function getBackendConfig()
     {
         return $this->backendConfig;
