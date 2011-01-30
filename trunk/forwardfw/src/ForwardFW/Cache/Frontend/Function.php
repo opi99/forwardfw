@@ -31,7 +31,7 @@ declare(encoding = "utf-8");
  */
 
 require_once 'ForwardFW/Cache/Frontend.php';
-require_once 'ForwardFW/Config/CacheSystem.php';
+//require_once 'ForwardFW/Config/Cache/Frontend.php';
 require_once 'ForwardFW/Config/FunctionCacheData.php';
 require_once 'ForwardFW/Interface/Application.php';
 

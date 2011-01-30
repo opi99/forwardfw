@@ -50,6 +50,12 @@ require_once 'ForwardFW/Cache/Exception/IsGenerating.php';
  */
 abstract class ForwardFW_Cache_Backend implements ForwardFW_Interface_Cache_Backend
 {
+    /**
+     * Constructor
+     *
+     * @param ForwardFW_Interface_Application $application The running application.
+     * @param ForwardFW_Config_Cache_Backend  $config      Backend config.
+     */
     public function __construct(
         ForwardFW_Interface_Application $application,
         ForwardFW_Config_Cache_Backend $config
