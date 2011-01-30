@@ -32,7 +32,7 @@ declare(encoding = "utf-8");
 
 require_once 'ForwardFW/Cache/Frontend.php';
 //require_once 'ForwardFW/Config/Cache/Frontend.php';
-require_once 'ForwardFW/Config/FunctionCacheData.php';
+require_once 'ForwardFW/Config/Cache/Data/Function.php';
 require_once 'ForwardFW/Interface/Application.php';
 
 /**
@@ -50,27 +50,27 @@ class ForwardFW_Cache_Frontend_Function extends ForwardFW_Cache_Frontend
     /**
      * Returns content from cache or gathers the data
      *
-     * @param ForwardFW_Config_CacheData $config What data should be get from cache
+     * @param ForwardFW_Config_Cache_Data $config What data should be get from cache
      *
      * @return mixed The data you requested.
      */
-    public function getCache(ForwardFW_Config_CacheData $config) {
+    public function getCache(ForwardFW_Config_Cache_Data $config) {
         return parent::getCache($config);
     }
 
     /**
      * Returns hash for this config.
      *
-     * @param ForwardFW_Config_CacheData $config For what the hash should calculated.
+     * @param ForwardFW_Config_Cache_Data $config For what the hash should calculated.
      *
      * @return string Hash for the config.
      */
-    protected function calculateHash(ForwardFW_Config_CacheData  $config)
+    protected function calculateHash(ForwardFW_Config_Cache_Data  $config)
     {
         return $this->getHash($config->getCallback()->getParameters());
     }
 
-    protected function getDataToCache(ForwardFW_Config_CacheData $config)
+    protected function getDataToCache(ForwardFW_Config_Cache_Data $config)
     {
         return $config->getCallback()->doCallback();
     }

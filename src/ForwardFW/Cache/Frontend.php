@@ -30,7 +30,7 @@ declare(encoding = "utf-8");
  * @since      File available since Release 0.0.8
  */
 
-require_once 'ForwardFW/Config/CacheData.php';
+require_once 'ForwardFW/Config/Cache/Data.php';
 require_once 'ForwardFW/Config/Cache/Frontend.php';
 require_once 'ForwardFW/Interface/Application.php';
 require_once 'ForwardFW/Interface/Cache/Backend.php';
@@ -117,7 +117,7 @@ abstract class ForwardFW_Cache_Frontend implements ForwardFW_Interface_Cache_Fro
      * Builds Backend of a cache configuration
      *
      * @param ForwardFW_Interface_Application   $application The running application
-     * @param ForwardFW_Config_CacheSystem      $config      Configuration of caching
+     * @param ForwardFW_Config_Cache_Frontend   $config      Configuration of caching
      * @param ForwardFW_Interface_Cache_Backend $backend     Backend for the frontend
      *
      * @return ForwardFW_Interface_Cache_Frontend Caching Frontend.
@@ -141,11 +141,11 @@ abstract class ForwardFW_Cache_Frontend implements ForwardFW_Interface_Cache_Fro
     /**
      * Returns content from cache or gathers the data
      *
-     * @param ForwardFW_Config_CacheData $config What data should be get from cache
+     * @param ForwardFW_Config_Cache_Data $config What data should be get from cache
      *
      * @return mixed The data you requested.
      */
-    public function getCache(ForwardFW_Config_CacheData $config)
+    public function getCache(ForwardFW_Config_Cache_Data $config)
     {
         $strHash = $this->calculateHash($config);
         switch ($config->getTimeout()) {
@@ -177,17 +177,17 @@ abstract class ForwardFW_Cache_Frontend implements ForwardFW_Interface_Cache_Fro
      * Returns the real data and add it to cache. If real data fails tries to
      * get old data from cache if available.
      *
-     * @param String                     $strHash       Hash of cache
-     * @param ForwardFW_Config_CacheData $config        What data should be get
-     *                                                  from cache.
-     * @param boolean                    $bOldAvailable True if backend has old
-     *                                                  data for hash.
+     * @param String                      $strHash       Hash of cache
+     * @param ForwardFW_Config_Cache_Data $config        What data should be get
+     *                                                   from cache.
+     * @param boolean                     $bOldAvailable True if backend has old
+     *                                                   data for hash.
      *
      * @return mixed The data you requested.
      */
     protected function getRealData(
         $strHash, 
-        ForwardFW_Config_CacheData $config,
+        ForwardFW_Config_Cache_Data $config,
         $bOldAvailable
     ) {
         try {
@@ -202,9 +202,9 @@ abstract class ForwardFW_Cache_Frontend implements ForwardFW_Interface_Cache_Fro
         return $mData;
     }
 
-    abstract protected function calculateHash(ForwardFW_Config_CacheData $config);
+    abstract protected function calculateHash(ForwardFW_Config_Cache_Data $config);
 
-    abstract protected function getDataToCache(ForwardFW_Config_CacheData $config);
+    abstract protected function getDataToCache(ForwardFW_Config_Cache_Data $config);
 
     /**
      * Calculates a hash by serialize and md5.

@@ -33,7 +33,7 @@ declare(encoding = "utf-8");
 /**
  *
  */
-require_once 'ForwardFW/Config/CacheData.php';
+require_once 'ForwardFW/Config/Cache/Data.php';
 require_once 'ForwardFW/Config/Cache/Frontend.php';
 require_once 'ForwardFW/Interface/Application.php';
 require_once 'ForwardFW/Interface/Cache/Backend.php';
@@ -56,21 +56,34 @@ interface ForwardFW_Interface_Cache_Frontend
      * @param ForwardFW_Interface_Application   $application The running application.
      * @param ForwardFW_Interface_Cache_Backend $backend     Backend for storing
      *                                                       cache data.
-     *
-     * @return void
      */
     public function __construct(
         ForwardFW_Interface_Application $application,
         ForwardFW_Interface_Cache_Backend $backend
     );
 
+    /**
+     * Builds an instance of cache
+     *
+     * @param ForwardFW_Interface_Application $application The running application
+     * @param ForwardFW_Config_Cache_Frontend $config      Configuration of caching
+     *
+     * @return ForwardFW_Interface_Cache_Frontend The cache Frontend
+     */
     static public function getInstance(
         ForwardFW_Interface_Application $application,
         ForwardFW_Config_Cache_Frontend $config
     );
 
+    /**
+     * Returns content from cache or gathers the data
+     *
+     * @param ForwardFW_Config_Cache_Data $config What data should be get from cache
+     *
+     * @return mixed The data you requested.
+     */
     public function getCache(
-        ForwardFW_Config_CacheData $config
+        ForwardFW_Config_Cache_Data $config
     );
 }
 ?>
