@@ -34,7 +34,7 @@ declare(encoding = "utf-8");
  *
  */
 require_once 'ForwardFW/Config/CacheData.php';
-require_once 'ForwardFW/Config/CacheSystem.php';
+require_once 'ForwardFW/Config/Cache/Frontend.php';
 require_once 'ForwardFW/Interface/Application.php';
 require_once 'ForwardFW/Interface/Cache/Backend.php';
 
@@ -66,7 +66,7 @@ interface ForwardFW_Interface_Cache_Frontend
 
     static public function getInstance(
         ForwardFW_Interface_Application $application,
-        ForwardFW_Config_CacheSystem $config
+        ForwardFW_Config_Cache_Frontend $config
     );
 
     public function getCache(
