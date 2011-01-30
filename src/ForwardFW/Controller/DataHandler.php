@@ -98,7 +98,7 @@ class ForwardFW_Controller_DataHandler extends ForwardFW_Controller
     {
         $handler = $this->getConnection($strConnection);
 
-        $this->getCacheSystem();
+        $this->getCacheSystem($strConnection);
 
         $cacheCallback = new ForwardFW_Callback(
             array($handler, 'loadFrom'),
