@@ -1,5 +1,6 @@
 2011-01-30 Alexander Opitz <opi@gmx.at>
 * #59 Cleanup cache config
+* #60 Release 0.0.10
 
 2011-01-22 Alexander Opitz <opi@gmx.at>
 * #53 Implement cache into DataLoader
