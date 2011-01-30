@@ -80,7 +80,11 @@ abstract class ForwardFW_Cache_Frontend implements ForwardFW_Interface_Cache_Fro
         ForwardFW_Interface_Application $application,
         ForwardFW_Config_Cache_Frontend $config
     ) {
-        $backend = self::getBackend($application, $config->getBackendConfig());
+        $backend = self::getBackend(
+            $application,
+            $config->getCacheBackend(),
+            $config->getBackendConfig()
+        );
         $frontend = self::getFrontend($application, $config, $backend);
         return $frontend;
     }
@@ -88,22 +92,23 @@ abstract class ForwardFW_Cache_Frontend implements ForwardFW_Interface_Cache_Fro
     /**
      * Builds Backend of a cache configuration
      *
-     * @param ForwardFW_Interface_Application $application The running application
-     * @param ForwardFW_Config_Cache_Frontend $config      Configuration of caching
+     * @param ForwardFW_Interface_Application $application     The running application
+     * @param string                          $strCacheBackend Configuration of caching
+     * @param ForwardFW_Config_Cache_Backend  $config          Configuration of caching
      *
      * @return ForwardFW_Interface_Cache_Backend Caching Backend.
      */
     public static function getBackend(
         ForwardFW_Interface_Application $application,
-        ForwardFW_Config_Cache_Frontend $config
+        $strCacheBackend,
+        ForwardFW_Config_Cache_Backend $config
     ) {
-        $class = $config->getCacheBackend();
-        if (isset($GLOBALS['Cache']['backend'][$class])) {
-            $return = $GLOBALS['Cache']['backend'][$class];
+        if (isset($GLOBALS['Cache']['backend'][$strCacheBackend])) {
+            $return = $GLOBALS['Cache']['backend'][$strCacheBackend];
         } else {
-            include_once str_replace('_', '/', $class) . '.php';
-            $return = new $class($application, $config);
-            $GLOBALS['Cache']['backend'][$class] = $return;
+            include_once str_replace('_', '/', $strCacheBackend) . '.php';
+            $return = new $strCacheBackend($application, $config);
+            $GLOBALS['Cache']['backend'][$strCacheBackend] = $return;
         }
         return $return;
     }
