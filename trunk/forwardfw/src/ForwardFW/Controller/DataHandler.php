@@ -35,6 +35,7 @@ require_once 'ForwardFW/Interface/Application.php';
 
 require_once 'ForwardFW/Callback.php';
 require_once 'ForwardFW/Cache/Frontend/Function.php';
+require_once 'ForwardFW/Cache/Data/Function.php';
 require_once 'ForwardFW/Config/Cache/Backend/File.php';
 
 
@@ -105,7 +106,7 @@ class ForwardFW_Controller_DataHandler extends ForwardFW_Controller
             array($strConnection, $arOptions)
         );
 
-        $configCacheData = new ForwardFW_Config_FunctionCacheData();
+        $configCacheData = new ForwardFW_Config_Cache_Data_Function();
         $configCacheData
             ->setCallback($cacheCallback)
             ->setTimeout($nCacheTimeout);

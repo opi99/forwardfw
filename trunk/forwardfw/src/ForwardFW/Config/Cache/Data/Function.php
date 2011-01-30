@@ -31,7 +31,7 @@ declare(encoding = "utf-8");
  */
 
 require_once 'ForwardFW/Callback.php';
-require_once 'ForwardFW/Config/CacheData.php';
+require_once 'ForwardFW/Config/Cache/Data.php';
 
 /**
  * Config for a Cache.
@@ -43,7 +43,7 @@ require_once 'ForwardFW/Config/CacheData.php';
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @link       http://forwardfw.sourceforge.net
  */
-class ForwardFW_Config_FunctionCacheData extends ForwardFW_Config_CacheData
+class ForwardFW_Config_Cache_Data_Function extends ForwardFW_Config_Cache_Data
 {
     /**
      * @var ForwardFW_Callback The callback function object.

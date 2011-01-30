@@ -42,7 +42,7 @@ require_once 'ForwardFW/Config.php';
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @link       http://forwardfw.sourceforge.net
  */
-class ForwardFW_Config_CacheData extends ForwardFW_Config
+class ForwardFW_Config_Cache_Data extends ForwardFW_Config
 {
     /**
      * @var integer Timeout of the cache in seconds.
