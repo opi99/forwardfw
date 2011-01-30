@@ -35,8 +35,8 @@ require_once 'ForwardFW/Interface/Application.php';
 
 require_once 'ForwardFW/Callback.php';
 require_once 'ForwardFW/Cache/Frontend/Function.php';
-require_once 'ForwardFW/Cache/Data/Function.php';
 require_once 'ForwardFW/Config/Cache/Backend/File.php';
+require_once 'ForwardFW/Config/Cache/Data/Function.php';
 
 
 /**
