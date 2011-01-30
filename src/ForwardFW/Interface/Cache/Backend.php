@@ -30,7 +30,7 @@ declare(encoding = "utf-8");
  * @since      File available since Release 0.0.8
  */
 
-require_once 'ForwardFW/Config/CacheSystem.php';
+require_once 'ForwardFW/Config/Cache/Backend.php';
 require_once 'ForwardFW/Interface/Application.php';
 
 /**
@@ -49,13 +49,13 @@ interface ForwardFW_Interface_Cache_Backend
      * Constructor
      *
      * @param ForwardFW_Interface_Application $application The running application.
-     * @param ForwardFW_Config_CacheSystem    $config      Configuration of Backend.
+     * @param ForwardFW_Config_Cache_Backend  $config      Configuration of Backend.
      *
      * @return void
      */
     public function __construct(
         ForwardFW_Interface_Application $application,
-        ForwardFW_Config_CacheSystem $config
+        ForwardFW_Config_Cache_Backend $config
     );
 
     /**
