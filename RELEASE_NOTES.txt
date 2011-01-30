@@ -1,13 +1,12 @@
-This is release 0.0.9 which finalize parts of the Caching System and is now ready
-to be used, but needs a clean up on the configuration part.
+This is release 0.0.10 which cleans up the caching configuration and adds clear
+caching. Also the DataHandler can now use the caching system. 
 How you can see in the demo application most things should now on the shape of
 pre-alpha quality. So it would be possible to play with it in small applications.
 This is also demonstrated in the ForwardDemo package.
-As the Caching System is now useable as it should be (Cache Looking, usage of 
-Exceptions) the next things to do are cleaning configuration of Caching System,
-use Caching System inside DataLoader, implement base object and data mapper.
-So we are getting closer to the release of 0.1.0. But there will be a 0.0.10 and
-maybe a 0.0.11 release before.
+As the caching system is now ready to use and the DataHandler can use it, the next
+part is to implement base object and data mapper.
+So we are getting closer to the release of 0.1.0. But there will be a 0.0.11 and
+maybe a 0.0.12 release before.
 
 Requirements:
 
