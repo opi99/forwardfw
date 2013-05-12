@@ -1,5 +1,4 @@
 <?php
-declare(encoding = "utf-8");
 /**
  * This file is part of ForwardFW a web application framework.
  *
@@ -23,12 +22,13 @@ declare(encoding = "utf-8");
  * @package    ForwardFW
  * @subpackage Object
  * @author     Alexander Opitz <opitz.alexander@primacom.net>
- * @copyright  2009-2010 The Authors
+ * @copyright  2009-2013 The Authors
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
- * @version    SVN: $Id: $
  * @link       http://forwardfw.sourceforge.net
  * @since      File available since Release 0.0.1
  */
+
+namespace ForwardFW\Object;
 
 require_once 'ForwardFW/Controller/DataLoader.php';
 require_once 'ForwardFW/Object.php';
@@ -43,7 +43,7 @@ require_once 'ForwardFW/Object.php';
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @link       http://forwardfw.sourceforge.net
  */
-class ForwardFW_Object_Sql extends ForwardFW_Object
+class Sql extends \ForwardFW\Object
 {
     /**
      * Name of the table, which is mostly a prefix and the object name
@@ -72,24 +72,25 @@ class ForwardFW_Object_Sql extends ForwardFW_Object
     /**
      * constructor
      *
-     * @param string $_strIdFieldName  Fieldname which holds the object id.
-     * @param string $_strTablePrefix  Prefix der Tabellennamen im Projekt.
-     * @param string $_strDBConnection Name of the DB connection to use.
+     * @param string $strIdFieldName  Fieldname which holds the object id.
+     * @param string $strTablePrefix  Prefix der Tabellennamen im Projekt.
+     * @param string $strDBConnection Name of the DB connection to use.
      *
      * @return new instance
      */
     function __construct(
-        $_strIdFieldName = 'ID',
-        $_strTablePrefix = '',
-        $_strDBConnection = 'default'
+        $strIdFieldName = 'ID',
+        $strTablePrefix = '',
+        $strDBConnection = 'default'
     ) {
-        parent::__construct($_strIdFieldName);
+        parent::__construct($strIdFieldName);
 
-        $this->strTablePrefix  = $_strTablePrefix;
-        $this->strDBConnection = $_strDBConnection;
+        $this->strTablePrefix  = $strTablePrefix;
+        $this->strDBConnection = $strDBConnection;
 
-        $this->strTableName = ForwardFW_Object_Sql::resolveTableName(
-            $this->strTablePrefix, get_class($this)
+        $this->strTableName = self::resolveTableName(
+            $this->strTablePrefix,
+            get_class($this)
         );
     }
 
@@ -97,15 +98,15 @@ class ForwardFW_Object_Sql extends ForwardFW_Object
      * Returns the name of table out of prefix and object name cobined with
      * an underscore and lowercased.
      *
-     * @param string $_strTablePrefix Prefix der Tabellennamen im Projekt.
-     * @param string $_strObjectName  Name of the object
+     * @param string $strTablePrefix Prefix der Tabellennamen im Projekt.
+     * @param string $strObjectName  Name of the object
      *
      * @return string The table name.
      */
-    static function resolveTableName($_strTablePrefix, $_strObjectName)
+    static function resolveTableName($strTablePrefix, $strObjectName)
     {
-        $strResult = (_$strTablePrefix != '' ? $_strTablePrefix.'_' : '');
-        $strResult.= substr($_strObjectName, strrpos($_strObjectName, '_') + 1);
+        $strResult  = ($strTablePrefix != '' ? $strTablePrefix . '_' : '');
+        $strResult .= substr($strObjectName, strrpos($strObjectName, '_') + 1);
         return strtolower($strResult);
     }
 
@@ -130,10 +131,10 @@ class ForwardFW_Object_Sql extends ForwardFW_Object
      */
     function loadByWhereClause($strWhereClause)
     {
-        $dataLoader = ForwardFW_Controller_DataLoader::getInstance(
+        $dataLoader = \ForwardFW\Controller\DataHandler::getInstance(
             $this->strApplicationName
         );
-        $arResult = &$dataLoader->loadFromDB(
+        $arResult = $dataLoader->loadFromDB(
             $this->strDBConnection,
             '*',
             $this->strTableName,
@@ -159,10 +160,10 @@ class ForwardFW_Object_Sql extends ForwardFW_Object
 
         $strWhereClause = $this->strIdFieldName.' = '.$this->getId();
 
-        $dataLoader = ForwardFW_Controller_DataLoader::getInstance(
+        $dataLoader = \ForwardFW\Controller\DataHandler::getInstance(
             $this->strApplicationName
         );
-        $bResult = &$dataLoader->saveToDB(
+        $bResult = $dataLoader->saveToDB(
             $this->strDBConnection,
             $arToSave,
             $this->strTableName,
@@ -172,5 +173,3 @@ class ForwardFW_Object_Sql extends ForwardFW_Object
         return $bResult;
     }
 }
-
-?>
