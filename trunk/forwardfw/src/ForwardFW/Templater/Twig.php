@@ -1,5 +1,4 @@
 <?php
-declare(encoding = "utf-8");
 /**
  * This file is part of ForwardFW a web application framework.
  *
@@ -23,20 +22,18 @@ declare(encoding = "utf-8");
  * @package    ForwardFW
  * @subpackage Templater
  * @author     Alexander Opitz <opitz.alexander@primacom.net>
- * @copyright  2009-2010 The Authors
+ * @copyright  2009-2013 The Authors
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
- * @version    SVN: $Id: $
  * @link       http://forwardfw.sourceforge.net
  * @since      File available since Release 0.0.3
  */
 
-/**
- *
- */
+namespace ForwardFW\Templater;
+
 require_once 'ForwardFW/Controller.php';
 require_once 'ForwardFW/Request.php';
 require_once 'ForwardFW/Response.php';
-require_once 'ForwardFW/Interface/Templater.php';
+require_once 'ForwardFW/Templater/TemplaterInterface.php';
 
 require_once 'Twig/Autoloader.php';
 
@@ -50,8 +47,7 @@ require_once 'Twig/Autoloader.php';
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @link       http://forwardfw.sourceforge.net
  */
-class ForwardFW_Templater_Twig extends ForwardFW_Controller
-    implements ForwardFW_Interface_Templater
+class Twig extends \ForwardFW\Controller implements \ForwardFW\Templater\TemplaterInterface
 {
     /**
      * @var Twig_Environment The Twig instance
@@ -76,16 +72,16 @@ class ForwardFW_Templater_Twig extends ForwardFW_Controller
     /**
      * Constructor
      *
-     * @param ForwardFW_Interface_Application $application The running application
+     * @param ForwardFW\Controller\ApplicationInterface $application The running application
      *
      * @return void
      */
     public function __construct(
-        ForwardFW_Interface_Application $application
+        \ForwardFW\Controller\ApplicationInterface $application
     ) {
         parent::__construct($application);
 
-        Twig_Autoloader::register();
+        \Twig_Autoloader::register();
 
         $arConfig = $GLOBALS[get_class($this)];
 
@@ -94,8 +90,8 @@ class ForwardFW_Templater_Twig extends ForwardFW_Controller
             mkdir($strCompilePath, 0770, true);
         }
 
-        $twigLoader = new Twig_Loader_Filesystem($arConfig['TemplatePath']);
-        $this->twigEnvironment = new Twig_Environment($twigLoader,
+        $twigLoader = new \Twig_Loader_Filesystem($arConfig['TemplatePath']);
+        $this->twigEnvironment = new \Twig_Environment($twigLoader,
             array(
                 'cache'      => $strCompilePath,
                 'autoescape' => false,
@@ -179,5 +175,3 @@ class ForwardFW_Templater_Twig extends ForwardFW_Controller
         return $result;
     }
 }
-
-?>
