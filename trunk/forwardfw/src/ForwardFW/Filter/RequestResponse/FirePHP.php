@@ -89,7 +89,7 @@ class FirePHP extends \ForwardFW\Filter\RequestResponse
      *
      * @return void
      */
-    function outputError()
+    public function outputError()
     {
         $this->firephp->group('Response::Error');
         $arErrors = $this->response->getErrors()->getEntries();

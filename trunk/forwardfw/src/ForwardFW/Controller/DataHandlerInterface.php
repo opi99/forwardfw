@@ -61,7 +61,9 @@ interface DataHandlerInterface
      * @return mixed The response Data
      */
     public function loadFromCached(
-        $strConnection, array $arOptions, $nCacheTimeout = -1
+        $strConnection,
+        array $arOptions,
+        $nCacheTimeout = -1
     );
 
     /**

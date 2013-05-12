@@ -49,7 +49,8 @@ class Caller extends \ForwardFW\Cache\Frontend
      *
      * @return mixed The data you requested.
      */
-    public function getCache(\ForwardFW\Config\Cache\Data $config) {
+    public function getCache(\ForwardFW\Config\Cache\Data $config)
+    {
         return parent::getCache($config);
     }
 
@@ -60,7 +61,7 @@ class Caller extends \ForwardFW\Cache\Frontend
      *
      * @return string Hash for the config.
      */
-    protected function calculateHash(\ForwardFW\Config\Cache\Data  $config)
+    protected function calculateHash(\ForwardFW\Config\Cache\Data $config)
     {
         return $this->getHash($config->getCallback()->getParameters());
     }

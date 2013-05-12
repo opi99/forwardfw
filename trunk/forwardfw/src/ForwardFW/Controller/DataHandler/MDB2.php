@@ -142,5 +142,4 @@ class MDB2 extends \ForwardFW\Controller\DataHandler
         $ret = $conMDB2->exec('set character set utf8');
         $this->arConnectionCache[$strConnection] = $conMDB2;
     }
-
 }

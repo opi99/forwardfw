@@ -108,7 +108,10 @@ class Sql extends \ForwardFW\Container
      * @return boolean True if object was loadable otherwise false.
      */
     public function loadByWhereClause(
-        $strWhereClause, $strGroupBy = '', $strOrderBy = '', $strLimit = ''
+        $strWhereClause,
+        $strGroupBy = '',
+        $strOrderBy = '',
+        $strLimit = ''
     ) {
         $objDataLoader = \ForwardFW\Controller\DataHandler::getInstance(
             $this->strApplicationName

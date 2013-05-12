@@ -62,7 +62,7 @@ interface FrontendInterface
      *
      * @return ForwardFW_Interface_Cache_Frontend The cache Frontend
      */
-    static public function getInstance(
+    public static function getInstance(
         \ForwardFW\Controller\ApplicationInterface $application,
         \ForwardFW\Config\Cache\Frontend $config
     );

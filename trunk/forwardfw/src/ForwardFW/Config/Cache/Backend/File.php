@@ -47,4 +47,3 @@ class File extends \ForwardFW\Config\Cache\Backend
      */
     public $strPath;
 }
-?>
