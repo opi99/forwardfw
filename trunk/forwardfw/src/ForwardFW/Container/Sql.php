@@ -1,5 +1,4 @@
 <?php
-declare(encoding = "utf-8");
 /**
  * This file is part of ForwardFW a web application framework.
  *
@@ -21,17 +20,18 @@ declare(encoding = "utf-8");
  *
  * @category   Object
  * @package    ForwardFW
- * @subpackage List
+ * @subpackage Container
  * @author     Alexander Opitz <opitz.alexander@primacom.net>
- * @copyright  2009-2010 The Authors
+ * @copyright  2009-2013 The Authors
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
- * @version    SVN: $Id: $
  * @link       http://forwardfw.sourceforge.net
  * @since      File available since Release 0.0.1
  */
 
+namespace \ForwardFW\Container;
+
 require_once 'ForwardFW/Controller/DataLoader.php';
-require_once 'ForwardFW/List.php';
+require_once 'ForwardFW/Container.php';
 require_once 'ForwardFW/Object/Sql.php';
 
 /**
@@ -39,12 +39,12 @@ require_once 'ForwardFW/Object/Sql.php';
  *
  * @category   Object
  * @package    ForwardFW
- * @subpackage List
+ * @subpackage Container
  * @author     Alexander Opitz <opitz.alexander@primacom.net>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @link       http://forwardfw.sourceforge.net
  */
-class ForwardFW_List_Sql extends ForwardFW_List
+class Sql extends \ForwardFW\Container
 {
     /**
      * Name of the table, which is mostly a prefix and the object name
@@ -73,20 +73,21 @@ class ForwardFW_List_Sql extends ForwardFW_List
     /**
      * constructor
      *
-     * @param string $_strTablePrefix  Prefix der Tabellennamen im Projekt.
-     * @param string $_strDBConnection Name of the DB connection to use.
+     * @param string $strTablePrefix  Prefix der Tabellennamen im Projekt.
+     * @param string $strDBConnection Name of the DB connection to use.
      *
      * @return new instance
      */
-    function __construct($_strTablePrefix = '', $_strDBConnection = 'default')
+    public function __construct($strTablePrefix = '', $strDBConnection = 'default')
     {
         parent::__construct();
 
-        $this->strTablePrefix  = $_strTablePrefix;
-        $this->strDBConnection = $_strDBConnection;
+        $this->strTablePrefix  = $strTablePrefix;
+        $this->strDBConnection = $strDBConnection;
 
-        $this->strTableName = ForwardFW_Object_Sql::resolveTableName(
-            $this->strTablePrefix, $this->strObjectName
+        $this->strTableName = \ForwardFW\Object\Sql::resolveTableName(
+            $this->strTablePrefix,
+            $this->strObjectName
         );
     }
 
@@ -95,7 +96,7 @@ class ForwardFW_List_Sql extends ForwardFW_List
      *
      * @return boolean True if object was loadable otherwise false.
      */
-    function loadAll()
+    public function loadAll()
     {
         return $this->loadByWhereClause('');
     }
@@ -110,10 +111,10 @@ class ForwardFW_List_Sql extends ForwardFW_List
      *
      * @return boolean True if object was loadable otherwise false.
      */
-    function loadByWhereClause(
+    public function loadByWhereClause(
         $strWhereClause, $strGroupBy = '', $strOrderBy = '', $strLimit = ''
     ) {
-        $objDataLoader = ForwardFW_Controller_DataLoader::getInstance(
+        $objDataLoader = \ForwardFW\Controller\DataHandler::getInstance(
             $this->strApplicationName
         );
         $arResult = $objDataLoader->loadFromDB(
@@ -132,4 +133,3 @@ class ForwardFW_List_Sql extends ForwardFW_List
         return false;
     }
 }
-?>

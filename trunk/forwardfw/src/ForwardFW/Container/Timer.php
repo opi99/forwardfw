@@ -1,5 +1,4 @@
 <?php
-declare(encoding = "utf-8");
 /**
  * This file is part of ForwardFW a web application framework.
  *
@@ -21,16 +20,17 @@ declare(encoding = "utf-8");
  *
  * @category   Object
  * @package    ForwardFW
- * @subpackage List
+ * @subpackage Container
  * @author     Alexander Opitz <opitz.alexander@primacom.net>
- * @copyright  2009-2010 The Authors
+ * @copyright  2009-2013 The Authors
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
- * @version    SVN: $Id: $
  * @link       http://forwardfw.sourceforge.net
  * @since      File available since Release 0.0.1
  */
 
-require_once 'ForwardFW/List.php';
+namespace \ForwardFW\Container;
+
+require_once 'ForwardFW/Container.php';
 require_once 'ForwardFW/Object/Timer.php';
 
 /**
@@ -38,12 +38,11 @@ require_once 'ForwardFW/Object/Timer.php';
  *
  * @category   Object
  * @package    ForwardFW
- * @subpackage List
+ * @subpackage Container
  * @author     Alexander Opitz <opitz.alexander@primacom.net>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @link       http://forwardfw.sourceforge.net
  */
-class ForwardFW_List_Timer extends ForwardFW_List
+class Timer extends \ForwardFW\Container
 {
 }
-?>

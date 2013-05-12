@@ -1,5 +1,4 @@
 <?php
-declare(encoding = "utf-8");
 /**
  * This file is part of ForwardFW a web application framework.
  *
@@ -19,30 +18,31 @@ declare(encoding = "utf-8");
  *
  * PHP version 5
  *
- * @category   List
+ * @category   Container
  * @package    ForwardFW
  * @subpackage Main
  * @author     Alexander Opitz <opitz.alexander@primacom.net>
- * @copyright  2009,2010 The Authors
+ * @copyright  2009-2013 The Authors
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
- * @version    SVN: $Id: $
  * @link       http://forwardfw.sourceforge.net
  * @since      File available since Release 0.0.1
  */
 
+namespace ForwardFW;
+
 require_once 'ForwardFW/Object.php';
 
 /**
- * This is the basic List class for ForwardFW Object
+ * This is the basic Container class for ForwardFW Object
  *
- * @category   List
+ * @category   Container
  * @package    ForwardFW
  * @subpackage Main
  * @author     Alexander Opitz <opitz.alexander@primacom.net>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @link       http://forwardfw.sourceforge.net
  */
-class ForwardFW_List extends ArrayObject
+class Container extends \ArrayObject
 {
     /**
     * Name of the object this list will manage
@@ -59,7 +59,7 @@ class ForwardFW_List extends ArrayObject
     public function __construct()
     {
         $this->strObjectName
-            = preg_replace('/\_List\_/', '_Object_', get_class($this));
+            = preg_replace('/\\\\Container\\\\/', '\\Object\\', get_class($this));
     }
 
 
@@ -95,11 +95,11 @@ class ForwardFW_List extends ArrayObject
     /**
      * Adds object to the list
      * 
-     * @param ForwardFW_Object $obj The object which should be add
+     * @param ForwardFW\Object $obj The object which should be add
      *
      * @return boolean if $obj could be add to the list
      */
-    public function addToList(ForwardFW_Object $obj)
+    public function addToList(Object $obj)
     {
         $bIsUseable = false;
         if ($this->isUseable($obj)) {
@@ -114,11 +114,11 @@ class ForwardFW_List extends ArrayObject
     /**
      * Removes given Object from List and returns state if it was in list.
      *
-     * @param ForwardFW_Object $obj The object that should be removed from list.
+     * @param ForwardFW\Object $obj The object that should be removed from list.
      *
      * @return boolean True if object could be removed otherwise false
      */
-    function removeFromList(T3_Object_Base $obj)
+    function removeFromList(Object $obj)
     {
         $bWasRemoveable = false;
         if ($this->isUseable($obj)) {
@@ -173,13 +173,13 @@ class ForwardFW_List extends ArrayObject
     /**
      * Examines if the given object is from typet this list will hold.
      *
-     * @param ForwardFW_Object $obj Object to examine
+     * @param ForwardFW\Object $obj Object to examine
      *
      * @return boolean True if given object can be managed by this list
      * otherwise false.
      * @TODO: Examine if it is a child of type
      */
-    public function isUseable(ForwardFW_Object $obj)
+    public function isUseable(Object $obj)
     {
         if ($this->strObjectName === get_class($obj)) {
             return true;
@@ -212,4 +212,3 @@ class ForwardFW_List extends ArrayObject
         return $this->strObjectName;
     }
 }
-?>
