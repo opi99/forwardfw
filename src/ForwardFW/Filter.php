@@ -1,5 +1,4 @@
 <?php
-declare(encoding = "utf-8");
 /**
  * This file is part of ForwardFW a web application framework.
  *
@@ -23,12 +22,13 @@ declare(encoding = "utf-8");
  * @package    ForwardFW
  * @subpackage Main
  * @author     Alexander Opitz <opitz.alexander@primacom.net>
- * @copyright  2009,2010 The Authors
+ * @copyright  2009-2013 The Authors
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
- * @version    SVN: $Id: $
  * @link       http://forwardfw.sourceforge.net
  * @since      File available since Release 0.0.1
  */
+
+namespace ForwardFW;
 
 /**
  * This abstract class needs to be extended to be a callable filter.
@@ -40,7 +40,7 @@ declare(encoding = "utf-8");
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @link       http://forwardfw.sourceforge.net
  */
-abstract class ForwardFW_Filter
+abstract class Filter
 {
     /**
      * Child filter that should be executed after your Incoming process.
@@ -52,11 +52,11 @@ abstract class ForwardFW_Filter
     /**
      * Constructor
      *
-     * @param ForwardFW_Filter $_child The child filter or null if you are the last
+     * @param ForwardFW\Filter $_child The child filter or null if you are the last
      *
      * @return new instance
      */
-    public function __construct(ForwardFW_Filter $_child = null)
+    public function __construct(Filter $_child = null)
     {
         $this->child = $_child;
     }
@@ -90,5 +90,3 @@ abstract class ForwardFW_Filter
         $this->doOutgoingFilter();
     }
 }
-
-?>

@@ -28,6 +28,7 @@
  * @since      File available since Release 0.0.1
  */
 
+namespace ForwardFW\Filter\RequestResponse;
 
 require_once 'ForwardFW/Filter/RequestResponse.php';
 
@@ -41,8 +42,7 @@ require_once 'ForwardFW/Filter/RequestResponse.php';
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @link       http://forwardfw.sourceforge.net
  */
-class ForwardFW_Filter_RequestResponse_Application
-    extends ForwardFW_Filter_RequestResponse
+class Application extends \ForwardFW\Filter\RequestResponse
 {
     /**
      * Function to process before your child
@@ -52,10 +52,10 @@ class ForwardFW_Filter_RequestResponse_Application
     public function doIncomingFilter()
     {
         $this->response->addLog('Start Application');
-        if (isset($GLOBALS['ForwardFW_Application'])) {
-            $strApplicationClass = $GLOBALS['ForwardFW_Application']['class'];
-            $strApplicationName  = $GLOBALS['ForwardFW_Application']['name'];
-            include_once str_replace('_', '/', $strApplicationClass) . '.php';
+        if (isset($GLOBALS['ForwardFW\\Application'])) {
+            $strApplicationClass = $GLOBALS['ForwardFW\\Application']['class'];
+            $strApplicationName  = $GLOBALS['ForwardFW\\Application']['name'];
+            include_once str_replace('\\', '/', $strApplicationClass) . '.php';
             $application = new $strApplicationClass(
                 $strApplicationName,
                 $this->request,

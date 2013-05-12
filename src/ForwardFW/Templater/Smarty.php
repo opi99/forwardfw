@@ -28,10 +28,12 @@
  * @since      File available since Release 0.0.2
  */
 
+namespace ForwardFW\Templater;
+
 require_once 'ForwardFW/Controller.php';
 require_once 'ForwardFW/Request.php';
 require_once 'ForwardFW/Response.php';
-require_once 'ForwardFW/Interface/Templater.php';
+require_once 'ForwardFW/Templater/TemplaterInterface.php';
 
 require_once 'Smarty/Smarty.class.php';
 
@@ -45,8 +47,7 @@ require_once 'Smarty/Smarty.class.php';
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @link       http://forwardfw.sourceforge.net
  */
-class ForwardFW_Templater_Smarty extends ForwardFW_Controller
-    implements ForwardFW_Interface_Templater
+class Smarty extends \ForwardFW\Controller implements \ForwardFW\Templater\TemplaterInterface
 {
     /**
      * @var Smarty The smarty instance
@@ -61,12 +62,12 @@ class ForwardFW_Templater_Smarty extends ForwardFW_Controller
     /**
      * Constructor
      *
-     * @param ForwardFW_Interface_Application $application The running application
+     * @param ForwardFW\Controller\ApplicationInterface $application The running application
      *
      * @return void
      */
     public function __construct(
-        ForwardFW_Interface_Application $application
+        \ForwardFW\Controller\ApplicationInterface $application
     ) {
         parent::__construct($application);
 
@@ -77,10 +78,10 @@ class ForwardFW_Templater_Smarty extends ForwardFW_Controller
             mkdir($strCompilePath, 0770, true);
         }
 
-        $this->smarty = new Smarty();
+        $this->smarty = new \Smarty();
         $this->smarty->setCompileDir($strCompilePath);
-        $this->smarty->registerPlugin('block', 'block', array(&$this, '__block'));
-        $this->smarty->registerPlugin('function', 'texter', array(&$this, '__texter'));
+        $this->smarty->registerPlugin('block', 'block', array(&$this, 'smartyBlock'));
+        $this->smarty->registerPlugin('function', 'texter', array(&$this, 'smartyTexter'));
 
         $this->strTemplatePath = $arConfig['TemplatePath'];
     }
@@ -162,7 +163,7 @@ class ForwardFW_Templater_Smarty extends ForwardFW_Controller
      * Block implementation for smarty.
      * Deprecated or should be used for template engines without conditions?
      */
-    public function __block($params, $content, &$smarty, &$repeat)
+    public function smartyBlock($params, $content, &$smarty, &$repeat)
     {
         $name = $params['name'];
         if (isset($this->arShowBlocks[$name]) && $this->arShowBlocks[$name] == 1) {
@@ -175,7 +176,7 @@ class ForwardFW_Templater_Smarty extends ForwardFW_Controller
      * Texter implementation for smarty.
      * More later, if it exists.
      */
-    public function __texter($params, &$smarty)
+    public function smartyTexter($params, &$smarty)
     {
         $strTextKey = $params['key'];
 

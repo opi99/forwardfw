@@ -1,5 +1,4 @@
 <?php
-declare(encoding = "utf-8");
 /**
  * This file is part of ForwardFW a web application framework.
  *
@@ -23,17 +22,15 @@ declare(encoding = "utf-8");
  * @package    ForwardFW
  * @subpackage Main
  * @author     Alexander Opitz <opitz.alexander@primacom.net>
- * @copyright  2009,2010 The Authors
+ * @copyright  2009-2013 The Authors
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
- * @version    SVN: $Id: $
  * @link       http://forwardfw.sourceforge.net
  * @since      File available since Release 0.0.2
  */
 
-/**
- *
- */
-require_once 'ForwardFW/Interface/Templater.php';
+namespace ForwardFW;
+
+require_once 'ForwardFW/Templater/TemplaterInterface.php';
 
 /**
  * This class can instantiate a templater class.
@@ -45,7 +42,7 @@ require_once 'ForwardFW/Interface/Templater.php';
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @link       http://forwardfw.sourceforge.net
  */
-class ForwardFW_Templater
+class Templater
 {
     /*
      * Array of the application independent Factories
@@ -64,15 +61,15 @@ class ForwardFW_Templater
     /**
      * Factory method to get Templater from config.
      *
-     * @param ForwardFW_Controller_Application $application The running application
+     * @param ForwardFW\Controller\Application $application The running application
      *
-     * @return ForwardFW_Templater
+     * @return ForwardFW\Templater
      */
-    static public function factory(
-        ForwardFW_Controller_Application $application
+    public static function factory(
+        Controller\Application $application
     ) {
         if (is_null(self::$instance)) {
-            self::$instance = ForwardFW_Templater::createTemplater($application);
+            self::$instance = static::createTemplater($application);
         }
         return self::$instance;
     }
@@ -80,21 +77,22 @@ class ForwardFW_Templater
     /**
      * Creation method of Templater from config.
      *
-     * @param ForwardFW_Controller_Application $application The running application
+     * @param ForwardFW\Controller\Application $application The running application
      *
-     * @return ForwardFW_Templater
+     * @return ForwardFW\Templater
      */
-    final static private function createTemplater(
-        ForwardFW_Controller_Application $application
+    final private static function createTemplater(
+        Controller\Application $application
     ) {
-        if (isset($GLOBALS['ForwardFW_Templater'])) {
+        if (isset($GLOBALS['ForwardFW\\Templater'])) {
             $strTemplaterName = $application->getRequest()->getConfigParameter(
-                'Templater', get_class()
+                'Templater',
+                get_class()
             );
-            include_once str_replace('_', '/', $strTemplaterName) . '.php';
+            include_once str_replace('\\', '/', $strTemplaterName) . '.php';
             $templater = new $strTemplaterName($application);
         } else {
-            $this->application->getResponse()->addError('No Templater');
+            $application->getResponse()->addError('No Templater');
         }
         return $templater;
     }

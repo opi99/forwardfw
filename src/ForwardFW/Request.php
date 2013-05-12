@@ -1,5 +1,4 @@
 <?php
-declare(encoding = "utf-8");
 /**
  * This file is part of ForwardFW a web application framework.
  *
@@ -23,12 +22,13 @@ declare(encoding = "utf-8");
  * @package    ForwardFW
  * @subpackage Main
  * @author     Alexander Opitz <opitz.alexander@primacom.net>
- * @copyright  2009,2010 The Authors
+ * @copyright  2009-2013 The Authors
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
- * @version    SVN: $Id: $
  * @link       http://forwardfw.sourceforge.net
  * @since      File available since Release 0.0.1
  */
+
+namespace ForwardFW;
 
 /**
  * This class represents the Request from browser.
@@ -40,7 +40,7 @@ declare(encoding = "utf-8");
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @link       http://forwardfw.sourceforge.net
  */
-class ForwardFW_Request
+class Request
 {
     /**
      * Returns the parameter for the application from browser request or
@@ -58,11 +58,14 @@ class ForwardFW_Request
         $strApplicationName = ''
     ) {
         $return = $this->getRequestParameter(
-            $strParameterName, $strApplicationName
+            $strParameterName,
+            $strApplicationName
         );
         if (is_null($return)) {
             $return = $this->getConfigParameter(
-                $strParameterName, $strControllerClass, $strApplicationName
+                $strParameterName,
+                $strControllerClass,
+                $strApplicationName
             );
         }
         return $return;
@@ -114,14 +117,9 @@ class ForwardFW_Request
         if (isset($GLOBALS[$strControllerClass][$strParameterName])) {
             $return = $GLOBALS[$strControllerClass][$strParameterName];
         }
-        if (
-            isset(
-                $GLOBALS[$strApplicationName][$strControllerClass][$strParameterName]
-            )
-        ) {
+        if (isset($GLOBALS[$strApplicationName][$strControllerClass][$strParameterName])) {
             $return = $GLOBALS[$strApplicationName][$strControllerClass][$strParameterName];
         }
         return $return;
     }
 }
-?>

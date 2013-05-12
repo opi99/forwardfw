@@ -1,5 +1,4 @@
 <?php
-declare(encoding = "utf-8");
 /**
  * This file is part of ForwardFW a web application framework.
  *
@@ -19,76 +18,36 @@ declare(encoding = "utf-8");
  *
  * PHP version 5
  *
- * @category   Application
+ * @category   Screen
  * @package    ForwardFW
  * @subpackage Interface
  * @author     Alexander Opitz <opitz.alexander@primacom.net>
- * @copyright  2009-2010 The Authors
+ * @copyright  2009-2013 The Authors
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
- * @version    SVN: $Id: $
  * @link       http://forwardfw.sourceforge.net
  * @since      File available since Release 0.0.5
  */
 
-/**
- *
- */
+namespace ForwardFW\Controller;
 
 /**
  * This Interface must be implemented from an application.
  *
- * @category   Application
+ * @category   Screen
  * @package    ForwardFW
  * @subpackage Interface
  * @author     Alexander Opitz <opitz.alexander@primacom.net>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @link       http://forwardfw.sourceforge.net
  */
-interface ForwardFW_Interface_Application
+interface ScreenInterface
 {
     /**
      * Constructor
      *
-     * @param string             $strName  Name of application.
-     * @param ForwardFW_Request  $request  The ForwardFW request object.
-     * @param ForwardFW_Response $response The ForwardFW response object.
+     * @param ForwardFW\Controller\Application $application The running application.
      *
      * @return void
      */
-    public function __construct(
-        $strName,
-        ForwardFW_Request $request,
-        ForwardFW_Response $response
-    );
-
-    /**
-     * Run screen and return generated content
-     *
-     * @return string generated content form screens
-     */
-    public function run();
-
-
-    /**
-     * Returns the name of the application
-     *
-     * @return string
-     */
-    public function getName();
-
-
-    /**
-     * Returns the request object
-     *
-     * @return ForwardFW_Request
-     */
-    public function getRequest();
-
-    /**
-     * Returns the response object
-     *
-     * @return ForwardFW_Response
-     */
-    public function getResponse();
+    public function __construct(ApplicationInterface $application);
 }
-?>

@@ -1,5 +1,4 @@
 <?php
-declare(encoding = "utf-8");
 /**
  * This file is part of ForwardFW a web application framework.
  *
@@ -19,75 +18,72 @@ declare(encoding = "utf-8");
  *
  * PHP version 5
  *
- * @category   Templater
+ * @category   Application
  * @package    ForwardFW
- * @subpackage Interface
+ * @subpackage Controller
  * @author     Alexander Opitz <opitz.alexander@primacom.net>
- * @copyright  2009,2010 The Authors
+ * @copyright  2009-2013 The Authors
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
- * @version    SVN: $Id: $
  * @link       http://forwardfw.sourceforge.net
- * @since      File available since Release 0.0.2
+ * @since      File available since Release 0.0.5
  */
 
-/**
- *
- */
+namespace ForwardFW\Controller;
 
 /**
- * Interface for a Templater.
+ * This Interface must be implemented from an application.
  *
- * @category   Templater
+ * @category   Application
  * @package    ForwardFW
- * @subpackage Interface
+ * @subpackage Controller
  * @author     Alexander Opitz <opitz.alexander@primacom.net>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @link       http://forwardfw.sourceforge.net
  */
-interface ForwardFW_Interface_Templater
+interface ApplicationInterface
 {
     /**
      * Constructor
      *
-     * @param ForwardFW_Interface_Application $application The running application
+     * @param string             $strName  Name of application.
+     * @param ForwardFW\Request  $request  The ForwardFW request object.
+     * @param ForwardFW\Response $response The ForwardFW response object.
      *
      * @return void
      */
     public function __construct(
-        ForwardFW_Interface_Application $application
+        $strName,
+        \ForwardFW\Request $request,
+        \ForwardFW\Response $response
     );
 
     /**
-     * Sets file to use for templating
+     * Run screen and return generated content
      *
-     * @param string $_strFile Complete path and filename.
-     *
-     * @return ForwardFW_Interface_Templater The instance.
+     * @return string generated content form screens
      */
-    public function setTemplateFile($_strFile);
+    public function run();
+
 
     /**
-     * Sets a var in the template to a value
+     * Returns the name of the application
      *
-     * @param string $_strName Name of template var.
-     * @param mixed  $_mValue  Value of template var.
-     *
-     * @return ForwardFW_Interface_Templater The instance.
+     * @return string
      */
-    public function setVar($_strName, $_mValue);
+    public function getName();
+
 
     /**
-     * Returns compiled template for outputing.
+     * Returns the request object
      *
-     * @return string Content of template after compiling.
+     * @return ForwardFW\Request
      */
-    public function getCompiled();
+    public function getRequest();
 
-    public function defineBlock($strBlockName);
-
-    public function showBlock($strBlockName);
-
-    public function hideBlock($strBlockName);
-
+    /**
+     * Returns the response object
+     *
+     * @return ForwardFW\Response
+     */
+    public function getResponse();
 }
-?>

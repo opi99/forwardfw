@@ -28,11 +28,10 @@
  * @since      File available since Release 0.0.1
  */
 
-/**
- *
- */
+namespace ForwardFW\Controller;
+
 require_once 'ForwardFW/Controller/View.php';
-require_once 'ForwardFW/Interface/Application.php';
+require_once 'ForwardFW/Controller/ApplicationInterface.php';
 require_once 'ForwardFW/Request.php';
 require_once 'ForwardFW/Response.php';
 //require_once 'ForwardFW/Exception/Screen.php';
@@ -48,8 +47,7 @@ require_once 'ForwardFW/Response.php';
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @link       http://forwardfw.sourceforge.net
  */
-class ForwardFW_Controller_Application extends ForwardFW_Controller_View
-    implements ForwardFW_Interface_Application
+class Application extends View implements ApplicationInterface
 {
     /**
      * Configuration name of application
@@ -83,15 +81,15 @@ class ForwardFW_Controller_Application extends ForwardFW_Controller_View
      * Constructor
      *
      * @param string             $strName  Name of application
-     * @param ForwardFW_Request  $request  The request object.
-     * @param ForwardFW_Response $response The request object.
+     * @param ForwardFW\Request  $request  The request object.
+     * @param ForwardFW\Response $response The request object.
      *
      * @return void
      */
     public function __construct(
         $strName,
-        ForwardFW_Request $request,
-        ForwardFW_Response $response
+        \ForwardFW\Request $request,
+        \ForwardFW\Response $response
     ) {
         $this->strName = $strName;
         $this->request            = $request;
@@ -156,7 +154,7 @@ class ForwardFW_Controller_Application extends ForwardFW_Controller_View
      */
     function getScreen($strScreen)
     {
-        $strFile = str_replace('_', '/', $this->arScreens[$strScreen]) . '.php';
+        $strFile = str_replace('\\', '/', $this->arScreens[$strScreen]) . '.php';
 
         $rIncludeFile = @fopen($strFile, 'r', true);
         if ($rIncludeFile) {
@@ -184,7 +182,7 @@ class ForwardFW_Controller_Application extends ForwardFW_Controller_View
      */
     public function processView()
     {
-        $templater = ForwardFW_Templater::factory($this->application);
+        $templater = \ForwardFW\Templater::factory($this->application);
         $templater->setVar('SCREEN', $this->screen->process());
         return parent::processView();
     }

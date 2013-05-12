@@ -28,6 +28,8 @@
  * @since      File available since Release 0.0.1
  */
 
+namespace ForwardFW\Filter;
+
 require_once 'ForwardFW/Filter.php';
 require_once 'ForwardFW/Request.php';
 require_once 'ForwardFW/Response.php';
@@ -42,7 +44,7 @@ require_once 'ForwardFW/Response.php';
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @link       http://forwardfw.sourceforge.net
  */
-class ForwardFW_Filter_RequestResponse extends ForwardFW_Filter
+class RequestResponse extends \ForwardFW\Filter
 {
     /**
      * The Request object
@@ -71,17 +73,17 @@ class ForwardFW_Filter_RequestResponse extends ForwardFW_Filter
      * @return new instance
      */
     public function __construct(
-        ForwardFW_Filter_RequestResponse $_child = null,
-        ForwardFW_Request $_request = null,
-        ForwardFW_Response $_response = null
+        RequestResponse $child = null,
+        \ForwardFW\Request $request = null,
+        \ForwardFW\Response $response = null
     ) {
-        parent::__construct($_child);
+        parent::__construct($child);
         if (! is_null($this->child)) {
             $this->request  = $this->child->getRequest();
             $this->response = $this->child->getResponse();
         } else {
-            $this->request  = $_request;
-            $this->response = $_response;
+            $this->request  = $request;
+            $this->response = $response;
         }
     }
 
@@ -129,23 +131,23 @@ class ForwardFW_Filter_RequestResponse extends ForwardFW_Filter
      * Builds the Filters which are defined in the configuration for RequestResponse
      * handling.
      *
-     * @param ForwardFW_Request  $_request  The request for this application
-     * @param ForwardFW_Response $_response The response for this application
+     * @param ForwardFW\Request  $request  The request for this application
+     * @param ForwardFW\Response $response The response for this application
      *
-     * @return ForwardFW_Filter_RequestResponse The start filter with the
+     * @return \ForwardFW\Filter\RequestResponse The start filter with the
      * configured childs. So the filters can be started.
      */
     public static function getFilters(
-        ForwardFW_Request $_request,
-        ForwardFW_Response $_response
+        \ForwardFW\Request $request,
+        \ForwardFW\Response $response
     ) {
         $filter = null;
         $arConfig = $GLOBALS[get_class()];
         if (is_array($arConfig)) {
             $arConfig = array_reverse($arConfig);
             foreach ($arConfig as $strFilter) {
-                include_once str_replace('_', '/', $strFilter) . '.php';
-                $filter = new $strFilter($filter, $_request, $_response);
+                include_once str_replace('\\', '/', $strFilter) . '.php';
+                $filter = new $strFilter($filter, $request, $response);
             }
         } else {
             // Fehler werfen

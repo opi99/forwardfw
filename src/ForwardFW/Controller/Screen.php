@@ -1,5 +1,4 @@
 <?php
-declare(encoding = "utf-8");
 /**
  * This file is part of ForwardFW a web application framework.
  *
@@ -23,19 +22,17 @@ declare(encoding = "utf-8");
  * @package    ForwardFW
  * @subpackage Controller
  * @author     Alexander Opitz <opitz.alexander@primacom.net>
- * @copyright  2009 The Authors
+ * @copyright  2009-2013 The Authors
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
- * @version    SVN: $Id: $
  * @link       http://forwardfw.sourceforge.net
  * @since      File available since Release 0.0.1
  */
 
-/**
- *
- */
+namespace ForwardFW\Controller;
+
 require_once 'ForwardFW/Controller/View.php';
-require_once 'ForwardFW/Interface/Application.php';
-require_once 'ForwardFW/Interface/Screen.php';
+require_once 'ForwardFW/Controller/ApplicationInterface.php';
+require_once 'ForwardFW/Controller/ScreenInterface.php';
 
 /**
  * This class is a basic Screen class.
@@ -47,28 +44,27 @@ require_once 'ForwardFW/Interface/Screen.php';
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @link       http://forwardfw.sourceforge.net
  */
-class ForwardFW_Controller_Screen extends ForwardFW_Controller_View
-    implements ForwardFW_Interface_Screen
+class Screen extends View implements ScreenInterface
 {
     /**
      * The View which should be used.
      *
-     * @var ArrayObject of ForwardFW_Controller_View
+     * @var ArrayObject of ForwardFW\Controller\View
      */
     private $views;
 
     /**
      * Constructor
      *
-     * @param ForwardFW_Interface_Application $_application The running application.
+     * @param ForwardFW\Controller\Application $application The running application.
      *
      * @return void
      */
-    public function __construct(ForwardFW_Interface_Application $_application)
+    public function __construct(ApplicationInterface $application)
     {
-        parent::__construct($_application);
-        $this->views = new ArrayObject();
-        $this->strView = 'ForwardFW_Controller_View';
+        parent::__construct($application);
+        $this->views = new \ArrayObject();
+        $this->strView = 'ForwardFW\\Controller\\View';
     }
 
     /**
@@ -127,10 +123,10 @@ class ForwardFW_Controller_Screen extends ForwardFW_Controller_View
      */
     public function processView()
     {
-        $templater = ForwardFW_Templater::factory($this->application);
+        $templater = \ForwardFW\Templater::factory($this->application);
         foreach ($this->views as $view) {
             $templater->setVar(
-                'VIEW_' . strtoupper($view->strViewName),
+                'VIEW_' . strtoupper(str_replace('\\', '_', $view->strViewName)),
                 $view->process()
             );
         }
@@ -140,11 +136,11 @@ class ForwardFW_Controller_Screen extends ForwardFW_Controller_View
     /**
      * Adds a view to the list of views.
      *
-     * @param ForwardFW_Controller_View $view The view to add.
+     * @param ForwardFW\Controller\View $view The view to add.
      *
-     * @return ForwardFW_Controller_Screen This Screen.
+     * @return ForwardFW\Controller\Screen This Screen.
      */
-    protected function addView(ForwardFW_Controller_View $view)
+    protected function addView(View $view)
     {
         $this->views->append($view);
         return $this;
@@ -155,11 +151,11 @@ class ForwardFW_Controller_Screen extends ForwardFW_Controller_View
      *
      * @param String $strView Name of the View.
      *
-     * @return ForwardFW_Controller_View The instance of the view.
+     * @return ForwardFW\Controller\View The instance of the view.
      */
     protected function loadView($strView)
     {
-        $strFile = str_replace('_', '/', $strView) . '.php';
+        $strFile = str_replace('\\', '/', $strView) . '.php';
         include_once $strFile;
         $view = new $strView($this->application);
         return $view;
@@ -168,11 +164,10 @@ class ForwardFW_Controller_Screen extends ForwardFW_Controller_View
     /**
      * Returns the list of views to show.
      *
-     * @return ArrayObject of ForwardFW_Controller_View The list of views.
+     * @return ArrayObject of ForwardFW\Controller\View The list of views.
      */
     public function getViews()
     {
         return $this->views;
     }
 }
-?>
