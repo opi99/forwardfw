@@ -87,7 +87,7 @@ class MDB2 extends \ForwardFW\Controller\DataHandler
         $arResult = array();
         $resultMDB2 = $conMDB2->query($strQuery);
 
-        if (\PEAR::isError($resultMDB2)) {
+        if (\MDB2::isError($resultMDB2)) {
             $this->application->getResponse()->addError($resultMDB2->getMessage() . $resultMDB2->getUserinfo());
             throw new \ForwardFW\Exception\DataHandler(
                 'Error while execute: '
@@ -133,7 +133,7 @@ class MDB2 extends \ForwardFW\Controller\DataHandler
         $options = array_merge($options, $arConfig['options']);
         $conMDB2 = \MDB2::connect($arConfig['dsn'], $options);
 
-        if (\PEAR::isError($conMDB2)) {
+        if (\MDB2::isError($conMDB2)) {
             $this->application->getResponse()->addError(
                 $conMDB2->getMessage() . $conMDB2->getUserinfo()
             );
