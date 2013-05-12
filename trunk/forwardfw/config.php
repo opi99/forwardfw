@@ -59,4 +59,3 @@ $GLOBALS['ShortDemo']['screens']             = array(
 );
 
 date_default_timezone_set('CET');
-?>
