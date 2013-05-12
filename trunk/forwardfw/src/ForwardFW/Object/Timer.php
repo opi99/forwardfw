@@ -1,5 +1,4 @@
 <?php
-declare(encoding = "utf-8");
 /**
  * This file is part of ForwardFW a web application framework.
  *
@@ -23,12 +22,13 @@ declare(encoding = "utf-8");
  * @package    ForwardFW
  * @subpackage Object
  * @author     Alexander Opitz <opitz.alexander@primacom.net>
- * @copyright  2009-2010 The Authors
+ * @copyright  2009-2013 The Authors
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
- * @version    SVN: $Id: $
  * @link       http://forwardfw.sourceforge.net
  * @since      File available since Release 0.0.1
  */
+
+namespace ForwardFW\Object;
 
 require_once 'ForwardFW/Object.php';
 
@@ -42,7 +42,7 @@ require_once 'ForwardFW/Object.php';
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @link       http://forwardfw.sourceforge.net
  */
-class ForwardFW_Object_Timer extends ForwardFW_Object
+class Timer extends \ForwardFW\Object
 {
     /**
      * Name of this Timer for output
@@ -179,10 +179,8 @@ class ForwardFW_Object_Timer extends ForwardFW_Object
      *
      * @return array of String with entries.
      */
-    function getEntries()
+    public function getEntries()
     {
         return $this->arEntries;
     }
 }
-
-?>

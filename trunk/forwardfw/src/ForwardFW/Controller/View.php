@@ -1,5 +1,4 @@
 <?php
-declare(encoding = "utf-8");
 /**
  * This file is part of ForwardFW a web application framework.
  *
@@ -23,18 +22,16 @@ declare(encoding = "utf-8");
  * @package    ForwardFW
  * @subpackage Controller
  * @author     Alexander Opitz <opitz.alexander@primacom.net>
- * @copyright  2009 The Authors
+ * @copyright  2009-2013 The Authors
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
- * @version    SVN: $Id: $
  * @link       http://forwardfw.sourceforge.net
  * @since      File available since Release 0.0.2
  */
 
-/**
- *
- */
+namespace ForwardFW\Controller;
+
 require_once 'ForwardFW/Controller.php';
-require_once 'ForwardFW/Interface/Application.php';
+require_once 'ForwardFW/Controller/ApplicationInterface.php';
 require_once 'ForwardFW/Templater.php';
 
 /**
@@ -47,18 +44,18 @@ require_once 'ForwardFW/Templater.php';
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @link       http://forwardfw.sourceforge.net
  */
-class ForwardFW_Controller_View extends ForwardFW_Controller
+class View extends \ForwardFW\Controller
 {
     /**
      * Constructor
      *
-     * @param ForwardFW_Interface_Application $_application The running application.
+     * @param ForwardFW\Controller\Application $application The running application.
      *
      * @return void
      */
-    public function __construct(ForwardFW_Interface_Application $_application)
+    public function __construct(ApplicationInterface $application)
     {
-        parent::__construct($_application);
+        parent::__construct($application);
         $this->strViewName = get_class($this);
     }
 
@@ -94,7 +91,7 @@ class ForwardFW_Controller_View extends ForwardFW_Controller
         $this->application->getResponse()->addLog(
             'Processing: ' . $this->getTemplateName() . '.tpl'
         );
-        $templater = ForwardFW_Templater::factory($this->application);
+        $templater = \ForwardFW\Templater::factory($this->application);
         $templater->setVar('ForwardFW_Version', $GLOBALS['ForwardFW']['Version']);
         try {
             $templater->setTemplateFile($this->getTemplateName() . '.tpl');
@@ -114,19 +111,22 @@ class ForwardFW_Controller_View extends ForwardFW_Controller
     {
         $strTemplateName = '';
         $nLength = strlen($this->strViewName);
-        $nLastPart = strrpos($this->strViewName, '_');
+        $nLastPart = strrpos($this->strViewName, '\\');
         $nPreviewsPart = strrpos(
-            $this->strViewName, '_', -($nLength - $nLastPart + 1)
+            $this->strViewName,
+            '\\',
+            -($nLength - $nLastPart + 1)
         );
         if ($nPreviewsPart === false) {
             $nPreviewsPart = -1;
         }
         $strTemplateName  = substr(
-            $this->strViewName, $nPreviewsPart + 1, $nLastPart - $nPreviewsPart - 1
+            $this->strViewName,
+            $nPreviewsPart + 1,
+            $nLastPart - $nPreviewsPart - 1
         );
         $strTemplateName .= '/';
         $strTemplateName .= substr($this->strViewName, $nLastPart + 1);
         return $strTemplateName;
     }
 }
-?>

@@ -1,5 +1,4 @@
 <?php
-declare(encoding = "utf-8");
 /**
  * This file is part of ForwardFW a web application framework.
  *
@@ -23,17 +22,15 @@ declare(encoding = "utf-8");
  * @package    ForwardFW
  * @subpackage Main
  * @author     Alexander Opitz <opitz.alexander@primacom.net>
- * @copyright  2009,2010 The Authors
+ * @copyright  2009-2013 The Authors
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
- * @version    SVN: $Id: $
  * @link       http://forwardfw.sourceforge.net
  * @since      File available since Release 0.0.1
  */
 
-/**
- *
- */
-require_once 'ForwardFW/Interface/Application.php';
+namespace ForwardFW;
+
+require_once 'ForwardFW/Controller/Application.php';
 
 /**
  * This class holds basic functions for controllers.
@@ -45,23 +42,23 @@ require_once 'ForwardFW/Interface/Application.php';
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @link       http://forwardfw.sourceforge.net
  */
-class ForwardFW_Controller
+class Controller
 {
     /**
      * The application object.
      *
-     * @var ForwardFW_Interface_Application
+     * @var ForwardFW\Controller\Application
      */
     protected $application;
 
     /**
      * Constructor
      *
-     * @param ForwardFW_Interface_Application $application The running application.
+     * @param ForwardFW\Controller\ApplicationInterface $application The running application.
      *
      * @return void
      */
-    public function __construct(ForwardFW_Interface_Application $application)
+    public function __construct(Controller\ApplicationInterface $application)
     {
         $this->application = $application;
     }
@@ -73,7 +70,7 @@ class ForwardFW_Controller
      *
      * @return mixed
      */
-    function getParameter($strParameterName)
+    public function getParameter($strParameterName)
     {
         return $this->application->getRequest()->getParameter(
             $strParameterName,
@@ -89,7 +86,7 @@ class ForwardFW_Controller
      *
      * @return mixed
      */
-    function getConfigParameter($strParameterName)
+    public function getConfigParameter($strParameterName)
     {
         return $this->application->getRequest()->getConfigParameter(
             $strParameterName,

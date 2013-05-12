@@ -28,6 +28,7 @@
  * @since      File available since Release 0.0.1
  */
 
+namespace ForwardFW\Filter\RequestResponse;
 require_once 'ForwardFW/Filter/RequestResponse.php';
 
 require_once 'FirePHPCore/FirePHP.class.php';
@@ -42,8 +43,7 @@ require_once 'FirePHPCore/FirePHP.class.php';
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @link       http://forwardfw.sourceforge.net
  */
-class ForwardFW_Filter_RequestResponse_FirePHP
-    extends ForwardFW_Filter_RequestResponse
+class FirePHP extends \ForwardFW\Filter\RequestResponse
 {
     /**
      * Function to process before your child
@@ -63,7 +63,7 @@ class ForwardFW_Filter_RequestResponse_FirePHP
     public function doOutgoingFilter()
     {
         $this->response->addLog('Leave Filter');
-        $this->firephp = FirePHP::getInstance(true);
+        $this->firephp = \FirePHP::getInstance(true);
 
         $this->outputLog();
         $this->outputError();

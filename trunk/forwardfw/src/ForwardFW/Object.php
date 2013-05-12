@@ -1,5 +1,4 @@
 <?php
-declare(encoding = "utf-8");
 /**
  * This file is part of ForwardFW a web application framework.
  *
@@ -23,12 +22,14 @@ declare(encoding = "utf-8");
  * @package    ForwardFW
  * @subpackage Main
  * @author     Alexander Opitz <opitz.alexander@primacom.net>
- * @copyright  2009,2010 The Authors
+ * @copyright  2009-2013 The Authors
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
- * @version    SVN: $Id: $
  * @link       http://forwardfw.sourceforge.net
  * @since      File available since Release 0.0.1
  */
+
+namespace ForwardFW;
+
 
 /**
  * A basic object/model inside ForwardFW, which can autoload its data fields.
@@ -40,7 +41,7 @@ declare(encoding = "utf-8");
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @link       http://forwardfw.sourceforge.net
  */
-class ForwardFW_Object
+class Object
 {
     /*
      * ID value
@@ -63,7 +64,7 @@ class ForwardFW_Object
      *
      * @return new instance
      */
-    function __construct($_strIdFieldName = 'ID')
+    public function __construct($_strIdFieldName = 'ID')
     {
         $this->strIdFieldName = $_strIdFieldName;
     }
@@ -75,7 +76,7 @@ class ForwardFW_Object
      *
      * @return void
      */
-    function loadByArray(&$arRow)
+    public function loadByArray(&$arRow)
     {
         $this->ID = $arRow[$this->strIdFieldName];
     }
@@ -87,9 +88,8 @@ class ForwardFW_Object
      *
      * @return void
      */
-    function saveToArray(&$arRow)
+    public function saveToArray(&$arRow)
     {
         $arRow[$this->strIdFieldName] = $this->ID;
     }
 }
-?>
