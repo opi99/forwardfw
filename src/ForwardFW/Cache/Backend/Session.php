@@ -40,7 +40,7 @@ namespace ForwardFW\Cache\Backend;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @link       http://forwardfw.sourceforge.net
  */
-class ForwardFW_Cache_Backend_Session extends ForwardFW_Cache_Backend
+class Session extends \ForwardFW\Cache\Backend
 {
     /**
      * Constructor

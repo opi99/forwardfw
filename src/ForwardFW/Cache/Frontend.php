@@ -139,14 +139,14 @@ abstract class Frontend implements FrontendInterface
     {
         $strHash = $this->calculateHash($config);
         switch ($config->getTimeout()) {
-        case -1:
-            $nTime = 0;
-            break;
-        case 0:
-            $nTime = time();
-            break;
-        default:
-            $nTime = time() - $config->getTimeout();
+            case -1:
+                $nTime = 0;
+                break;
+            case 0:
+                $nTime = time();
+                break;
+            default:
+                $nTime = time() - $config->getTimeout();
         }
         try {
             $mData = $this->backend->getData($strHash, $nTime);
@@ -176,7 +176,7 @@ abstract class Frontend implements FrontendInterface
      * @return mixed The data you requested.
      */
     protected function getRealData(
-        $strHash, 
+        $strHash,
         \ForwardFW\Config\Cache\Data $config,
         $bOldAvailable
     ) {

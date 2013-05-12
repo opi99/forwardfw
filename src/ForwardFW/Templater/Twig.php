@@ -83,7 +83,7 @@ class Twig extends \ForwardFW\Controller implements \ForwardFW\Templater\Templat
 
         $twigLoader = new \Twig_Loader_Filesystem($arConfig['TemplatePath']);
         $this->twigEnvironment = new \Twig_Environment(
-			$twigLoader,
+            $twigLoader,
             array(
                 'cache'      => $strCompilePath,
                 'autoescape' => false,

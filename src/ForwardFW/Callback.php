@@ -67,7 +67,7 @@ class Callback
             $this->callback = $callback;
             $this->setParameters($arParameters);
         } else {
-            throw new Exception\Callback('This is no callback function');
+            throw new Exception\Callback('This is no possible callback function');
         }
     }
 

@@ -104,7 +104,7 @@ class Application extends View implements ApplicationInterface
      *
      * @return void
      */
-    function run()
+    public function run()
     {
         $strProcessScreen = $this->getProcessScreen();
 
@@ -129,7 +129,7 @@ class Application extends View implements ApplicationInterface
      *
      * @return string name of screen to process
      */
-    function getProcessScreen()
+    public function getProcessScreen()
     {
         $strProcessScreen = $this->getParameter('screen');
         if (!isset($this->arScreens[$strProcessScreen])) {
@@ -145,7 +145,7 @@ class Application extends View implements ApplicationInterface
      *
      * @return T3_Controller_Screen
      */
-    function getScreen($strScreen)
+    public function getScreen($strScreen)
     {
         $strFile = str_replace('\\', '/', $this->arScreens[$strScreen]) . '.php';
 

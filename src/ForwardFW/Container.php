@@ -116,7 +116,7 @@ class Container extends \ArrayObject
      *
      * @return boolean True if object could be removed otherwise false
      */
-    function removeFromList(Object $obj)
+    public function removeFromList(Object $obj)
     {
         $bWasRemoveable = false;
         if ($this->isUseable($obj)) {
