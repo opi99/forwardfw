@@ -30,11 +30,6 @@
 
 namespace ForwardFW\Controller\DataHandler;
 
-require_once 'ForwardFW/Exception/DataHandler.php';
-require_once 'ForwardFW/Controller/DataHandler.php';
-require_once 'ForwardFW/Controller/ApplicationInterface.php';
-require_once 'MDB2.php';
-
 /**
  * Managing DataLoading via PEAR::MDB2
  *

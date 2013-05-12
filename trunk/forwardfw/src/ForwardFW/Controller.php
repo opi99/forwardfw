@@ -30,8 +30,6 @@
 
 namespace ForwardFW;
 
-require_once 'ForwardFW/Controller/Application.php';
-
 /**
  * This class holds basic functions for controllers.
  *

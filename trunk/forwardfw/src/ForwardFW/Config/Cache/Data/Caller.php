@@ -30,9 +30,6 @@
 
 namespace ForwardFW\Config\Cache\Data;
 
-require_once 'ForwardFW/Callback.php';
-require_once 'ForwardFW/Config/Cache/Data.php';
-
 /**
  * Config for a Cache.
  *

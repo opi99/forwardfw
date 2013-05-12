@@ -30,13 +30,6 @@
 
 namespace ForwardFW\Templater;
 
-require_once 'ForwardFW/Controller.php';
-require_once 'ForwardFW/Request.php';
-require_once 'ForwardFW/Response.php';
-require_once 'ForwardFW/Templater/TemplaterInterface.php';
-
-require_once 'Twig/Autoloader.php';
-
 /**
  * Class to use Twig as Templater.
  *
@@ -80,8 +73,6 @@ class Twig extends \ForwardFW\Controller implements \ForwardFW\Templater\Templat
         \ForwardFW\Controller\ApplicationInterface $application
     ) {
         parent::__construct($application);
-
-        \Twig_Autoloader::register();
 
         $arConfig = $GLOBALS[get_class($this)];
 

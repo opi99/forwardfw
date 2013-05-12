@@ -30,10 +30,6 @@
 
 namespace ForwardFW\Filter;
 
-require_once 'ForwardFW/Filter.php';
-require_once 'ForwardFW/Request.php';
-require_once 'ForwardFW/Response.php';
-
 /**
  * This abstract class needs to be extended to be a callable filter.
  *

@@ -30,15 +30,6 @@
 
 namespace ForwardFW\Controller;
 
-require_once 'ForwardFW/Controller/DataHandlerInterface.php';
-require_once 'ForwardFW/Controller/ApplicationInterface.php';
-
-require_once 'ForwardFW/Callback.php';
-require_once 'ForwardFW/Cache/Frontend/Caller.php';
-require_once 'ForwardFW/Config/Cache/Backend/File.php';
-require_once 'ForwardFW/Config/Cache/Data/Caller.php';
-
-
 /**
  * Managing DataLoading via PEAR::MDB
  *

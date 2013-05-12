@@ -30,8 +30,6 @@
 
 namespace ForwardFW\Controller;
 
-require_once 'ForwardFW/Controller/ApplicationInterface.php';
-
 /**
  * Interface for a DataLoader.
  *

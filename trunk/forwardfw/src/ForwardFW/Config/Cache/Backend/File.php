@@ -30,8 +30,6 @@
 
 namespace ForwardFW\Config\Cache\Backend;
 
-require_once 'ForwardFW/Config/Cache/Backend.php';
-
 /**
  * Config for a Cache.
  *

@@ -30,8 +30,6 @@
 
 namespace ForwardFW;
 
-require_once 'ForwardFW/Object/Timer.php';
-
 /**
  * This class represents the Response to the browser.
  *

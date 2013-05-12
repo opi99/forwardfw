@@ -30,13 +30,6 @@
 
 namespace ForwardFW\Controller;
 
-require_once 'ForwardFW/Controller/View.php';
-require_once 'ForwardFW/Controller/ApplicationInterface.php';
-require_once 'ForwardFW/Request.php';
-require_once 'ForwardFW/Response.php';
-//require_once 'ForwardFW/Exception/Screen.php';
-//require_once 'ForwardFW/Exception/Application.php';
-
 /**
  * This Controller over one application.
  *

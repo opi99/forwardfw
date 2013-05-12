@@ -30,9 +30,6 @@
 
 namespace ForwardFW\Object;
 
-require_once 'ForwardFW/Controller/DataLoader.php';
-require_once 'ForwardFW/Object.php';
-
 /**
  * A object/model that can load themself from DB.
  *

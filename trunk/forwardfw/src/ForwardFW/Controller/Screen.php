@@ -30,10 +30,6 @@
 
 namespace ForwardFW\Controller;
 
-require_once 'ForwardFW/Controller/View.php';
-require_once 'ForwardFW/Controller/ApplicationInterface.php';
-require_once 'ForwardFW/Controller/ScreenInterface.php';
-
 /**
  * This class is a basic Screen class.
  *

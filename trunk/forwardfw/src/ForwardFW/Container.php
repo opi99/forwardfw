@@ -30,8 +30,6 @@
 
 namespace ForwardFW;
 
-require_once 'ForwardFW/Object.php';
-
 /**
  * This is the basic Container class for ForwardFW Object
  *

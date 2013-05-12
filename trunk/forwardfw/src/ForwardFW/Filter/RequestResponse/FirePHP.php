@@ -29,7 +29,6 @@
  */
 
 namespace ForwardFW\Filter\RequestResponse;
-require_once 'ForwardFW/Filter/RequestResponse.php';
 
 require_once 'FirePHPCore/FirePHP.class.php';
 

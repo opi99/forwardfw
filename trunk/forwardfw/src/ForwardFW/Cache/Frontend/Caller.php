@@ -30,11 +30,6 @@
 
 namespace ForwardFW\Cache\Frontend;
 
-require_once 'ForwardFW/Cache/Frontend.php';
-//require_once 'ForwardFW/Config/Cache/Frontend.php';
-require_once 'ForwardFW/Config/Cache/Data/Caller.php';
-require_once 'ForwardFW/Controller/ApplicationInterface.php';
-
 /**
  * Implementation of a Cache.
  *
