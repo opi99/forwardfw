@@ -1,5 +1,4 @@
 <?php
-declare(encoding = "utf-8");
 /**
  * This file is part of ForwardFW a web application framework.
  *
@@ -23,16 +22,12 @@ declare(encoding = "utf-8");
  * @package    ForwardFW
  * @subpackage Templater
  * @author     Alexander Opitz <opitz.alexander@primacom.net>
- * @copyright  2009-2010 The Authors
+ * @copyright  2009-2013 The Authors
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
- * @version    SVN: $Id: $
  * @link       http://forwardfw.sourceforge.net
  * @since      File available since Release 0.0.2
  */
 
-/**
- *
- */
 require_once 'ForwardFW/Controller.php';
 require_once 'ForwardFW/Request.php';
 require_once 'ForwardFW/Response.php';
@@ -83,9 +78,9 @@ class ForwardFW_Templater_Smarty extends ForwardFW_Controller
         }
 
         $this->smarty = new Smarty();
-        $this->smarty->compile_dir = $strCompilePath;
-        $this->smarty->register_block('block', array(&$this, '__block'));
-        $this->smarty->register_function('texter', array(&$this, '__texter'));
+        $this->smarty->setCompileDir($strCompilePath);
+        $this->smarty->registerPlugin('block', 'block', array(&$this, '__block'));
+        $this->smarty->registerPlugin('function', 'texter', array(&$this, '__texter'));
 
         $this->strTemplatePath = $arConfig['TemplatePath'];
     }
@@ -190,5 +185,3 @@ class ForwardFW_Templater_Smarty extends ForwardFW_Controller
         return $result;
     }
 }
-
-?>

@@ -1,6 +1,15 @@
+Install
+-------
+
 Copy the data to your web path.
 If FirePHPCore isn't in your include_path you can link or copy the Core into the libs path.
-If Smarty2/3 isn't in your include_path you can link or copy the Core into the libs path.
+If Smarty (3.1 or newer) isn't in your include_path you can link or copy the Core into the libs path.
 You can also use Twig (0.9.6 or newer) as template engine, the same here, add it to your
 include path or link/copy it to the libs path. You need to adjust the config.inc.php.
 Direct your browser to the index.php file, that's all.
+
+Install FirePHPCore from PEAR
+-----------------------------
+
+pear channel-discover pear.firephp.org
+pear install firephp/FirePHPCore
