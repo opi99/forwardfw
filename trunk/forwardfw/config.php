@@ -7,7 +7,7 @@ ini_set('include_path', dirname(__FILE__) . DIRECTORY_SEPARATOR . 'src' . PATH_S
 ini_set('include_path', dirname(__FILE__) . DIRECTORY_SEPARATOR . 'libs' . PATH_SEPARATOR . ini_get('include_path'));
 
 $GLOBALS['ForwardFW'] = array(
-    'Version' => '0.0.10',
+    'Version' => '0.0.11-dev',
 );
 
 $GLOBALS['ForwardFW_Filter_RequestResponse'] = array(
@@ -26,13 +26,13 @@ $GLOBALS['ForwardFW_Templater']              = array(
 );
 
 $GLOBALS['ForwardFW_Templater_Smarty']       = array(
-    'CompilePath'  => getcwd() . '/cache/',
-    'TemplatePath' => getcwd() . '/data/templates/smarty'
+    'CompilePath'  => getcwd() . '/../cache/',
+    'TemplatePath' => getcwd() . '/../data/templates/smarty'
 );
 
 $GLOBALS['ForwardFW_Templater_Twig']         = array(
-    'CompilePath'  => getcwd() . '/cache/',
-    'TemplatePath' => getcwd() . '/data/templates/twig'
+    'CompilePath'  => getcwd() . '/../cache/',
+    'TemplatePath' => getcwd() . '/../data/templates/twig'
 );
 
 $GLOBALS['ForwardFW_Controller_DataHandler']  = array(
