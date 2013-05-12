@@ -125,7 +125,7 @@ class Smarty extends \ForwardFW\Controller implements \ForwardFW\Templater\Templ
             $result = $this->smarty->fetch(
                 $this->strTemplatePath . '/' . $this->strFile
             );
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             ob_end_clean();
             throw $e;
         }

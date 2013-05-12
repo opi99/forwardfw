@@ -1,5 +1,4 @@
 <?php
-declare(encoding = "utf-8");
 /**
  * This file is part of ForwardFW a web application framework.
  *
@@ -23,16 +22,17 @@ declare(encoding = "utf-8");
  * @package    ForwardFW
  * @subpackage Cache
  * @author     Alexander Opitz <opitz.alexander@primacom.net>
- * @copyright  2009-2010 The Authors
+ * @copyright  2009-2013 The Authors
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
- * @version    SVN: $Id: $
  * @link       http://forwardfw.sourceforge.net
  * @since      File available since Release 0.0.8
  */
 
+namespace ForwardFW\Cache;
+
+require_once 'ForwardFW/Cache/BackendInterface.php';
 require_once 'ForwardFW/Config/Cache/Backend.php';
-require_once 'ForwardFW/Interface/Application.php';
-require_once 'ForwardFW/Interface/Cache/Backend.php';
+require_once 'ForwardFW/Controller/ApplicationInterface.php';
 
 require_once 'ForwardFW/Cache/Exception/TimeOut.php';
 require_once 'ForwardFW/Cache/Exception/NoData.php';
@@ -48,17 +48,17 @@ require_once 'ForwardFW/Cache/Exception/IsGenerating.php';
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @link       http://forwardfw.sourceforge.net
  */
-abstract class ForwardFW_Cache_Backend implements ForwardFW_Interface_Cache_Backend
+abstract class Backend implements BackendInterface
 {
     /**
      * Constructor
      *
-     * @param ForwardFW_Interface_Application $application The running application.
-     * @param ForwardFW_Config_Cache_Backend  $config      Backend config.
+     * @param ForwardFW\Controller\ApplicationInterface $application The running application.
+     * @param ForwardFW\Config\Cache\Backend  $config      Backend config.
      */
     public function __construct(
-        ForwardFW_Interface_Application $application,
-        ForwardFW_Config_Cache_Backend $config
+        \ForwardFW\Controller\ApplicationInterface $application,
+        \ForwardFW\Config\Cache\Backend $config
     ) {
         $this->application = $application;
         $this->config = $config;
@@ -71,9 +71,9 @@ abstract class ForwardFW_Cache_Backend implements ForwardFW_Interface_Cache_Back
      * @param integer $nTime   Oldest Time of data in cache.
      *
      * @return mixed Data from cache
-     * @throws ForwardFW_Cache_Exception_IsGenerating
-     * @throws ForwardFW_Cache_Exception_TimeOut
-     * @throws ForwardFW_Cache_Exception_NoData
+     * @throws ForwardFW\Cache\Exception\IsGenerating
+     * @throws ForwardFW\Cache\Exception\TimeOut
+     * @throws ForwardFW\Cache\Exception\NoData
      */
     public function getData($strHash, $nTime)
     {
@@ -90,21 +90,21 @@ abstract class ForwardFW_Cache_Backend implements ForwardFW_Interface_Cache_Back
                     $this->application->getResponse()->addLog(
                         'Cache Backend: Data isGenerating'
                     );
-                    throw new ForwardFW_Cache_Exception_IsGenerating();
+                    throw new \ForwardFW\Cache\Exception\IsGenerating();
                 }
             } else {
                 // Data but timed out exception
                 $this->application->getResponse()->addLog(
                     'Cache Backend: Data timed out'
                 );
-                throw new ForwardFW_Cache_Exception_TimeOut();
+                throw new \ForwardFW\Cache\Exception\TimeOut();
             }
         } else {
             // No Data Exception
             $this->application->getResponse()->addLog(
                 'Cache Backend: No data available'
             );
-            throw new ForwardFW_Cache_Exception_NoData();
+            throw new \ForwardFW\Cache\Exception\NoData();
         }
     }
 
@@ -198,4 +198,3 @@ abstract class ForwardFW_Cache_Backend implements ForwardFW_Interface_Cache_Back
      */
     abstract protected function clear();
 }
-?>

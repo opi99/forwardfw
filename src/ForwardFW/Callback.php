@@ -1,5 +1,4 @@
 <?php
-declare(encoding = "utf-8");
 /**
  * This file is part of ForwardFW a web application framework.
  *
@@ -23,14 +22,13 @@ declare(encoding = "utf-8");
  * @package    ForwardFW
  * @subpackage Main
  * @author     Alexander Opitz <opitz.alexander@primacom.net>
- * @copyright  2009,2010 The Authors
+ * @copyright  2009-2013 The Authors
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
- * @version    SVN: $Id: $
  * @link       http://forwardfw.sourceforge.net
  * @since      File available since Release 0.0.8
  */
 
-require_once 'ForwardFW/Exception/Callback.php';
+namespace ForwardFW;
 
 /**
  * Config for a Cache.
@@ -42,7 +40,7 @@ require_once 'ForwardFW/Exception/Callback.php';
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @link       http://forwardfw.sourceforge.net
  */
-class ForwardFW_Callback
+class Callback
 {
     /**
      * @var Callback The callback function configuration
@@ -61,7 +59,7 @@ class ForwardFW_Callback
      * @param array    $arParameters Parameters for function call.
      *
      * @return void
-     * @throws ForwardFW_Exception_Callback
+     * @throws ForwardFW\Exception\Callback
      */
     public function __construct($callback, array $arParameters = null)
     {
@@ -69,7 +67,7 @@ class ForwardFW_Callback
             $this->callback = $callback;
             $this->setParameters($arParameters);
         } else {
-            throw new ForwardFW_Exception_Callback('This is no callback function');
+            throw new Exception\Callback('This is no callback function');
         }
     }
 
@@ -78,7 +76,7 @@ class ForwardFW_Callback
      *
      * @param array $arParameters Parameters for function call.
      *
-     * @return ForwrdFW_Callback
+     * @return ForwrdFW\Callback
      */
     public function setParameters(array $arParameters = null)
     {
@@ -112,4 +110,3 @@ class ForwardFW_Callback
         }
     }
 }
-?>

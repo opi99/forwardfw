@@ -1,5 +1,4 @@
 <?php
-declare(encoding = "utf-8");
 /**
  * This file is part of ForwardFW a web application framework.
  *
@@ -23,12 +22,13 @@ declare(encoding = "utf-8");
  * @package    ForwardFW
  * @subpackage Config
  * @author     Alexander Opitz <opitz.alexander@primacom.net>
- * @copyright  2009, 2010 The Authors
+ * @copyright  2009-2013 The Authors
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
- * @version    SVN: $Id: $
  * @link       http://forwardfw.sourceforge.net
  * @since      File available since Release 0.0.8
  */
+
+namespace ForwardFW\Config\Cache;
 
 require_once 'ForwardFW/Config.php';
 
@@ -42,7 +42,7 @@ require_once 'ForwardFW/Config.php';
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @link       http://forwardfw.sourceforge.net
  */
-class ForwardFW_Config_Cache_Data extends ForwardFW_Config
+class Data extends \ForwardFW\Config
 {
     /**
      * @var integer Timeout of the cache in seconds.
@@ -100,4 +100,3 @@ class ForwardFW_Config_Cache_Data extends ForwardFW_Config
         return $this->bReserveOld;
     }
 }
-?>

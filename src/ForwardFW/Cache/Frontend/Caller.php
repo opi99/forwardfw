@@ -1,5 +1,4 @@
 <?php
-declare(encoding = "utf-8");
 /**
  * This file is part of ForwardFW a web application framework.
  *
@@ -21,56 +20,58 @@ declare(encoding = "utf-8");
  *
  * @category   Cache
  * @package    ForwardFW
- * @subpackage Config
+ * @subpackage Main
  * @author     Alexander Opitz <opitz.alexander@primacom.net>
- * @copyright  2009, 2010 The Authors
+ * @copyright  2009-2013 The Authors
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
- * @version    SVN: $Id: $
  * @link       http://forwardfw.sourceforge.net
  * @since      File available since Release 0.0.8
  */
 
-require_once 'ForwardFW/Callback.php';
-require_once 'ForwardFW/Config/Cache/Data.php';
+namespace ForwardFW\Cache\Frontend;
+
+require_once 'ForwardFW/Cache/Frontend.php';
+//require_once 'ForwardFW/Config/Cache/Frontend.php';
+require_once 'ForwardFW/Config/Cache/Data/Caller.php';
+require_once 'ForwardFW/Controller/ApplicationInterface.php';
 
 /**
- * Config for a Cache.
+ * Implementation of a Cache.
  *
  * @category   Cache
  * @package    ForwardFW
- * @subpackage Config
+ * @subpackage Main
  * @author     Alexander Opitz <opitz.alexander@primacom.net>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @link       http://forwardfw.sourceforge.net
  */
-class ForwardFW_Config_Cache_Data_Function extends ForwardFW_Config_Cache_Data
+class Caller extends \ForwardFW\Cache\Frontend
 {
     /**
-     * @var ForwardFW_Callback The callback function object.
-     */
-    protected $callback = null;
-
-    /**
-     * Sets the callback
+     * Returns content from cache or gathers the data
      *
-     * @param ForwardFW_Callback $callback The callback configuration
+     * @param ForwardFW\Config\Cache\Data $config What data should be get from cache
      *
-     * @return ForwardFW_Config_FunctionCacheData
+     * @return mixed The data you requested.
      */
-    public function setCallback(ForwardFW_Callback $callback)
-    {
-        $this->callback = $callback;
-        return $this;
+    public function getCache(\ForwardFW\Config\Cache\Data $config) {
+        return parent::getCache($config);
     }
 
     /**
-     * Gets the callback configuration
+     * Returns hash for this config.
      *
-     * @return ForwardFW_Callback
+     * @param ForwardFW\Config\Cache\Data $config For what the hash should calculated.
+     *
+     * @return string Hash for the config.
      */
-    public function getCallback()
+    protected function calculateHash(\ForwardFW\Config\Cache\Data  $config)
     {
-        return $this->callback;
+        return $this->getHash($config->getCallback()->getParameters());
+    }
+
+    protected function getDataToCache(\ForwardFW\Config\Cache\Data $config)
+    {
+        return $config->getCallback()->doCallback();
     }
 }
-?>

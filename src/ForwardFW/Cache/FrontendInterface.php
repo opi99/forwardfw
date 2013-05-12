@@ -1,5 +1,4 @@
 <?php
-declare(encoding = "utf-8");
 /**
  * This file is part of ForwardFW a web application framework.
  *
@@ -23,15 +22,18 @@ declare(encoding = "utf-8");
  * @package    ForwardFW
  * @subpackage Interface
  * @author     Alexander Opitz <opitz.alexander@primacom.net>
- * @copyright  2009-2010 The Authors
+ * @copyright  2009-2013 The Authors
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
- * @version    SVN: $Id: $
  * @link       http://forwardfw.sourceforge.net
  * @since      File available since Release 0.0.8
  */
 
-require_once 'ForwardFW/Config/Cache/Backend.php';
-require_once 'ForwardFW/Interface/Application.php';
+namespace ForwardFW\Cache;
+
+require_once 'ForwardFW/Cache/BackendInterface.php';
+require_once 'ForwardFW/Config/Cache/Data.php';
+require_once 'ForwardFW/Config/Cache/Frontend.php';
+require_once 'ForwardFW/Controller/ApplicationInterface.php';
 
 /**
  * Interface for a Cache.
@@ -43,57 +45,41 @@ require_once 'ForwardFW/Interface/Application.php';
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @link       http://forwardfw.sourceforge.net
  */
-interface ForwardFW_Interface_Cache_Backend
+interface FrontendInterface
 {
     /**
      * Constructor
      *
-     * @param ForwardFW_Interface_Application $application The running application.
-     * @param ForwardFW_Config_Cache_Backend  $config      Configuration of Backend.
-     *
-     * @return void
+     * @param ForwardFW\Controller\ApplicationInterface   $application The running application.
+     * @param ForwardFW\Cache\BackendInterface $backend     Backend for storing
+     *                                                       cache data.
      */
     public function __construct(
-        ForwardFW_Interface_Application $application,
-        ForwardFW_Config_Cache_Backend $config
+        \ForwardFW\Controller\ApplicationInterface $application,
+        \ForwardFW\Cache\BackendInterface $backend
     );
 
     /**
-     * Gets data from Cache.
+     * Builds an instance of cache
      *
-     * @param string  $strHash Hash for data.
-     * @param integer $nTime   Oldest Time of data in cache.
+     * @param ForwardFW\Controller\ApplicationInterface $application The running application
+     * @param ForwardFW\Config\Cache\Frontend $config      Configuration of caching
      *
-     * @return mixed Data from cache
+     * @return ForwardFW_Interface_Cache_Frontend The cache Frontend
      */
-    public function getData($strHash, $nTime);
+    static public function getInstance(
+        \ForwardFW\Controller\ApplicationInterface $application,
+        \ForwardFW\Config\Cache\Frontend $config
+    );
 
     /**
-     * Sets data from Cache.
+     * Returns content from cache or gathers the data
      *
-     * @param string $strHash Hash for data.
-     * @param mixed  $mData   Data to save into cache.
+     * @param ForwardFW\Config\Cache\Data $config What data should be get from cache
      *
-     * @return void
+     * @return mixed The data you requested.
      */
-    public function setData($strHash, $mData);
-
-    /**
-     * Clears data from Cache.
-     *
-     * @param string $strHash Hash for data.
-     *
-     * @return void
-     */
-    public function unsetData($strHash);
-
-    /**
-     * Sets marker that cache will be generated yet.
-     *
-     * @param string $strHash Hash of cache which is generated.
-     *
-     * @return void
-     */
-    public function setGenerating($strHash);
+    public function getCache(
+        \ForwardFW\Config\Cache\Data $config
+    );
 }
-?>

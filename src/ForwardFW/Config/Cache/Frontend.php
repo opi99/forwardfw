@@ -1,5 +1,4 @@
 <?php
-declare(encoding = "utf-8");
 /**
  * This file is part of ForwardFW a web application framework.
  *
@@ -23,12 +22,13 @@ declare(encoding = "utf-8");
  * @package    ForwardFW
  * @subpackage Config
  * @author     Alexander Opitz <opitz.alexander@primacom.net>
- * @copyright  2009, 2010 The Authors
+ * @copyright  2009-2013 The Authors
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
- * @version    SVN: $Id: $
  * @link       http://forwardfw.sourceforge.net
  * @since      File available since Release 0.0.8
  */
+
+namespace ForwardFW\Config\Cache;
 
 require_once 'ForwardFW/Config.php';
 
@@ -42,7 +42,7 @@ require_once 'ForwardFW/Config.php';
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @link       http://forwardfw.sourceforge.net
  */
-class ForwardFW_Config_Cache_Frontend extends ForwardFW_Config
+class Frontend extends \ForwardFW\Config
 {
     /**
      * @var string Class Name of Cache Frontend
@@ -55,7 +55,7 @@ class ForwardFW_Config_Cache_Frontend extends ForwardFW_Config
     private $strCacheBackend = '';
 
     /**
-     * @var ForwardFW_Config_Cache_Backend Configuration for Cache Backend
+     * @var ForwardFW\Config\Cache\Backend Configuration for Cache Backend
      */
     private $backendConfig = null;
 
@@ -88,11 +88,11 @@ class ForwardFW_Config_Cache_Frontend extends ForwardFW_Config
     /**
      * Config of the Backend
      *
-     * @param ForwardFW_Config_Cache_Backend $backendConfig Config of the backend cache.
+     * @param ForwardFW\Config\Cache\Backend $backendConfig Config of the backend cache.
      *
-     * @return ForwardFW_Config_Cache_Frontend This.
+     * @return ForwardFW\Config\Cache\Frontend This.
      */
-    public function setBackendConfig(ForwardFW_Config_Cache_Backend $backendConfig)
+    public function setBackendConfig(\ForwardFW\Config\Cache\Backend $backendConfig)
     {
         $this->backendConfig = $backendConfig;
         return $this;
@@ -129,4 +129,3 @@ class ForwardFW_Config_Cache_Frontend extends ForwardFW_Config
         return $this->backendConfig;
     }
 }
-?>

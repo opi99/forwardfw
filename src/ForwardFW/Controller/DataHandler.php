@@ -1,5 +1,4 @@
 <?php
-declare(encoding = "utf-8");
 /**
  * This file is part of ForwardFW a web application framework.
  *
@@ -29,13 +28,15 @@ declare(encoding = "utf-8");
  * @since      File available since Release 0.0.7
  */
 
-require_once 'ForwardFW/Interface/DataHandler.php';
-require_once 'ForwardFW/Interface/Application.php';
+namespace ForwardFW\Controller;
+
+require_once 'ForwardFW/Controller/DataHandlerInterface.php';
+require_once 'ForwardFW/Controller/ApplicationInterface.php';
 
 require_once 'ForwardFW/Callback.php';
-require_once 'ForwardFW/Cache/Frontend/Function.php';
+require_once 'ForwardFW/Cache/Frontend/Caller.php';
 require_once 'ForwardFW/Config/Cache/Backend/File.php';
-require_once 'ForwardFW/Config/Cache/Data/Function.php';
+require_once 'ForwardFW/Config/Cache/Data/Caller.php';
 
 
 /**
@@ -48,8 +49,7 @@ require_once 'ForwardFW/Config/Cache/Data/Function.php';
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @link       http://forwardfw.sourceforge.net
  */
-class ForwardFW_Controller_DataHandler extends ForwardFW_Controller
-    implements ForwardFW_Interface_DataHandler
+class DataHandler extends \ForwardFW\Controller implements DataHandlerInterface
 {
     /**
      * @var array Cache of connections
@@ -59,11 +59,11 @@ class ForwardFW_Controller_DataHandler extends ForwardFW_Controller
     /**
      * Constructor
      *
-     * @param ForwardFW_Interface_Application $application The running application.
+     * @param ForwardFW\Controller\ApplicationInterface $application The running application.
      *
      * @return void
      */
-    public function __construct(ForwardFW_Interface_Application $application)
+    public function __construct(ApplicationInterface $application)
     {
         parent::__construct($application);
     }
@@ -71,16 +71,16 @@ class ForwardFW_Controller_DataHandler extends ForwardFW_Controller
     /**
      * Returns an instance of configured DataHandler.
      *
-     * @param ForwardFW_Interface_Application $application The running application.
+     * @param ForwardFW\Controller\ApplicationInterface $application The running application.
      *
      * @return void
      */
-    public static function getInstance(ForwardFW_Interface_Application $application)
+    public static function getInstance(ApplicationInterface $application)
     {
         if (isset($GLOBALS['DataLoader']['instance'][$application])) {
             $return = $GLOBALS['DataLoader']['instance'][$application->getName()];
         } else {
-            $return = new ForwardFW_Controller_DataHandler($application);
+            $return = new self($application);
             $GLOBALS['DataLoader']['instance'][$application->getName()] = $return;
         }
         return $return;
@@ -100,12 +100,12 @@ class ForwardFW_Controller_DataHandler extends ForwardFW_Controller
 
         $cache = $this->getCacheSystem($strConnection);
 
-        $cacheCallback = new ForwardFW_Callback(
+        $cacheCallback = new \ForwardFW\Callback(
             array($handler, 'loadFrom'),
             array($strConnection, $arOptions)
         );
 
-        $configCacheData = new ForwardFW_Config_Cache_Data_Function();
+        $configCacheData = new \ForwardFW\Config\Cache\Data\Caller();
         $configCacheData
             ->setCallback($cacheCallback)
             ->setTimeout($nCacheTimeout);
@@ -124,16 +124,16 @@ class ForwardFW_Controller_DataHandler extends ForwardFW_Controller
      */
     protected function getCacheSystem($strConnection)
     {
-        $backendConfig = new ForwardFW_Config_Cache_Backend_File();
+        $backendConfig = new \ForwardFW\Config\Cache\Backend\File();
         $backendConfig->strPath = getcwd() . '/cache/';
 
-        $configCacheFrontend = new ForwardFW_Config_Cache_Frontend();
+        $configCacheFrontend = new \ForwardFW\Config\Cache\Frontend();
         $configCacheFrontend
-            ->setCacheBackend('ForwardFW_Cache_Backend_File')
+            ->setCacheBackend('ForwardFW\\Cache\\Backend\\File')
             ->setBackendConfig($backendConfig)
-            ->setCacheFrontend('ForwardFW_Cache_Frontend_Function');
+            ->setCacheFrontend('ForwardFW\\Cache\\Frontend\\Caller');
 
-        $cache = ForwardFW_Cache_Frontend::getInstance(
+        $cache = \ForwardFW\Cache\Frontend::getInstance(
             $this->application,
             $configCacheFrontend
         );

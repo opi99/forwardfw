@@ -20,7 +20,7 @@
  *
  * @category   Exception
  * @package    ForwardFW
- * @subpackage Cache
+ * @subpackage DataHandler
  * @author     Alexander Opitz <opitz.alexander@primacom.net>
  * @copyright  2009-2013 The Authors
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
@@ -28,20 +28,20 @@
  * @since      File available since Release 0.0.9
  */
 
-namespace ForwardFW\Cache\Exception;
+namespace ForwardFW\Exception;
 
-require_once 'ForwardFW/Cache/Exception.php';
+require_once 'ForwardFW/Exception.php';
 
 /**
  * Base Exception inside Framework.
  *
  * @category   Exception
  * @package    ForwardFW
- * @subpackage Cache
+ * @subpackage DataHandler
  * @author     Alexander Opitz <opitz.alexander@primacom.net>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @link       http://forwardfw.sourceforge.net
  */
-class TimeOut extends \ForwardFW\Cache\Exception
+class DataHandler extends \ForwardFW\Exception
 {
 }

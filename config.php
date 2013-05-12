@@ -10,52 +10,52 @@ $GLOBALS['ForwardFW'] = array(
     'Version' => '0.0.11-dev',
 );
 
-$GLOBALS['ForwardFW_Filter_RequestResponse'] = array(
-    'ForwardFW_Filter_RequestResponse_FirePHP',
-    'ForwardFW_Filter_RequestResponse_Application',
+$GLOBALS['ForwardFW\\Filter\\RequestResponse'] = array(
+    'ForwardFW\\Filter\\RequestResponse\\FirePHP',
+    'ForwardFW\\Filter\\RequestResponse\\Application',
 );
 
-$GLOBALS['ForwardFW_Application']            = array(
-    'class' => 'ForwardFW_Controller_Application',
+$GLOBALS['ForwardFW\\Application'] = array(
+    'class' => 'ForwardFW\\Controller\\Application',
     'name'  => 'ShortDemo',
 );
 
-$GLOBALS['ForwardFW_Templater']              = array(
-    'Templater' => 'ForwardFW_Templater_Smarty',
-#    'Templater' => 'ForwardFW_Templater_Twig',
+$GLOBALS['ForwardFW\\Templater'] = array(
+    'Templater' => 'ForwardFW\\Templater\\Smarty',
+//     'Templater' => 'ForwardFW\\Templater\\Twig',
 );
 
-$GLOBALS['ForwardFW_Templater_Smarty']       = array(
+$GLOBALS['ForwardFW\\Templater\\Smarty'] = array(
     'CompilePath'  => getcwd() . '/../cache/',
     'TemplatePath' => getcwd() . '/../data/templates/smarty'
 );
 
-$GLOBALS['ForwardFW_Templater_Twig']         = array(
+$GLOBALS['ForwardFW\\Templater\\Twig'] = array(
     'CompilePath'  => getcwd() . '/../cache/',
     'TemplatePath' => getcwd() . '/../data/templates/twig'
 );
 
-$GLOBALS['ForwardFW_Controller_DataHandler']  = array(
+$GLOBALS['ForwardFW\\Controller\\DataHandler'] = array(
     'default' => array(
-        'handler' => 'ForwardFW_Controller_DataHandler_MDB2',
+        'handler' => 'ForwardFW\\Controller\\DataHandler\\MDB2',
         'config' => array(
-            'dsn' => 'mysql://john:doe@localhost/forwardfw',
+            'dsn' => 'mysqli://john:doe@localhost/forwardfw',
             'options' => array(),
             'prefix'  => '',
         ),
     ),
 );
 
-$GLOBALS['ForwardFW_Controller_DataHandler_MDB2']  = array(
+$GLOBALS['ForwardFW\\Controller\\DataHandler\\MDB2'] = array(
     'default' => array(
-        'dsn' => 'mysql://john:doe@localhost/forwardfw',
+        'dsn' => 'mysqli://john:doe@localhost/forwardfw',
         'options' => array(),
         'prefix'  => null,
     ),
 );
 
-$GLOBALS['ShortDemo']['screens']             = array(
-    'Hello' => 'ForwardFW_Controller_Screen'
+$GLOBALS['ShortDemo']['screens'] = array(
+    'Hello' => 'ForwardFW\\Controller\\Screen'
 );
 
 date_default_timezone_set('CET');

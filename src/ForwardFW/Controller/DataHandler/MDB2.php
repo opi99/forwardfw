@@ -1,5 +1,4 @@
 <?php
-declare(encoding = "utf-8");
 /**
  * This file is part of ForwardFW a web application framework.
  *
@@ -23,17 +22,18 @@ declare(encoding = "utf-8");
  * @package    ForwardFW
  * @subpackage Controller/DataHandler
  * @author     Alexander Opitz <opitz.alexander@primacom.net>
- * @copyright  2009-2010 The Authors
+ * @copyright  2009-2013 The Authors
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
- * @version    SVN: $Id: $
  * @link       http://forwardfw.sourceforge.net
  * @since      File available since Release 0.0.7
  */
 
+namespace ForwardFW\Controller\DataHandler;
+
 require_once 'ForwardFW/Exception/DataHandler.php';
 require_once 'ForwardFW/Controller/DataHandler.php';
-require_once 'ForwardFW/Interface/Application.php';
-require_once 'PEAR/MDB2.php';
+require_once 'ForwardFW/Controller/ApplicationInterface.php';
+require_once 'MDB2.php';
 
 /**
  * Managing DataLoading via PEAR::MDB2
@@ -45,7 +45,7 @@ require_once 'PEAR/MDB2.php';
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @link       http://forwardfw.sourceforge.net
  */
-class ForwardFW_Controller_DataHandler_MDB2 extends ForwardFW_Controller_DataHandler
+class MDB2 extends \ForwardFW\Controller\DataHandler
 {
     /**
      * @var array Prefix for tables
@@ -87,9 +87,9 @@ class ForwardFW_Controller_DataHandler_MDB2 extends ForwardFW_Controller_DataHan
         $arResult = array();
         $resultMDB2 = $conMDB2->query($strQuery);
 
-        if (PEAR::isError($resultMDB2)) {
+        if (\PEAR::isError($resultMDB2)) {
             $this->application->getResponse()->addError($resultMDB2->getMessage() . $resultMDB2->getUserinfo());
-            throw new ForwardFW_Exception_DataHandler(
+            throw new \ForwardFW\Exception\DataHandler(
                 'Error while execute: '
                 . $resultMDB2->getMessage()
                 . $resultMDB2->getUserinfo()
@@ -131,13 +131,13 @@ class ForwardFW_Controller_DataHandler_MDB2 extends ForwardFW_Controller_DataHan
         }
         $options = array('portability' => MDB2_PORTABILITY_ALL ^ MDB2_PORTABILITY_FIX_CASE);
         $options = array_merge($options, $arConfig['options']);
-        $conMDB2 = MDB2::connect($arConfig['dsn'], $options);
+        $conMDB2 = \MDB2::connect($arConfig['dsn'], $options);
 
-        if (PEAR::isError($conMDB2)) {
+        if (\PEAR::isError($conMDB2)) {
             $this->application->getResponse()->addError(
                 $conMDB2->getMessage() . $conMDB2->getUserinfo()
             );
-            throw new ForwardFW_Exception_DataHandler(
+            throw new \ForwardFW\Exception\DataHandler(
                 'Cannot initialize MDB Connection: '
                 . $conMDB2->getMessage()
                 . $conMDB2->getUserinfo()
@@ -149,5 +149,3 @@ class ForwardFW_Controller_DataHandler_MDB2 extends ForwardFW_Controller_DataHan
     }
 
 }
-
-?>

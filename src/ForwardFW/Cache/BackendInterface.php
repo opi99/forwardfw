@@ -1,5 +1,4 @@
 <?php
-declare(encoding = "utf-8");
 /**
  * This file is part of ForwardFW a web application framework.
  *
@@ -19,84 +18,81 @@ declare(encoding = "utf-8");
  *
  * PHP version 5
  *
- * @category   DataLoader
+ * @category   Cache
  * @package    ForwardFW
  * @subpackage Interface
  * @author     Alexander Opitz <opitz.alexander@primacom.net>
- * @copyright  2009,2010 The Authors
+ * @copyright  2009-2013 The Authors
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
- * @version    SVN: $Id: $
  * @link       http://forwardfw.sourceforge.net
- * @since      File available since Release 0.0.7
+ * @since      File available since Release 0.0.8
  */
 
-/**
- *
- */
+namespace ForwardFW\Cache;
+
+require_once 'ForwardFW/Config/Cache/Backend.php';
+require_once 'ForwardFW/Controller/ApplicationInterface.php';
 
 /**
- * Interface for a DataLoader.
+ * Interface for a Cache.
  *
- * @category   DataLoader
+ * @category   Cache
  * @package    ForwardFW
  * @subpackage Interface
  * @author     Alexander Opitz <opitz.alexander@primacom.net>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @link       http://forwardfw.sourceforge.net
  */
-interface ForwardFW_Interface_DataHandler
+interface BackendInterface
 {
     /**
      * Constructor
      *
-     * @param ForwardFW_Interface_Application $application The running application
+     * @param ForwardFW\Controller\ApplicationInterface $application The running application.
+     * @param ForwardFW\Config\Cache\Backend  $config      Configuration of Backend.
      *
      * @return void
      */
     public function __construct(
-        ForwardFW_Interface_Application $application
+        \ForwardFW\Controller\ApplicationInterface $application,
+        \ForwardFW\Config\Cache\Backend $config
     );
 
     /**
-     * Calls the loading if it isn't in cache or cache timed out.
+     * Gets data from Cache.
      *
-     * @param string  $strConnection Name of connection defined in conf.
-     * @param array   $arOptions     Operations for this load.
-     * @param integer $nCacheTimeout Cache lifetime, -1 to use default.
+     * @param string  $strHash Hash for data.
+     * @param integer $nTime   Oldest Time of data in cache.
      *
-     * @return mixed The response Data
+     * @return mixed Data from cache
      */
-    public function loadFromCached(
-        $strConnection, array $arOptions, $nCacheTimeout = -1
-    );
+    public function getData($strHash, $nTime);
 
     /**
-     * Load method.
+     * Sets data from Cache.
      *
-     * @param string $strConnection Name of connection defined in conf.
-     * @param array  $arOptions     Operations for this load.
-     *
-     * @return mixed The response Data
-     */
-    public function loadFrom($strConnection, array $arOptions);
-
-    /**
-     * Save method.
-     *
-     * @param string $strConnection Name of connection defined in conf.
-     * @param array  $options       Operations for the saving.
-     *
-     * @return boolean 
-     */
-    public function saveTo($strConnection, array $options);
-
-    /**
-     * Initialize the given connection.
-     *
-     * @param string $strConnection Name of connection defined in conf.
+     * @param string $strHash Hash for data.
+     * @param mixed  $mData   Data to save into cache.
      *
      * @return void
      */
-    public function initConnection($strConnection);
+    public function setData($strHash, $mData);
+
+    /**
+     * Clears data from Cache.
+     *
+     * @param string $strHash Hash for data.
+     *
+     * @return void
+     */
+    public function unsetData($strHash);
+
+    /**
+     * Sets marker that cache will be generated yet.
+     *
+     * @param string $strHash Hash of cache which is generated.
+     *
+     * @return void
+     */
+    public function setGenerating($strHash);
 }
-?>

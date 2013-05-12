@@ -45,7 +45,7 @@ interface ScreenInterface
     /**
      * Constructor
      *
-     * @param ForwardFW\Controller\Application $application The running application.
+     * @param ForwardFW\Controller\ApplicationInterface $application The running application.
      *
      * @return void
      */
