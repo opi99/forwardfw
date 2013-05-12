@@ -30,8 +30,6 @@
 
 namespace ForwardFW;
 
-require_once 'ForwardFW/Templater/TemplaterInterface.php';
-
 /**
  * This class can instantiate a templater class.
  *

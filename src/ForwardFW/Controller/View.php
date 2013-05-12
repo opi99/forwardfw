@@ -30,10 +30,6 @@
 
 namespace ForwardFW\Controller;
 
-require_once 'ForwardFW/Controller.php';
-require_once 'ForwardFW/Controller/ApplicationInterface.php';
-require_once 'ForwardFW/Templater.php';
-
 /**
  * This class is a basic View class.
  *

@@ -30,10 +30,6 @@
 
 namespace \ForwardFW\Container;
 
-require_once 'ForwardFW/Controller/DataLoader.php';
-require_once 'ForwardFW/Container.php';
-require_once 'ForwardFW/Object/Sql.php';
-
 /**
  * A list of models that can load themself from DB.
  *

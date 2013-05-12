@@ -30,8 +30,6 @@
 
 namespace ForwardFW\Object;
 
-require_once 'ForwardFW/Object.php';
-
 /**
  * Model for mesuring time, can add hints with meantime
  *

@@ -30,13 +30,6 @@
 
 namespace ForwardFW\Templater;
 
-require_once 'ForwardFW/Controller.php';
-require_once 'ForwardFW/Request.php';
-require_once 'ForwardFW/Response.php';
-require_once 'ForwardFW/Templater/TemplaterInterface.php';
-
-require_once 'Smarty/Smarty.class.php';
-
 /**
  * Class to use Smarty as Templater.
  *

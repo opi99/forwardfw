@@ -30,8 +30,6 @@
 
 namespace ForwardFW\Filter\RequestResponse;
 
-require_once 'ForwardFW/Filter/RequestResponse.php';
-
 /**
  * This class loads and runs the requested Application.
  *

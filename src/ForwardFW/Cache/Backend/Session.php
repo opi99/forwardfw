@@ -30,10 +30,6 @@
 
 namespace ForwardFW\Cache\Backend;
 
-require_once 'ForwardFW/Controller/ApplicationInterface.php';
-require_once 'ForwardFW/Config/Cache/Backend.php';
-require_once 'ForwardFW/Cache/Backend.php';
-
 /**
  * Implementation of a Cache Backend.
  *

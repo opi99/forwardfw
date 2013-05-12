@@ -30,8 +30,6 @@
 
 namespace ForwardFW\Exception;
 
-require_once 'ForwardFW/Exception.php';
-
 /**
  * Base Exception inside Framework.
  *

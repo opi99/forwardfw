@@ -30,9 +30,6 @@
 
 namespace \ForwardFW\Container;
 
-require_once 'ForwardFW/Container.php';
-require_once 'ForwardFW/Object/Timer.php';
-
 /**
  * A list of Timer models.
  *
