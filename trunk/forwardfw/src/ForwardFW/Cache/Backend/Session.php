@@ -1,5 +1,4 @@
 <?php
-declare(encoding = "utf-8");
 /**
  * This file is part of ForwardFW a web application framework.
  *
@@ -23,15 +22,16 @@ declare(encoding = "utf-8");
  * @package    ForwardFW
  * @subpackage Cache/Backend
  * @author     Alexander Opitz <opitz.alexander@primacom.net>
- * @copyright  2009-2010 The Authors
+ * @copyright  2009-2013 The Authors
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
- * @version    SVN: $Id: $
  * @link       http://forwardfw.sourceforge.net
  * @since      File available since Release 0.0.8
  */
 
+namespace ForwardFW\Cache\Backend;
+
+require_once 'ForwardFW/Controller/ApplicationInterface.php';
 require_once 'ForwardFW/Config/Cache/Backend.php';
-require_once 'ForwardFW/Interface/Application.php';
 require_once 'ForwardFW/Cache/Backend.php';
 
 /**
@@ -49,12 +49,12 @@ class ForwardFW_Cache_Backend_Session extends ForwardFW_Cache_Backend
     /**
      * Constructor
      *
-     * @param ForwardFW_Interface_Application $application The running application.
-     * @param ForwardFW_Config_Cache_Backend  $config      Backend config.
+     * @param ForwardFW\Controller\ApplicationInterface $application The running application.
+     * @param ForwardFW\Config\Cache\Backend  $config      Backend config.
      */
     public function __construct(
-        ForwardFW_Interface_Application $application,
-        ForwardFW_Config_Cache_Backend $config
+        \ForwardFW\Controller\ApplicationInterface $application,
+        \ForwardFW\Config\Cache\Backend $config
     ) {
         session_start();
         parent::__construct($application, $config);
@@ -110,4 +110,3 @@ class ForwardFW_Cache_Backend_Session extends ForwardFW_Cache_Backend
         return true;
     }
 }
-?>
