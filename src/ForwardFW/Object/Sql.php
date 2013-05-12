@@ -78,7 +78,7 @@ class Sql extends \ForwardFW\Object
      *
      * @return new instance
      */
-    function __construct(
+    public function __construct(
         $strIdFieldName = 'ID',
         $strTablePrefix = '',
         $strDBConnection = 'default'
@@ -103,7 +103,7 @@ class Sql extends \ForwardFW\Object
      *
      * @return string The table name.
      */
-    static function resolveTableName($strTablePrefix, $strObjectName)
+    public static function resolveTableName($strTablePrefix, $strObjectName)
     {
         $strResult  = ($strTablePrefix != '' ? $strTablePrefix . '_' : '');
         $strResult .= substr($strObjectName, strrpos($strObjectName, '_') + 1);
@@ -117,9 +117,9 @@ class Sql extends \ForwardFW\Object
      *
      * @return boolean True if object was loadable otherwise false.
      */
-    function loadByID($ID)
+    public function loadByID($ID)
     {
-        return $this->loadByWhereClause($this->strIdFieldName.'='.$ID);
+        return $this->loadByWhereClause($this->strIdFieldName . '=' . $ID);
     }
 
     /**
@@ -129,7 +129,7 @@ class Sql extends \ForwardFW\Object
      *
      * @return boolean True if object was loadable otherwise false.
      */
-    function loadByWhereClause($strWhereClause)
+    public function loadByWhereClause($strWhereClause)
     {
         $dataLoader = \ForwardFW\Controller\DataHandler::getInstance(
             $this->strApplicationName
@@ -138,7 +138,10 @@ class Sql extends \ForwardFW\Object
             $this->strDBConnection,
             '*',
             $this->strTableName,
-            $strWhereClause, '', '', '1'
+            $strWhereClause,
+            '',
+            '',
+            '1'
         );
         if ($arResult !== false && count($arResult) == 1) {
             $this->loadByArray($arResult[0]);
@@ -153,7 +156,7 @@ class Sql extends \ForwardFW\Object
      *
      * @return boolean True if object was saveable otherwise false.
      */
-    function save()
+    public function save()
     {
         $arToSave = array();
         $this->saveToArray($arToSave);

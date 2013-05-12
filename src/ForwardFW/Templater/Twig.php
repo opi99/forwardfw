@@ -91,7 +91,8 @@ class Twig extends \ForwardFW\Controller implements \ForwardFW\Templater\Templat
         }
 
         $twigLoader = new \Twig_Loader_Filesystem($arConfig['TemplatePath']);
-        $this->twigEnvironment = new \Twig_Environment($twigLoader,
+        $this->twigEnvironment = new \Twig_Environment(
+			$twigLoader,
             array(
                 'cache'      => $strCompilePath,
                 'autoescape' => false,
@@ -141,6 +142,9 @@ class Twig extends \ForwardFW\Controller implements \ForwardFW\Templater\Templat
         return $result;
     }
 
+    /**
+     * @TODO Not combined with Twig
+     */
     public function defineBlock($strBlockName)
     {
         $this->arShowBlocks[$strBlockName] = 0;
@@ -156,7 +160,7 @@ class Twig extends \ForwardFW\Controller implements \ForwardFW\Templater\Templat
         $this->arShowBlocks[$strBlockName] = 0;
     }
 
-    public function __block($params, $content, &$smarty, &$repeat)
+    public function twigBlock($params, $content, &$smarty, &$repeat)
     {
         $name = $params['name'];
         if (isset($this->arShowBlocks[$name]) && $this->arShowBlocks[$name] == 1) {
@@ -165,7 +169,7 @@ class Twig extends \ForwardFW\Controller implements \ForwardFW\Templater\Templat
         return '';
     }
 
-    public function __texter($params, &$smarty)
+    public function twigTexter($params, &$smarty)
     {
         $strTextKey = $params['key'];
 
