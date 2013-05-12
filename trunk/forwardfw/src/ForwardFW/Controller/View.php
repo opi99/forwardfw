@@ -96,7 +96,7 @@ class View extends \ForwardFW\Controller
         try {
             $templater->setTemplateFile($this->getTemplateName() . '.tpl');
             return $templater->getCompiled();
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $this->application->response->addError($e->getMessage());
         }
     }

@@ -121,10 +121,10 @@ class Application extends View implements ApplicationInterface
                 // @TODO evaluate State of Screen
                 $strResult = $this->processView();
             }
-        } catch (ForwardFW_Exception $e) {
+        } catch (\ForwardFW\Exception $e) {
             // Todo Inner Exception Logging
             throw $e;
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             // Todo Logging
             throw $e;
         }
