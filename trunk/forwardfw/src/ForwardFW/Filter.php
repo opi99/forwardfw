@@ -52,13 +52,13 @@ abstract class Filter
     /**
      * Constructor
      *
-     * @param ForwardFW\Filter $_child The child filter or null if you are the last
+     * @param ForwardFW\Filter $child The child filter or null if you are the last
      *
      * @return new instance
      */
-    public function __construct(Filter $_child = null)
+    public function __construct(Filter $child = null)
     {
-        $this->child = $_child;
+        $this->child = $child;
     }
 
     /**
@@ -75,6 +75,17 @@ abstract class Filter
      * @return void
      */
     abstract public function doOutgoingFilter();
+
+    /**
+     * Sets a child for the filter.
+     *
+     * @param ForwardFW\Filter $child The child filter or null if you are the last
+     *
+     * @return void
+     */
+    public function setChild(Filter $child = null) {
+        $this->child = $child;
+    }
 
     /**
      * Function to process filtering incoming/child/outgoing
