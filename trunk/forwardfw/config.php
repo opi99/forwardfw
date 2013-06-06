@@ -6,6 +6,8 @@ ini_set('display_errors', true);
 set_include_path(dirname(__FILE__) . '/src' . PATH_SEPARATOR . get_include_path());
 set_include_path(dirname(__FILE__) . '/libs' . PATH_SEPARATOR . get_include_path());
 
+require_once 'ForwardFW/Autoloader.php';
+
 $GLOBALS['ForwardFW'] = array(
     'Version' => '0.0.11-dev',
 );
