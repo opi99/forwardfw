@@ -18,55 +18,28 @@
  *
  * PHP version 5
  *
- * @category   Filter
+ * @category   Config
  * @package    ForwardFW
- * @subpackage RequestResponse
+ * @subpackage Interface
  * @author     Alexander Opitz <opitz.alexander@primacom.net>
  * @copyright  2009-2013 The Authors
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @link       http://forwardfw.sourceforge.net
- * @since      File available since Release 0.0.1
+ * @since      File available since Release 0.0.11
  */
 
-namespace ForwardFW\Filter\RequestResponse;
+namespace ForwardFW\Config\Filter;
 
 /**
- * This class loads and runs the requested Application.
+ * Config for a Cache.
  *
- * @category   Filter
+ * @category   Config
  * @package    ForwardFW
- * @subpackage RequestResponse
+ * @subpackage Main
  * @author     Alexander Opitz <opitz.alexander@primacom.net>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @link       http://forwardfw.sourceforge.net
  */
-class Application extends \ForwardFW\Filter\RequestResponse
+class RequestResponse extends \ForwardFW\Config
 {
-    /**
-     * Function to process before your child
-     *
-     * @return void
-     */
-    public function doIncomingFilter()
-    {
-        $strApplicationClass = $this->config->getApplicationClass();
-        $this->response->addLog('Start Application: ' . $this->config->getApplicationConfig()->getName());
-
-        $application = new $strApplicationClass(
-            $this->config->getApplicationConfig(),
-            $this->request,
-            $this->response
-        );
-        $application->run();
-    }
-
-    /**
-     * Function to process after your child
-     *
-     * @return void
-     */
-    public function doOutgoingFilter()
-    {
-        $this->response->addLog('End Application');
-    }
 }

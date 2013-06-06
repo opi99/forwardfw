@@ -18,7 +18,7 @@
  *
  * PHP version 5
  *
- * @category   Cache
+ * @category   Config
  * @package    ForwardFW
  * @subpackage Interface
  * @author     Alexander Opitz <opitz.alexander@primacom.net>

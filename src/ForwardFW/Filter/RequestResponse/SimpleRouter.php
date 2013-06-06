@@ -25,7 +25,7 @@
  * @copyright  2009-2013 The Authors
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @link       http://forwardfw.sourceforge.net
- * @since      File available since Release 0.0.1
+ * @since      File available since Release 0.0.10
  */
 
 namespace ForwardFW\Filter\RequestResponse;
@@ -40,7 +40,7 @@ namespace ForwardFW\Filter\RequestResponse;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @link       http://forwardfw.sourceforge.net
  */
-class Application extends \ForwardFW\Filter\RequestResponse
+class SimpleRouter extends \ForwardFW\Filter\RequestResponse
 {
     /**
      * Function to process before your child
@@ -49,15 +49,24 @@ class Application extends \ForwardFW\Filter\RequestResponse
      */
     public function doIncomingFilter()
     {
-        $strApplicationClass = $this->config->getApplicationClass();
-        $this->response->addLog('Start Application: ' . $this->config->getApplicationConfig()->getName());
+        $this->response->addLog('Start Route');
 
-        $application = new $strApplicationClass(
-            $this->config->getApplicationConfig(),
-            $this->request,
-            $this->response
-        );
-        $application->run();
+        if (isset($GLOBALS['ForwardFW\\SimpleRouter'])) {
+            $parent = $this;
+            foreach ($GLOBALS['ForwardFW\\SimpleRouter'] as $routeConfig) {
+                if (strncmp($_SERVER['REQUEST_URI'], $routeConfig->getStart(), strlen($routeConfig->getStart())) === 0) {
+                    $strFilter = $routeConfig->getFilterClass();
+                    $child = new $strFilter(null, $routeConfig->getFilterConfig(), $this->request, $this->response);
+                    $parent->setChild($child);
+                    $parent = $child;
+                }
+            }
+            if ($this->child === null) {
+                $this->response->addError('No Route found');
+            }
+        } else {
+            $this->response->addError('No Route defined');
+        }
     }
 
     /**
@@ -67,6 +76,6 @@ class Application extends \ForwardFW\Filter\RequestResponse
      */
     public function doOutgoingFilter()
     {
-        $this->response->addLog('End Application');
+        $this->response->addLog('End Route');
     }
 }

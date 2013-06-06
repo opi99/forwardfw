@@ -43,13 +43,6 @@ namespace ForwardFW\Controller;
 class Application extends View implements ApplicationInterface
 {
     /**
-     * Configuration name of application
-     *
-     * @var String
-     */
-    protected $strName;
-
-    /**
      * The request object.
      *
      * @var ForwardFW_Request
@@ -71,26 +64,38 @@ class Application extends View implements ApplicationInterface
     private $arScreens = array();
 
     /**
+     * Actuall screen to process.
+     *
+     * @var ForwardFW\Controller\ScreenInterface
+     */
+    private $screen = null;
+
+    /**
+     * @var ForwardFW\Config\Application Configuration
+     */
+    private $config = null;
+
+    /**
      * Constructor
      *
-     * @param string             $strName  Name of application
-     * @param ForwardFW\Request  $request  The request object.
-     * @param ForwardFW\Response $response The request object.
+     * @param ForwardFW\Config\Application $config   Name of application.
+     * @param ForwardFW\Request            $request  The request object.
+     * @param ForwardFW\Response           $response The request object.
      *
      * @return void
      */
     public function __construct(
-        $strName,
+        \ForwardFW\Config\Application $config,
         \ForwardFW\Request $request,
         \ForwardFW\Response $response
     ) {
-        $this->strName = $strName;
-        $this->request            = $request;
-        $this->response           = $response;
+        $this->config   = $config;
+        $this->request  = $request;
+        $this->response = $response;
 
         parent::__construct($this);
 
-        $this->arScreens = $this->getConfigParameter('screens');
+        $this->arScreens = $this->config->getScreens();
 
         if (count($this->arScreens) === 0) {
             die(
@@ -143,28 +148,18 @@ class Application extends View implements ApplicationInterface
      *
      * @param string $strScreen name of screen
      *
-     * @return T3_Controller_Screen
+     * @return ForwardFW\Controller\ScreenInterface
      */
     public function getScreen($strScreen)
     {
-        $strFile = str_replace('\\', '/', $this->arScreens[$strScreen]) . '.php';
+        $strScreenClass = $this->arScreens[$strScreen];
 
-        $rIncludeFile = @fopen($strFile, 'r', true);
-        if ($rIncludeFile) {
-            fclose($rIncludeFile);
-            $ret = include_once $strFile;
-            //Screen vorhanden?
-            if (!$ret) {
-                $this->response->addError('Screen not includeable.');
-            } else {
-                $screenController
-                    = new $this->arScreens[$strScreen]($this);
-            }
+        if (class_exists($strScreenClass)) {
+            $screenController = new $strScreenClass($this);
         } else {
-            $this->response->addError(
-                'Screen Controller File "'.htmlspecialchars($strFile).'" not found'
-            );
+            $this->response->addError('ScreenClass "' . $strScreenClass . '" not includeable.');
         }
+
         return $screenController;
     }
 

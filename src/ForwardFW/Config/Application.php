@@ -20,53 +20,82 @@
  *
  * @category   Filter
  * @package    ForwardFW
- * @subpackage RequestResponse
+ * @subpackage Config
  * @author     Alexander Opitz <opitz.alexander@primacom.net>
  * @copyright  2009-2013 The Authors
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @link       http://forwardfw.sourceforge.net
- * @since      File available since Release 0.0.1
+ * @since      File available since Release 0.0.11
  */
 
-namespace ForwardFW\Filter\RequestResponse;
+namespace ForwardFW\Config;
 
 /**
- * This class loads and runs the requested Application.
+ * Config for a Application Filter.
  *
  * @category   Filter
  * @package    ForwardFW
- * @subpackage RequestResponse
+ * @subpackage Config
  * @author     Alexander Opitz <opitz.alexander@primacom.net>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @link       http://forwardfw.sourceforge.net
  */
-class Application extends \ForwardFW\Filter\RequestResponse
+class Application extends \ForwardFW\Config
 {
     /**
-     * Function to process before your child
-     *
-     * @return void
+     * @var string Name of the application
      */
-    public function doIncomingFilter()
-    {
-        $strApplicationClass = $this->config->getApplicationClass();
-        $this->response->addLog('Start Application: ' . $this->config->getApplicationConfig()->getName());
+    private $strName = '';
 
-        $application = new $strApplicationClass(
-            $this->config->getApplicationConfig(),
-            $this->request,
-            $this->response
-        );
-        $application->run();
+    /**
+     * @var array Screens of the application
+     */
+    private $arScreens = '';
+
+    /**
+     * Sets name of the application.
+     *
+     * @param string $strName Name of the application.
+     *
+     * @return ForwardFW\Config\Application
+     */
+    public function setName($strName)
+    {
+        $this->strName = $strName;
+        return $this;
     }
 
     /**
-     * Function to process after your child
+     * Sets screens of the application
      *
-     * @return void
+     * @param array $arScreens Screens of the application.
+     *
+     * @return ForwardFW\Config\Application
      */
-    public function doOutgoingFilter()
+    public function setScreens(array $arScreens)
     {
-        $this->response->addLog('End Application');
+        $this->arScreens = $arScreens;
+        return $this;
+    }
+
+    /**
+     * Get name of the application.
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->strName;
+    }
+
+
+    /**
+     * Get screens of the application
+     *
+     * @return array
+     */
+    public function getScreens()
+    {
+        return $this->arScreens;
     }
 }

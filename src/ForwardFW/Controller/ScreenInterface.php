@@ -50,4 +50,12 @@ interface ScreenInterface
      * @return void
      */
     public function __construct(ApplicationInterface $application);
+
+
+    /**
+     * Processes the Screen.
+     *
+     * @return string result of View
+     */
+    public function process();
 }

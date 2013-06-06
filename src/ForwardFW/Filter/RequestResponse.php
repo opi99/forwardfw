@@ -43,33 +43,33 @@ namespace ForwardFW\Filter;
 class RequestResponse extends \ForwardFW\Filter
 {
     /**
-     * The Request object
-     *
-     * @var ForwardFW_Request
+     * @var ForwardFW\Request The Request object
      */
     protected $request = null;
 
     /**
-     * The Response object
-     *
-     * @var ForwardFW_Request
+     * @var ForwardFW\Request The Response object
      */
     protected $response = null;
 
     /**
+     * @var ForwardFW\Config\Filter\RequestResponse config of the filter
+     */
+    protected $config = null;
+
+    /**
      * Constructor
      *
-     * @param ForwardFW_Filter_RequestResponse $_child    The child filter or null
-     * if you are the last
-     * @param ForwardFW_Request                $_request  The request for this
-     *                                                    application
-     * @param ForwardFW_Response               $_response The response for this
-     *                                                    application
+     * @param ForwardFW\Filter\RequestResponse        $child    The child filter or null if you are the last
+     * @param ForwardFW\Config\Filter\RequestResponse $config   Config for this filter
+     * @param ForwardFW\Request                       $request  The request for this application
+     * @param ForwardFW\Response                      $response The response for this application
      *
      * @return new instance
      */
     public function __construct(
         RequestResponse $child = null,
+        \ForwardFW\Config\Filter\RequestResponse $config = null,
         \ForwardFW\Request $request = null,
         \ForwardFW\Response $response = null
     ) {
@@ -81,6 +81,7 @@ class RequestResponse extends \ForwardFW\Filter
             $this->request  = $request;
             $this->response = $response;
         }
+        $this->config = $config;
     }
 
     /**
@@ -142,8 +143,7 @@ class RequestResponse extends \ForwardFW\Filter
         if (is_array($arConfig)) {
             $arConfig = array_reverse($arConfig);
             foreach ($arConfig as $strFilter) {
-                include_once str_replace('\\', '/', $strFilter) . '.php';
-                $filter = new $strFilter($filter, $request, $response);
+                $filter = new $strFilter($filter, null, $request, $response);
             }
         } else {
             // Fehler werfen

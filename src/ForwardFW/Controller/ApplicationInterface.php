@@ -45,14 +45,12 @@ interface ApplicationInterface
     /**
      * Constructor
      *
-     * @param string             $strName  Name of application.
-     * @param ForwardFW\Request  $request  The ForwardFW request object.
-     * @param ForwardFW\Response $response The ForwardFW response object.
-     *
-     * @return void
+     * @param ForwardFW\Config\Application $config   Name of application.
+     * @param ForwardFW\Request            $request  The ForwardFW request object.
+     * @param ForwardFW\Response           $response The ForwardFW response object.
      */
     public function __construct(
-        $strName,
+        \ForwardFW\Config\Application $config,
         \ForwardFW\Request $request,
         \ForwardFW\Response $response
     );

@@ -86,6 +86,7 @@ class Twig extends \ForwardFW\Controller implements \ForwardFW\Templater\Templat
             $twigLoader,
             array(
                 'cache'      => $strCompilePath,
+                'debug'      => true,
                 'autoescape' => false,
             )
         );

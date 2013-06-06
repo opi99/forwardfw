@@ -107,6 +107,9 @@ class Screen extends View implements ScreenInterface
     public function controlView()
     {
         $view = $this->loadView($this->strView);
+        if (null === $view) {
+            return false;
+        }
         $this->addView($view);
         parent::controlView();
         return true;
@@ -145,15 +148,18 @@ class Screen extends View implements ScreenInterface
     /**
      * Loads the view by its Name.
      *
-     * @param String $strView Name of the View.
+     * @param string $strViewClass Name of the View.
      *
      * @return ForwardFW\Controller\View The instance of the view.
      */
-    protected function loadView($strView)
+    protected function loadView($strViewClass)
     {
-        $strFile = str_replace('\\', '/', $strView) . '.php';
-        include_once $strFile;
-        $view = new $strView($this->application);
+        if (class_exists($strViewClass)) {
+            $view = new $strViewClass($this->application);
+        } else {
+            $this->application->getResponse()->addError('ViewClass "' . $strViewClass . '" not includeable.');
+        }
+
         return $view;
     }
 
