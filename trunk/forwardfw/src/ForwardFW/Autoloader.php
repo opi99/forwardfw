@@ -28,13 +28,17 @@
  * @since      File available since Release 0.0.1
  */
 
-namespace ForwardFW;
+spl_autoload_register(
+    function ($classname) {
+        if (!strncmp($classname, 'Smarty_', 7)) {
+            return;
+        }
+        $classname = ltrim($classname, "\\");
+        preg_match('/^(.+)?([^\\\\]+)$/U', $classname, $match);
+        $filename = str_replace('\\', '/', $match[1])
+            . str_replace(['\\', '_'], '/', $match[2])
+            . ".php";
 
-$request = new Request();
-$response = new Response();
-
-ob_start();
-Filter\RequestResponse::getFilters($request, $response)
-    ->doFilter();
-echo $response->getContent();
-ob_flush();
+        include_once $filename;
+    }
+);

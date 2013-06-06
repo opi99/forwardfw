@@ -1,36 +1,44 @@
+2013-06-06 Alexander Opitz <opi@gmx.at>
+* #71: Move autoloader out of Bootstrap.php
+
+2013-05-12 Alexander Opitz <opi@gmx.at>
+* #66: Use namespaces
+* #66: Minimum MDB2 2.5.0
+* #: Update Require minimum PHP 5.4.x
+
 2011-01-30 Alexander Opitz <opi@gmx.at>
-* #59 Cleanup cache config
-* #60 Release 0.0.10
+* #59: Cleanup cache config
+* #60: Release 0.0.10
 
 2011-01-22 Alexander Opitz <opi@gmx.at>
-* #53 Implement cache into DataLoader
+* #53: Implement cache into DataLoader
 
 2011-01-16 Alexander Opitz <opi@gmx.at>
-* #57 Add cache clearing
-* #61 DataLoader/MDB2 Cleanup and use Exception
+* #57: Add cache clearing
+* #61: DataLoader/MDB2 Cleanup and use Exception
 
 2011-01-13 Alexander Opitz <opi@gmx.at>
-* #57 Add function to remove explizit a hash
+* #57: Add function to remove explizit a hash
 
 2011-01-05 Alexander Opitz <opi@gmx.at>
-* #58 Add Logging output to Cache Backend
-* #55 Releasing 0.0.9
+* #58: Add Logging output to Cache Backend
+* #55: Releasing 0.0.9
 
 2011-01-02 Alexander Opitz <opi@gmx.at>
-* #50 Implement Filecache
+* #50: Implement Filecache
 
 2010-12-26 Alexander Opitz <opi@gmx.at>
-* #54 Complete Cache looking
-* #56 Disable autoescaping for Twig 0.9.10
-* #50 Refactor for more cache backends
+* #54: Complete Cache looking
+* #56: Disable autoescaping for Twig 0.9.10
+* #50: Refactor for more cache backends
 
 2010-12-24 Alexander Opitz <opi@gmx.at>
-* #54 Cache looking
-* #51 Implement Exceptions
+* #54: Cache looking
+* #51: Implement Exceptions
 
 2010-11-21 Alexander Opitz <opi@gmx.at>
-* #42 Implement Caching Framework
-* #44 Releasing 0.0.8
+* #42: Implement Caching Framework
+* #44: Releasing 0.0.8
 
 2010-07-29 Alexander Opitz <opi@gmx.at>
 * DataHandler FW #32
