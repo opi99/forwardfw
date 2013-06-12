@@ -84,8 +84,13 @@ class Request
         $strApplicationName = ''
     ) {
         $return = null;
-        if (isset($_REQUEST[$strApplicationName][$strParameterName])) {
-            $return = $_REQUEST[$strApplicationName][$strParameterName];
+        if ($strApplicationName) {
+            $data = $_REQUEST[$strApplicationName];
+        } else {
+            $data = $_REQUEST;
+        }
+        if (isset($data[$strParameterName])) {
+            $return = $data[$strParameterName];
         }
         return $return;
     }
@@ -121,5 +126,19 @@ class Request
             $return = $GLOBALS[$strApplicationName][$strControllerClass][$strParameterName];
         }
         return $return;
+    }
+
+    public function getHostPath()
+    {
+        $strPath = dirname($_SERVER['PHP_SELF']);
+        if ($strPath === '/') {
+            $strPath = '';
+        }
+        return $strPath;
+    }
+
+    public function getHostName()
+    {
+        return $_SERVER['HTTP_HOST'];
     }
 }

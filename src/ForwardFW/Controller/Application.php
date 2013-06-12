@@ -171,6 +171,7 @@ class Application extends View implements ApplicationInterface
     public function processView()
     {
         $templater = \ForwardFW\Templater::factory($this->application);
+        $templater->setVar('APPLICATION', $this);
         $templater->setVar('SCREEN', $this->screen->process());
         return parent::processView();
     }
@@ -182,7 +183,7 @@ class Application extends View implements ApplicationInterface
      */
     public function getName()
     {
-        return $this->strName;
+        return $this->config->getName();
     }
 
     /**

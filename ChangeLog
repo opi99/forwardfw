@@ -1,6 +1,7 @@
 2013-06-12 Alexander Opitz <opi@gmx.at>
 * #73: Let the response object send the data
 * #74: SQL Objects should be possible to save themself to DataHandler/MDB2
+* #75: Bring all a bit together
 
 2013-06-06 Alexander Opitz <opi@gmx.at>
 * #71: Move autoloader out of Bootstrap.php
