@@ -59,6 +59,7 @@ class SimpleRouter extends \ForwardFW\Filter\RequestResponse
                     $child = new $strFilter(null, $routeConfig->getFilterConfig(), $this->request, $this->response);
                     $parent->setChild($child);
                     $parent = $child;
+                    break;
                 }
             }
             if ($this->child === null) {
