@@ -106,9 +106,84 @@ class MDB2 extends \ForwardFW\Controller\DataHandler
      */
     public function saveTo($strConnection, array $options)
     {
-        // @TODO
+        $conMDB2 = $this->getConnection($strConnection);
+
+        $strQuery = 'UPDATE ';
+        if (isset($tablePrefix['default'])) {
+            $strQuery .= $tablePrefix['default']
+                . '_' . $options['to'];
+        } else {
+            $strQuery .= $options['to'];
+        }
+        $strQuery .= ' SET ';
+        foreach ($options['values'] as $strName => $value) {
+            $arSets[] = $strName . '=' . $this->getSqlValue($options['columns'][$strName], $value, $conMDB2);
+        }
+        $strQuery .= implode(',', $arSets);
+
+        $strQuery .= ' WHERE ' . $options['where'];
+
+        $arResult = array();
+        $resultMDB2 = $conMDB2->query($strQuery);
+
+        if (\MDB2::isError($resultMDB2)) {
+            $this->application->getResponse()->addError($resultMDB2->getMessage() . $resultMDB2->getUserinfo());
+            throw new \ForwardFW\Exception\DataHandler(
+                'Error while execute: '
+                . $resultMDB2->getMessage()
+                . $resultMDB2->getUserinfo()
+            );
+        }
+        while ($arRow = $resultMDB2->fetchRow(MDB2_FETCHMODE_ASSOC)) {
+            array_push($arResult, $arRow);
+        }
+        return $arResult;
     }
 
+    /**
+     * Saves Data to a connection (DB, SOAP, File)
+     *
+     * @param string $strConnection Name of connection
+     * @param array  $arOptions     Options to load the data
+     *
+     * @return mixed Data from the connection.
+     */
+    public function create($strConnection, array $options)
+    {
+        $conMDB2 = $this->getConnection($strConnection);
+
+        $strQuery = 'INSERT INTO ';
+        if (isset($tablePrefix['default'])) {
+            $strQuery .= $tablePrefix['default']
+                . '_' . $options['to'];
+        } else {
+            $strQuery .= $options['to'];
+        }
+
+        $strQuery .= ' (' . implode(',', array_keys($options['values'])) . ')';
+        $strQuery .= ' VALUES (';
+        $arValues = array();
+        foreach ($options['values'] as $strName => $value) {
+            $arValues[] = $this->getSqlValue($options['columns'][$strName], $value, $conMDB2);
+        }
+        $strQuery .= implode(',', $arValues) . ')';
+
+        $arResult = array();
+        $resultMDB2 = $conMDB2->query($strQuery);
+
+        if (\MDB2::isError($resultMDB2)) {
+            $this->application->getResponse()->addError($resultMDB2->getMessage() . $resultMDB2->getUserinfo());
+            throw new \ForwardFW\Exception\DataHandler(
+                'Error while execute: '
+                . $resultMDB2->getMessage()
+                . $resultMDB2->getUserinfo()
+            );
+        }
+        while ($arRow = $resultMDB2->fetchRow(MDB2_FETCHMODE_ASSOC)) {
+            array_push($arResult, $arRow);
+        }
+        return $arResult;
+    }
 
     /**
      * Loads and initialize the connection handler.
@@ -141,5 +216,10 @@ class MDB2 extends \ForwardFW\Controller\DataHandler
 
         $ret = $conMDB2->exec('set character set utf8');
         $this->arConnectionCache[$strConnection] = $conMDB2;
+    }
+
+    public function getSqlValue($strType, $value, $conMDB2)
+    {
+        return $conMDB2->quote($value, $strType, true);
     }
 }

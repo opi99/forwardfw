@@ -66,6 +66,8 @@ class Sql extends \ForwardFW\Object
      */
     protected $strDBConnection = '';
 
+    protected $application = null;
+
     /**
      * constructor
      *
@@ -76,7 +78,7 @@ class Sql extends \ForwardFW\Object
      * @return new instance
      */
     public function __construct(
-        $strIdFieldName = 'ID',
+        $strIdFieldName = 'id',
         $strTablePrefix = '',
         $strDBConnection = 'default'
     ) {
@@ -91,6 +93,11 @@ class Sql extends \ForwardFW\Object
         );
     }
 
+    public function setApplication(\ForwardFW\Controller\ApplicationInterface $application)
+    {
+        $this->application = $application;
+    }
+
     /**
      * Returns the name of table out of prefix and object name cobined with
      * an underscore and lowercased.
@@ -102,21 +109,21 @@ class Sql extends \ForwardFW\Object
      */
     public static function resolveTableName($strTablePrefix, $strObjectName)
     {
-        $strResult  = ($strTablePrefix != '' ? $strTablePrefix . '_' : '');
-        $strResult .= substr($strObjectName, strrpos($strObjectName, '_') + 1);
-        return strtolower($strResult);
+        $result = ($strTablePrefix != '' ? $strTablePrefix . '_' : '');
+        $result .= substr($strObjectName, strrpos($strObjectName, '\\') + 1);
+        return strtolower($result);
     }
 
     /**
      * Loads a the object from DB by the given ID.
      *
-     * @param mixed $ID The ID for the object.
+     * @param mixed $id The ID for the object.
      *
      * @return boolean True if object was loadable otherwise false.
      */
-    public function loadByID($ID)
+    public function loadById($id)
     {
-        return $this->loadByWhereClause($this->strIdFieldName . '=' . $ID);
+        return $this->loadByWhereClause($this->strIdFieldName . '=' . $id);
     }
 
     /**
@@ -128,17 +135,17 @@ class Sql extends \ForwardFW\Object
      */
     public function loadByWhereClause($strWhereClause)
     {
-        $dataLoader = \ForwardFW\Controller\DataHandler::getInstance(
-            $this->strApplicationName
+        $dataHandler = \ForwardFW\Controller\DataHandler::getInstance(
+            $this->application
         );
-        $arResult = $dataLoader->loadFromDB(
+        $arResult = $dataHandler->loadFrom(
             $this->strDBConnection,
-            '*',
-            $this->strTableName,
-            $strWhereClause,
-            '',
-            '',
-            '1'
+            array(
+                'select' => '*',
+                'from' => $this->strTableName,
+                'where' => $strWhereClause,
+                'limit' => '1',
+            )
         );
         if ($arResult !== false && count($arResult) == 1) {
             $this->loadByArray($arResult[0]);
@@ -158,18 +165,40 @@ class Sql extends \ForwardFW\Object
         $arToSave = array();
         $this->saveToArray($arToSave);
 
-        $strWhereClause = $this->strIdFieldName.' = '.$this->getId();
+        unset($arToSave[$this->strIdFieldName]);
 
-        $dataLoader = \ForwardFW\Controller\DataHandler::getInstance(
-            $this->strApplicationName
-        );
-        $bResult = $dataLoader->saveToDB(
-            $this->strDBConnection,
-            $arToSave,
-            $this->strTableName,
-            $strWhereClause
+        $dataHandler = \ForwardFW\Controller\DataHandler::getInstance(
+            $this->application
         );
 
-        return $bResult;
+        $id = $this->getId();
+        if (empty($id)) {
+            $isOk = $dataHandler->create(
+                $this->strDBConnection,
+                array(
+                    'columns' => $this->getTableConfig(),
+                    'to'      => $this->strTableName,
+                    'values'  => $arToSave,
+                )
+            );
+        } else {
+            $isOk = $dataHandler->saveTo(
+                $this->strDBConnection,
+                array(
+                    'columns' => $this->getTableConfig(),
+                    'to'      => $this->strTableName,
+                    'values'  => $arToSave,
+                    'where'   => $this->strIdFieldName . ' = ' . $this->getId(),
+                )
+            );
+        }
+        return $isOk;
+    }
+
+    public function getTableConfig()
+    {
+        return array(
+            'id' => 'integer',
+        );
     }
 }

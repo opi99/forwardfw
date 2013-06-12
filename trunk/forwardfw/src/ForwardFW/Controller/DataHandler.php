@@ -68,7 +68,7 @@ class DataHandler extends \ForwardFW\Controller implements DataHandlerInterface
      */
     public static function getInstance(ApplicationInterface $application)
     {
-        if (isset($GLOBALS['DataLoader']['instance'][$application])) {
+        if (isset($GLOBALS['DataLoader']['instance'][$application->getName()])) {
             $return = $GLOBALS['DataLoader']['instance'][$application->getName()];
         } else {
             $return = new self($application);
@@ -154,12 +154,25 @@ class DataHandler extends \ForwardFW\Controller implements DataHandlerInterface
      *
      * @return mixed Data from the connection.
      */
-    public function saveTo($strConnection, array $options)
+    public function create($strConnection, array $arOptions)
+    {
+        $handler = $this->getConnection($strConnection);
+        return $handler->create($strConnection, $arOptions);
+    }
+
+    /**
+     * Saves Data to a connection (DB, SOAP, File)
+     *
+     * @param string $strConnection Name of connection
+     * @param array  $arOptions     Options to load the data
+     *
+     * @return mixed Data from the connection.
+     */
+    public function saveTo($strConnection, array $arOptions)
     {
         $handler = $this->getConnection($strConnection);
         return $handler->saveTo($strConnection, $arOptions);
     }
-
 
     /**
      * Gets the connection handler.
@@ -187,23 +200,12 @@ class DataHandler extends \ForwardFW\Controller implements DataHandlerInterface
     public function initConnection($strConnection)
     {
         $arConfig = $this->getConfigParameter($strConnection);
-        $strHandler = $arConfig['handler'];
+        $strHandlerClass = $arConfig['handler'];
 
-        $strFile = str_replace('\\', '/', $strHandler) . '.php';
-
-        $rIncludeFile = @fopen($strFile, 'r', true);
-        if ($rIncludeFile) {
-            fclose($rIncludeFile);
-            $ret = include_once $strFile;
-            if (!$ret) {
-                $this->application->getResponse()->addError('DataHandler not includeable.');
-            } else {
-                $handler= new $strHandler($this->application);
-            }
+        if (class_exists($strHandlerClass)) {
+            $handler = new $strHandlerClass($this->application);
         } else {
-            $this->application->getResponse()->addError(
-                'DataHandler Controller File "'.htmlspecialchars($strFile).'" not found'
-            );
+            $this->response->addError('DataHandlerClass "' . $strHandlerClass . '" not includeable.');
         }
 
         $this->arConnectionCache[$strConnection] = $handler;
