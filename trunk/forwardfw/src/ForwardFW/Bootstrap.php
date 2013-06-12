@@ -36,5 +36,6 @@ $response = new Response();
 ob_start();
 Filter\RequestResponse::getFilters($request, $response)
     ->doFilter();
-echo $response->getContent();
+
+$response->send();
 ob_flush();
