@@ -28,7 +28,7 @@
  * @since      File available since Release 0.0.1
  */
 
-namespace \ForwardFW\Container;
+namespace ForwardFW\Container;
 
 /**
  * A list of models that can load themself from DB.
@@ -66,6 +66,8 @@ class Sql extends \ForwardFW\Container
      */
     protected $strDBConnection = '';
 
+    protected $application = null;
+
     /**
      * constructor
      *
@@ -87,14 +89,86 @@ class Sql extends \ForwardFW\Container
         );
     }
 
+    public function setApplication(\ForwardFW\Controller\ApplicationInterface $application)
+    {
+        $this->application = $application;
+    }
+
     /**
      * Loads all data from given table.
      *
+     * @param boolean $bHidden If true then also return the hidden objects
+     *
      * @return boolean True if object was loadable otherwise false.
      */
-    public function loadAll()
+    public function loadAll($bHidden = false)
     {
-        return $this->loadByWhereClause('');
+        return $this->loadByWhereClause(
+            $this->buildWhereClause($bHidden)
+        );
+    }
+
+    /**
+     * Returns count of all objects in DB
+     *
+     * @param string  $strWhereClause Where clause for the select.
+     * @param boolean $bHidden        If true then also count the hidden objects
+     *
+     * @return integer
+     */
+    public function countAll($bHidden = false)
+    {
+        return $this->countFromDb(
+            $this->buildWhereClause($bHidden)
+        );
+    }
+
+    /**
+     * Returns where clouse depending with deleted and hidden fields.
+     *
+     * @param boolean $bHidden If true then also count the hidden objects
+     *
+     * @return string
+     */
+    public function buildWhereClause($bHidden, array $arFields = null)
+    {
+        if (null !== $arFields) {
+            foreach ($arFields as $strField => $value) {
+                $arWhere[] = $strField . '="' . $value . '"';
+            }
+        }
+
+        if (!$bHidden) {
+            $arWhere[] = 'hidden=0';
+        }
+        $arWhere[] = 'deleted=0';
+
+        return implode(' AND ', $arWhere);
+    }
+
+    /**
+     * Returns count of objects in DB
+     *
+     * @param string $strWhereClause Where clause for the select.
+     *
+     * @return integer
+     */
+    public function countFromDb($strWhereClause)
+    {
+        $dataHandler = \ForwardFW\Controller\DataHandler::getInstance(
+            $this->application
+        );
+        $arResult = $dataHandler->loadFrom(
+            $this->strDBConnection,
+            array(
+                'select' => 'count(id)',
+                'from'   => $this->strTableName,
+                'where'  => $strWhereClause,
+            )
+        );
+
+        $row = reset($arResult);
+        return (int) reset($row);
     }
 
     /**
@@ -108,22 +182,24 @@ class Sql extends \ForwardFW\Container
      * @return boolean True if object was loadable otherwise false.
      */
     public function loadByWhereClause(
-        $strWhereClause,
-        $strGroupBy = '',
-        $strOrderBy = '',
-        $strLimit = ''
+        $strWhereClause = null,
+        $strGroupBy = null,
+        $strOrderBy = null,
+        $strLimit = null
     ) {
-        $objDataLoader = \ForwardFW\Controller\DataHandler::getInstance(
-            $this->strApplicationName
+        $dataHandler = \ForwardFW\Controller\DataHandler::getInstance(
+            $this->application
         );
-        $arResult = $objDataLoader->loadFromDB(
+        $arResult = $dataHandler->loadFrom(
             $this->strDBConnection,
-            '*',
-            $this->strTableName,
-            $strWhereClause,
-            $strGroupBy,
-            $strOrderBy,
-            $strLimit
+            array(
+                'select' => '*',
+                'from'   => $this->strTableName,
+                'where'  => $strWhereClause,
+                'group'  => $strGroupBy,
+                'order'  => (is_null($strOrderBy) ? $this->strOrderBy : $strOrderBy),
+                'limit'  => $strLimit,
+            )
         );
         if ($arResult !== false) {
             $this->loadByArray($arResult);

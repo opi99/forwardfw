@@ -43,30 +43,26 @@ namespace ForwardFW;
  */
 class Object
 {
-    /*
-     * ID value
-     *
-     * @var mixed
+    /**
+     * @var mixed Content of id
      */
-    protected $ID = 0;
+    protected $id = 0;
 
     /**
-     * Name of the field in data array, which holds the ID
-     *
-     * @var string
+     * @var string Name of the field in data array, which holds the ID
      */
-    protected $strIdFieldName = 'ID';
+    protected $strIdFieldName = 'id';
 
     /**
      * Constructur
      *
-     * @param strinf $_strIdFieldName Name of the ID field in data
+     * @param strinf $strIdFieldName Name of the ID field in data
      *
      * @return new instance
      */
-    public function __construct($_strIdFieldName = 'ID')
+    public function __construct($strIdFieldName = 'id')
     {
-        $this->strIdFieldName = $_strIdFieldName;
+        $this->strIdFieldName = $strIdFieldName;
     }
 
     /**
@@ -76,9 +72,9 @@ class Object
      *
      * @return void
      */
-    public function loadByArray(&$arRow)
+    public function loadByArray($arRow)
     {
-        $this->ID = $arRow[$this->strIdFieldName];
+        $this->id = $arRow[$this->strIdFieldName];
     }
 
     /**
@@ -90,6 +86,28 @@ class Object
      */
     public function saveToArray(&$arRow)
     {
-        $arRow[$this->strIdFieldName] = $this->ID;
+        $arRow[$this->strIdFieldName] = $this->id;
+    }
+
+    /**
+     * Returns the id of model.
+     *
+     * @return mixed
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Sets id of model.
+     *
+     * @param mixed $id Id of model.
+     *
+     * @return void
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
     }
 }
