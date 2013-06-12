@@ -49,18 +49,17 @@ class Screen extends View implements ScreenInterface
      */
     private $views;
 
+    protected $strView = null;
+
     /**
      * Constructor
      *
      * @param ForwardFW\Controller\ApplicationInterface $application The running application.
-     *
-     * @return void
      */
     public function __construct(ApplicationInterface $application)
     {
         parent::__construct($application);
         $this->views = new \ArrayObject();
-        $this->strView = 'ForwardFW\\Controller\\View';
     }
 
     /**
@@ -106,13 +105,15 @@ class Screen extends View implements ScreenInterface
      */
     public function controlView()
     {
-        $view = $this->loadView($this->strView);
-        if (null === $view) {
-            return false;
+        if ($this->strView) {
+            $view = $this->loadView($this->strView);
+            if (null === $view) {
+                return false;
+            }
+            $this->addView($view);
         }
-        $this->addView($view);
-        parent::controlView();
-        return true;
+
+        return parent::controlView();
     }
 
     /**
