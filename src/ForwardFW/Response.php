@@ -43,25 +43,31 @@ namespace ForwardFW;
 class Response
 {
     /**
-     * Holds every Log message as string.
-     *
-     * @var ForwardFW\Object\Timer
+     * @var ForwardFW\Object\Timer Holds every Log message as string.
      */
     private $logTimer = null;
 
     /**
-     * Holds every Error message as string.
-     *
-     * @var ForwardFW\Object\Timer
+     * @var ForwardFW\Object\Timer Holds every Error message as string.
      */
     private $errorTimer = null;
 
     /**
-     * Holds the content to send back to web server.
-     *
-     * @var string
+     * @var string Holds the content to send back to web server.
      */
     private $strContent = '';
+
+    /**
+     * @var integer HTTP Status Code.
+     */
+    private $nHttpStatus = 200;
+
+    /**
+     * @var integer HTTP Status Code.
+     */
+    private $strContentType = '';
+
+    private $strContentDisposition = null;
 
     /**
      * Constructor
@@ -97,6 +103,9 @@ class Response
     public function addError($strEntry)
     {
         $this->errorTimer->addEntry($strEntry);
+        if ($this->nHttpStatus === 200) {
+            $this->nHttpStatus = 500;
+        }
         return $this;
     }
 
@@ -110,6 +119,45 @@ class Response
     public function addContent($strContent)
     {
         $this->content .= $strContent;
+        return $this;
+    }
+
+    /**
+     * Sets the HTTP Status Code
+     *
+     * @param integer $nHttpStatus The HTTP Status Code
+     *
+     * @return ForwardFW_Response Themself.
+     */
+    public function setHttpStatus($nHttpStatus)
+    {
+        $this->nHttpStatus = $nHttpStatus;
+        return $this;
+    }
+
+    /**
+     * Sets the HTTP ContentType
+     *
+     * @param string $strContentType The HTTP ContentType
+     *
+     * @return ForwardFW_Response Themself.
+     */
+    public function setContentType($strContentType)
+    {
+        $this->strContentType = $strContentType;
+        return $this;
+    }
+
+    /**
+     * Sets the HTTP ContentDisposition
+     *
+     * @param string $strContentDisposition The HTTP ContentDisposition
+     *
+     * @return ForwardFW_Response Themself.
+     */
+    public function setContentDisposition($strContentDisposition)
+    {
+        $this->strContentDisposition = $strContentDisposition;
         return $this;
     }
 
@@ -141,5 +189,22 @@ class Response
     public function getContent()
     {
         return $this->content;
+    }
+
+    /**
+     * Sends content
+     *
+     * @return void
+     */
+    public function send()
+    {
+        header('HTTP/1.1 ' . $this->nHttpStatus);
+        if ($this->strContentType) {
+            header('Content-Type: ' . $this->strContentType);
+        }
+        if (null !== $this->strContentDisposition) {
+            header('Content-Disposition: ' . $this->strContentDisposition);
+        }
+        echo $this->content;
     }
 }
