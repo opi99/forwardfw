@@ -22,7 +22,7 @@
  * @package    ForwardFW
  * @subpackage RequestResponse
  * @author     Alexander Opitz <opitz.alexander@primacom.net>
- * @copyright  2009-2013 The Authors
+ * @copyright  2009-2014 The Authors
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @link       http://forwardfw.sourceforge.net
  * @since      File available since Release 0.0.1
@@ -49,11 +49,11 @@ class Application extends \ForwardFW\Filter\RequestResponse
      */
     public function doIncomingFilter()
     {
-        $strApplicationClass = $this->config->getApplicationClass();
-        $this->response->addLog('Start Application: ' . $this->config->getApplicationConfig()->getName());
+        $strClass = $this->config->getConfig()->getExecutionClass();
+        $this->response->addLog('Start Application: ' . $this->config->getConfig()->getName());
 
-        $application = new $strApplicationClass(
-            $this->config->getApplicationConfig(),
+        $application = new $strClass(
+            $this->config->getConfig(),
             $this->request,
             $this->response
         );
