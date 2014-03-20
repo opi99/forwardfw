@@ -22,7 +22,7 @@
  * @package    ForwardFW
  * @subpackage Templater
  * @author     Alexander Opitz <opitz.alexander@primacom.net>
- * @copyright  2009-2013 The Authors
+ * @copyright  2009-2014 The Authors
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @link       http://forwardfw.sourceforge.net
  * @since      File available since Release 0.0.2
@@ -55,18 +55,18 @@ class Smarty extends \ForwardFW\Controller implements \ForwardFW\Templater\Templ
     /**
      * Constructor
      *
+     * @param ForwardFW\Config\Templater $config The smarty configuration
      * @param ForwardFW\Controller\ApplicationInterface $application The running application
      *
      * @return void
      */
     public function __construct(
-        \ForwardFW\Controller\ApplicationInterface $application
+        \ForwardFW\Config\Templater $config, \ForwardFW\Controller\ApplicationInterface $application
     ) {
         parent::__construct($application);
 
-        $arConfig = $GLOBALS[get_class($this)];
+        $strCompilePath = $config->getCompilePath();
 
-        $strCompilePath = $arConfig['CompilePath'];
         if (!is_dir($strCompilePath)) {
             mkdir($strCompilePath, 0770, true);
         }
@@ -76,33 +76,33 @@ class Smarty extends \ForwardFW\Controller implements \ForwardFW\Templater\Templ
         $this->smarty->registerPlugin('block', 'block', array(&$this, 'smartyBlock'));
         $this->smarty->registerPlugin('function', 'texter', array(&$this, 'smartyTexter'));
 
-        $this->strTemplatePath = $arConfig['TemplatePath'];
+        $this->strTemplatePath = $config->getTemplatePath();
     }
 
     /**
      * Sets file to use for templating
      *
-     * @param string $_strFile Complete path and filename.
+     * @param string $strFile Complete path and filename.
      *
      * @return ForwardFW_Templater_Smarty The instance.
      */
-    public function setTemplateFile($_strFile)
+    public function setTemplateFile($strFile)
     {
-        $this->strFile = $_strFile;
+        $this->strFile = $strFile;
         return $this;
     }
 
     /**
      * Sets a var in the template to a value
      *
-     * @param string $_strName Name of template var.
-     * @param mixed  $_mValue  Value of template var.
+     * @param string $strName Name of template var.
+     * @param mixed  $mValue  Value of template var.
      *
      * @return ForwardFW_Templater_Smarty The instance.
      */
-    public function setVar($_strName, $_mValue)
+    public function setVar($strName, $mValue)
     {
-        $this->smarty->assign($_strName, $_mValue);
+        $this->smarty->assign($strName, $mValue);
         return $this;
     }
 
