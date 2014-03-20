@@ -73,7 +73,7 @@ class Controller
         return $this->application->getRequest()->getParameter(
             $strParameterName,
             get_class($this),
-            $this->application->getName()
+            $this->application->getIdent()
         );
     }
 
@@ -89,7 +89,7 @@ class Controller
         return $this->application->getRequest()->getConfigParameter(
             $strParameterName,
             get_class($this),
-            $this->application->getName()
+            $this->application->getIdent()
         );
     }
 }
