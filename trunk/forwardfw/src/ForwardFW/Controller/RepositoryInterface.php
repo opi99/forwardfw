@@ -18,9 +18,9 @@
  *
  * PHP version 5
  *
- * @category   DataLoader
+ * @category   Application
  * @package    ForwardFW
- * @subpackage Interface
+ * @subpackage Controller
  * @author     Alexander Opitz <opitz.alexander@primacom.net>
  * @copyright  2009-2014 The Authors
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
@@ -31,11 +31,11 @@
 namespace ForwardFW\Controller;
 
 /**
- * Interface for a DataLoader.
+ * Interface for an Repository
  *
- * @category   DataLoader
+ * @category   Application
  * @package    ForwardFW
- * @subpackage Interface
+ * @subpackage Controller
  * @author     Alexander Opitz <opitz.alexander@primacom.net>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @link       http://forwardfw.sourceforge.net
@@ -45,7 +45,7 @@ interface RepositoryInterface
     /**
      * Constructor
      *
-     * @param ForwardFW\Controller\ApplicationInterface $application The running application
+     * @param ForwardFW\Controller\ApplicationInterface $application The running application.
      *
      * @return void
      */
