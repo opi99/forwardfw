@@ -22,7 +22,7 @@
  * @package    ForwardFW
  * @subpackage Controller
  * @author     Alexander Opitz <opitz.alexander@primacom.net>
- * @copyright  2009-2013 The Authors
+ * @copyright  2009-2014 The Authors
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @link       http://forwardfw.sourceforge.net
  * @since      File available since Release 0.0.1
@@ -40,22 +40,8 @@ namespace ForwardFW\Controller;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @link       http://forwardfw.sourceforge.net
  */
-class Application extends View implements ApplicationInterface
+class Application extends ApplicationAbstract
 {
-    /**
-     * The request object.
-     *
-     * @var ForwardFW_Request
-     */
-    protected $request;
-
-    /**
-     * The response object.
-     *
-     * @var ForwardFW_Response
-     */
-    protected $response;
-
     /**
      * screens for this application
      *
@@ -70,10 +56,7 @@ class Application extends View implements ApplicationInterface
      */
     private $screen = null;
 
-    /**
-     * @var ForwardFW\Config\Application Configuration
-     */
-    private $config = null;
+    private $templater;
 
     /**
      * Constructor
@@ -89,11 +72,7 @@ class Application extends View implements ApplicationInterface
         \ForwardFW\Request $request,
         \ForwardFW\Response $response
     ) {
-        $this->config   = $config;
-        $this->request  = $request;
-        $this->response = $response;
-
-        parent::__construct($this);
+        parent::__construct($config, $request, $response);
 
         $this->arScreens = $this->config->getScreens();
 
@@ -170,40 +149,10 @@ class Application extends View implements ApplicationInterface
      */
     public function processView()
     {
-        $templater = \ForwardFW\Templater::factory($this->application);
+        $templater = $this->getTemplater();
         $templater->setVar('APPLICATION', $this);
         $templater->setVar('SCREEN', $this->screen->process());
         return parent::processView();
-    }
-
-    /**
-     * Returns the name of the application
-     *
-     * @return string
-     */
-    public function getName()
-    {
-        return $this->config->getName();
-    }
-
-    /**
-     * Returns the request object
-     *
-     * @return ForwardFW_Request
-     */
-    public function getRequest()
-    {
-        return $this->request;
-    }
-
-    /**
-     * Returns the response object
-     *
-     * @return ForwardFW_Response
-     */
-    public function getResponse()
-    {
-        return $this->response;
     }
 
     /**
@@ -214,5 +163,13 @@ class Application extends View implements ApplicationInterface
     public function getScreens()
     {
         return $this->arScreens;
+    }
+
+    public function getTemplater()
+    {
+        if (null === $this->templater) {
+            $this->templater = \ForwardFW\Templater::factory($this->config->getTemplaterConfig(), $this);
+        }
+        return $this->templater;
     }
 }
