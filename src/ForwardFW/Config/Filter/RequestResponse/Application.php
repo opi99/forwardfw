@@ -43,59 +43,35 @@ namespace ForwardFW\Config\Filter\RequestResponse;
 class Application extends \ForwardFW\Config\Filter\RequestResponse
 {
     /**
-     * @var string ApplicationClass to call
+     * @var string Class of application to call
      */
-    private $strApplicationClass = '';
+    protected $strExecutionClass = 'ForwardFW\\Filter\\RequestResponse\\Application';
 
     /**
      * @var ForwardFW\Config\Application Config of the application
      */
-    private $applicationConfig = '';
-
-    /**
-     * Sets Classname of the application to call.
-     *
-     * @param string $strApplicationClass Name of the RequestResponse filter to add in FilterChain
-     *
-     * @return ForwardFW\Config\Filter\RequestResponse\Application
-     */
-    public function setApplicationClass($strApplicationClass)
-    {
-        $this->strApplicationClass = $strApplicationClass;
-        return $this;
-    }
+    private $config = '';
 
     /**
      * Config of the RequestResponse filter
      *
-     * @param ForwardFW\Config\Filter\RequestResponse $applicationConfig Config of the RequestResponse filter.
+     * @param ForwardFW\Config\Filter\RequestResponse $config Config of the RequestResponse filter.
      *
      * @return FForwardFW\Config\Filter\RequestResponse\Application
      */
-    public function setApplicationConfig(\ForwardFW\Config\Application $applicationConfig)
+    public function setConfig(\ForwardFW\Config\Application $config)
     {
-        $this->applicationConfig = $applicationConfig;
+        $this->config = $config;
         return $this;
     }
-
-    /**
-     * Get Classname of the application to call.
-     *
-     * @return string
-     */
-    public function getApplicationClass()
-    {
-        return $this->strApplicationClass;
-    }
-
 
     /**
      * Get config of the RequestResponse filter.
      *
      * @return ForwardFW\Config\Application
      */
-    public function getApplicationConfig()
+    public function getConfig()
     {
-        return $this->applicationConfig;
+        return $this->config;
     }
 }
