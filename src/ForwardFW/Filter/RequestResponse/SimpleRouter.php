@@ -22,7 +22,7 @@
  * @package    ForwardFW
  * @subpackage RequestResponse
  * @author     Alexander Opitz <opitz.alexander@primacom.net>
- * @copyright  2009-2013 The Authors
+ * @copyright  2009-2014 The Authors
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @link       http://forwardfw.sourceforge.net
  * @since      File available since Release 0.0.10
@@ -51,22 +51,18 @@ class SimpleRouter extends \ForwardFW\Filter\RequestResponse
     {
         $this->response->addLog('Start Route');
 
-        if (isset($GLOBALS['ForwardFW\\SimpleRouter'])) {
-            $parent = $this;
-            foreach ($GLOBALS['ForwardFW\\SimpleRouter'] as $routeConfig) {
-                if (strncmp($_SERVER['REQUEST_URI'], $routeConfig->getStart(), strlen($routeConfig->getStart())) === 0) {
-                    $strFilter = $routeConfig->getFilterClass();
-                    $child = new $strFilter(null, $routeConfig->getFilterConfig(), $this->request, $this->response);
-                    $parent->setChild($child);
-                    $parent = $child;
-                    break;
-                }
+        $parent = $this;
+        foreach ($this->config->getRoutes() as $routeConfig) {
+            if (strncmp($_SERVER['REQUEST_URI'], $routeConfig->getStart(), strlen($routeConfig->getStart())) === 0) {
+                $strFilter = $routeConfig->getFilterClass();
+                $child = new $strFilter(null, $routeConfig->getFilterConfig(), $this->request, $this->response);
+                $parent->setChild($child);
+                $parent = $child;
+                break;
             }
-            if ($this->child === null) {
-                $this->response->addError('No Route found');
-            }
-        } else {
-            $this->response->addError('No Route defined');
+        }
+        if ($this->child === null) {
+            $this->response->addError('No Route found');
         }
     }
 
