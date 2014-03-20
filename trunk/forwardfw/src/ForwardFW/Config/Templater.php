@@ -43,4 +43,36 @@ namespace ForwardFW\Config;
 abstract class Templater extends \ForwardFW\Config
 {
     use Traits\Execution;
+
+    /**
+     * @var string Path to save the compiled versions of templates.
+     */
+    private $strCompilePath = '';
+
+    /**
+     * @var string Path to the templates
+     */
+    private $strTemplatePath = '';
+
+    public function setCompilePath($strCompilePath)
+    {
+        $this->strCompilePath = $strCompilePath;
+        return $this;
+    }
+
+    public function setTemplatePath($strTemplatePath)
+    {
+        $this->strTemplatePath = $strTemplatePath;
+        return $this;
+    }
+
+    public function getCompilePath()
+    {
+        return $this->strCompilePath;
+    }
+
+    public function getTemplatePath()
+    {
+        return $this->strTemplatePath;
+    }
 }

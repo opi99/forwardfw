@@ -40,10 +40,10 @@ namespace ForwardFW\Config\Templater;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @link       http://forwardfw.sourceforge.net
  */
-class Twig extends \ForwardFW\Config\Templater
+class Smarty extends \ForwardFW\Config\Templater
 {
     /**
      * @var string TemplaterClass to call
      */
-    protected $strExecutionClass = 'ForwardFW\\Templater\\Twig';
+    protected $strExecutionClass = 'ForwardFW\\Templater\\Smarty';
 }
