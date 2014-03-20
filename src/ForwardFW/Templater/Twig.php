@@ -65,6 +65,7 @@ class Twig extends \ForwardFW\Controller implements \ForwardFW\Templater\Templat
     /**
      * Constructor
      *
+     * @param ForwardFW\Config\Templater $config The twig configuration
      * @param ForwardFW\Controller\ApplicationInterface $application The running application
      *
      * @return void
@@ -73,8 +74,6 @@ class Twig extends \ForwardFW\Controller implements \ForwardFW\Templater\Templat
         \ForwardFW\Config\Templater $config, \ForwardFW\Controller\ApplicationInterface $application
     ) {
         parent::__construct($application);
-
-        $arConfig = $GLOBALS[get_class($this)];
 
         $strCompilePath = $config->getCompilePath();
 
