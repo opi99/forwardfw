@@ -18,11 +18,11 @@
  *
  * PHP version 5
  *
- * @category   Filter
+ * @category   Application
  * @package    ForwardFW
  * @subpackage Config
  * @author     Alexander Opitz <opitz.alexander@primacom.net>
- * @copyright  2009-2013 The Authors
+ * @copyright  2009-2014 The Authors
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @link       http://forwardfw.sourceforge.net
  * @since      File available since Release 0.0.11
@@ -33,7 +33,7 @@ namespace ForwardFW\Config;
 /**
  * Config for a Application Filter.
  *
- * @category   Filter
+ * @category   Application
  * @package    ForwardFW
  * @subpackage Config
  * @author     Alexander Opitz <opitz.alexander@primacom.net>
@@ -42,6 +42,13 @@ namespace ForwardFW\Config;
  */
 class Application extends \ForwardFW\Config
 {
+    use \ForwardFW\Config\Traits\Execution;
+
+    /**
+     * @var string strExecutionClass
+     */
+    protected $strExecutionClass = 'ForwardFW\\Controller\\Application';
+
     /**
      * @var string Name of the application
      */
@@ -51,6 +58,16 @@ class Application extends \ForwardFW\Config
      * @var array Screens of the application
      */
     private $arScreens = '';
+
+    /**
+     * @var string Identity of the application for get/post parameters
+     */
+    private $strIdent = '';
+
+    /**
+     * @var ForwardFW\Config\Templater
+     */
+    private $templaterConfig = null;
 
     /**
      * Sets name of the application.
@@ -79,6 +96,25 @@ class Application extends \ForwardFW\Config
     }
 
     /**
+     * Sets the ident of the application.
+     *
+     * @param string $strIdent Identity of the application for post/get parameters.
+     *
+     * @return ForwardFW\Config\Application
+     */
+    public function setIdent($strIdent)
+    {
+        $this->strIdent = $strIdent;
+        return $this;
+    }
+
+    public function setTemplaterConfig(Templater $templaterConfig)
+    {
+        $this->templaterConfig = $templaterConfig;
+        return $this;
+    }
+
+    /**
      * Get name of the application.
      *
      * @return string
@@ -88,7 +124,6 @@ class Application extends \ForwardFW\Config
         return $this->strName;
     }
 
-
     /**
      * Get screens of the application
      *
@@ -97,5 +132,25 @@ class Application extends \ForwardFW\Config
     public function getScreens()
     {
         return $this->arScreens;
+    }
+
+    /**
+     * Get ident of the application.
+     *
+     * @return string
+     */
+    public function getIdent()
+    {
+        return $this->strIdent;
+    }
+
+    /**
+     * Get config of Templater
+     *
+     * @return string
+     */
+    public function getTemplaterConfig()
+    {
+        return $this->templaterConfig;
     }
 }
