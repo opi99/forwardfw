@@ -87,7 +87,7 @@ class View extends \ForwardFW\Controller
         $this->application->getResponse()->addLog(
             'Processing: ' . $this->getTemplateName() . '.tpl'
         );
-        $templater = \ForwardFW\Templater::factory($this->application);
+        $templater = $this->application->getTemplater();
         $templater->setVar('ForwardFW_Version', $GLOBALS['ForwardFW']['Version']);
         try {
             $templater->setTemplateFile($this->getTemplateName() . '.tpl');
@@ -106,23 +106,24 @@ class View extends \ForwardFW\Controller
     protected function getTemplateName()
     {
         $strTemplateName = '';
-        $nLength = strlen($this->strViewName);
-        $nLastPart = strrpos($this->strViewName, '\\');
-        $nPreviewsPart = strrpos(
-            $this->strViewName,
-            '\\',
-            -($nLength - $nLastPart + 1)
-        );
-        if ($nPreviewsPart === false) {
-            $nPreviewsPart = -1;
-        }
-        $strTemplateName  = substr(
-            $this->strViewName,
-            $nPreviewsPart + 1,
-            $nLastPart - $nPreviewsPart - 1
-        );
-        $strTemplateName .= '/';
-        $strTemplateName .= substr($this->strViewName, $nLastPart + 1);
+//         $nLength = strlen($this->strViewName);
+//         $nLastPart = strrpos($this->strViewName, '\\');
+//         $nPreviewsPart = strrpos(
+//             $this->strViewName,
+//             '\\',
+//             -($nLength - $nLastPart + 1)
+//         );
+//         if ($nPreviewsPart === false) {
+//             $nPreviewsPart = -1;
+//         }
+//         $strTemplateName  = substr(
+//             $this->strViewName,
+//             $nPreviewsPart + 1,
+//             $nLastPart - $nPreviewsPart - 1
+//         );
+//         $strTemplateName .= '/';
+//         $strTemplateName .= substr($this->strViewName, $nLastPart + 1);
+        $strTemplateName = strtr($this->strViewName, '\\', '/');
         return $strTemplateName;
     }
 }
