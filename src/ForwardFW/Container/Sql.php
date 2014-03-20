@@ -66,6 +66,12 @@ class Sql extends \ForwardFW\Container
      */
     protected $strDBConnection = '';
 
+    /**
+     * The application this container is running in.
+     *
+     * @access private
+     * @var \ForwardFW\Controller\ApplicationInterface
+     */
     protected $application = null;
 
     /**
@@ -118,7 +124,7 @@ class Sql extends \ForwardFW\Container
      */
     public function countAll($bHidden = false)
     {
-        return $this->countFromDb(
+        return $this->countByWhereClause(
             $this->buildWhereClause($bHidden)
         );
     }
@@ -134,7 +140,9 @@ class Sql extends \ForwardFW\Container
     {
         if (null !== $arFields) {
             foreach ($arFields as $strField => $value) {
-                $arWhere[] = $strField . '="' . $value . '"';
+                if ($value !== null) {
+                    $arWhere[] = $strField . '="' . $value . '"';
+                }
             }
         }
 
@@ -153,7 +161,7 @@ class Sql extends \ForwardFW\Container
      *
      * @return integer
      */
-    public function countFromDb($strWhereClause)
+    public function countByWhereClause($strWhereClause)
     {
         $dataHandler = \ForwardFW\Controller\DataHandler::getInstance(
             $this->application
