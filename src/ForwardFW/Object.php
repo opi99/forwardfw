@@ -22,7 +22,7 @@
  * @package    ForwardFW
  * @subpackage Main
  * @author     Alexander Opitz <opitz.alexander@primacom.net>
- * @copyright  2009-2013 The Authors
+ * @copyright  2009-2014 The Authors
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @link       http://forwardfw.sourceforge.net
  * @since      File available since Release 0.0.1
@@ -41,73 +41,7 @@ namespace ForwardFW;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @link       http://forwardfw.sourceforge.net
  */
-class Object
+abstract class Object
 {
-    /**
-     * @var mixed Content of id
-     */
-    protected $id = 0;
-
-    /**
-     * @var string Name of the field in data array, which holds the ID
-     */
-    protected $strIdFieldName = 'id';
-
-    /**
-     * Constructur
-     *
-     * @param strinf $strIdFieldName Name of the ID field in data
-     *
-     * @return new instance
-     */
-    public function __construct($strIdFieldName = 'id')
-    {
-        $this->strIdFieldName = $strIdFieldName;
-    }
-
-    /**
-     * Loads the model data out of an array as data set
-     *
-     * @param array &$arRow The array with data to read out
-     *
-     * @return void
-     */
-    public function loadByArray($arRow)
-    {
-        $this->id = $arRow[$this->strIdFieldName];
-    }
-
-    /**
-     * Saves the model data into an array as data set
-     *
-     * @param array &$arRow The array into which the data will be written
-     *
-     * @return void
-     */
-    public function saveToArray(&$arRow)
-    {
-        $arRow[$this->strIdFieldName] = $this->id;
-    }
-
-    /**
-     * Returns the id of model.
-     *
-     * @return mixed
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * Sets id of model.
-     *
-     * @param mixed $id Id of model.
-     *
-     * @return void
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-    }
+    public function __construct() {}
 }
