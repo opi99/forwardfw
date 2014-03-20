@@ -9,32 +9,26 @@ set_include_path(dirname(__FILE__) . '/libs' . PATH_SEPARATOR . get_include_path
 require_once 'ForwardFW/Autoloader.php';
 
 $GLOBALS['ForwardFW'] = array(
-    'Version' => '0.0.11-dev',
+    'Version' => '0.1.0-dev',
 );
 
 $GLOBALS['ForwardFW\\Filter\\RequestResponse'] = array(
-    'ForwardFW\\Filter\\RequestResponse\\FirePHP',
-    'ForwardFW\\Filter\\RequestResponse\\Application',
-);
-
-$GLOBALS['ForwardFW\\Application'] = array(
-    'class' => 'ForwardFW\\Controller\\Application',
-    'name'  => 'ShortDemo',
-);
-
-$GLOBALS['ForwardFW\\Templater'] = array(
-    'Templater' => 'ForwardFW\\Templater\\Smarty',
-//     'Templater' => 'ForwardFW\\Templater\\Twig',
-);
-
-$GLOBALS['ForwardFW\\Templater\\Smarty'] = array(
-    'CompilePath'  => getcwd() . '/../cache/',
-    'TemplatePath' => getcwd() . '/../data/templates/smarty'
-);
-
-$GLOBALS['ForwardFW\\Templater\\Twig'] = array(
-    'CompilePath'  => getcwd() . '/../cache/',
-    'TemplatePath' => getcwd() . '/../data/templates/twig'
+    (new ForwardFW\Config\Filter\RequestResponse\FirePhp()),
+    (new ForwardFW\Config\Filter\RequestResponse\Application())
+        ->setConfig(
+            (new ForwardFW\Config\Application())
+                ->setName('ShortDemo')
+                ->setScreens(
+                    array(
+                        'Hello' => 'ForwardFW\\Controller\\Screen'
+                    )
+                )
+                ->setTemplaterConfig(
+                    (new ForwardFW\Config\Templater\Smarty())
+                        ->setCompilePath(getcwd() . '/../cache/')
+                        ->setTemplatePath(getcwd() . '/../data/templates/smarty')
+                )
+        )
 );
 
 $GLOBALS['ForwardFW\\Controller\\DataHandler'] = array(
@@ -54,10 +48,6 @@ $GLOBALS['ForwardFW\\Controller\\DataHandler\\MDB2'] = array(
         'options' => array(),
         'prefix'  => null,
     ),
-);
-
-$GLOBALS['ShortDemo']['screens'] = array(
-    'Hello' => 'ForwardFW\\Controller\\Screen'
 );
 
 date_default_timezone_set('CET');
