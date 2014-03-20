@@ -50,6 +50,13 @@ abstract class Filter
     protected $child = null;
 
     /**
+     * Set to true if the Chain should stop here.
+     *
+     * @var boolean
+     */
+    protected $doStopChain = false;
+
+    /**
      * Constructor
      *
      * @param ForwardFW\Filter $child The child filter or null if you are the last
@@ -95,7 +102,7 @@ abstract class Filter
     public function doFilter()
     {
         $this->doIncomingFilter();
-        if (!is_null($this->child)) {
+        if (!is_null($this->child) && !$this->doStopChain) {
             $this->child->doFilter();
         }
         $this->doOutgoingFilter();
