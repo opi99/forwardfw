@@ -42,4 +42,5 @@ namespace ForwardFW\Config\Filter;
  */
 class RequestResponse extends \ForwardFW\Config
 {
+    use \ForwardFW\Config\Traits\Execution;
 }
