@@ -22,7 +22,7 @@
  * @package    ForwardFW
  * @subpackage Main
  * @author     Alexander Opitz <opitz.alexander@primacom.net>
- * @copyright  2009-2013 The Authors
+ * @copyright  2009-2014 The Authors
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @link       http://forwardfw.sourceforge.net
  * @since      File available since Release 0.0.1
@@ -60,8 +60,6 @@ class Container extends \ArrayObject
             = preg_replace('/\\\\Container\\\\/', '\\Object\\', get_class($this));
     }
 
-
-
     /**
      * Creates a new object of type $strObjectName which won't be added to list
      * and returns this object.
@@ -73,13 +71,11 @@ class Container extends \ArrayObject
         return new $this->strObjectName();
     }
 
-
-
     /**
      * Creates a new Object of type $strObjectName, adds it to the list and
      * returns the object
      *
-     * @return ForwardFW_Object
+     * @return ForwardFW\Object
      */
     public function createNewToList()
     {
@@ -88,16 +84,14 @@ class Container extends \ArrayObject
         return $obj;
     }
 
-
-
     /**
      * Adds object to the list
-     * 
+     *
      * @param ForwardFW\Object $obj The object which should be add
      *
      * @return boolean if $obj could be add to the list
      */
-    public function addToList(Object $obj)
+    public function add(Object $obj)
     {
         $bIsUseable = false;
         if ($this->isUseable($obj)) {
@@ -107,8 +101,6 @@ class Container extends \ArrayObject
         return $bIsUseable;
     }
 
-
-
     /**
      * Removes given Object from List and returns state if it was in list.
      *
@@ -116,7 +108,7 @@ class Container extends \ArrayObject
      *
      * @return boolean True if object could be removed otherwise false
      */
-    public function removeFromList(Object $obj)
+    public function remove(Object $obj)
     {
         $bWasRemoveable = false;
         if ($this->isUseable($obj)) {
@@ -129,8 +121,6 @@ class Container extends \ArrayObject
         }
         return $bWasRemoveable;
     }
-
-
 
     /**
      * Creates a new object of the List type, loads it with the array information
@@ -146,8 +136,6 @@ class Container extends \ArrayObject
         $obj->loadByArray($arObject);
         $this->append($obj);
     }
-
-
 
     /**
      * Loads an array to this list. The array needs to hold arrays with the data
@@ -165,8 +153,6 @@ class Container extends \ArrayObject
             }
         }
     }
-
-
 
     /**
      * Examines if the given object is from typet this list will hold.
@@ -186,8 +172,6 @@ class Container extends \ArrayObject
         }
     }
 
-
-
     /**
      * Sorts the array
      *
@@ -197,8 +181,6 @@ class Container extends \ArrayObject
     {
         $this->uasort('strcmp');
     }
-
-
 
     /**
      * Returns the Name of the objects this list will manage
