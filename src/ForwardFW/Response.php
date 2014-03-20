@@ -22,7 +22,7 @@
  * @package    ForwardFW
  * @subpackage Main
  * @author     Alexander Opitz <opitz.alexander@primacom.net>
- * @copyright  2009-2013 The Authors
+ * @copyright  2009-2014 The Authors
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @link       http://forwardfw.sourceforge.net
  * @since      File available since Release 0.0.1
@@ -43,12 +43,12 @@ namespace ForwardFW;
 class Response
 {
     /**
-     * @var ForwardFW\Object\Timer Holds every Log message as string.
+     * @var ForwardFW\Object\Stateless\Timer Holds every Log message as string.
      */
     private $logTimer = null;
 
     /**
-     * @var ForwardFW\Object\Timer Holds every Error message as string.
+     * @var ForwardFW\Object\Stateless\Timer Holds every Error message as string.
      */
     private $errorTimer = null;
 
@@ -76,7 +76,7 @@ class Response
      */
     public function __construct()
     {
-        $this->logTimer   = new Object\Timer();
+        $this->logTimer   = new Object\Stateless\Timer();
         $this->errorTimer = clone $this->logTimer;
     }
 
