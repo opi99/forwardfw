@@ -50,7 +50,7 @@ interface TemplaterInterface
      * @return void
      */
     public function __construct(
-        \ForwardFW\Controller\ApplicationInterface $application
+        \ForwardFW\Config\Templater $config, \ForwardFW\Controller\ApplicationInterface $application
     );
 
     /**
