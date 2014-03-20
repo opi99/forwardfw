@@ -22,7 +22,7 @@
  * @package    ForwardFW
  * @subpackage RequestResponse
  * @author     Alexander Opitz <opitz.alexander@primacom.net>
- * @copyright  2009-2013 The Authors
+ * @copyright  2009-2014 The Authors
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @link       http://forwardfw.sourceforge.net
  * @since      File available since Release 0.0.1
@@ -142,8 +142,9 @@ class RequestResponse extends \ForwardFW\Filter
         $arConfig = $GLOBALS[get_class()];
         if (is_array($arConfig)) {
             $arConfig = array_reverse($arConfig);
-            foreach ($arConfig as $strFilter) {
-                $filter = new $strFilter($filter, null, $request, $response);
+            foreach ($arConfig as $config) {
+                $strFilterClass = $config->getExecutionClass();
+                $filter = new $strFilterClass($filter, $config, $request, $response);
             }
         } else {
             // Fehler werfen
