@@ -22,7 +22,7 @@
  * @package    ForwardFW
  * @subpackage Main
  * @author     Alexander Opitz <opitz.alexander@primacom.net>
- * @copyright  2009-2013 The Authors
+ * @copyright  2009-2014 The Authors
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @link       http://forwardfw.sourceforge.net
  * @since      File available since Release 0.0.2
@@ -64,10 +64,10 @@ class Templater
      * @return ForwardFW\Templater
      */
     public static function factory(
-        Controller\Application $application
+        Config\Templater $config, Controller\Application $application
     ) {
         if (is_null(self::$instance)) {
-            self::$instance = static::createTemplater($application);
+            self::$instance = static::createTemplater($config, $application);
         }
         return self::$instance;
     }
@@ -80,18 +80,10 @@ class Templater
      * @return ForwardFW\Templater
      */
     final private static function createTemplater(
-        Controller\Application $application
+        Config\Templater $config, Controller\Application $application
     ) {
-        if (isset($GLOBALS['ForwardFW\\Templater'])) {
-            $strTemplaterName = $application->getRequest()->getConfigParameter(
-                'Templater',
-                get_class()
-            );
-            include_once str_replace('\\', '/', $strTemplaterName) . '.php';
-            $templater = new $strTemplaterName($application);
-        } else {
-            $application->getResponse()->addError('No Templater');
-        }
+        $strTemplaterName = $config->getExecutionClass();
+        $templater = new $strTemplaterName($config, $application);
         return $templater;
     }
 }
