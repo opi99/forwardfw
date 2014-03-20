@@ -25,13 +25,13 @@
  * @copyright  2009-2013 The Authors
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @link       http://forwardfw.sourceforge.net
- * @since      File available since Release 0.0.5
+ * @since      File available since Release 0.0.11
  */
 
 namespace ForwardFW\Controller;
 
 /**
- * This Interface must be implemented from an application.
+ * This Controller over one application.
  *
  * @category   Application
  * @package    ForwardFW
@@ -40,54 +40,92 @@ namespace ForwardFW\Controller;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @link       http://forwardfw.sourceforge.net
  */
-interface ApplicationInterface
+abstract class ApplicationAbstract extends View implements ApplicationInterface
 {
+    /**
+     * The request object.
+     *
+     * @var \ForwardFW\Request
+     */
+    protected $request;
+
+    /**
+     * The response object.
+     *
+     * @var \ForwardFW\Response
+     */
+    protected $response;
+
+    /**
+     * @var \ForwardFW\Config\Application Configuration
+     */
+    protected $config = null;
+
     /**
      * Constructor
      *
-     * @param ForwardFW\Config\Application $config   Name of application.
-     * @param ForwardFW\Request            $request  The ForwardFW request object.
-     * @param ForwardFW\Response           $response The ForwardFW response object.
+     * @param \ForwardFW\Config\Application $config   Name of application.
+     * @param \ForwardFW\Request            $request  The request object.
+     * @param \ForwardFW\Response           $response The request object.
+     *
+     * @return void
      */
     public function __construct(
         \ForwardFW\Config\Application $config,
         \ForwardFW\Request $request,
         \ForwardFW\Response $response
-    );
+    ) {
+        $this->config   = $config;
+        $this->request  = $request;
+        $this->response = $response;
+
+        parent::__construct($this);
+    }
 
     /**
      * Run screen and return generated content
      *
-     * @return string generated content form screens
+     * @return void
      */
-    public function run();
-
+    abstract public function run();
 
     /**
      * Returns the name of the application
      *
      * @return string
      */
-    public function getName();
+    public function getName()
+    {
+        return $this->config->getName();
+    }
 
     /**
      * Returns the ident of the application
      *
      * @return string
      */
-    public function getIdent();
+    public function getIdent()
+    {
+        return $this->config->getIdent();
+    }
 
     /**
      * Returns the request object
      *
-     * @return ForwardFW\Request
+     * @return ForwardFW_Request
      */
-    public function getRequest();
+    public function getRequest()
+    {
+        return $this->request;
+    }
 
     /**
      * Returns the response object
      *
-     * @return ForwardFW\Response
+     * @return ForwardFW_Response
      */
-    public function getResponse();
+    public function getResponse()
+    {
+        return $this->response;
+    }
 }
