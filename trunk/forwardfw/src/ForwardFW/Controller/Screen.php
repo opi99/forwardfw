@@ -22,7 +22,7 @@
  * @package    ForwardFW
  * @subpackage Controller
  * @author     Alexander Opitz <opitz.alexander@primacom.net>
- * @copyright  2009-2013 The Authors
+ * @copyright  2009-2014 The Authors
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @link       http://forwardfw.sourceforge.net
  * @since      File available since Release 0.0.1
@@ -123,7 +123,7 @@ class Screen extends View implements ScreenInterface
      */
     public function processView()
     {
-        $templater = \ForwardFW\Templater::factory($this->application);
+        $templater = $this->application->getTemplater();
         foreach ($this->views as $view) {
             $templater->setVar(
                 'VIEW_' . strtoupper(str_replace('\\', '_', $view->strViewName)),
