@@ -46,7 +46,7 @@ class File extends \ForwardFW\Cache\Backend
      * Constructor
      *
      * @param ForwardFW\Controller\ApplicationInterface $application The running application.
-     * @param ForwardFW\Config\Cache\Backend  $config      Backend config.
+     * @param ForwardFW\Config\Cache\Backend $config Backend config.
      */
     public function __construct(
         \ForwardFW\Controller\ApplicationInterface $application,
@@ -59,16 +59,16 @@ class File extends \ForwardFW\Cache\Backend
      * Writes data into the cache
      *
      *
-     * @param string $strHash Hash for data.
-     * @param array  $arData  Data to save into cache.
+     * @param string $hash Hash for data.
+     * @param array $arData Data to save into cache.
      *
      * @return void
      */
-    protected function writeData($strHash, array $arData)
+    protected function writeData($hash, array $arData)
     {
         $strPath = $this->config->strPath;
         if (is_writeable($strPath)) {
-            return file_put_contents($strPath . $strHash, serialize($arData));
+            return file_put_contents($strPath . $hash, serialize($arData));
         } else {
             throw new \ForwardFW\Cache\Exception('Not writeable');
         }
@@ -77,15 +77,15 @@ class File extends \ForwardFW\Cache\Backend
     /**
      * Reads data from the cache
      *
-     * @param string $strHash Hash for data.
+     * @param string $hash Hash for data.
      *
      * @return array Data from the storage
      */
-    protected function readData($strHash)
+    protected function readData($hash)
     {
         $strPath = $this->config->strPath;
-        if (is_readable($strPath . $strHash)) {
-            return unserialize(file_get_contents($strPath . $strHash));
+        if (is_readable($strPath . $hash)) {
+            return unserialize(file_get_contents($strPath . $hash));
         }
         return null;
     }
@@ -93,15 +93,15 @@ class File extends \ForwardFW\Cache\Backend
     /**
      * Removes data from the cache
      *
-     * @param string $strHash Hash for data.
+     * @param string $hash Hash for data.
      *
      * @return boolean Returns true if data removed otherwise false.
      */
-    protected function removeData($strHash)
+    protected function removeData($hash)
     {
         $strPath = $this->config->strPath;
-        if (is_writeable($strPath . $strHash)) {
-            return unlink($strPath . $strHash);
+        if (is_writeable($strPath . $hash)) {
+            return unlink($strPath . $hash);
         }
         return false;
     }

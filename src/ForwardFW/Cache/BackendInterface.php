@@ -46,9 +46,7 @@ interface BackendInterface
      * Constructor
      *
      * @param ForwardFW\Controller\ApplicationInterface $application The running application.
-     * @param ForwardFW\Config\Cache\Backend  $config      Configuration of Backend.
-     *
-     * @return void
+     * @param ForwardFW\Config\Cache\Backend $config Configuration of Backend.
      */
     public function __construct(
         \ForwardFW\Controller\ApplicationInterface $application,
@@ -58,38 +56,38 @@ interface BackendInterface
     /**
      * Gets data from Cache.
      *
-     * @param string  $strHash Hash for data.
-     * @param integer $nTime   Oldest Time of data in cache.
+     * @param string $hash Hash for data.
+     * @param integer $nTime Oldest Time of data in cache.
      *
      * @return mixed Data from cache
      */
-    public function getData($strHash, $nTime);
+    public function getData($hash, $nTime);
 
     /**
      * Sets data from Cache.
      *
-     * @param string $strHash Hash for data.
-     * @param mixed  $mData   Data to save into cache.
+     * @param string $hash Hash for data.
+     * @param mixed $data Data to save into cache.
      *
      * @return void
      */
-    public function setData($strHash, $mData);
+    public function setData($hash, $data);
 
     /**
      * Clears data from Cache.
      *
-     * @param string $strHash Hash for data.
+     * @param string $hash Hash for data.
      *
      * @return void
      */
-    public function unsetData($strHash);
+    public function unsetData($hash);
 
     /**
      * Sets marker that cache will be generated yet.
      *
-     * @param string $strHash Hash of cache which is generated.
+     * @param string $hash Hash of cache which is generated.
      *
      * @return void
      */
-    public function setGenerating($strHash);
+    public function setGenerating($hash);
 }
