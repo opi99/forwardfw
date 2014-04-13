@@ -42,8 +42,33 @@ namespace ForwardFW\Config\Cache\Backend;
  */
 class File extends \ForwardFW\Config\Cache\Backend
 {
+    protected $strExecutionClass = 'ForwardFW\\Cache\\Backend\\File';
+
     /*
      * @var string Path to cache
      */
-    public $strPath;
+    private $path;
+
+    /**
+     * Sets the path where this cache lies.
+     *
+     * @param string $path The path to cache data into.
+     *
+     * @return ForwardFW\Config\Cache\Backend\File This.
+     */
+    public function setPath($path)
+    {
+        $this->path = $path;
+        return $this;
+    }
+    
+    /**
+     * Gets the path where this cache lies.
+     *
+     * @return string The path to cache data into.
+     */
+    public function getPath()
+    {
+        return $this->Path;
+    }
 }

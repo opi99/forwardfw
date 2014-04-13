@@ -70,7 +70,6 @@ abstract class Frontend implements FrontendInterface
     ) {
         $backend = self::getBackend(
             $application,
-            $config->getCacheBackend(),
             $config->getBackendConfig()
         );
         $frontend = self::getFrontend($application, $config, $backend);
@@ -81,24 +80,16 @@ abstract class Frontend implements FrontendInterface
      * Builds Backend of a cache configuration
      *
      * @param ForwardFW\Controller\ApplicationInterface $application The running application
-     * @param string $strCacheBackend Configuration of caching
      * @param ForwardFW\Config\Cache\Backend $config Configuration of caching
      *
      * @return ForwardFW\Cache\BackendInterface Caching Backend.
      */
     public static function getBackend(
         \ForwardFW\Controller\ApplicationInterface $application,
-        $strCacheBackend,
         \ForwardFW\Config\Cache\Backend $config
     ) {
-        if (isset($GLOBALS['Cache']['backend'][$strCacheBackend])) {
-            $return = $GLOBALS['Cache']['backend'][$strCacheBackend];
-        } else {
-            include_once str_replace('\\', '/', $strCacheBackend) . '.php';
-            $return = new $strCacheBackend($application, $config);
-            $GLOBALS['Cache']['backend'][$strCacheBackend] = $return;
-        }
-        return $return;
+        $className = $config->getExecutionClass();
+        return new $className($application, $config);
     }
 
     /**
@@ -115,15 +106,8 @@ abstract class Frontend implements FrontendInterface
         \ForwardFW\Config\Cache\Frontend $config,
         \ForwardFW\Cache\BackendInterface $backend
     ) {
-        $class = $config->getCacheFrontend();
-        if (isset($GLOBALS['Cache']['frontend'][$class])) {
-            $return = $GLOBALS['Cache']['frontend'][$class];
-        } else {
-            include_once str_replace('\\', '/', $class) . '.php';
-            $return = new $class($application, $backend);
-            $GLOBALS['Cache']['frontend'][$class] = $return;
-        }
-        return $return;
+        $className = $config->getExecutionClass();
+        return new $className($application, $backend);
     }
 
     /**

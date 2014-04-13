@@ -42,46 +42,12 @@ namespace ForwardFW\Config\Cache;
  */
 class Frontend extends \ForwardFW\Config
 {
-    /**
-     * @var string Class Name of Cache Frontend
-     */
-    private $strCacheFrontend = '';
-
-    /**
-     * @var string Class Name of Cache Backend
-     */
-    private $strCacheBackend = '';
+    use \ForwardFW\Config\Traits\Execution;
 
     /**
      * @var ForwardFW\Config\Cache\Backend Configuration for Cache Backend
      */
     private $backendConfig = null;
-
-    /**
-     * Sets Name of FE Cache
-     *
-     * @param string $strCacheFrontend Name of the frontend cache.
-     *
-     * @return ForwardFW_Config_Cache_Frontend This.
-     */
-    public function setCacheFrontend($strCacheFrontend)
-    {
-        $this->strCacheFrontend = $strCacheFrontend;
-        return $this;
-    }
-
-    /**
-     * Sets Name of BE Cache
-     *
-     * @param string $strCacheBackend Name of the backend cache.
-     *
-     * @return ForwardFW_Config_Cache_Frontend This.
-     */
-    public function setCacheBackend($strCacheBackend)
-    {
-        $this->strCacheBackend = $strCacheBackend;
-        return $this;
-    }
 
     /**
      * Config of the Backend
@@ -97,30 +63,9 @@ class Frontend extends \ForwardFW\Config
     }
 
     /**
-     * Get Name of cache frontend.
-     *
-     * @return string Name of frontend cache
-     */
-    public function getCacheFrontend()
-    {
-        return $this->strCacheFrontend;
-    }
-
-    /**
-     * Get Name of cache backend.
-     *
-     * @return string Name of backend cache
-     */
-    public function getCacheBackend()
-    {
-        return $this->strCacheBackend;
-    }
-
-
-    /**
      * Get config of cache backend.
      *
-     * @return ForwardFW_Config_Cache_Backend Config of backend cache
+     * @return ForwardFW\Config\Cache\Backend Config of backend cache
      */
     public function getBackendConfig()
     {

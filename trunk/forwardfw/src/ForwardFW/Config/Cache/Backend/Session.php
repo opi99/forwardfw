@@ -25,10 +25,10 @@
  * @copyright  2009-2014 The Authors
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @link       http://forwardfw.sourceforge.net
- * @since      File available since Release 0.0.9
+ * @since      File available since Release 0.1.0
  */
 
-namespace ForwardFW\Config\Cache;
+namespace ForwardFW\Config\Cache\Backend;
 
 /**
  * Config for a Cache.
@@ -40,7 +40,12 @@ namespace ForwardFW\Config\Cache;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @link       http://forwardfw.sourceforge.net
  */
-class Backend extends \ForwardFW\Config
+class Session extends \ForwardFW\Config\Cache\Backend
 {
-    use \ForwardFW\Config\Traits\Execution;
+    protected $strExecutionClass = 'ForwardFW\\Cache\\Backend\\Session';
+
+    /*
+     * @var string Name of the session.
+     */
+    public $name;
 }
