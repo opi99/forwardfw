@@ -45,10 +45,8 @@ abstract class Frontend implements FrontendInterface
     /**
      * Constructor
      *
-     * @param ForwardFW\Controller\ApplicationInterface   $application The running application
-     * @param ForwardFW\Cache\BackendInterface $backend     Backend instance.
-     *
-     * @return void
+     * @param ForwardFW\Controller\ApplicationInterface $application The running application
+     * @param ForwardFW\Cache\BackendInterface $backend Backend instance.
      */
     public function __construct(
         \ForwardFW\Controller\ApplicationInterface $application,
@@ -62,9 +60,9 @@ abstract class Frontend implements FrontendInterface
      * Builds an instance of cache
      *
      * @param ForwardFW\Controller\ApplicationInterface $application The running application
-     * @param ForwardFW\Config\Cache\Frontend $config      Configuration of caching
+     * @param ForwardFW\Config\Cache\Frontend $config Configuration of caching
      *
-     * @return ForwardFW_Interface_Cache_Frontend The cache Frontend
+     * @return ForwardFW\Cache\FrontendInterface The cache Frontend
      */
     public static function getInstance(
         \ForwardFW\Controller\ApplicationInterface $application,
@@ -82,11 +80,11 @@ abstract class Frontend implements FrontendInterface
     /**
      * Builds Backend of a cache configuration
      *
-     * @param ForwardFW\Controller\ApplicationInterface $application     The running application
-     * @param string                          $strCacheBackend Configuration of caching
-     * @param ForwardFW\Config\Cache\Backend  $config          Configuration of caching
+     * @param ForwardFW\Controller\ApplicationInterface $application The running application
+     * @param string $strCacheBackend Configuration of caching
+     * @param ForwardFW\Config\Cache\Backend $config Configuration of caching
      *
-     * @return ForwardFW_Interface_Cache_Backend Caching Backend.
+     * @return ForwardFW\Cache\BackendInterface Caching Backend.
      */
     public static function getBackend(
         \ForwardFW\Controller\ApplicationInterface $application,
@@ -106,11 +104,11 @@ abstract class Frontend implements FrontendInterface
     /**
      * Builds Backend of a cache configuration
      *
-     * @param ForwardFW\Controller\ApplicationInterface   $application The running application
-     * @param ForwardFW\Config\Cache\Frontend   $config      Configuration of caching
-     * @param ForwardFW\Cache\BackendInterface $backend     Backend for the frontend
+     * @param ForwardFW\Controller\ApplicationInterface $application The running application
+     * @param ForwardFW\Config\Cache\Frontend $config Configuration of caching
+     * @param ForwardFW\Cache\BackendInterface $backend Backend for the frontend
      *
-     * @return ForwardFW_Interface_Cache_Frontend Caching Frontend.
+     * @return ForwardFW\Cache\FrontendInterface Caching Frontend.
      */
     public static function getFrontend(
         \ForwardFW\Controller\ApplicationInterface $application,
@@ -149,17 +147,17 @@ abstract class Frontend implements FrontendInterface
                 $nTime = time() - $config->getTimeout();
         }
         try {
-            $mData = $this->backend->getData($strHash, $nTime);
+            $data = $this->backend->getData($strHash, $nTime);
         } catch (\ForwardFW\Cache\Exception\NoData $eNoData) {
-            $mData = $this->getRealData($strHash, $config, false);
+            $data = $this->getRealData($strHash, $config, false);
         } catch (\ForwardFW\Cache\Exception\TimeOut $eTimeOut) {
-            $mData = $this->getRealData($strHash, $config, true);
+            $data = $this->getRealData($strHash, $config, true);
         } catch (\ForwardFW\Cache\Exception\IsGenerating $eIsGenerating) {
             usleep(500);
-            $mData = $this->getCache($config);
+            $data = $this->getCache($config);
         }
 
-        return $mData;
+        return $data;
     }
 
 
@@ -167,25 +165,23 @@ abstract class Frontend implements FrontendInterface
      * Returns the real data and add it to cache. If real data fails tries to
      * get old data from cache if available.
      *
-     * @param String                      $strHash       Hash of cache
-     * @param ForwardFW\Config\Cache\Data $config        What data should be get
-     *                                                   from cache.
-     * @param boolean                     $bOldAvailable True if backend has old
-     *                                                   data for hash.
+     * @param string $hash Hash of cache
+     * @param ForwardFW\Config\Cache\Data $config What data should be get from cache.
+     * @param boolean $bOldAvailable True if backend has old data for hash.
      *
      * @return mixed The data you requested.
      */
     protected function getRealData(
-        $strHash,
+        $hash,
         \ForwardFW\Config\Cache\Data $config,
-        $bOldAvailable
+        $isOldAvailable
     ) {
         try {
             $mData = $this->getDataToCache($config);
-            $this->backend->setData($strHash, $mData);
+            $this->backend->setData($hash, $mData);
         } catch (\Exception $e) {
-            if ($config->getReserveOld() && $bOldAvailable) {
-                $mData = $this->backend->getData($strHash, 0);
+            if ($config->getReserveOld() && $isOldAvailable) {
+                $mData = $this->backend->getData($hash, 0);
             }
         }
 
@@ -199,12 +195,12 @@ abstract class Frontend implements FrontendInterface
     /**
      * Calculates a hash by serialize and md5.
      *
-     * @param mixed $mValue The data from which the hash should be gathered.
+     * @param mixed $data The data from which the hash should be gathered.
      *
-     * @return string The hash.
+     * @return string The md5 hash.
      */
-    public function getHash($mValue)
+    public function getHash($data)
     {
-        return md5(serialize($mValue));
+        return md5(serialize($data));
     }
 }

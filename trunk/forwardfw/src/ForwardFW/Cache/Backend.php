@@ -59,17 +59,17 @@ abstract class Backend implements BackendInterface
     /**
      * Gets data from Cache.
      *
-     * @param string  $strHash Hash for data.
-     * @param integer $nTime   Oldest Time of data in cache.
+     * @param string $hash Hash for data.
+     * @param integer $nTime Oldest Time of data in cache.
      *
      * @return mixed Data from cache
      * @throws ForwardFW\Cache\Exception\IsGenerating
      * @throws ForwardFW\Cache\Exception\TimeOut
      * @throws ForwardFW\Cache\Exception\NoData
      */
-    public function getData($strHash, $nTime)
+    public function getData($hash, $nTime)
     {
-        $arData = $this->readData($strHash);
+        $arData = $this->readData($hash);
         if (!is_null($arData) && is_array($arData)) {
             if ($arData['time'] > $nTime) {
                 if (!$arData['generating']) {
@@ -104,17 +104,17 @@ abstract class Backend implements BackendInterface
     /**
      * Sets data into Cache.
      *
-     * @param string $strHash Hash for data.
-     * @param mixed  $mData   Data to save into cache.
+     * @param string $hash Hash for data.
+     * @param mixed $data Data to save into cache.
      *
      * @return void
      */
-    public function setData($strHash, $mData)
+    public function setData($hash, $data)
     {
         $this->writeData(
-            $strHash,
+            $hash,
             array(
-                'data' => $mData,
+                'data' => $data,
                 'time' => time(),
                 'generating' => false,
             )
@@ -124,28 +124,28 @@ abstract class Backend implements BackendInterface
     /**
      * Clears data from Cache.
      *
-     * @param string $strHash Hash for data.
+     * @param string $hash Hash for data.
      *
      * @return void
      */
-    public function unsetData($strHash)
+    public function unsetData($hash)
     {
         $this->removeData(
-            $strHash
+            $hash
         );
     }
 
     /**
      * Sets marker that cache will be generated yet.
      *
-     * @param string $strHash Hash of cache which is generated.
+     * @param string $hash Hash of cache which is generated.
      *
      * @return void
      */
-    public function setGenerating($strHash)
+    public function setGenerating($hash)
     {
         $this->writeData(
-            $strHash,
+            $hash,
             array(
                 'time' => time(),
                 'generating' => true,
@@ -153,35 +153,34 @@ abstract class Backend implements BackendInterface
         );
     }
 
-
     /**
      * Writes data into the cache
      *
      *
-     * @param string $strHash Hash for data.
-     * @param array  $arData  Data to save into cache.
+     * @param string $hash Hash for data.
+     * @param array $arData Data to save into cache.
      *
      * @return void
      */
-    abstract protected function writeData($strHash, array $arData);
+    abstract protected function writeData($hash, array $arData);
 
     /**
      * Reads data from the cache
      *
-     * @param string $strHash Hash for data.
+     * @param string $hash Hash for data.
      *
      * @return array Data from the storage
      */
-    abstract protected function readData($strHash);
+    abstract protected function readData($hash);
 
     /**
      * Removes data from the cache
      *
-     * @param string $strHash Hash for data.
+     * @param string $hash Hash for data.
      *
      * @return boolean Returns true if data removed otherwise false.
      */
-    abstract protected function removeData($strHash);
+    abstract protected function removeData($hash);
 
     /**
      * Clear complete cache

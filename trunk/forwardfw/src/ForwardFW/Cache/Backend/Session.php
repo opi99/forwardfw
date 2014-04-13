@@ -46,7 +46,7 @@ class Session extends \ForwardFW\Cache\Backend
      * Constructor
      *
      * @param ForwardFW\Controller\ApplicationInterface $application The running application.
-     * @param ForwardFW\Config\Cache\Backend  $config      Backend config.
+     * @param ForwardFW\Config\Cache\Backend $config Backend config.
      */
     public function __construct(
         \ForwardFW\Controller\ApplicationInterface $application,
@@ -60,38 +60,38 @@ class Session extends \ForwardFW\Cache\Backend
      * Writes data into the cache
      *
      *
-     * @param string $strHash Hash for data.
-     * @param array  $arData  Data to save into cache.
+     * @param string $hash Hash for data.
+     * @param array $arData Data to save into cache.
      *
      * @return void
      */
-    protected function writeData($strHash, array $arData)
+    protected function writeData($hash, array $arData)
     {
-        $_SESSION['cache'][$strHash] = $arData;
+        $_SESSION['cache'][$hash] = $arData;
     }
 
     /**
      * Reads data from the cache
      *
-     * @param string $strHash Hash for data.
+     * @param string $hash Hash for data.
      *
      * @return array Data from the storage
      */
-    protected function readData($strHash)
+    protected function readData($hash)
     {
-        return $_SESSION['cache'][$strHash];
+        return $_SESSION['cache'][$hash];
     }
 
     /**
      * Removes data from the cache
      *
-     * @param string $strHash Hash for data.
+     * @param string $hash Hash for data.
      *
      * @return boolean Returns true if data removed otherwise false.
      */
-    protected function removeData($strHash)
+    protected function removeData($hash)
     {
-        unset($_SESSION['cache'][$strHash]);
+        unset($_SESSION['cache'][$hash]);
         return true;
     }
 
@@ -100,7 +100,7 @@ class Session extends \ForwardFW\Cache\Backend
      *
      * @return void
      */
-    protected function clear($strHash)
+    protected function clear($hash)
     {
         $_SESSION['cache'] = array();
         return true;

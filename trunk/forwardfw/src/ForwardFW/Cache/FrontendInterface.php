@@ -45,9 +45,8 @@ interface FrontendInterface
     /**
      * Constructor
      *
-     * @param ForwardFW\Controller\ApplicationInterface   $application The running application.
-     * @param ForwardFW\Cache\BackendInterface $backend     Backend for storing
-     *                                                       cache data.
+     * @param ForwardFW\Controller\ApplicationInterface $application The running application.
+     * @param ForwardFW\Cache\BackendInterface $backend Backend for storing cache data.
      */
     public function __construct(
         \ForwardFW\Controller\ApplicationInterface $application,
@@ -58,7 +57,7 @@ interface FrontendInterface
      * Builds an instance of cache
      *
      * @param ForwardFW\Controller\ApplicationInterface $application The running application
-     * @param ForwardFW\Config\Cache\Frontend $config      Configuration of caching
+     * @param ForwardFW\Config\Cache\Frontend $config Configuration of caching
      *
      * @return ForwardFW_Interface_Cache_Frontend The cache Frontend
      */
