@@ -52,8 +52,10 @@ class Session extends \ForwardFW\Cache\Backend
         \ForwardFW\Controller\ApplicationInterface $application,
         \ForwardFW\Config\Cache\Backend $config
     ) {
-        session_start();
         parent::__construct($application, $config);
+
+        session_name($this->config->getName());
+        session_start();
     }
 
     /**

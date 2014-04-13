@@ -66,9 +66,9 @@ class File extends \ForwardFW\Cache\Backend
      */
     protected function writeData($hash, array $arData)
     {
-        $strPath = $this->config->strPath;
-        if (is_writeable($strPath)) {
-            return file_put_contents($strPath . $hash, serialize($arData));
+        $path = $this->config->getPath();
+        if (is_writeable($path)) {
+            return file_put_contents($path . $hash, serialize($arData));
         } else {
             throw new \ForwardFW\Cache\Exception('Not writeable');
         }
@@ -83,9 +83,9 @@ class File extends \ForwardFW\Cache\Backend
      */
     protected function readData($hash)
     {
-        $strPath = $this->config->strPath;
-        if (is_readable($strPath . $hash)) {
-            return unserialize(file_get_contents($strPath . $hash));
+        $path = $this->config->getPath();
+        if (is_readable($path . $hash)) {
+            return unserialize(file_get_contents($path . $hash));
         }
         return null;
     }
@@ -99,9 +99,9 @@ class File extends \ForwardFW\Cache\Backend
      */
     protected function removeData($hash)
     {
-        $strPath = $this->config->strPath;
-        if (is_writeable($strPath . $hash)) {
-            return unlink($strPath . $hash);
+        $path = $this->config->getPath();
+        if (is_writeable($path . $hash)) {
+            return unlink($path . $hash);
         }
         return false;
     }
@@ -113,7 +113,7 @@ class File extends \ForwardFW\Cache\Backend
      */
     protected function clear()
     {
-        $arFiles = glob($this->config->strPath);
+        $arFiles = glob($this->config->getPath());
         foreach ($arFiles as $strFile) {
             unlink($strFile);
         }
