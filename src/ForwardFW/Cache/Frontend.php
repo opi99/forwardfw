@@ -119,7 +119,7 @@ abstract class Frontend implements FrontendInterface
      */
     public function getCache(\ForwardFW\Config\Cache\Data $config)
     {
-        $strHash = $this->calculateHash($config);
+        $hash = $this->calculateHash($config);
         switch ($config->getTimeout()) {
             case -1:
                 $nTime = 0;
@@ -131,11 +131,11 @@ abstract class Frontend implements FrontendInterface
                 $nTime = time() - $config->getTimeout();
         }
         try {
-            $data = $this->backend->getData($strHash, $nTime);
+            $data = $this->backend->getData($hash, $nTime);
         } catch (\ForwardFW\Cache\Exception\NoData $eNoData) {
-            $data = $this->getRealData($strHash, $config, false);
+            $data = $this->getRealData($hash, $config, false);
         } catch (\ForwardFW\Cache\Exception\TimeOut $eTimeOut) {
-            $data = $this->getRealData($strHash, $config, true);
+            $data = $this->getRealData($hash, $config, true);
         } catch (\ForwardFW\Cache\Exception\IsGenerating $eIsGenerating) {
             usleep(500);
             $data = $this->getCache($config);
