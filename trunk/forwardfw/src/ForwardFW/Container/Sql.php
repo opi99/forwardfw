@@ -89,7 +89,7 @@ class Sql extends \ForwardFW\Container
         $this->strTablePrefix  = $strTablePrefix;
         $this->strDBConnection = $strDBConnection;
 
-        $this->strTableName = \ForwardFW\Object\Sql::resolveTableName(
+        $this->strTableName = \ForwardFW\Object\Statefull\Sql::resolveTableName(
             $this->strTablePrefix,
             $this->strObjectName
         );
