@@ -50,10 +50,17 @@ class SimpleRouter extends \ForwardFW\Filter\RequestResponse
     public function doIncomingFilter()
     {
         $this->response->addLog('Start Route');
-
         $parent = $this;
+
+        $strPath = dirname($_SERVER['PHP_SELF']);
+        if ($strPath === '/') {
+            $strRoutePath = $_SERVER['REQUEST_URI'];
+        } else {
+            $strRoutePath = substr($_SERVER['REQUEST_URI'], strlen($strPath));
+        }
+
         foreach ($this->config->getRoutes() as $routeConfig) {
-            if (strncmp($_SERVER['REQUEST_URI'], $routeConfig->getStart(), strlen($routeConfig->getStart())) === 0) {
+            if (strncmp($strRoutePath, $routeConfig->getStart(), strlen($routeConfig->getStart())) === 0) {
                 $strFilter = $routeConfig->getFilterClass();
                 $child = new $strFilter(null, $routeConfig->getFilterConfig(), $this->request, $this->response);
                 $parent->setChild($child);
