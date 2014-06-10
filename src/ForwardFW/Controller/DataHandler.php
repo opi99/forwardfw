@@ -161,6 +161,20 @@ class DataHandler extends \ForwardFW\Controller implements DataHandlerInterface
     }
 
     /**
+     * Truncates Data to a connection (DB, SOAP, File)
+     *
+     * @param string $strConnection Name of connection
+     * @param array  $arOptions     Options to load the data
+     *
+     * @return mixed Data from the connection.
+     */
+    public function truncate($strConnection, array $arOptions)
+    {
+        $handler = $this->getConnection($strConnection);
+        return $handler->truncate($strConnection, $arOptions);
+    }
+
+    /**
      * Saves Data to a connection (DB, SOAP, File)
      *
      * @param string $strConnection Name of connection
