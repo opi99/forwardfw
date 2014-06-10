@@ -186,6 +186,43 @@ class MDB2 extends \ForwardFW\Controller\DataHandler
     }
 
     /**
+     * Truncates Data to a connection (DB, SOAP, File)
+     *
+     * @param string $strConnection Name of connection
+     * @param array  $arOptions     Options to load the data
+     *
+     * @return mixed Data from the connection.
+     */
+    public function truncate($strConnection, array $options)
+    {
+        $conMDB2 = $this->getConnection($strConnection);
+
+        $strQuery = 'truncate ';
+        if (isset($tablePrefix['default'])) {
+            $strQuery .= $tablePrefix['default']
+                . '_' . $options['table'];
+        } else {
+            $strQuery .= $options['table'];
+        }
+
+        $arResult = array();
+        $resultMDB2 = $conMDB2->query($strQuery);
+
+        if (\MDB2::isError($resultMDB2)) {
+            $this->application->getResponse()->addError($resultMDB2->getMessage() . $resultMDB2->getUserinfo());
+            throw new \ForwardFW\Exception\DataHandler(
+                'Error while execute: '
+                . $resultMDB2->getMessage()
+                . $resultMDB2->getUserinfo()
+            );
+        }
+        while ($arRow = $resultMDB2->fetchRow(MDB2_FETCHMODE_ASSOC)) {
+            array_push($arResult, $arRow);
+        }
+        return $arResult;
+    }
+
+    /**
      * Loads and initialize the connection handler.
      *
      * @param string $strConnection Name of connection

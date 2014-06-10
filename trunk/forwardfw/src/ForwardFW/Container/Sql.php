@@ -215,4 +215,27 @@ class Sql extends \ForwardFW\Container
         }
         return false;
     }
+
+
+    /**
+     * Truncates complete given table.
+     *
+     * @return boolean True if table was truncated otherwise false.
+     */
+    public function truncate()
+    {
+        $dataHandler = \ForwardFW\Controller\DataHandler::getInstance(
+            $this->application
+        );
+        $arResult = $dataHandler->truncate(
+            $this->strDBConnection,
+            array(
+                'table' => $this->strTableName,
+            )
+        );
+        if ($arResult !== false) {
+            return true;
+        }
+        return false;
+    }
 }
