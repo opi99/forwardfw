@@ -184,18 +184,17 @@ class Sqlite3 extends \ForwardFW\Controller\DataHandler
      */
     public function truncate($strConnection, array $options)
     {
-        $conMDB2 = $this->getConnection($strConnection);
+        $connection = $this->getConnection($strConnection);
 
-        $strQuery = 'truncate ';
         if (isset($tablePrefix['default'])) {
-            $strQuery .= $tablePrefix['default']
+            $table .= $tablePrefix['default']
                 . '_' . $options['table'];
         } else {
-            $strQuery .= $options['table'];
+            $table .= $options['table'];
         }
 
-        $arResult = array();
-        $result = $connection->exec($strQuery);
+        // Delete content of table
+        $result = $connection->exec('DELETE FROM ' . $table);
 
         if ($result === FALSE) {
             $this->application->getResponse()->addError($connection->lastErrorMsg());
@@ -203,7 +202,17 @@ class Sqlite3 extends \ForwardFW\Controller\DataHandler
                 'Error while execute: ' . $connection->lastErrorMsg()
             );
         }
-        return $arResult;
+
+        // Reset auto_inc counter
+        $result = $connection->exec('DELETE FROM SQLITE_SEQUENCE WHERE name = \'' . $table . '\'');
+
+        if ($result === FALSE) {
+            $this->application->getResponse()->addError($connection->lastErrorMsg());
+            throw new \ForwardFW\Exception\DataHandler(
+                'Error while execute: ' . $connection->lastErrorMsg()
+            );
+        }
+        return array();
     }
 
     /**
@@ -232,12 +241,16 @@ class Sqlite3 extends \ForwardFW\Controller\DataHandler
             );
         }
 
-        $ret = $connection->exec('set character set utf8');
+        $ret = $connection->exec('PRAGMA encoding = "utf-8"');
+        $connection->busyTimeout(5000);
         $this->arConnectionCache[$strConnection] = $connection;
     }
 
     public function getSqlValue($strType, $value, $connection)
     {
-        return $connection->escapeString($value);
+        if ($strType === 'integer') {
+            return (int) $value;
+        }
+        return '\'' . $connection->escapeString($value) . '\'';
     }
 }
