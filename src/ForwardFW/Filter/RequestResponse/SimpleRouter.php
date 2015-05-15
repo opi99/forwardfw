@@ -52,15 +52,10 @@ class SimpleRouter extends \ForwardFW\Filter\RequestResponse
         $this->response->addLog('Start Route');
         $parent = $this;
 
-        $strPath = dirname($_SERVER['PHP_SELF']);
-        if ($strPath === '/') {
-            $strRoutePath = $_SERVER['REQUEST_URI'];
-        } else {
-            $strRoutePath = substr($_SERVER['REQUEST_URI'], strlen($strPath));
-        }
+        $routePath = $this->getRoutePath();
 
         foreach ($this->config->getRoutes() as $routeConfig) {
-            if (strncmp($strRoutePath, $routeConfig->getStart(), strlen($routeConfig->getStart())) === 0) {
+            if (strncmp($routePath, $routeConfig->getStart(), strlen($routeConfig->getStart())) === 0) {
                 $strFilter = $routeConfig->getFilterClass();
                 $child = new $strFilter(null, $routeConfig->getFilterConfig(), $this->request, $this->response);
                 $parent->setChild($child);
@@ -71,6 +66,23 @@ class SimpleRouter extends \ForwardFW\Filter\RequestResponse
         if ($this->child === null) {
             $this->response->addError('No Route found');
         }
+    }
+
+    /**
+     * Returns the path for routing
+     *
+     * @return strin Path to route on
+     */
+    protected function getRoutePath()
+    {
+        $strPath = dirname($_SERVER['PHP_SELF']);
+        if ($strPath === '/') {
+            $routePath = $_SERVER['REQUEST_URI'];
+        } else {
+            $routePath = substr($_SERVER['REQUEST_URI'], strlen($strPath));
+        }
+
+        return $routePath;
     }
 
     /**
