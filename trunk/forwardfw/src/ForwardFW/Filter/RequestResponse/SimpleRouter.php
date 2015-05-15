@@ -64,7 +64,7 @@ class SimpleRouter extends \ForwardFW\Filter\RequestResponse
             }
         }
         if ($this->child === null) {
-            $this->response->addError('No Route found');
+            $this->response->addError('No Route "' . $routePath . '" found');
         }
     }
 
@@ -75,11 +75,15 @@ class SimpleRouter extends \ForwardFW\Filter\RequestResponse
      */
     protected function getRoutePath()
     {
-        $strPath = dirname($_SERVER['PHP_SELF']);
-        if ($strPath === '/') {
-            $routePath = $_SERVER['REQUEST_URI'];
+        if ($this->config->getRequestPath()) {
+            $routePath = $this->config->getRequestPath();
         } else {
-            $routePath = substr($_SERVER['REQUEST_URI'], strlen($strPath));
+            $strPath = dirname($_SERVER['PHP_SELF']);
+            if ($strPath === '/') {
+                $routePath = $_SERVER['REQUEST_URI'];
+            } else {
+                $routePath = substr($_SERVER['REQUEST_URI'], strlen($strPath));
+            }
         }
 
         return $routePath;
