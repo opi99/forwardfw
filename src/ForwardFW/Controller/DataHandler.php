@@ -216,10 +216,14 @@ class DataHandler extends \ForwardFW\Controller implements DataHandlerInterface
         $arConfig = $this->getConfigParameter($strConnection);
         $strHandlerClass = $arConfig['handler'];
 
+        if (isset($arConfig['prefix'])) {
+            $this->arTablePrefix[$strConnection] = $arConfig['prefix'];
+        }
+
         if (class_exists($strHandlerClass)) {
             $handler = new $strHandlerClass($this->application);
         } else {
-            $this->response->addError('DataHandlerClass "' . $strHandlerClass . '" not includeable.');
+            throw new \ForwardFW\Exception\DataHandler('DataHandlerClass "' . $strHandlerClass . '" not includeable.');
         }
 
         $this->arConnectionCache[$strConnection] = $handler;
