@@ -46,6 +46,8 @@ class SimpleRouter extends \ForwardFW\Config\Filter\RequestResponse
 
     private $routes = null;
 
+    private $requestPath = '';
+
     public function __construct()
     {
         $this->routes = new \ArrayObject();
@@ -60,5 +62,16 @@ class SimpleRouter extends \ForwardFW\Config\Filter\RequestResponse
     public function getRoutes()
     {
         return $this->routes;
+    }
+
+    public function setRequestPath($requestPath)
+    {
+        $this->requestPath = $requestPath;
+        return $this;
+    }
+
+    public function getRequestPath()
+    {
+        return $this->requestPath;
     }
 }
