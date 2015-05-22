@@ -22,7 +22,7 @@
  * @package    ForwardFW
  * @subpackage RequestResponse
  * @author     Alexander Opitz <opitz.alexander@primacom.net>
- * @copyright  2009-2014 The Authors
+ * @copyright  2009-2015 The Authors
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @link       http://forwardfw.sourceforge.net
  * @since      File available since Release 0.0.10
@@ -52,10 +52,17 @@ class SimpleRouter extends \ForwardFW\Filter\RequestResponse
         $this->response->addLog('Start Route');
         $parent = $this;
 
-        $routePath = $this->getRoutePath();
+        $routePath = $this->request->getRoutePath();
 
         foreach ($this->config->getRoutes() as $routeConfig) {
             if (strncmp($routePath, $routeConfig->getStart(), strlen($routeConfig->getStart())) === 0) {
+
+                $nextRoute = substr($routePath, strlen($routeConfig->getStart()));
+                if ($nextRoute === false) {
+                    $nextRoute = '';
+                }
+                $this->request->setRoutePath($nextRoute);
+
                 $strFilter = $routeConfig->getFilterClass();
                 $child = new $strFilter(null, $routeConfig->getFilterConfig(), $this->request, $this->response);
                 $parent->setChild($child);
@@ -66,27 +73,8 @@ class SimpleRouter extends \ForwardFW\Filter\RequestResponse
         if ($this->child === null) {
             $this->response->addError('No Route "' . $routePath . '" found');
         }
-    }
 
-    /**
-     * Returns the path for routing
-     *
-     * @return strin Path to route on
-     */
-    protected function getRoutePath()
-    {
-        if ($this->config->getRequestPath()) {
-            $routePath = $this->config->getRequestPath();
-        } else {
-            $strPath = dirname($_SERVER['PHP_SELF']);
-            if ($strPath === '/') {
-                $routePath = $_SERVER['REQUEST_URI'];
-            } else {
-                $routePath = substr($_SERVER['REQUEST_URI'], strlen($strPath));
-            }
-        }
 
-        return $routePath;
     }
 
     /**
