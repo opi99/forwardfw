@@ -88,7 +88,7 @@ class Sql extends \ForwardFW\Object\Statefull
         $strTablePrefix = '',
         $strDBConnection = 'default'
     ) {
-        parent::__construct($strIdFieldName);
+        parent::__construct(null, $strIdFieldName);
 
         $this->strTablePrefix  = $strTablePrefix;
         $this->strDBConnection = $strDBConnection;
