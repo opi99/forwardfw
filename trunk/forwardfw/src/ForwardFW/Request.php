@@ -22,7 +22,7 @@
  * @package    ForwardFW
  * @subpackage Main
  * @author     Alexander Opitz <opitz.alexander@primacom.net>
- * @copyright  2009-2014 The Authors
+ * @copyright  2009-2015 The Authors
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @link       http://forwardfw.sourceforge.net
  * @since      File available since Release 0.0.1
@@ -42,6 +42,9 @@ namespace ForwardFW;
  */
 class Request
 {
+    /** @var string Path to route applications */
+    protected $routePath = null;
+
     /**
      * Returns the parameter for the application from browser request or
      * the session data.
@@ -126,6 +129,47 @@ class Request
             $return = $GLOBALS[$strApplicationName][$strControllerClass][$strParameterName];
         }
         return $return;
+    }
+
+    /**
+     * Returns the path for routing
+     *
+     * @return string Path to route on
+     */
+    public function getRoutePath()
+    {
+        if ($this->routePath === NULL) {
+            $this->routePath = $this->findRoutePath();
+        }
+
+        return $this->routePath;
+    }
+
+    /**
+     * Sets the path for routing
+     *
+     * @param string $routePath Path to route on
+     */
+    public function setRoutePath($routePath)
+    {
+        $this->routePath = $routePath;
+    }
+
+    /**
+     * Find the path to route out of the server request vars
+     *
+     * @return string Path to route on.
+     */
+    protected function findRoutePath()
+    {
+        $hostPath = $this->getHostPath();
+        if ($hostPath === '') {
+            $routePath = $_SERVER['REQUEST_URI'];
+        } else {
+            $routePath = substr($_SERVER['REQUEST_URI'], strlen($hostPath) + 1);
+        }
+
+        return $routePath;
     }
 
     public function getHostPath()
