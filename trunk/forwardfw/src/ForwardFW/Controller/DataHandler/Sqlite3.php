@@ -22,7 +22,7 @@
  * @package    ForwardFW
  * @subpackage Controller/DataHandler
  * @author     Alexander Opitz <opitz.alexander@primacom.net>
- * @copyright  2014 The Authors
+ * @copyright  2014-2015 The Authors
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @link       http://forwardfw.sourceforge.net
  * @since      File available since Release 0.1.0
@@ -45,38 +45,32 @@ class Sqlite3 extends \ForwardFW\Controller\DataHandler
     /**
      * @var array Prefix for tables
      */
-    private $arTablePrefix = array();
+    private $tablePrefix = array();
 
     /**
      * Loads Data from a connection (DB, SOAP, File)
      *
-     * @param string $strConnection Name of connection
-     * @param array  $arOptions     Options to load the data
+     * @param string $connectionName Name of connection
+     * @param array $options Options to load the data
      *
      * @return array Data from the connection.
      */
-    public function loadFrom($strConnection, array $arOptions)
+    public function loadFrom($connectionName, array $options)
     {
-        $connection = $this->getConnection($strConnection);
+        $connection = $this->getConnection($connectionName);
 
-        $strQuery = 'SELECT ' . $arOptions['select'] . ' FROM ';
-        if (isset($this->arTablePrefix[$strConnection])) {
-            $strQuery .= '`' . $this->arTablePrefix[$strConnection]
-                .'_' . $arOptions['from'] . '`';
-        } else {
-            $strQuery .= '`' . $arOptions['from'] . '`';
+        $strQuery = 'SELECT ' . $options['select'] . ' FROM ' . $this->getTableName($options['to'], $connectionName);
+        if (isset($options['where'])) {
+            $strQuery .= ' WHERE ' . $options['where'];
         }
-        if (isset($arOptions['where'])) {
-            $strQuery .= ' WHERE ' . $arOptions['where'];
+        if (isset($options['group'])) {
+            $strQuery .= ' GROUP BY ' . $options['group'];
         }
-        if (isset($arOptions['group'])) {
-            $strQuery .= ' GROUP BY ' . $arOptions['group'];
+        if (isset($options['order'])) {
+            $strQuery .= ' ORDER BY ' . $options['order'];
         }
-        if (isset($arOptions['order'])) {
-            $strQuery .= ' ORDER BY ' . $arOptions['order'];
-        }
-        if (isset($arOptions['limit'])) {
-            $strQuery .= ' LIMIT ' . $arOptions['limit'];
+        if (isset($options['limit'])) {
+            $strQuery .= ' LIMIT ' . $options['limit'];
         }
 
         $arResult = array();
@@ -98,22 +92,17 @@ class Sqlite3 extends \ForwardFW\Controller\DataHandler
     /**
      * Saves Data to a connection (DB, SOAP, File)
      *
-     * @param string $strConnection Name of connection
-     * @param array  $arOptions     Options to load the data
+     * @param string $connectionName Name of connection
+     * @param array $options Options to load the data
      *
      * @return array Empty array
      */
-    public function saveTo($strConnection, array $options)
+    public function saveTo($connectionName, array $options)
     {
-        $connection = $this->getConnection($strConnection);
+        $connection = $this->getConnection($connectionName);
 
-        $strQuery = 'UPDATE ';
-        if (isset($tablePrefix['default'])) {
-            $strQuery .= $tablePrefix['default']
-                . '_' . $options['to'];
-        } else {
-            $strQuery .= $options['to'];
-        }
+        $strQuery = 'UPDATE ' . $this->getTableName($options['to'], $connectionName);
+
         $strQuery .= ' SET ';
         foreach ($options['values'] as $strName => $value) {
             $arSets[] = $strName . '=' . $this->getSqlValue($options['columns'][$strName], $value, $connection);
@@ -137,22 +126,16 @@ class Sqlite3 extends \ForwardFW\Controller\DataHandler
     /**
      * Saves Data to a connection (DB, SOAP, File)
      *
-     * @param string $strConnection Name of connection
-     * @param array  $arOptions     Options to load the data
+     * @param string $connectionName Name of connection
+     * @param array $options Options to load the data
      *
      * @return array Empty array
      */
-    public function create($strConnection, array $options)
+    public function create($connectionName, array $options, \ForwardFW\Callback $idCallback = null)
     {
-        $connection = $this->getConnection($strConnection);
+        $connection = $this->getConnection($connectionName);
 
-        $strQuery = 'INSERT INTO ';
-        if (isset($tablePrefix['default'])) {
-            $strQuery .= $tablePrefix['default']
-                . '_' . $options['to'];
-        } else {
-            $strQuery .= $options['to'];
-        }
+        $strQuery = 'INSERT INTO ' . $this->getTableName($options['to'], $connectionName);
 
         $strQuery .= ' (' . implode(',', array_keys($options['values'])) . ')';
         $strQuery .= ' VALUES (';
@@ -171,27 +154,25 @@ class Sqlite3 extends \ForwardFW\Controller\DataHandler
                 'Error while execute: ' . $connection->lastErrorMsg()
             );
         }
+
+        // @TODO Callback with new ID
+
         return $arResult;
     }
 
     /**
      * Truncates Data to a connection (DB, SOAP, File)
      *
-     * @param string $strConnection Name of connection
-     * @param array  $arOptions     Options to load the data
+     * @param string $connectionName Name of connection
+     * @param array $options Options to load the data
      *
      * @return array Empty array
      */
-    public function truncate($strConnection, array $options)
+    public function truncate($connectionName, array $options)
     {
-        $connection = $this->getConnection($strConnection);
+        $connection = $this->getConnection($connectionName);
 
-        if (isset($tablePrefix['default'])) {
-            $table .= $tablePrefix['default']
-                . '_' . $options['table'];
-        } else {
-            $table .= $options['table'];
-        }
+        $table = $this->getTableName($options['table'], $connectionName);
 
         // Delete content of table
         $result = $connection->exec('DELETE FROM ' . $table);
@@ -218,16 +199,16 @@ class Sqlite3 extends \ForwardFW\Controller\DataHandler
     /**
      * Loads and initialize the connection handler.
      *
-     * @param string $strConnection Name of connection
+     * @param string $connectionName Name of connection
      *
      * @return void
      */
-    public function initConnection($strConnection)
+    public function initConnection($connectionName)
     {
-        $arConfig = $this->getConfigParameter($strConnection);
+        $arConfig = $this->getConfigParameter($connectionName);
 
         if (isset($arConfig['prefix'])) {
-            $this->arTablePrefix[$strConnection] = $arConfig['prefix'];
+            $this->tablePrefix[$connectionName] = $arConfig['prefix'];
         }
         try {
             $connection = new \SQLite3($arConfig['dsn'], SQLITE3_OPEN_READWRITE);
@@ -243,7 +224,7 @@ class Sqlite3 extends \ForwardFW\Controller\DataHandler
 
         $ret = $connection->exec('PRAGMA encoding = "utf-8"');
         $connection->busyTimeout(5000);
-        $this->arConnectionCache[$strConnection] = $connection;
+        $this->arConnectionCache[$connectionName] = $connection;
     }
 
     public function getSqlValue($strType, $value, $connection)
@@ -252,5 +233,22 @@ class Sqlite3 extends \ForwardFW\Controller\DataHandler
             return (int) $value;
         }
         return '\'' . $connection->escapeString($value) . '\'';
+    }
+
+    /**
+     * Returns real table name Prefix or DB dependent changes.
+     *
+     * @param string $tableName Name of table inside application
+     * @param string $connectionName Name of connection
+     *
+     * @return string Name of table inside DB
+     */
+    protected function getTableName($tableName, $connectionName)
+    {
+        if ($this->tablePrefix[$connectionName] !== '') {
+            return $this->tablePrefix[$connectionName] . '_' . $tableName;
+        } else {
+            return $tableName;
+        }
     }
 }

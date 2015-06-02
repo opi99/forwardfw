@@ -22,7 +22,7 @@
  * @package    ForwardFW
  * @subpackage Controller
  * @author     Alexander Opitz <opitz.alexander@primacom.net>
- * @copyright  2009-2014 The Authors
+ * @copyright  2009-2015 The Authors
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @link       http://forwardfw.sourceforge.net
  * @since      File available since Release 0.0.7
@@ -31,7 +31,7 @@
 namespace ForwardFW\Controller;
 
 /**
- * Managing DataLoading via PEAR::MDB
+ * Interface for DataHandlers
  *
  * @category   Application
  * @package    ForwardFW
@@ -63,49 +63,50 @@ interface DataHandlerInterface
     /**
      * Loads Data from cache or from a connection (DB, SOAP, File) if cache failed.
      *
-     * @param string $strConnection Name of connection
-     * @param array  $arOptions     Options to load the data
+     * @param string $connectionName Name of connection
+     * @param array $options Options to load the data
      *
      * @return mixed Data from the connection.
      */
-    public function loadFromCached($strConnection, array $arOptions, $nCacheTimeout = -1);
+    public function loadFromCached($connectionName, array $options, $nCacheTimeout = -1);
 
     /**
      * Loads Data from a connection (DB, SOAP, File)
      *
-     * @param string $strConnection Name of connection
-     * @param array  $arOptions     Options to load the data
+     * @param string $connectionName Name of connection
+     * @param array $options Options to load the data
      *
      * @return mixed Data from the connection.
      */
-    public function loadFrom($strConnection, array $arOptions);
+    public function loadFrom($connectionName, array $options);
 
     /**
      * Saves Data to a connection (DB, SOAP, File)
      *
-     * @param string $strConnection Name of connection
-     * @param array  $arOptions     Options to load the data
+     * @param string $connectionName Name of connection
+     * @param array $options Options to load the data
+     * @param ForwardFW\Callback $idCallback Callback to give id of object creation
      *
      * @return mixed Data from the connection.
      */
-    public function create($strConnection, array $arOptions);
+    public function create($connectionName, array $options, \ForwardFW\Callback $idCallback = null);
 
     /**
      * Saves Data to a connection (DB, SOAP, File)
      *
-     * @param string $strConnection Name of connection
-     * @param array  $arOptions     Options to load the data
+     * @param string $connectionName Name of connection
+     * @param array $options Options to load the data
      *
      * @return mixed Data from the connection.
      */
-    public function saveTo($strConnection, array $arOptions);
+    public function saveTo($connectionName, array $options);
 
     /**
      * Loads and initialize the connection handler.
      *
-     * @param string $strConnection Name of connection
+     * @param string $connectionName Name of connection
      *
      * @return void
      */
-    public function initConnection($strConnection);
+    public function initConnection($connectionName);
 }

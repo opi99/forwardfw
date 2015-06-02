@@ -185,7 +185,8 @@ class Sql extends \ForwardFW\Object\Statefull
                     'columns' => $this->getTableConfig(),
                     'to'      => $this->strTableName,
                     'values'  => $arToSave,
-                )
+                ),
+                new \ForwardFW\Callback(array($this, 'setId'))
             );
         } else {
             $isOk = $dataHandler->saveTo(
