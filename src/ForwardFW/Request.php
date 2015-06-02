@@ -45,30 +45,39 @@ class Request
     /** @var string Path to route applications */
     protected $routePath = null;
 
+    /** @var array data of json request */
+    protected $json = null;
+
     /**
      * Returns the parameter for the application from browser request or
      * the session data.
      *
-     * @param string $strParameterName   Name of the parameter to return.
-     * @param string $strControllerClass Class name of the controller, wh asks.
-     * @param string $strApplicationName Name of the application.
+     * @param string $parameterName   Name of the parameter to return.
+     * @param string $controllerClass Class name of the controller, wh asks.
+     * @param string $applicationName Name of the application.
      *
      * @return mixed The parameter for the application or null.
      */
     public function getParameter(
-        $strParameterName,
-        $strControllerClass = 'ForwardFW_Request',
-        $strApplicationName = ''
+        $parameterName,
+        $controllerClass = 'ForwardFW_Request',
+        $applicationName = null
     ) {
         $return = $this->getRequestParameter(
-            $strParameterName,
-            $strApplicationName
+            $parameterName,
+            $applicationName
         );
-        if (is_null($return)) {
+        if ($return !== null) {
+            $return = $this->getJsonParameter(
+                $parameterName,
+                $applicationName
+            );
+        }
+        if ($return !== null) {
             $return = $this->getConfigParameter(
-                $strParameterName,
-                $strControllerClass,
-                $strApplicationName
+                $parameterName,
+                $controllerClass,
+                $applicationName
             );
         }
         return $return;
@@ -77,23 +86,53 @@ class Request
     /**
      * Returns the request parameter from browser/user session.
      *
-     * @param string $strParameterName   Name of the parameter to return.
-     * @param string $strApplicationName Name of the application.
+     * @param string $parameterName   Name of the parameter to return.
+     * @param string $applicationName Name of the application.
      *
      * @return mixed The parameter from the request.
      */
     public function getRequestParameter(
-        $strParameterName,
-        $strApplicationName = ''
+        $parameterName,
+        $applicationName = null
     ) {
         $return = null;
-        if ($strApplicationName) {
-            $data = $_REQUEST[$strApplicationName];
+        if ($applicationName !== null) {
+            $data = $_REQUEST[$applicationName];
         } else {
             $data = $_REQUEST;
         }
-        if (isset($data[$strParameterName])) {
-            $return = $data[$strParameterName];
+        if (isset($data[$parameterName])) {
+            $return = $data[$parameterName];
+        }
+        return $return;
+    }
+
+    /**
+     * Gets the json request parameter
+     *
+     * @param string $parameterName   Name of the parameter to return.
+     * @param string $applicationName Name of the application.
+     *
+     * @return stdClass The json parameter from the request.
+     */
+    public function getJsonParameter(
+        $parameterName,
+        $applicationName = null
+    ) {
+        if ($this->json === null) {
+            $this->json = json_decode(file_get_contents("php://input"));
+            if ($this->json === null) {
+                $this->json = array();
+            }
+        }
+        $return = null;
+        if ($applicationName !== null) {
+            $data = $this->json->$applicationName;
+        } else {
+            $data = $this->json;
+        }
+        if (isset($data->$parameterName)) {
+            $return = $data->$parameterName;
         }
         return $return;
     }
@@ -101,32 +140,32 @@ class Request
     /**
      * Returns the config parameter for the application from configuration.
      *
-     * @param string $strParameterName   Name of the parameter to return.
-     * @param string $strControllerClass Class name of the controller, wh asks.
-     * @param string $strApplicationName Name of the application.
+     * @param string $parameterName   Name of the parameter to return.
+     * @param string $controllerClass Class name of the controller, wh asks.
+     * @param string $applicationName Name of the application.
      *
      * @return mixed The configuration for the application or null.
      */
     public function getConfigParameter(
-        $strParameterName,
-        $strControllerClass = 'ForwardFW_Request',
-        $strApplicationName = ''
+        $parameterName,
+        $controllerClass = 'ForwardFW_Request',
+        $applicationName = null
     ) {
         $return = null;
-        if (isset($GLOBALS[$strParameterName])) {
-            $return = $GLOBALS[$strParameterName];
+        if (isset($GLOBALS[$parameterName])) {
+            $return = $GLOBALS[$parameterName];
         }
-        if (isset($GLOBALS['ForwardFW'][$strParameterName])) {
-            $return = $GLOBALS['ForwardFW'][$strParameterName];
+        if (isset($GLOBALS['ForwardFW'][$parameterName])) {
+            $return = $GLOBALS['ForwardFW'][$parameterName];
         }
-        if (isset($GLOBALS[$strApplicationName][$strParameterName])) {
-            $return = $GLOBALS[$strApplicationName][$strParameterName];
+        if ($applicationName !== null && isset($GLOBALS[$applicationName][$parameterName])) {
+            $return = $GLOBALS[$applicationName][$parameterName];
         }
-        if (isset($GLOBALS[$strControllerClass][$strParameterName])) {
-            $return = $GLOBALS[$strControllerClass][$strParameterName];
+        if (isset($GLOBALS[$controllerClass][$parameterName])) {
+            $return = $GLOBALS[$controllerClass][$parameterName];
         }
-        if (isset($GLOBALS[$strApplicationName][$strControllerClass][$strParameterName])) {
-            $return = $GLOBALS[$strApplicationName][$strControllerClass][$strParameterName];
+        if ($applicationName !== null && isset($GLOBALS[$applicationName][$controllerClass][$parameterName])) {
+            $return = $GLOBALS[$applicationName][$controllerClass][$parameterName];
         }
         return $return;
     }
