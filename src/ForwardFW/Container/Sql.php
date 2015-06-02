@@ -216,6 +216,17 @@ class Sql extends \ForwardFW\Container
         return false;
     }
 
+    /**
+     * Saves all elements in this container to the database.
+     *
+     * @return void
+     */
+    public function save()
+    {
+        foreach ($this as $value) {
+            $value->save();
+        }
+    }
 
     /**
      * Truncates complete given table.
