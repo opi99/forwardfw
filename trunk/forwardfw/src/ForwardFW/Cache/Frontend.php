@@ -22,7 +22,7 @@
  * @package    ForwardFW
  * @subpackage Main
  * @author     Alexander Opitz <opitz.alexander@primacom.net>
- * @copyright  2009-2014 The Authors
+ * @copyright  2009-2015 The Authors
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @link       http://forwardfw.sourceforge.net
  * @since      File available since Release 0.0.8
@@ -164,6 +164,7 @@ abstract class Frontend implements FrontendInterface
             $mData = $this->getDataToCache($config);
             $this->backend->setData($hash, $mData);
         } catch (\Exception $e) {
+            $this->application->getResponse()->addError($e->getMessage());
             if ($config->getReserveOld() && $isOldAvailable) {
                 $mData = $this->backend->getData($hash, 0);
             }
