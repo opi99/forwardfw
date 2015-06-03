@@ -67,19 +67,20 @@ class Request
             $parameterName,
             $applicationName
         );
-        if ($return !== null) {
+        if ($return === null) {
             $return = $this->getJsonParameter(
                 $parameterName,
                 $applicationName
             );
         }
-        if ($return !== null) {
+        if ($return === null) {
             $return = $this->getConfigParameter(
                 $parameterName,
                 $controllerClass,
                 $applicationName
             );
         }
+
         return $return;
     }
 
