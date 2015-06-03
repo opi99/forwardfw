@@ -118,11 +118,8 @@ class DataHandler extends \ForwardFW\Controller implements DataHandlerInterface
         $backendConfig = new \ForwardFW\Config\Cache\Backend\File();
         $backendConfig->strPath = getcwd() . '/cache/';
 
-        $configCacheFrontend = new \ForwardFW\Config\Cache\Frontend();
-        $configCacheFrontend
-            ->setCacheBackend('ForwardFW\\Cache\\Backend\\File')
-            ->setBackendConfig($backendConfig)
-            ->setCacheFrontend('ForwardFW\\Cache\\Frontend\\Caller');
+        $configCacheFrontend = new \ForwardFW\Config\Cache\Frontend\Caller();
+        $configCacheFrontend->setBackendConfig($backendConfig);
 
         $cache = \ForwardFW\Cache\Frontend::getInstance(
             $this->application,

@@ -22,7 +22,7 @@
  * @package    ForwardFW
  * @subpackage Controller/DataHandler
  * @author     Alexander Opitz <opitz.alexander@primacom.net>
- * @copyright  2009-2014 The Authors
+ * @copyright  2009-2015 The Authors
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @link       http://forwardfw.sourceforge.net
  * @since      File available since Release 0.0.7
@@ -45,38 +45,32 @@ class MDB2 extends \ForwardFW\Controller\DataHandler
     /**
      * @var array Prefix for tables
      */
-    private $arTablePrefix = array();
+    private $tablePrefix = array();
 
     /**
      * Loads Data from a connection (DB, SOAP, File)
      *
-     * @param string $strConnection Name of connection
-     * @param array  $arOptions     Options to load the data
+     * @param string $connectionName Name of connection
+     * @param array $options Options to load the data
      *
      * @return mixed Data from the connection.
      */
-    public function loadFrom($strConnection, array $arOptions)
+    public function loadFrom($connectionName, array $options)
     {
-        $conMDB2 = $this->getConnection($strConnection);
+        $conMDB2 = $this->getConnection($connectionName);
 
-        $strQuery = 'SELECT ' . $arOptions['select'] . ' FROM ';
-        if (isset($this->arTablePrefix[$strConnection])) {
-            $strQuery .= '`' . $this->arTablePrefix[$strConnection]
-                .'_' . $arOptions['from'] . '`';
-        } else {
-            $strQuery .= '`' . $arOptions['from'] . '`';
+        $strQuery = 'SELECT ' . $options['select'] . ' FROM ' . $this->getTableName($options['to'], $connectionName);
+        if (isset($options['where'])) {
+            $strQuery .= ' WHERE ' . $options['where'];
         }
-        if (isset($arOptions['where'])) {
-            $strQuery .= ' WHERE ' . $arOptions['where'];
+        if (isset($options['group'])) {
+            $strQuery .= ' GROUP BY ' . $options['group'];
         }
-        if (isset($arOptions['group'])) {
-            $strQuery .= ' GROUP BY ' . $arOptions['group'];
+        if (isset($options['order'])) {
+            $strQuery .= ' ORDER BY ' . $options['order'];
         }
-        if (isset($arOptions['order'])) {
-            $strQuery .= ' ORDER BY ' . $arOptions['order'];
-        }
-        if (isset($arOptions['limit'])) {
-            $strQuery .= ' LIMIT ' . $arOptions['limit'];
+        if (isset($options['limit'])) {
+            $strQuery .= ' LIMIT ' . $options['limit'];
         }
 
         $arResult = array();
@@ -99,22 +93,17 @@ class MDB2 extends \ForwardFW\Controller\DataHandler
     /**
      * Saves Data to a connection (DB, SOAP, File)
      *
-     * @param string $strConnection Name of connection
-     * @param array  $arOptions     Options to load the data
+     * @param string $connectionName Name of connection
+     * @param array $options Options to load the data
      *
      * @return mixed Data from the connection.
      */
-    public function saveTo($strConnection, array $options)
+    public function saveTo($connectionName, array $options)
     {
-        $conMDB2 = $this->getConnection($strConnection);
+        $conMDB2 = $this->getConnection($connectionName);
 
-        $strQuery = 'UPDATE ';
-        if (isset($tablePrefix['default'])) {
-            $strQuery .= $tablePrefix['default']
-                . '_' . $options['to'];
-        } else {
-            $strQuery .= $options['to'];
-        }
+        $strQuery = 'UPDATE ' . $this->getTableName($options['to'], $connectionName);
+
         $strQuery .= ' SET ';
         foreach ($options['values'] as $strName => $value) {
             $arSets[] = $strName . '=' . $this->getSqlValue($options['columns'][$strName], $value, $conMDB2);
@@ -143,22 +132,17 @@ class MDB2 extends \ForwardFW\Controller\DataHandler
     /**
      * Saves Data to a connection (DB, SOAP, File)
      *
-     * @param string $strConnection Name of connection
-     * @param array  $arOptions     Options to load the data
+     * @param string $connectionName Name of connection
+     * @param array $options Options to load the data
+     * @param ForwardFW\Callback $idCallback Callback to give id of object creation
      *
      * @return mixed Data from the connection.
      */
-    public function create($strConnection, array $options)
+    public function create($connectionName, array $options, \ForwardFW\Callback $idCallback = null)
     {
-        $conMDB2 = $this->getConnection($strConnection);
+        $conMDB2 = $this->getConnection($connectionName);
 
-        $strQuery = 'INSERT INTO ';
-        if (isset($tablePrefix['default'])) {
-            $strQuery .= $tablePrefix['default']
-                . '_' . $options['to'];
-        } else {
-            $strQuery .= $options['to'];
-        }
+        $strQuery = 'INSERT INTO ' . $this->getTableName($options['to'], $connectionName);
 
         $strQuery .= ' (' . implode(',', array_keys($options['values'])) . ')';
         $strQuery .= ' VALUES (';
@@ -188,22 +172,16 @@ class MDB2 extends \ForwardFW\Controller\DataHandler
     /**
      * Truncates Data to a connection (DB, SOAP, File)
      *
-     * @param string $strConnection Name of connection
-     * @param array  $arOptions     Options to load the data
+     * @param string $connectionName Name of connection
+     * @param array $options Options to load the data
      *
      * @return mixed Data from the connection.
      */
-    public function truncate($strConnection, array $options)
+    public function truncate($connectionName, array $options)
     {
-        $conMDB2 = $this->getConnection($strConnection);
+        $conMDB2 = $this->getConnection($connectionName);
 
-        $strQuery = 'truncate ';
-        if (isset($tablePrefix['default'])) {
-            $strQuery .= $tablePrefix['default']
-                . '_' . $options['table'];
-        } else {
-            $strQuery .= $options['table'];
-        }
+        $strQuery = 'truncate ' . $this->getTableName($options['table'], $connectionName);
 
         $arResult = array();
         $resultMDB2 = $conMDB2->query($strQuery);
@@ -225,16 +203,16 @@ class MDB2 extends \ForwardFW\Controller\DataHandler
     /**
      * Loads and initialize the connection handler.
      *
-     * @param string $strConnection Name of connection
+     * @param string $connectionName Name of connection
      *
      * @return void
      */
-    public function initConnection($strConnection)
+    public function initConnection($connectionName)
     {
-        $arConfig = $this->getConfigParameter($strConnection);
+        $arConfig = $this->getConfigParameter($connectionName);
 
         if (isset($arConfig['prefix'])) {
-            $this->arTablePrefix[$strConnection] = $arConfig['prefix'];
+            $this->arTablePrefix[$connectionName] = $arConfig['prefix'];
         }
         $options = array('portability' => MDB2_PORTABILITY_ALL ^ MDB2_PORTABILITY_FIX_CASE);
         $options = array_merge($options, $arConfig['options']);
@@ -252,11 +230,28 @@ class MDB2 extends \ForwardFW\Controller\DataHandler
         }
 
         $ret = $conMDB2->exec('set character set utf8');
-        $this->arConnectionCache[$strConnection] = $conMDB2;
+        $this->arConnectionCache[$connectionName] = $conMDB2;
     }
 
     public function getSqlValue($strType, $value, $conMDB2)
     {
         return $conMDB2->quote($value, $strType, true);
+    }
+
+    /**
+     * Returns real table name Prefix or DB dependent changes.
+     *
+     * @param string $tableName Name of table inside application
+     * @param string $connectionName Name of connection
+     *
+     * @return string Name of table inside DB
+     */
+    protected function getTableName($tableName, $connectionName)
+    {
+        if ($this->tablePrefix[$connectionName] !== '') {
+            return $this->tablePrefix[$connectionName] . '_' . $tableName;
+        } else {
+            return $tableName;
+        }
     }
 }
