@@ -22,7 +22,7 @@
  * @package    ForwardFW
  * @subpackage Config
  * @author     Alexander Opitz <opitz.alexander@primacom.net>
- * @copyright  2009-2014 The Authors
+ * @copyright  2009-2015 The Authors
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @link       http://forwardfw.sourceforge.net
  * @since      File available since Release 0.0.9
@@ -61,7 +61,7 @@ class File extends \ForwardFW\Config\Cache\Backend
         $this->path = $path;
         return $this;
     }
-    
+
     /**
      * Gets the path where this cache lies.
      *
