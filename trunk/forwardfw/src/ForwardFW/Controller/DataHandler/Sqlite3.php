@@ -128,6 +128,7 @@ class Sqlite3 extends \ForwardFW\Controller\DataHandler
      *
      * @param string $connectionName Name of connection
      * @param array $options Options to load the data
+     * @param ForwardFW\Callback $idCallback Callback to give id of object creation
      *
      * @return array Empty array
      */
