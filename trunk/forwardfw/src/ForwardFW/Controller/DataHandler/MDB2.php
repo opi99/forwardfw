@@ -77,7 +77,6 @@ class MDB2 extends \ForwardFW\Controller\DataHandler
         $resultMDB2 = $conMDB2->query($strQuery);
 
         if (\MDB2::isError($resultMDB2)) {
-            $this->application->getResponse()->addError($resultMDB2->getMessage() . $resultMDB2->getUserinfo());
             throw new \ForwardFW\Exception\DataHandler(
                 'Error while execute: '
                 . $resultMDB2->getMessage()
@@ -116,7 +115,6 @@ class MDB2 extends \ForwardFW\Controller\DataHandler
         $resultMDB2 = $conMDB2->query($strQuery);
 
         if (\MDB2::isError($resultMDB2)) {
-            $this->application->getResponse()->addError($resultMDB2->getMessage() . $resultMDB2->getUserinfo());
             throw new \ForwardFW\Exception\DataHandler(
                 'Error while execute: '
                 . $resultMDB2->getMessage()
@@ -156,7 +154,6 @@ class MDB2 extends \ForwardFW\Controller\DataHandler
         $resultMDB2 = $conMDB2->query($strQuery);
 
         if (\MDB2::isError($resultMDB2)) {
-            $this->application->getResponse()->addError($resultMDB2->getMessage() . $resultMDB2->getUserinfo());
             throw new \ForwardFW\Exception\DataHandler(
                 'Error while execute: '
                 . $resultMDB2->getMessage()
@@ -187,7 +184,6 @@ class MDB2 extends \ForwardFW\Controller\DataHandler
         $resultMDB2 = $conMDB2->query($strQuery);
 
         if (\MDB2::isError($resultMDB2)) {
-            $this->application->getResponse()->addError($resultMDB2->getMessage() . $resultMDB2->getUserinfo());
             throw new \ForwardFW\Exception\DataHandler(
                 'Error while execute: '
                 . $resultMDB2->getMessage()
@@ -219,9 +215,6 @@ class MDB2 extends \ForwardFW\Controller\DataHandler
         $conMDB2 = \MDB2::connect($arConfig['dsn'], $options);
 
         if (\MDB2::isError($conMDB2)) {
-            $this->application->getResponse()->addError(
-                $conMDB2->getMessage() . $conMDB2->getUserinfo()
-            );
             throw new \ForwardFW\Exception\DataHandler(
                 'Cannot initialize MDB Connection: '
                 . $conMDB2->getMessage()
