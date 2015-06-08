@@ -22,7 +22,7 @@
  * @package    ForwardFW
  * @subpackage Main
  * @author     Alexander Opitz <opitz.alexander@primacom.net>
- * @copyright  2009-2014 The Authors
+ * @copyright  2009-2015 The Authors
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @link       http://forwardfw.sourceforge.net
  * @since      File available since Release 0.0.1
@@ -64,7 +64,7 @@ class Container extends \ArrayObject
      * Creates a new object of type $strObjectName which won't be added to list
      * and returns this object.
      *
-     * @return ForwardFW_Object The created Base_Object
+     * @return ForwardFW\Object The created object
      */
     public function createNew()
     {
@@ -75,7 +75,7 @@ class Container extends \ArrayObject
      * Creates a new Object of type $strObjectName, adds it to the list and
      * returns the object
      *
-     * @return ForwardFW\Object
+     * @return ForwardFW\Object The created object
      */
     public function createNewToList()
     {

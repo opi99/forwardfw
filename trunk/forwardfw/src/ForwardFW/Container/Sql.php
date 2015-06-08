@@ -22,7 +22,7 @@
  * @package    ForwardFW
  * @subpackage Container
  * @author     Alexander Opitz <opitz.alexander@primacom.net>
- * @copyright  2009-2014 The Authors
+ * @copyright  2009-2015 The Authors
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @link       http://forwardfw.sourceforge.net
  * @since      File available since Release 0.0.1
@@ -98,6 +98,23 @@ class Sql extends \ForwardFW\Container
     public function setApplication(\ForwardFW\Controller\ApplicationInterface $application)
     {
         $this->application = $application;
+    }
+
+    public function getApplication()
+    {
+        return $this->application;
+    }
+
+    /**
+     * Creates a new object of type and returns this object.
+     *
+     * @return ForwardFW\Object
+     */
+    public function createNew()
+    {
+        $obj = parent::createNew();
+        $obj->setApplication($this->getApplication());
+        return $obj;
     }
 
     /**
