@@ -63,10 +63,13 @@ class SimpleRouter extends \ForwardFW\Filter\RequestResponse
                 }
                 $this->request->setRoutePath($nextRoute);
 
-                $strFilter = $routeConfig->getFilterClass();
-                $child = new $strFilter(null, $routeConfig->getFilterConfig(), $this->request, $this->response);
-                $parent->setChild($child);
-                $parent = $child;
+                $filterConfigs = $routeConfig->getFilterConfigs();
+                foreach ($filterConfigs as $filterConfig) {
+                    $filterClassName = $filterConfig->getExecutionClass();
+                    $child = new $filterClassName(null, $filterConfig, $this->request, $this->response);
+                    $parent->setChild($child);
+                    $parent = $child;
+                }
                 break;
             }
         }

@@ -22,7 +22,7 @@
  * @package    ForwardFW
  * @subpackage Config
  * @author     Alexander Opitz <opitz.alexander@primacom.net>
- * @copyright  2009-2014 The Authors
+ * @copyright  2009-2015 The Authors
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @link       http://forwardfw.sourceforge.net
  * @since      File available since Release 0.0.11
@@ -45,17 +45,12 @@ class Route extends \ForwardFW\Config
     /**
      * @var string Startpoint of the route
      */
-    private $strStart = '';
+    private $start = '';
 
     /**
-     * @var string FilterClass to call
+     * @var ForwardFW\Config\Filter\RequestResponse[] Config of the filter
      */
-    private $strFilterClass = '';
-
-    /**
-     * @var ForwardFW\Config\Filter\RequestResponse Config of the filter
-     */
-    private $filterConfig = '';
+    private $filterConfigs = array();
 
     /**
      * Sets Startpoint of the route
@@ -71,28 +66,15 @@ class Route extends \ForwardFW\Config
     }
 
     /**
-     * Sets Classame of the RequestResponse filter to add in FilterChain
-     *
-     * @param string $strFilterClass Classname of the RequestResponse filter to add in FilterChain
-     *
-     * @return ForwardFW\Config\Filter\RequestResponse\SimpleRouter
-     */
-    public function setFilterClass($strFilterClass)
-    {
-        $this->strFilterClass = $strFilterClass;
-        return $this;
-    }
-
-    /**
      * Config of the RequestResponse filter
      *
      * @param ForwardFW\Config\Filter\RequestResponse $filterConfig Config of the RequestResponse filter.
      *
      * @return ForwardFW\Config\Filter\RequestResponse\SimpleRouter
      */
-    public function setFilterConfig(\ForwardFW\Config\Filter\RequestResponse $filterConfig)
+    public function addFilterConfig(\ForwardFW\Config\Filter\RequestResponse $filterConfig)
     {
-        $this->filterConfig = $filterConfig;
+        $this->filterConfigs[] = $filterConfig;
         return $this;
     }
 
@@ -107,23 +89,12 @@ class Route extends \ForwardFW\Config
     }
 
     /**
-     * Get Classame of the RequestResponse filter.
-     *
-     * @return string
-     */
-    public function getFilterClass()
-    {
-        return $this->strFilterClass;
-    }
-
-
-    /**
      * Get config of the RequestResponse filter.
      *
-     * @return ForwardFW\Config\Filter\RequestResponse
+     * @return ForwardFW\Config\Filter\RequestResponse[]
      */
-    public function getFilterConfig()
+    public function getFilterConfigs()
     {
-        return $this->filterConfig;
+        return $this->filterConfigs;
     }
 }
