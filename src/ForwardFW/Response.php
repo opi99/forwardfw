@@ -22,7 +22,7 @@
  * @package    ForwardFW
  * @subpackage Main
  * @author     Alexander Opitz <opitz.alexander@primacom.net>
- * @copyright  2009-2014 The Authors
+ * @copyright  2009-2015 The Authors
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @link       http://forwardfw.sourceforge.net
  * @since      File available since Release 0.0.1
@@ -60,10 +60,15 @@ class Response
     /**
      * @var integer HTTP Status Code.
      */
-    private $nHttpStatus = 200;
+    private $httpStatusCode = 200;
 
     /**
-     * @var integer HTTP Status Code.
+     * @var string HTTP Status Message.
+     */
+    private $httpStatusMessage = '';
+
+    /**
+     * @var string Type of content.
      */
     private $strContentType = '';
 
@@ -96,15 +101,20 @@ class Response
     /**
      * Adds an entry to the error array.
      *
-     * @param string $strEntry The entry as string.
+     * @param string $errorMessage The entry as string.
+     * @param integer $httpStatusCode The HTTP Status Code
      *
      * @return ForwardFW_Response Themself.
      */
-    public function addError($strEntry)
+    public function addError($errorMessage, $httpStatusCode = 0)
     {
-        $this->errorTimer->addEntry($strEntry);
-        if ($this->nHttpStatus === 200) {
-            $this->nHttpStatus = 500;
+        $this->errorTimer->addEntry($errorMessage);
+        if ($httpStatusCode !== 0) {
+            $this->setHttpStatus($httpStatusCode, $errorMessage);
+        } else {
+            if ($this->httpStatusCode === 200) {
+                $this->setHttpStatus(500);
+            }
         }
         return $this;
     }
@@ -125,13 +135,15 @@ class Response
     /**
      * Sets the HTTP Status Code
      *
-     * @param integer $nHttpStatus The HTTP Status Code
+     * @param integer $httpStatusCode The HTTP Status Code
+     * @param string $httpStatusMessage The HTTP Status Message
      *
      * @return ForwardFW_Response Themself.
      */
-    public function setHttpStatus($nHttpStatus)
+    public function setHttpStatus($httpStatusCode, $httpStatusMessage = '')
     {
-        $this->nHttpStatus = $nHttpStatus;
+        $this->httpStatusCode = $httpStatusCode;
+        $this->httpStatusMessage = $httpStatusMessage;
         return $this;
     }
 
@@ -198,7 +210,10 @@ class Response
      */
     public function send()
     {
-        header('HTTP/1.1 ' . $this->nHttpStatus);
+        header(
+            'HTTP/1.1 ' . $this->httpStatusCode
+            . ($this->httpStatusMessage !== '' ? ' ' . $this->httpStatusMessage : '')
+        );
         if ($this->strContentType) {
             header('Content-Type: ' . $this->strContentType);
         }

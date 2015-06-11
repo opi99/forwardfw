@@ -74,7 +74,7 @@ class SimpleRouter extends \ForwardFW\Filter\RequestResponse
             }
         }
         if ($this->child === null) {
-            $this->response->addError('No Route "' . $routePath . '" found');
+            $this->response->addError('No Route "' . $routePath . '" found', 404);
         }
 
 
