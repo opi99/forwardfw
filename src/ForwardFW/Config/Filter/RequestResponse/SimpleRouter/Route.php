@@ -72,7 +72,7 @@ class Route extends \ForwardFW\Config
      *
      * @return ForwardFW\Config\Filter\RequestResponse\SimpleRouter
      */
-    public function addFilterConfig(\ForwardFW\Config\Filter\RequestResponse $filterConfig)
+    public function addFilter(\ForwardFW\Config\Filter\RequestResponse $filterConfig)
     {
         $this->filterConfigs[] = $filterConfig;
         return $this;
