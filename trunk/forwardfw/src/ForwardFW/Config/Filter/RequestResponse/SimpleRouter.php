@@ -44,8 +44,14 @@ class SimpleRouter extends \ForwardFW\Config\Filter\RequestResponse
 {
     protected $strExecutionClass = 'ForwardFW\\Filter\\RequestResponse\\SimpleRouter';
 
+    /**
+     * @var ForwardFW\Config\Filter\RequestResponse\SimpleRouter\Route Config of one route
+     */
     private $routes = null;
 
+    /**
+     * Constructor
+     */
     public function __construct()
     {
         $this->routes = new \ArrayObject();
