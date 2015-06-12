@@ -63,6 +63,6 @@ class Session extends \ForwardFW\Filter\RequestResponse
     public function doOutgoingFilter()
     {
         $this->response->addLog('Leave Filter');
-        session_write_close(); 
+        session_write_close();
     }
 }
