@@ -84,6 +84,8 @@ class Json extends \ForwardFW\Filter\RequestResponse
             $this->response->addError($e->getMessage())
                 ->setHttpStatus(400);
         }
+
+        return $response;
     }
 
     /**
