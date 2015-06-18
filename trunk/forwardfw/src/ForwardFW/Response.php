@@ -72,7 +72,15 @@ class Response
      */
     private $strContentType = '';
 
+    /**
+     * @var string The HTTP ContentDisposition
+     */
     private $strContentDisposition = null;
+
+    /**
+     * @var ArrayObject data
+     */
+    private $data = null;
 
     /**
      * Constructor
@@ -83,6 +91,7 @@ class Response
     {
         $this->logTimer   = new Object\Stateless\Timer();
         $this->errorTimer = clone $this->logTimer;
+        $this->data = new \ArrayObject();
     }
 
     /**
@@ -96,6 +105,29 @@ class Response
     {
         $this->logTimer->addEntry($strEntry);
         return $this;
+    }
+
+    /**
+     * Sets data into response. Please NameSpace your keys!
+     *
+     * @param string $key Name of the data
+     * @param mixed $value The data themself
+     * @return void
+     */
+    public function addData($key, $value)
+    {
+        $this->data[$key] = $value;
+    }
+
+    /**
+     * Gets data which was set into response. Please NameSpace your keys!
+     *
+     * @param string $key Name of the data
+     * @return mixed The data themself
+     */
+    public function getData($key)
+    {
+        return ($this->data[$key]);
     }
 
     /**
