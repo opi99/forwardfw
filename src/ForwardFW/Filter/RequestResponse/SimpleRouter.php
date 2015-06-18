@@ -42,6 +42,11 @@ namespace ForwardFW\Filter\RequestResponse;
  */
 class SimpleRouter extends \ForwardFW\Filter\RequestResponse
 {
+    /*
+     * @var string Saved routePath till this point
+     */
+    private $routePath = '';
+
     /**
      * Function to process before your child
      *
@@ -52,12 +57,12 @@ class SimpleRouter extends \ForwardFW\Filter\RequestResponse
         $this->response->addLog('Start Route');
         $parent = $this;
 
-        $routePath = $this->request->getRoutePath();
+        $this->routePath = $this->request->getRoutePath();
 
         foreach ($this->config->getRoutes() as $routeConfig) {
-            if (strncmp($routePath, $routeConfig->getStart(), strlen($routeConfig->getStart())) === 0) {
+            if (strncmp($this->routePath, $routeConfig->getStart(), strlen($routeConfig->getStart())) === 0) {
 
-                $nextRoute = substr($routePath, strlen($routeConfig->getStart()));
+                $nextRoute = substr($this->routePath, strlen($routeConfig->getStart()));
                 if ($nextRoute === false) {
                     $nextRoute = '';
                 }
@@ -74,7 +79,7 @@ class SimpleRouter extends \ForwardFW\Filter\RequestResponse
             }
         }
         if ($this->child === null) {
-            $this->response->addError('No Route "' . $routePath . '" found', 404);
+            $this->response->addError('No Route "' . $this->routePath . '" found', 404);
         }
 
 
@@ -87,6 +92,9 @@ class SimpleRouter extends \ForwardFW\Filter\RequestResponse
      */
     public function doOutgoingFilter()
     {
+        // Restore routePath
+        $this->request->setRoutePath($this->routePath);
+
         $this->response->addLog('End Route');
     }
 }
