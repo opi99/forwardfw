@@ -45,7 +45,7 @@ class SimpleRouter extends \ForwardFW\Config\Filter\RequestResponse
     protected $strExecutionClass = 'ForwardFW\\Filter\\RequestResponse\\SimpleRouter';
 
     /**
-     * @var ForwardFW\Config\Filter\RequestResponse\SimpleRouter\Route Config of one route
+     * @var ForwardFW\Config\Filter\RequestResponse\SimpleRouter\Route[] Config of the routes
      */
     private $routes = null;
 
@@ -57,12 +57,23 @@ class SimpleRouter extends \ForwardFW\Config\Filter\RequestResponse
         $this->routes = new \ArrayObject();
     }
 
+    /**
+     * Adding the config of a Route.
+     *
+     * @param ForwardFW\Config\Filter\RequestResponse\SimpleRouter\Route[] $route The route config to add.
+     * @return void
+     */
     public function addRoute(SimpleRouter\Route $route)
     {
         $this->routes->append($route);
         return $this;
     }
 
+    /**
+     * Returns the configured routes.
+     *
+     * @return ForwardFW\Config\Filter\RequestResponse\SimpleRouter\Route[] Config of routes
+     */
     public function getRoutes()
     {
         return $this->routes;
