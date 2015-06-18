@@ -68,7 +68,13 @@ class Mvc extends \ForwardFW\Filter\RequestResponse
         $this->response->addLog('Stop Mvc View chaining');
     }
 
-    protected function runFilters($filtersConfig)
+    /**
+     * Runs the filters given by config
+     *
+     * @param ForwardFW\Config\Filter[] Configuration of the filters.
+     * @return void
+     */
+    protected function runFilters(array $filtersConfig)
     {
         if ($filtersConfig) {
             $filter = null;
