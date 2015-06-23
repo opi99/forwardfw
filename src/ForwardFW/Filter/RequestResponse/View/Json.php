@@ -68,7 +68,7 @@ class Json extends \ForwardFW\Filter\RequestResponse
      *
      * @return string[] The standard JSON response as array.
      */
-    private function getJsonResponse()
+    protected function getJsonResponse()
     {
         $data = $this->response->getData('json');
         try {
@@ -94,7 +94,7 @@ class Json extends \ForwardFW\Filter\RequestResponse
      * @param string[] Array of Error strings to send as message.
      * @return string[] The standard JSON response as array.
      */
-    private function getJsonErrorResponse($errorEntries)
+    protected function getJsonErrorResponse($errorEntries)
     {
         return array(
             'success' => false,

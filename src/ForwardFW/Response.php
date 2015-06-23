@@ -70,7 +70,7 @@ class Response
     /**
      * @var string Type of content.
      */
-    private $strContentType = '';
+    private $contentType = 'text/plain';
 
     /**
      * @var string The HTTP ContentDisposition
@@ -182,14 +182,24 @@ class Response
     /**
      * Sets the HTTP ContentType
      *
-     * @param string $strContentType The HTTP ContentType
+     * @param string $contentType The HTTP ContentType
      *
      * @return ForwardFW_Response Themself.
      */
-    public function setContentType($strContentType)
+    public function setContentType($contentType)
     {
-        $this->strContentType = $strContentType;
+        $this->contentType = $contentType;
         return $this;
+    }
+
+    /**
+     * Gets the HTTP ContentType
+     *
+     * @return string The HTTP content type.
+     */
+    public function getContentType()
+    {
+        return $this->contentType;
     }
 
     /**
