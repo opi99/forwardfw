@@ -84,7 +84,11 @@ class Mvc extends \ForwardFW\Filter\RequestResponse
                 $filter = new $filterClass($filter, $filterConfig, $this->request, $this->response);
             }
 
-            $filter->doFilter();
+            try {
+                $filter->doFilter();
+            } catch (\Exception $e) {
+                $this->response->addError($e->getMessage());
+            }
         }
     }
 }
