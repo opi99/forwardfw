@@ -39,6 +39,9 @@ spl_autoload_register(
             . str_replace(['\\', '_'], '/', $match[2])
             . ".php";
 
-        include_once $filename;
+        if ($res = @fopen($filename, 'r', true)) {
+            fclose($res);
+            include_once $filename;
+        }
     }
 );
