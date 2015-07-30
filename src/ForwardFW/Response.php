@@ -123,11 +123,21 @@ class Response
      * Gets data which was set into response. Please NameSpace your keys!
      *
      * @param string $key Name of the data
-     * @return mixed The data themself
+     * @return mixed The data themself for given key
      */
     public function getData($key)
     {
-        return ($this->data[$key]);
+        return $this->data[$key];
+    }
+
+    /**
+     * Gets all data which was set into response.
+     *
+     * @return mixed The data themself
+     */
+    public function getAllData()
+    {
+        return $this->data;
     }
 
     /**
