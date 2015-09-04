@@ -50,12 +50,37 @@ class DataHandler extends \ForwardFW\Config\Service
     /** @var string prefix in tables. */
     private $tablePrefix = '';
 
+    private $dsn = '';
+
+    /**
+     * Sets dsn for this connection.
+     *
+     * @param string $dsn Prefix for Tables.
+     *
+     * @return \ForwardFW\Config\Service\DataHandler
+     */
+    public function setDsn($dsn)
+    {
+        $this->dsn = $dsn;
+        return $this;
+    }
+
+    /**
+     * Gets dsn for this connection.
+     *
+     * @return string
+     */
+    public function getDsn()
+    {
+        return $this->dsn;
+    }
+
     /**
      * Sets prefix for the used tables.
      *
      * @param string $tablePrefix Prefix for Tables.
      *
-     * @return ForwardFW\Config\Service
+     * @return \ForwardFW\Config\Service\DataHandler
      */
     public function setTablePrefix($tablePrefix)
     {

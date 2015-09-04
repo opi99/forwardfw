@@ -9,11 +9,17 @@ set_include_path(dirname(__FILE__) . '/libs' . PATH_SEPARATOR . get_include_path
 require_once 'ForwardFW/Autoloader.php';
 
 $GLOBALS['ForwardFW'] = array(
-    'Version' => '0.1.0-dev',
+    'Version' => '0.1.1-dev',
 );
 
 $GLOBALS['ForwardFW\\Filter\\RequestResponse'] = array(
     (new ForwardFW\Config\Filter\RequestResponse\FirePhp()),
+    (new ForwardFW\Config\Filter\RequestResponse\RegisterServices())
+        ->addService(
+            (new ForwardFW\Config\Service\DataHandler\Mdb2())
+                ->setDsn('mysqli://john:doe@localhost/forwardfw')
+                ->setTablePrefix('')
+        ),
     (new ForwardFW\Config\Filter\RequestResponse\Application())
         ->setConfig(
             (new ForwardFW\Config\Application())
@@ -29,25 +35,6 @@ $GLOBALS['ForwardFW\\Filter\\RequestResponse'] = array(
                         ->setTemplatePath(getcwd() . '/../data/templates/smarty')
                 )
         )
-);
-
-$GLOBALS['ForwardFW\\Controller\\DataHandler'] = array(
-    'default' => array(
-        'handler' => 'ForwardFW\\Controller\\DataHandler\\MDB2',
-        'config' => array(
-            'dsn' => 'mysqli://john:doe@localhost/forwardfw',
-            'options' => array(),
-            'prefix'  => '',
-        ),
-    ),
-);
-
-$GLOBALS['ForwardFW\\Controller\\DataHandler\\MDB2'] = array(
-    'default' => array(
-        'dsn' => 'mysqli://john:doe@localhost/forwardfw',
-        'options' => array(),
-        'prefix'  => null,
-    ),
 );
 
 date_default_timezone_set('CET');
