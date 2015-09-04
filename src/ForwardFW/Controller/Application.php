@@ -22,7 +22,7 @@
  * @package    ForwardFW
  * @subpackage Controller
  * @author     Alexander Opitz <opitz.alexander@primacom.net>
- * @copyright  2009-2014 The Authors
+ * @copyright  2009-2015 The Authors
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @link       http://forwardfw.sourceforge.net
  * @since      File available since Release 0.0.1
@@ -61,18 +61,20 @@ class Application extends ApplicationAbstract
     /**
      * Constructor
      *
-     * @param ForwardFW\Config\Application $config   Name of application.
-     * @param ForwardFW\Request            $request  The request object.
-     * @param ForwardFW\Response           $response The request object.
+     * @param \ForwardFW\Config\Application $config         Name of application.
+     * @param \ForwardFW\Request            $request        The request object.
+     * @param \ForwardFW\Response           $response       The request object.
+     * @param \ForwardFW\Service            $serviceManager The services for this application
      *
      * @return void
      */
     public function __construct(
         \ForwardFW\Config\Application $config,
         \ForwardFW\Request $request,
-        \ForwardFW\Response $response
+        \ForwardFW\Response $response,
+        \ForwardFW\ServiceManager $serviceManager
     ) {
-        parent::__construct($config, $request, $response);
+        parent::__construct($config, $request, $response, $serviceManager);
 
         $this->arScreens = $this->config->getScreens();
 
