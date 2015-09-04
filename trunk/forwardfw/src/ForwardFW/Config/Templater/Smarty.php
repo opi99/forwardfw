@@ -45,5 +45,5 @@ class Smarty extends \ForwardFW\Config\Templater
     /**
      * @var string TemplaterClass to call
      */
-    protected $strExecutionClass = 'ForwardFW\\Templater\\Smarty';
+    protected $executionClassName = 'ForwardFW\\Templater\\Smarty';
 }

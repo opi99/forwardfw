@@ -45,5 +45,5 @@ class Twig extends \ForwardFW\Config\Templater
     /**
      * @var string TemplaterClass to call
      */
-    protected $strExecutionClass = 'ForwardFW\\Templater\\Twig';
+    protected $executionClassName = 'ForwardFW\\Templater\\Twig';
 }
