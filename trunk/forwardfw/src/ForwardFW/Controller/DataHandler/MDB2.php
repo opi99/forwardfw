@@ -43,11 +43,6 @@ namespace ForwardFW\Controller\DataHandler;
 class MDB2 extends \ForwardFW\Controller\DataHandler
 {
     /**
-     * @var array Prefix for tables
-     */
-    private $tablePrefix = array();
-
-    /**
      * Loads Data from a connection (DB, SOAP, File)
      *
      * @param string $connectionName Name of connection
@@ -205,14 +200,9 @@ class MDB2 extends \ForwardFW\Controller\DataHandler
      */
     public function initConnection($connectionName)
     {
-        $arConfig = $this->getConfigParameter($connectionName);
-
-        if (isset($arConfig['prefix'])) {
-            $this->arTablePrefix[$connectionName] = $arConfig['prefix'];
-        }
         $options = array('portability' => MDB2_PORTABILITY_ALL ^ MDB2_PORTABILITY_FIX_CASE);
-        $options = array_merge($options, $arConfig['options']);
-        $conMDB2 = \MDB2::connect($arConfig['dsn'], $options);
+//         $options = array_merge($options, $arConfig['options']);
+        $conMDB2 = \MDB2::connect($this->config->getDsn(), $options);
 
         if (\MDB2::isError($conMDB2)) {
             throw new \ForwardFW\Exception\DataHandler(
@@ -241,8 +231,10 @@ class MDB2 extends \ForwardFW\Controller\DataHandler
      */
     protected function getTableName($tableName, $connectionName)
     {
-        if ($this->tablePrefix[$connectionName] !== '') {
-            return $this->tablePrefix[$connectionName] . '_' . $tableName;
+        $tablePrefix = $this->config->getTablePrefix();
+
+        if ($tablePrefix !== '') {
+            return $tablePrefix . '_' . $tableName;
         } else {
             return $tableName;
         }
