@@ -45,7 +45,7 @@ class SimpleView extends \ForwardFW\Config\Filter\RequestResponse
     /**
      * @var string Class of application to call
      */
-    protected $strExecutionClass = 'ForwardFW\\Filter\\RequestResponse\\View\\SimpleView';
+    protected $executionClassName = 'ForwardFW\\Filter\\RequestResponse\\View\\SimpleView';
 
     /**
      * @var string Name of file to output
