@@ -42,7 +42,7 @@ namespace ForwardFW\Config\Cache\Backend;
  */
 class File extends \ForwardFW\Config\Cache\Backend
 {
-    protected $strExecutionClass = 'ForwardFW\\Cache\\Backend\\File';
+    protected $executionClassName = 'ForwardFW\\Cache\\Backend\\File';
 
     /*
      * @var string Path to cache

@@ -42,7 +42,7 @@ namespace ForwardFW\Config\Cache\Backend;
  */
 class Session extends \ForwardFW\Config\Cache\Backend
 {
-    protected $strExecutionClass = 'ForwardFW\\Cache\\Backend\\Session';
+    protected $executionClassName = 'ForwardFW\\Cache\\Backend\\Session';
 
     /*
      * @var string Name of the session.

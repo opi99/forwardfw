@@ -88,7 +88,7 @@ abstract class Frontend implements FrontendInterface
         \ForwardFW\Controller\ApplicationInterface $application,
         \ForwardFW\Config\Cache\Backend $config
     ) {
-        $className = $config->getExecutionClass();
+        $className = $config->getExecutionClassName();
         return new $className($application, $config);
     }
 
@@ -106,7 +106,7 @@ abstract class Frontend implements FrontendInterface
         \ForwardFW\Config\Cache\Frontend $config,
         \ForwardFW\Cache\BackendInterface $backend
     ) {
-        $className = $config->getExecutionClass();
+        $className = $config->getExecutionClassName();
         return new $className($application, $backend);
     }
 

@@ -45,9 +45,9 @@ class Application extends \ForwardFW\Config
     use \ForwardFW\Config\Traits\Execution;
 
     /**
-     * @var string strExecutionClass
+     * @var string $executionClassName
      */
-    protected $strExecutionClass = 'ForwardFW\\Controller\\Application';
+    protected $executionClassName = 'ForwardFW\\Controller\\Application';
 
     /**
      * @var string Name of the application

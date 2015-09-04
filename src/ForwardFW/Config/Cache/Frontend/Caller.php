@@ -42,5 +42,5 @@ namespace ForwardFW\Config\Cache\Frontend;
  */
 class Caller extends \ForwardFW\Config\Cache\Frontend
 {
-    protected $strExecutionClass = 'ForwardFW\\Cache\\Frontend\\Caller';
+    protected $executionClassName = 'ForwardFW\\Cache\\Frontend\\Caller';
 }
