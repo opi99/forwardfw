@@ -210,7 +210,8 @@ class Sql extends \ForwardFW\Container
         $strWhereClause = null,
         $strGroupBy = null,
         $strOrderBy = null,
-        $strLimit = null
+        $strLimit = null,
+        $tableAs = null
     ) {
         $dataHandler = \ForwardFW\Controller\DataHandler::getInstance(
             $this->application
@@ -219,7 +220,7 @@ class Sql extends \ForwardFW\Container
             $this->strDBConnection,
             array(
                 'select' => '*',
-                'from'   => $this->strTableName,
+                'from'   => $this->strTableName . ($tableAs ? ' as ' . $tableAs: ''),
                 'where'  => $strWhereClause,
                 'group'  => $strGroupBy,
                 'order'  => (is_null($strOrderBy) ? $this->strOrderBy : $strOrderBy),
