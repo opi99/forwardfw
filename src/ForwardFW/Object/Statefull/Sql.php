@@ -70,9 +70,9 @@ class Sql extends \ForwardFW\Object\Statefull
      * The application this container is running in.
      *
      * @access private
-     * @var \ForwardFW\Controller\ApplicationInterface
+     * @var \ForwardFW\ServiceManager
      */
-    protected $application = null;
+    protected $serviceManager = null;
 
     /**
      * constructor
@@ -99,14 +99,14 @@ class Sql extends \ForwardFW\Object\Statefull
         );
     }
 
-    public function setApplication(\ForwardFW\Controller\ApplicationInterface $application)
+    public function setServiceManager(\ForwardFW\ServiceManager $serviceManager)
     {
-        $this->application = $application;
+        $this->serviceManager = $serviceManager;
     }
 
-    public function getApplication()
+    public function getServiceManager()
     {
-        return $this->application;
+        return $this->serviceManager;
     }
 
     /**
@@ -146,9 +146,8 @@ class Sql extends \ForwardFW\Object\Statefull
      */
     public function loadByWhereClause($strWhereClause)
     {
-        $dataHandler = \ForwardFW\Controller\DataHandler::getInstance(
-            $this->application
-        );
+        $dataHandler = $this->serviceManager->getService('ForwardFW\\Controller\\DataHandlerInterface');
+
         $arResult = $dataHandler->loadFrom(
             $this->strDBConnection,
             array(
@@ -178,9 +177,7 @@ class Sql extends \ForwardFW\Object\Statefull
 
         unset($arToSave[$this->strIdFieldName]);
 
-        $dataHandler = \ForwardFW\Controller\DataHandler::getInstance(
-            $this->application
-        );
+        $dataHandler = $this->serviceManager->getService('ForwardFW\\Controller\\DataHandlerInterface');
 
         $id = $this->getId();
         if (empty($id)) {
@@ -205,6 +202,16 @@ class Sql extends \ForwardFW\Object\Statefull
             );
         }
         return $isOk;
+    }
+
+    public function loadByArray($arRow)
+    {
+        parent::loadByArray($arRow);
+
+        $tableConfig = $this->getTableConfig();
+        if ($tableConfig[$this->strIdFieldName] === 'integer') {
+            $this->id = (int) $this->id;
+        }
     }
 
     public function getTableConfig()

@@ -80,8 +80,8 @@ class Mvc extends \ForwardFW\Filter\RequestResponse
             $filter = null;
 
             foreach (array_reverse($filtersConfig) as $filterConfig) {
-                $filterClass = $filterConfig->getExecutionClass();
-                $filter = new $filterClass($filter, $filterConfig, $this->request, $this->response);
+                $filterClass = $filterConfig->getExecutionClassName();
+                $filter = new $filterClass($filter, $filterConfig, $this->request, $this->response, $this->serviceManager);
             }
 
             try {

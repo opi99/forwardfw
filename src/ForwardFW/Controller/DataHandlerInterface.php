@@ -43,22 +43,13 @@ namespace ForwardFW\Controller;
 interface DataHandlerInterface
 {
     /**
-     * Constructor
-     *
-     * @param ForwardFW\Controller\ApplicationInterface $application The running application.
-     *
-     * @return void
-     */
-    public function __construct(ApplicationInterface $application);
-
-    /**
      * Returns an instance of configured DataHandler.
      *
      * @param ForwardFW\Controller\ApplicationInterface $application The running application.
      *
      * @return void
      */
-    public static function getInstance(ApplicationInterface $application);
+//     public static function getInstance(ApplicationInterface $application);
 
     /**
      * Loads Data from cache or from a connection (DB, SOAP, File) if cache failed.

@@ -95,14 +95,14 @@ class Sql extends \ForwardFW\Container
         );
     }
 
-    public function setApplication(\ForwardFW\Controller\ApplicationInterface $application)
+    public function setServiceManager(\ForwardFW\ServiceManager $serviceManager)
     {
-        $this->application = $application;
+        $this->serviceManager = $serviceManager;
     }
 
-    public function getApplication()
+    public function getServiceManager()
     {
-        return $this->application;
+        return $this->serviceManager;
     }
 
     /**
@@ -113,7 +113,7 @@ class Sql extends \ForwardFW\Container
     public function createNew()
     {
         $obj = parent::createNew();
-        $obj->setApplication($this->getApplication());
+        $obj->setServiceManager($this->getServiceManager());
         return $obj;
     }
 
@@ -180,9 +180,8 @@ class Sql extends \ForwardFW\Container
      */
     public function countByWhereClause($strWhereClause)
     {
-        $dataHandler = \ForwardFW\Controller\DataHandler::getInstance(
-            $this->application
-        );
+        $dataHandler = $this->serviceManager->getService('ForwardFW\\Controller\\DataHandlerInterface');
+
         $arResult = $dataHandler->loadFrom(
             $this->strDBConnection,
             array(
@@ -213,9 +212,8 @@ class Sql extends \ForwardFW\Container
         $strLimit = null,
         $tableAs = null
     ) {
-        $dataHandler = \ForwardFW\Controller\DataHandler::getInstance(
-            $this->application
-        );
+        $dataHandler = $this->serviceManager->getService('ForwardFW\\Controller\\DataHandlerInterface');
+
         $arResult = $dataHandler->loadFrom(
             $this->strDBConnection,
             array(
@@ -253,9 +251,8 @@ class Sql extends \ForwardFW\Container
      */
     public function truncate()
     {
-        $dataHandler = \ForwardFW\Controller\DataHandler::getInstance(
-            $this->application
-        );
+        $dataHandler = $this->serviceManager->getService('ForwardFW\\Controller\\DataHandlerInterface');
+
         $arResult = $dataHandler->truncate(
             $this->strDBConnection,
             array(
