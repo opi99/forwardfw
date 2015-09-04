@@ -45,14 +45,16 @@ interface ApplicationInterface
     /**
      * Constructor
      *
-     * @param ForwardFW\Config\Application $config   Name of application.
-     * @param ForwardFW\Request            $request  The ForwardFW request object.
-     * @param ForwardFW\Response           $response The ForwardFW response object.
+     * @param \ForwardFW\Config\Application $config   Name of application.
+     * @param \ForwardFW\Request            $request  The ForwardFW request object.
+     * @param \ForwardFW\Response           $response The ForwardFW response object.
+     * @param \ForwardFW\Service            $serviceManager The services for this application
      */
     public function __construct(
         \ForwardFW\Config\Application $config,
         \ForwardFW\Request $request,
-        \ForwardFW\Response $response
+        \ForwardFW\Response $response,
+        \ForwardFW\ServiceManager $serviceManager
     );
 
     /**
@@ -61,7 +63,6 @@ interface ApplicationInterface
      * @return string generated content form screens
      */
     public function run();
-
 
     /**
      * Returns the name of the application
@@ -80,14 +81,21 @@ interface ApplicationInterface
     /**
      * Returns the request object
      *
-     * @return ForwardFW\Request
+     * @return \ForwardFW\Request
      */
     public function getRequest();
 
     /**
      * Returns the response object
      *
-     * @return ForwardFW\Response
+     * @return \ForwardFW\Response
      */
     public function getResponse();
+
+    /**
+     * Returns the response object of this process
+     *
+     * @return \ForwardFW\Response
+     */
+    public function getServiceManager();
 }

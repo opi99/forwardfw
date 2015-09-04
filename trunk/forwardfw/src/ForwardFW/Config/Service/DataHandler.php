@@ -18,56 +18,58 @@
  *
  * PHP version 5
  *
- * @category   Filter
+ * @category   ServiceManager
  * @package    ForwardFW
- * @subpackage RequestResponse
+ * @subpackage Config
  * @author     Alexander Opitz <opitz.alexander@primacom.net>
- * @copyright  2009-2014 The Authors
+ * @copyright  2015 The Authors
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @link       http://forwardfw.sourceforge.net
- * @since      File available since Release 0.0.1
+ * @since      File available since Release 0.0.11
  */
 
-namespace ForwardFW\Filter\RequestResponse;
+namespace ForwardFW\Config\Service;
 
 /**
- * This class loads and runs the requested Application.
+ * Config for a Service.
  *
- * @category   Filter
+ * @category   ServiceManager
  * @package    ForwardFW
- * @subpackage RequestResponse
+ * @subpackage Config
  * @author     Alexander Opitz <opitz.alexander@primacom.net>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @link       http://forwardfw.sourceforge.net
  */
-class Application extends \ForwardFW\Filter\RequestResponse
+class DataHandler extends \ForwardFW\Config\Service
 {
-    /**
-     * Function to process before your child
-     *
-     * @return void
-     */
-    public function doIncomingFilter()
-    {
-        $strClass = $this->config->getConfig()->getExecutionClassName();
-        $this->response->addLog('Start Application: ' . $this->config->getConfig()->getName());
+    protected $executionClassName = 'ForwardFW\\Controller\\DataHandler';
 
-        $application = new $strClass(
-            $this->config->getConfig(),
-            $this->request,
-            $this->response,
-            $this->serviceManager
-        );
-        $application->run();
+    protected $interfaceName = 'ForwardFW\\Controller\\DataHandlerInterface';
+
+    // No different DataHandler configurable yet. Maybe remove DataHandler and declare this as different startable services?
+    /** @var string prefix in tables. */
+    private $tablePrefix = '';
+
+    /**
+     * Sets prefix for the used tables.
+     *
+     * @param string $tablePrefix Prefix for Tables.
+     *
+     * @return ForwardFW\Config\Service
+     */
+    public function setTablePrefix($tablePrefix)
+    {
+        $this->tablePrefix = $tablePrefix;
+        return $this;
     }
 
     /**
-     * Function to process after your child
+     * Gets prefix for the used tables.
      *
-     * @return void
+     * @return string
      */
-    public function doOutgoingFilter()
+    public function getTablePrefix()
     {
-        $this->response->addLog('End Application');
+        return $this->tablePrefix;
     }
 }

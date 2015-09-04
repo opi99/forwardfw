@@ -18,56 +18,57 @@
  *
  * PHP version 5
  *
- * @category   Filter
+ * @category   ServiceManager
  * @package    ForwardFW
- * @subpackage RequestResponse
+ * @subpackage Config
  * @author     Alexander Opitz <opitz.alexander@primacom.net>
- * @copyright  2009-2014 The Authors
+ * @copyright  2015 The Authors
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @link       http://forwardfw.sourceforge.net
- * @since      File available since Release 0.0.1
+ * @since      File available since Release 0.0.11
  */
 
-namespace ForwardFW\Filter\RequestResponse;
+namespace ForwardFW\Config;
 
 /**
- * This class loads and runs the requested Application.
+ * Config for a Service.
  *
- * @category   Filter
+ * @category   ServiceManager
  * @package    ForwardFW
- * @subpackage RequestResponse
+ * @subpackage Config
  * @author     Alexander Opitz <opitz.alexander@primacom.net>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @link       http://forwardfw.sourceforge.net
  */
-class Application extends \ForwardFW\Filter\RequestResponse
+class Service extends \ForwardFW\Config
 {
-    /**
-     * Function to process before your child
-     *
-     * @return void
-     */
-    public function doIncomingFilter()
-    {
-        $strClass = $this->config->getConfig()->getExecutionClassName();
-        $this->response->addLog('Start Application: ' . $this->config->getConfig()->getName());
+    use \ForwardFW\Config\Traits\Execution;
 
-        $application = new $strClass(
-            $this->config->getConfig(),
-            $this->request,
-            $this->response,
-            $this->serviceManager
-        );
-        $application->run();
+    /**
+     * @var string Interface which this service represents.
+     */
+    protected $interfaceName = '';
+
+    /**
+     * Sets name of interface this service represents.
+     *
+     * @param string $interfaceName Name of interface this service represents.
+     *
+     * @return ForwardFW\Config\Service
+     */
+    public function setInterfaceName($interfaceName)
+    {
+        $this->interfaceName = $interfaceName;
+        return $this;
     }
 
     /**
-     * Function to process after your child
+     * Get name of interface this service represents.
      *
-     * @return void
+     * @return string
      */
-    public function doOutgoingFilter()
+    public function getInterfaceName()
     {
-        $this->response->addLog('End Application');
+        return $this->interfaceName;
     }
 }

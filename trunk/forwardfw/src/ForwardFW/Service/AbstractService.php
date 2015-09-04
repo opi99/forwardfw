@@ -18,56 +18,57 @@
  *
  * PHP version 5
  *
- * @category   Filter
+ * @category   ServiceManager
  * @package    ForwardFW
- * @subpackage RequestResponse
+ * @subpackage Main
  * @author     Alexander Opitz <opitz.alexander@primacom.net>
- * @copyright  2009-2014 The Authors
+ * @copyright  2015 The Authors
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @link       http://forwardfw.sourceforge.net
- * @since      File available since Release 0.0.1
+ * @since      File available since Release 0.1.1
  */
 
-namespace ForwardFW\Filter\RequestResponse;
+namespace ForwardFW\Service;
 
 /**
- * This class loads and runs the requested Application.
+ * This interface defines services which can be started.
  *
- * @category   Filter
+ * @category   ServiceManager
  * @package    ForwardFW
- * @subpackage RequestResponse
+ * @subpackage Main
  * @author     Alexander Opitz <opitz.alexander@primacom.net>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @link       http://forwardfw.sourceforge.net
  */
-class Application extends \ForwardFW\Filter\RequestResponse
+class AbstractService
 {
+    /** @var \ForwardFW\ServiceManager The ServiceManager instance. */
+    protected $serviceManager;
+
+    /** @var \ForwardFW\Config\Service The config for this service. */
+    protected $config;
+
     /**
-     * Function to process before your child
+     * Constructor
+     *
+     * @param \ForwardFW\ServiceManager $response The ServiceManager instance.
+     * @param \ForwardFW\Config\Service $config Config for the service, needs to be verified in the service.
      *
      * @return void
      */
-    public function doIncomingFilter()
+    public function __construct(\ForwardFW\ServiceManager $serviceManager, \ForwardFW\Config\Service $config)
     {
-        $strClass = $this->config->getConfig()->getExecutionClassName();
-        $this->response->addLog('Start Application: ' . $this->config->getConfig()->getName());
-
-        $application = new $strClass(
-            $this->config->getConfig(),
-            $this->request,
-            $this->response,
-            $this->serviceManager
-        );
-        $application->run();
+        $this->serviceManager = $serviceManager;
+        $this->config = $config;
     }
 
     /**
-     * Function to process after your child
+     * Returns the ServiceManager instance
      *
-     * @return void
+     * @return \ForwardFW\ServiceManager
      */
-    public function doOutgoingFilter()
+    public function getServiceManager()
     {
-        $this->response->addLog('End Application');
+        return $this->serviceManager;
     }
 }

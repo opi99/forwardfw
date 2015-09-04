@@ -57,6 +57,11 @@ abstract class ApplicationAbstract extends View implements ApplicationInterface
     protected $response;
 
     /**
+     * @var ForwardFW\ServiceManager The ServiceManager object
+     */
+    protected $serviceManager = null;
+
+    /**
      * @var \ForwardFW\Config\Application Configuration
      */
     protected $config = null;
@@ -64,20 +69,23 @@ abstract class ApplicationAbstract extends View implements ApplicationInterface
     /**
      * Constructor
      *
-     * @param \ForwardFW\Config\Application $config   Name of application.
-     * @param \ForwardFW\Request            $request  The request object.
-     * @param \ForwardFW\Response           $response The request object.
+     * @param \ForwardFW\Config\Application $config         Name of application.
+     * @param \ForwardFW\Request            $request        The request object.
+     * @param \ForwardFW\Response           $response       The request object.
+     * @param \ForwardFW\Service            $serviceManager The services for this application
      *
      * @return void
      */
     public function __construct(
         \ForwardFW\Config\Application $config,
         \ForwardFW\Request $request,
-        \ForwardFW\Response $response
+        \ForwardFW\Response $response,
+        \ForwardFW\ServiceManager $serviceManager
     ) {
-        $this->config   = $config;
-        $this->request  = $request;
+        $this->config = $config;
+        $this->request = $request;
         $this->response = $response;
+        $this->serviceManager = $serviceManager;
 
         parent::__construct($this);
     }
@@ -112,7 +120,7 @@ abstract class ApplicationAbstract extends View implements ApplicationInterface
     /**
      * Returns the request object
      *
-     * @return ForwardFW_Request
+     * @return \ForwardFW\Request
      */
     public function getRequest()
     {
@@ -122,10 +130,20 @@ abstract class ApplicationAbstract extends View implements ApplicationInterface
     /**
      * Returns the response object
      *
-     * @return ForwardFW_Response
+     * @return \ForwardFW\Response
      */
     public function getResponse()
     {
         return $this->response;
+    }
+
+    /**
+     * Returns the response object of this process
+     *
+     * @return \ForwardFW\Response
+     */
+    public function getServiceManager()
+    {
+        return $this->serviceManager;
     }
 }

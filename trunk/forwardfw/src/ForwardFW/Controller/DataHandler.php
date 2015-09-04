@@ -40,25 +40,21 @@ namespace ForwardFW\Controller;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @link       http://forwardfw.sourceforge.net
  */
-class DataHandler extends \ForwardFW\Controller implements DataHandlerInterface
+class DataHandler extends \ForwardFW\Service\AbstractService implements DataHandlerInterface
 {
     /**
      * @var array Cache of connections
      */
     protected $connectionCache = array();
 
-    /**
-     * Constructor
-     *
-     * @param ForwardFW\Controller\ApplicationInterface $application The running application.
-     *
-     * @return void
-     */
-    public function __construct(ApplicationInterface $application)
+    public function __construct(\ForwardFW\ServiceManager $serviceManager, \ForwardFW\Config\Service $config)
     {
-        parent::__construct($application);
+        if ($config instanceof \ForwardFW\Config\Service\DataHandler) {
+            parent::__construct($serviceManager, $config);
+        } else {
+            throw new \Exception('Not my config class');
+        }
     }
-
     /**
      * Returns an instance of configured DataHandler.
      *
@@ -66,16 +62,17 @@ class DataHandler extends \ForwardFW\Controller implements DataHandlerInterface
      *
      * @return void
      */
-    public static function getInstance(ApplicationInterface $application)
-    {
-        if (isset($GLOBALS['DataLoader']['instance'][$application->getName()])) {
-            $return = $GLOBALS['DataLoader']['instance'][$application->getName()];
-        } else {
-            $return = new self($application);
-            $GLOBALS['DataLoader']['instance'][$application->getName()] = $return;
-        }
-        return $return;
-    }
+// No instancing DataHandler is a service now.
+//     public static function getInstance(ApplicationInterface $application)
+//     {
+//         if (isset($GLOBALS['DataLoader']['instance'][$application->getName()])) {
+//             $return = $GLOBALS['DataLoader']['instance'][$application->getName()];
+//         } else {
+//             $return = new self($application);
+//             $GLOBALS['DataLoader']['instance'][$application->getName()] = $return;
+//         }
+//         return $return;
+//     }
 
     /**
      * Loads Data from cache or from a connection (DB, SOAP, File) if cache failed.

@@ -40,7 +40,7 @@ namespace ForwardFW\Filter\RequestResponse;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @link       http://forwardfw.sourceforge.net
  */
-class SimpleRouter extends \ForwardFW\Filter\RequestResponse
+class RegisterServices extends \ForwardFW\Filter\RequestResponse
 {
     /*
      * @var string Saved routePath till this point
@@ -54,35 +54,11 @@ class SimpleRouter extends \ForwardFW\Filter\RequestResponse
      */
     public function doIncomingFilter()
     {
-        $this->response->addLog('Start Route');
-        $parent = $this;
+        $this->response->addLog('Register Services');
 
-        $this->routePath = $this->request->getRoutePath();
-
-        foreach ($this->config->getRoutes() as $routeConfig) {
-            if (strncmp($this->routePath, $routeConfig->getStart(), strlen($routeConfig->getStart())) === 0) {
-
-                $nextRoute = substr($this->routePath, strlen($routeConfig->getStart()));
-                if ($nextRoute === false) {
-                    $nextRoute = '';
-                }
-                $this->request->setRoutePath($nextRoute);
-
-                $filterConfigs = $routeConfig->getFilterConfigs();
-                foreach ($filterConfigs as $filterConfig) {
-                    $filterClassName = $filterConfig->getExecutionClassName();
-                    $child = new $filterClassName(null, $filterConfig, $this->request, $this->response, $this->serviceManager);
-                    $parent->setChild($child);
-                    $parent = $child;
-                }
-                break;
-            }
+        foreach ($this->config->getServices() as $serviceConfig) {
+            $this->getServiceManager()->registerService($serviceConfig);
         }
-        if ($this->child === null) {
-            $this->response->addError('No Route "' . $this->routePath . '" found', 404);
-        }
-
-
     }
 
     /**
@@ -92,9 +68,9 @@ class SimpleRouter extends \ForwardFW\Filter\RequestResponse
      */
     public function doOutgoingFilter()
     {
-        // Restore routePath
-        $this->request->setRoutePath($this->routePath);
-
-        $this->response->addLog('End Route');
+        $this->response->addLog('Stop Services');
+        foreach ($this->config->getServices() as $serviceConfig) {
+            $this->getServiceManager()->stopService($serviceConfig->getInterfaceName());
+        }
     }
 }
