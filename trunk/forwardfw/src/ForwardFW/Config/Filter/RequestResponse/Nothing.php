@@ -45,5 +45,5 @@ class Nothing extends \ForwardFW\Config\Filter\RequestResponse
     /**
      * @var string Class of application to call
      */
-    protected $strExecutionClass = 'ForwardFW\\Filter\\RequestResponse\\Nothing';
+    protected $executionClassName = 'ForwardFW\\Filter\\RequestResponse\\Nothing';
 }

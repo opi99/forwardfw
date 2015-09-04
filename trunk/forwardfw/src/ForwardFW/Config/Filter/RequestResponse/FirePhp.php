@@ -42,5 +42,5 @@ namespace ForwardFW\Config\Filter\RequestResponse;
  */
 class FirePhp extends \ForwardFW\Config\Filter\RequestResponse
 {
-    protected $strExecutionClass = 'ForwardFW\\Filter\\RequestResponse\\FirePhp';
+    protected $executionClassName = 'ForwardFW\\Filter\\RequestResponse\\FirePhp';
 }

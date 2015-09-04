@@ -45,7 +45,7 @@ class Mvc extends \ForwardFW\Config\Filter\RequestResponse
     /**
      * @var string Class of application to call
      */
-    protected $strExecutionClass = 'ForwardFW\\Filter\\RequestResponse\\Application\\Mvc';
+    protected $executionClassName = 'ForwardFW\\Filter\\RequestResponse\\Application\\Mvc';
 
     /**
      * @var ForwardFW\Config\Filter\RequestResponse[] Config of the controller filter

@@ -42,7 +42,7 @@ namespace ForwardFW\Config\Filter\RequestResponse;
  */
 class SimpleRouter extends \ForwardFW\Config\Filter\RequestResponse
 {
-    protected $strExecutionClass = 'ForwardFW\\Filter\\RequestResponse\\SimpleRouter';
+    protected $executionClassName = 'ForwardFW\\Filter\\RequestResponse\\SimpleRouter';
 
     /**
      * @var ForwardFW\Config\Filter\RequestResponse\SimpleRouter\Route[] Config of the routes
@@ -60,7 +60,7 @@ class SimpleRouter extends \ForwardFW\Config\Filter\RequestResponse
     /**
      * Adding the config of a Route.
      *
-     * @param ForwardFW\Config\Filter\RequestResponse\SimpleRouter\Route[] $route The route config to add.
+     * @param ForwardFW\Config\Filter\RequestResponse\SimpleRouter\Route $route The route config to add.
      * @return void
      */
     public function addRoute(SimpleRouter\Route $route)

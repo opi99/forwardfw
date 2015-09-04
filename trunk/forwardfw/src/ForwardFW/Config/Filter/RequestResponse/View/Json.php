@@ -45,5 +45,5 @@ class Json extends \ForwardFW\Config\Filter\RequestResponse
     /**
      * @var string Class of application to call
      */
-    protected $strExecutionClass = 'ForwardFW\\Filter\\RequestResponse\\View\\Json';
+    protected $executionClassName = 'ForwardFW\\Filter\\RequestResponse\\View\\Json';
 }

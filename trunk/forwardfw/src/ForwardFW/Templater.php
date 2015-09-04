@@ -82,7 +82,7 @@ class Templater
     final private static function createTemplater(
         Config\Templater $config, Controller\Application $application
     ) {
-        $strTemplaterName = $config->getExecutionClass();
+        $strTemplaterName = $config->getExecutionClassName();
         $templater = new $strTemplaterName($config, $application);
         return $templater;
     }

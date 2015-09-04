@@ -42,5 +42,5 @@ namespace ForwardFW\Config\Filter\RequestResponse;
  */
 class Login extends \ForwardFW\Config\Filter\RequestResponse
 {
-    protected $strExecutionClass = 'ForwardFW\\Filter\\RequestResponse\\Login';
+    protected $executionClassName = 'ForwardFW\\Filter\\RequestResponse\\Login';
 }

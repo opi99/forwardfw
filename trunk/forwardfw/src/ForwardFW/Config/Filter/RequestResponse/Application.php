@@ -45,7 +45,7 @@ class Application extends \ForwardFW\Config\Filter\RequestResponse
     /**
      * @var string Class of application to call
      */
-    protected $strExecutionClass = 'ForwardFW\\Filter\\RequestResponse\\Application';
+    protected $executionClassName = 'ForwardFW\\Filter\\RequestResponse\\Application';
 
     /**
      * @var ForwardFW\Config\Application Config of the application
@@ -55,9 +55,9 @@ class Application extends \ForwardFW\Config\Filter\RequestResponse
     /**
      * Config of the RequestResponse filter
      *
-     * @param ForwardFW\Config\Filter\RequestResponse $config Config of the RequestResponse filter.
+     * @param ForwardFW\Config\Application $config Config of the RequestResponse filter.
      *
-     * @return FForwardFW\Config\Filter\RequestResponse\Application
+     * @return ForwardFW\Config\Filter\RequestResponse\Application
      */
     public function setConfig(\ForwardFW\Config\Application $config)
     {

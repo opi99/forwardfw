@@ -42,14 +42,14 @@ namespace ForwardFW\Config\Traits;
  */
 trait Execution
 {
-    public function setExecutionClass($strExecutionClass)
+    public function setExecutionClassName($executionClassName)
     {
-        $this->strExecutionClass = $strExecutionClass;
+        $this->executionClassName = $executionClassName;
         return $this;
     }
 
-    public function getExecutionClass()
+    public function getExecutionClassName()
     {
-        return $this->strExecutionClass;
+        return $this->executionClassName;
     }
 }
