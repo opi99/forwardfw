@@ -43,11 +43,6 @@ namespace ForwardFW\Controller\DataHandler;
 class Sqlite3 extends \ForwardFW\Controller\DataHandler
 {
     /**
-     * @var array Prefix for tables
-     */
-    private $tablePrefix = array();
-
-    /**
      * Loads Data from a connection (DB, SOAP, File)
      *
      * @param string $connectionName Name of connection
@@ -206,13 +201,8 @@ class Sqlite3 extends \ForwardFW\Controller\DataHandler
      */
     public function initConnection($connectionName)
     {
-        $arConfig = $this->getConfigParameter($connectionName);
-
-        if (isset($arConfig['prefix'])) {
-            $this->tablePrefix[$connectionName] = $arConfig['prefix'];
-        }
         try {
-            $connection = new \SQLite3($arConfig['dsn'], SQLITE3_OPEN_READWRITE);
+            $connection = new \SQLite3($this->config->getDsn(), SQLITE3_OPEN_READWRITE);
         } catch (\Exception $e) {
             $this->application->getResponse()->addError(
                 $e->getMessage()
@@ -246,8 +236,10 @@ class Sqlite3 extends \ForwardFW\Controller\DataHandler
      */
     protected function getTableName($tableName, $connectionName)
     {
-        if ($this->tablePrefix[$connectionName] !== '') {
-            return $this->tablePrefix[$connectionName] . '_' . $tableName;
+        $tablePrefix = $this->config->getTablePrefix();
+
+        if ($tablePrefix !== '') {
+            return $tablePrefix . '_' . $tableName;
         } else {
             return $tableName;
         }
