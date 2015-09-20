@@ -42,11 +42,20 @@ namespace ForwardFW;
  */
 class ServiceManager
 {
-    /** @var \ForwardFW\Request The request instance. */
+    /**
+     * @var \ForwardFW\Request The request instance
+     */
     protected $request;
 
-    /** @var \ForwardFW\ResponseThe response instance. */
+    /**
+     * @var \ForwardFW\Response The response instance
+     */
     protected $response;
+
+    /**
+     * @var \ForwardFW\Config\ServiceManager The config for the service manager
+     */
+    protected $config;
 
     private $registeredServices = array();
 
@@ -55,12 +64,14 @@ class ServiceManager
     /**
      * Constructor
      *
-     * @param \ForwardFW\Request $request The request instance.
-     * @param \ForwardFW\Response $response The request instance.
+     * @param \ForwardFW\Config\ServiceManager $config Config of this ServiceManager
+     * @param \ForwardFW\Request $request The request instance
+     * @param \ForwardFW\Response $response The request instance
      *
      * @return void
      */
     public function __construct(
+        \ForwardFW\Config\ServiceManager $config,
         \ForwardFW\Request $request,
         \ForwardFW\Response $response
     ) {

@@ -30,12 +30,42 @@
 
 namespace ForwardFW;
 
-$request = new Request();
-$response = new Response();
+class Bootstrap
+{
+    /**
+     * @var Request
+     */
+    private $request;
 
-ob_start();
-Filter\RequestResponse::getFilters($request, $response)
-    ->doFilter();
+    /**
+     * @var Response
+     */
+    private $response;
 
-$response->send();
-ob_flush();
+    /**
+     * @var ForwardFW\Config\Runner
+     */
+    private $config;
+
+    public function __construct()
+    {
+        require_once __DIR__ . '/Autoloader.php';
+        $this->request = new Request();
+        $this->response = new Response();
+    }
+
+    public function loadConfig($file)
+    {
+        $this->config = require_once $file;
+        if (!$this->config instanceof \ForwardFW\Config\Runner) {
+            throw new \Exception('Config didn\'t return a runner configuration.');
+        }
+    }
+
+    public function run()
+    {
+        $class = $this->config->getExecutionClassName();
+        $instance = new $class($this->config, $this->request, $this->response);
+        $instance->run();
+    }
+}

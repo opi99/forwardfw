@@ -18,28 +18,34 @@
  *
  * PHP version 5
  *
- * @category   Config
+ * @category   ServiceManager
  * @package    ForwardFW
- * @subpackage Interface
+ * @subpackage Config
  * @author     Alexander Opitz <opitz.alexander@primacom.net>
- * @copyright  2009-2015 The Authors
+ * @copyright  2015 The Authors
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @link       http://forwardfw.sourceforge.net
- * @since      File available since Release 0.0.11
+ * @since      File available since Release 0.1.0
  */
 
-namespace ForwardFW\Config\Filter;
+namespace ForwardFW\Config;
 
 /**
- * Config for a Cache.
+ * Config for a Service.
  *
- * @category   Config
+ * @category   ServiceManager
  * @package    ForwardFW
- * @subpackage Main
+ * @subpackage Config
  * @author     Alexander Opitz <opitz.alexander@primacom.net>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @link       http://forwardfw.sourceforge.net
  */
-class RequestResponse extends \ForwardFW\Config\Processor
+class ServiceManager extends \ForwardFW\Config
 {
+    use \ForwardFW\Config\Traits\Execution;
+
+    /**
+     * @var string $executionClassName
+     */
+    protected $executionClassName = 'ForwardFW\\ServiceManager';
 }
