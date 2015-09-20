@@ -1,3 +1,3 @@
 <?php
 
-include_once(dirname(__FILE__) . '/Smarty/Smarty.class.php');
+include_once(__DIR__ . '/Smarty/Smarty.class.php');
