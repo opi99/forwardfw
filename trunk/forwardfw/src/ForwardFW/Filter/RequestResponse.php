@@ -90,9 +90,6 @@ class RequestResponse extends \ForwardFW\Filter
             $this->response = $response;
             $this->serviceManager = $serviceManager;
         }
-if ($this->serviceManager === null) {
-    debug_print_backtrace();
-}
         $this->config = $config;
     }
 
@@ -152,27 +149,25 @@ if ($this->serviceManager === null) {
      *
      * @param ForwardFW\Request $request The request for this application
      * @param ForwardFW\Response $response The response for this application
+     * @param ForwardFW\ServiceManager $serviceManager The service manager for this application
      *
      * @return \ForwardFW\Filter\RequestResponse The start filter with the
      * configured childs. So the filters can be started.
      */
     public static function getFilters(
         \ForwardFW\Request $request,
-        \ForwardFW\Response $response
+        \ForwardFW\Response $response,
+        \ForwardFW\ServiceManager $serviceManager,
+        \ArrayObject $processors
     ) {
-        $serviceManager = new \ForwardFW\ServiceManager($request, $response);
-
         $filter = null;
-        $arConfig = $GLOBALS[get_class()];
-        if (is_array($arConfig)) {
-            $arConfig = array_reverse($arConfig);
-            foreach ($arConfig as $config) {
-                $strFilterClass = $config->getExecutionClassName();
-                $filter = new $strFilterClass($filter, $config, $request, $response, $serviceManager);
-            }
-        } else {
-            // Fehler werfen
+
+        $processors = array_reverse($processors->getArrayCopy());
+        foreach ($processors as $config) {
+            $strFilterClass = $config->getExecutionClassName();
+            $filter = new $strFilterClass($filter, $config, $request, $response, $serviceManager);
         }
+
         return $filter;
     }
 }
