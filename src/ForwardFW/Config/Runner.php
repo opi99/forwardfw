@@ -50,6 +50,11 @@ class Runner extends \ForwardFW\Config
     protected $executionClassName = 'ForwardFW\\Runner';
 
     /**
+     * @var boolean True if runner should send data otherwise false
+     */
+    private $shouldSend = true;
+
+    /**
      * @var \ForwardFW\Config\Service Config of the services
      */
     private $services;
@@ -58,7 +63,7 @@ class Runner extends \ForwardFW\Config
      * @var \ForwardFW\Config\Processor Config of the processors
      */
     private $processors;
-    
+
     /**
      * @var \ForwardFW\Config\ServiceManager Config of the service manager
      */
@@ -71,6 +76,18 @@ class Runner extends \ForwardFW\Config
     {
         $this->services = new \ArrayObject();
         $this->processors = new \ArrayObject();
+    }
+
+    public function setShouldSend($shouldSend)
+    {
+        $this->shouldSend = $shouldSend;
+        return $this;
+    }
+
+
+    public function getShouldSend()
+    {
+        return $this->shouldSend;
     }
 
     /**

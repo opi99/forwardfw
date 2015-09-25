@@ -64,14 +64,14 @@ class Runner
         $this->runProcessors();
         $this->stopServices();
     }
-    
+
     protected function initializeServiceManager()
     {
         $serviceManagerConfig = $this->config->getServiceManager();
         $class = $serviceManagerConfig->getExecutionClassName();
         $this->serviceManager = new $class($serviceManagerConfig, $this->request, $this->response);
     }
-    
+
     protected function registerServices()
     {
         $this->response->addLog('Register Services');
@@ -80,17 +80,21 @@ class Runner
             $this->serviceManager->registerService($serviceConfig);
         }
     }
-    
+
     protected function runProcessors()
     {
         ob_start();
         Filter\RequestResponse::getFilters($this->request, $this->response, $this->serviceManager, $this->config->getProcessors())
             ->doFilter();
 
-        $this->response->send();
-        ob_flush();
+        if ($this->config->getShouldSend()) {
+            $this->response->send();
+            ob_end_flush();
+        } else {
+            ob_end_clean();
+        }
     }
-    
+
     protected function stopServices()
     {
         $this->response->addLog('Stop Services');
