@@ -107,13 +107,14 @@ class Container extends \ArrayObject
      * @param ForwardFW\Object $obj The object that should be removed from list.
      *
      * @return boolean True if object could be removed otherwise false
+     * @TODO Only possible for statefull objects
      */
     public function remove(Object $obj)
     {
         $bWasRemoveable = false;
         if ($this->isUseable($obj)) {
             foreach ($this as $key => $value) {
-                if ($value->ID == $obj->ID) {
+                if ($value->getId() == $obj->ID) {
                     unset($this[$key]);
                     $bWasRemoveable = true;
                 }
@@ -122,6 +123,26 @@ class Container extends \ArrayObject
         return $bWasRemoveable;
     }
 
+    /**
+     * Removes given Object from List and returns state if it was in list.
+     *
+     * @param mixed $id Id of the object to remove
+     *
+     * @return boolean True if object could be removed otherwise false
+     * @TODO Only possible for statefull objects
+     */
+    public function removeById($id)
+    {
+        $bWasRemoveable = false;
+        foreach ($this as $key => $value) {
+            if ($value->getId() == $id) {
+                unset($this[$key]);
+                $bWasRemoveable = true;
+            }
+        }
+
+        return $bWasRemoveable;
+    }
     /**
      * Creates a new object of the List type, loads it with the array information
      * and add it to the list.

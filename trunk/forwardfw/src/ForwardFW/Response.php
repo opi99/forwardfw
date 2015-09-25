@@ -175,6 +175,19 @@ class Response
     }
 
     /**
+     * Overwrite existent content string.
+     *
+     * @param string $content The content as string.
+     *
+     * @return ForwardFW_Response Themself.
+     */
+    public function setContent($content)
+    {
+        $this->content = $content;
+        return $this;
+    }
+
+    /**
      * Sets the HTTP Status Code
      *
      * @param integer $httpStatusCode The HTTP Status Code
@@ -266,8 +279,8 @@ class Response
             'HTTP/1.1 ' . $this->httpStatusCode
             . ($this->httpStatusMessage !== '' ? ' ' . $this->httpStatusMessage : '')
         );
-        if ($this->strContentType) {
-            header('Content-Type: ' . $this->strContentType);
+        if ($this->contentType) {
+            header('Content-Type: ' . $this->contentType);
         }
         if (null !== $this->strContentDisposition) {
             header('Content-Disposition: ' . $this->strContentDisposition);

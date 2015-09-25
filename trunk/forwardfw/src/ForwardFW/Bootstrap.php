@@ -56,10 +56,21 @@ class Bootstrap
 
     public function loadConfig($file)
     {
-        $this->config = require_once $file;
-        if (!$this->config instanceof \ForwardFW\Config\Runner) {
+        $this->config = require $file;
+
+        if (!$this->config instanceof Config\Runner) {
             throw new \Exception('Config didn\'t return a runner configuration.');
         }
+    }
+
+    public function getRequest()
+    {
+        return $this->request;
+    }
+
+    public function getResponse()
+    {
+        return $this->response;
     }
 
     public function run()
