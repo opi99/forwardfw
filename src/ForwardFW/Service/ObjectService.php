@@ -45,11 +45,41 @@ class ObjectService extends AbstractService implements ObjectServiceInterface, S
     /** @var \ForwardFW\Object[][] Holds the objects per className and id*/
     protected $objects = array();
 
-    public function getObject($className, $id)
+    public function getObjects($className, $ids)
     {
+        $objects = array();
+        $missing = array();
+
+        foreach ($ids as $id) {
+            $object = $this->getObject($className, $id, false);
+            if ($object === null) {
+                $missing[] = $id;
+            } else {
+                $objects[] = $object;
+            }
+        }
+
+        if (count($missing)) {
+            // Load Container
+            $classNameContainer = str_replace('\\Object\\', '\\Container\\', $className);
+            $container = new $classNameContainer();
+            $container->setServiceManager($this->getServiceManager());
+            $container->loadByIds($missing);
+            foreach ($container as $object) {
+                $objects[] = $object;
+                $this->setObject($object);
+            }
+        }
+
+        return $objects;
+    }
+
+    public function getObject($className, $id, $autoload = true)
+    {
+        $object = null;
         if (isset($this->objects[$className][$id])) {
             $object = $this->objects[$className][$id];
-        } else {
+        } elseif ($autoload) {
             $object = $this->instanciateObject($className, $id);
             $this->setObject($object);
         }

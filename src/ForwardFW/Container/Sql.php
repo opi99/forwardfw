@@ -195,6 +195,11 @@ class Sql extends \ForwardFW\Container
         return (int) reset($row);
     }
 
+    public function loadByIds($ids)
+    {
+        return $this->loadByWhereClause(/*$this->strIdFieldName . '*/ 'id in (' . implode(',', $ids) . ')');
+    }
+
     /**
      * Loads all data from given table by given where clause.
      *
