@@ -91,6 +91,7 @@ class Response
     {
         $this->logTimer   = new Object\Stateless\Timer();
         $this->errorTimer = clone $this->logTimer;
+        $this->logTimer->addEntry('Started after: ' . (microtime(true) - $_SERVER["REQUEST_TIME_FLOAT"]));
         $this->data = new \ArrayObject();
     }
 
