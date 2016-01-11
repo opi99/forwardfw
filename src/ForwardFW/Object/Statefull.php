@@ -115,4 +115,12 @@ class Statefull extends \ForwardFW\Object
     {
         $this->id = $id;
     }
+
+    /**
+     * Clones the statfull object and resets the id, so it can be saved as new one.
+     */
+    public function __clone()
+    {
+        $this->id = 0;
+    }
 }
