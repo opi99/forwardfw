@@ -100,4 +100,14 @@ interface DataHandlerInterface
      * @return void
      */
     public function initConnection($connectionName);
+
+    /**
+     * Quotes and escapes a string to be save in SQL query.
+     *
+     * @param string $connectionName Name of connection
+     * @param string $value The string to be quoted savely
+     *
+     * @return string
+     */
+    public function quoteString($connectionName, $value);
 }

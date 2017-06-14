@@ -219,4 +219,18 @@ class DataHandler extends \ForwardFW\Service\AbstractService implements DataHand
 
         $this->connectionCache[$connectionName] = $handler;
     }
+
+    /**
+     * Quotes and escapes a string to be save in SQL query.
+     *
+     * @param string $connectionName Name of connection
+     * @param string $value The string to be quoted savely
+     *
+     * @return string
+     */
+    public function quoteString($connectionName, $value)
+    {
+        $handler = $this->getConnection($connectionName);
+        return $handler->quoteString($connectionName, $value);
+    }
 }
