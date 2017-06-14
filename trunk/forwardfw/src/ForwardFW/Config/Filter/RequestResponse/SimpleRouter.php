@@ -50,6 +50,11 @@ class SimpleRouter extends \ForwardFW\Config\Filter\RequestResponse
     private $routes = null;
 
     /**
+     * @var boolean Set to false if the SimpleRouter shouldn't add an error if route was not found.
+     */
+    private $routeNotFoundError = true;
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -61,7 +66,7 @@ class SimpleRouter extends \ForwardFW\Config\Filter\RequestResponse
      * Adding the config of a Route.
      *
      * @param ForwardFW\Config\Filter\RequestResponse\SimpleRouter\Route $route The route config to add.
-     * @return void
+     * @return $this
      */
     public function addRoute(SimpleRouter\Route $route)
     {
@@ -77,5 +82,28 @@ class SimpleRouter extends \ForwardFW\Config\Filter\RequestResponse
     public function getRoutes()
     {
         return $this->routes;
+    }
+
+    /**
+     * Set if a route not found error should be set or not.
+     *
+     * @param boolean $routeNotFoundError True if you want a route not found error otherwise false
+     * @return $this
+     */
+    public function setRouteNotFoundError($routeNotFoundError = true)
+    {
+        $this->routeNotFoundError = $routeNotFoundError;
+        return $this;
+    }
+
+
+    /**
+     * Get if a route not found error should be set or not.
+     *
+     * @return boolean True if want a route not found error should be set otherwise false.
+     */
+    public function getRouteNotFoundError()
+    {
+        return $this->routeNotFoundError;
     }
 }
