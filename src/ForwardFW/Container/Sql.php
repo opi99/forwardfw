@@ -155,10 +155,18 @@ class Sql extends \ForwardFW\Container
      */
     public function buildWhereClause($bHidden, array $arFields = null)
     {
+        $dataHandler = $this->serviceManager->getService('ForwardFW\\Controller\\DataHandlerInterface');
+
         if (null !== $arFields) {
             foreach ($arFields as $strField => $value) {
                 if ($value !== null) {
-                    $arWhere[] = $strField . '="' . $value . '"';
+                    if (is_string($value)) {
+                        $arWhere[] = $strField . '=' . $dataHandler->quoteString($this->strDBConnection, $value);
+                    } elseif (is_integer($value) || is_float($value)) {
+                        $arWhere[] = $strField . '=' . $value;
+                    } else {
+                        throw new \Exception('Invalid Value');
+                    }
                 }
             }
         }
