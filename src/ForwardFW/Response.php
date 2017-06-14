@@ -189,7 +189,7 @@ class Response
     }
 
     /**
-     * Sets the HTTP Status Code
+     * Sets the HTTP Status Code and Message
      *
      * @param integer $httpStatusCode The HTTP Status Code
      * @param string $httpStatusMessage The HTTP Status Message
@@ -201,6 +201,26 @@ class Response
         $this->httpStatusCode = $httpStatusCode;
         $this->httpStatusMessage = $httpStatusMessage;
         return $this;
+    }
+
+    /**
+     * Gets the HTTP Status Code
+     *
+     * @return integer The HTTP Status Code
+     */
+    public function getHttpStatusCode()
+    {
+        return $this->httpStatusCode;
+    }
+
+    /**
+     * Gets the HTTP Status Message
+     *
+     * @return string The HTTP Status Message
+     */
+    public function getHttpStatusMessage()
+    {
+        return $this->httpStatusMessage;
     }
 
     /**
@@ -237,6 +257,16 @@ class Response
     {
         $this->strContentDisposition = $strContentDisposition;
         return $this;
+    }
+
+    /**
+     * Gets the HTTP ContentDisposition
+     *
+     * @return string The HTTP ContentDisposition
+     */
+    public function getContentDisposition()
+    {
+        return $this->strContentDisposition;
     }
 
     /**
