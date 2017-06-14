@@ -78,7 +78,7 @@ class SimpleRouter extends \ForwardFW\Filter\RequestResponse
                 break;
             }
         }
-        if ($this->child === null) {
+        if ($this->child === null && $this->config->getRouteNotFoundError()) {
             $this->response->addError('No Route "' . $this->routePath . '" found', 404);
         }
 
@@ -92,9 +92,21 @@ class SimpleRouter extends \ForwardFW\Filter\RequestResponse
      */
     public function doOutgoingFilter()
     {
-        // Restore routePath
-        $this->request->setRoutePath($this->routePath);
-
         $this->response->addLog('End Route');
+    }
+
+    /**
+     * Function to process filtering incoming/child/outgoing
+     *
+     * @return void
+     */
+    public function doFilter()
+    {
+        try {
+            parent::doFilter();
+        } finally {
+            // Restore routePath
+            $this->request->setRoutePath($this->routePath);
+        }
     }
 }
