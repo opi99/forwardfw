@@ -41,7 +41,7 @@ namespace ForwardFW;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @link       http://forwardfw.sourceforge.net
  */
-abstract class Object
+abstract class ObjectAbstract
 {
     public function __construct() {}
 }

@@ -41,7 +41,7 @@ namespace ForwardFW\Object;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @link       http://forwardfw.sourceforge.net
  */
-class Statefull extends \ForwardFW\Object
+class Statefull extends \ForwardFW\ObjectAbstract
 {
     /**
      * @var mixed Content of id
