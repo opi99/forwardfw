@@ -93,6 +93,7 @@ class Application extends ApplicationAbstract
     public function run()
     {
         $strProcessScreen = $this->getProcessScreen();
+        $this->response->setContentType($this->config->getContentType());
 
         try {
             $this->screen = $this->getScreen($strProcessScreen);

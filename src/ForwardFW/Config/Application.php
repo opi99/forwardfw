@@ -68,6 +68,11 @@ class Application extends \ForwardFW\Config
      * @var ForwardFW\Config\Templater
      */
     private $templaterConfig = null;
+    
+    /**
+     * Default content type of this application
+     */
+    private $contentType = 'text/html';
 
     /**
      * Sets name of the application.
@@ -152,5 +157,15 @@ class Application extends \ForwardFW\Config
     public function getTemplaterConfig()
     {
         return $this->templaterConfig;
+    }
+
+    public function getContentType(): string
+    {
+        return $this->contentType;
+    }
+
+    public function setContentType(string $contentType)
+    {
+        $this->contentType = $contentType;
     }
 }

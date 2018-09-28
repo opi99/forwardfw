@@ -49,6 +49,8 @@ class SimpleView extends \ForwardFW\Filter\RequestResponse
      */
     public function doIncomingFilter()
     {
+        $this->response->setContentType('text/html');
+
         $this->response->addContent(
             file_get_contents($this->config->getFileName())
         );
