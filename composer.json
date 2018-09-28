@@ -1,0 +1,6 @@
+{
+    "require": {
+        "kodus/chrome-logger": "^1.0",
+        "smarty/smarty": "^3.1"
+    }
+}

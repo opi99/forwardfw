@@ -50,6 +50,7 @@ class Bootstrap
     public function __construct()
     {
         require_once __DIR__ . '/Autoloader.php';
+        require_once __DIR__ . '/../../vendor/autoload.php';
         $this->request = new Request();
         $this->response = new Response();
     }
