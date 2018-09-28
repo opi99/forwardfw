@@ -7,7 +7,7 @@ return (new ForwardFW\Config\Runner())
                 ->setTablePrefix('')
         )
         ->addProcessor(
-            new ForwardFW\Config\Filter\RequestResponse\FirePhp()
+            new ForwardFW\Config\Filter\RequestResponse\ChromeLogger()
         )
         ->addProcessor(
             (new ForwardFW\Config\Filter\RequestResponse\Application())
