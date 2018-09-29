@@ -53,26 +53,26 @@ class Bootstrap
         $this->response = new Response();
     }
 
-    public function loadConfig($file)
+    public function loadConfig(string $file): void
     {
         $this->config = require $file;
 
         if (!$this->config instanceof Config\Runner) {
-            throw new \Exception('Config didn\'t return a runner configuration.');
+            throw new \ForwardFW\Exception\BootstrapException('Config didn\'t return a runner configuration.');
         }
     }
 
-    public function getRequest()
+    public function getRequest(): Request
     {
         return $this->request;
     }
 
-    public function getResponse()
+    public function getResponse(): Response
     {
         return $this->response;
     }
 
-    public function run()
+    public function run(): void
     {
         $class = $this->config->getExecutionClassName();
         $instance = new $class($this->config, $this->request, $this->response);
