@@ -8,24 +8,24 @@ class Benchmark_Part5_Test extends Benchmark_Part5_Base
 
     private $object = null;
 
-    public function setData($strData)
+    public function setData(string $strData): Benchmark_Part5_Test
     {
         $this->strData = $strData;
         return $this;
     }
 
-    public function getData()
+    public function getData(): string
     {
         return $this->strData;
     }
 
-    public function setObject(Benchmark_Part5_Test $obj)
+    public function setObject(Benchmark_Part5_Test $obj): Benchmark_Part5_Test
     {
         $this->object = $obj;
         return $this;
     }
 
-    public function getObject()
+    public function getObject(): Benchmark_Part5_Test
     {
         return $this->object;
     }

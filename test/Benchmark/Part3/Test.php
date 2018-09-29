@@ -8,7 +8,7 @@ class Benchmark_Part3_Test extends Benchmark_Part3_Base
 
     private $object = null;
 
-    public function setData($strData)
+    public function setData(string $strData)
     {
         $this->strData = $strData;
     }
