@@ -61,7 +61,6 @@ class SimpleRouter extends \ForwardFW\Filter\RequestResponse
 
         foreach ($this->config->getRoutes() as $routeConfig) {
             if (strncmp($this->routePath, $routeConfig->getStart(), strlen($routeConfig->getStart())) === 0) {
-
                 $nextRoute = substr($this->routePath, strlen($routeConfig->getStart()));
                 if ($nextRoute === false) {
                     $nextRoute = '';
@@ -81,8 +80,6 @@ class SimpleRouter extends \ForwardFW\Filter\RequestResponse
         if ($this->child === null && $this->config->getRouteNotFoundError()) {
             $this->response->addError('No Route "' . $this->routePath . '" found', 404);
         }
-
-
     }
 
     /**

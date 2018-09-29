@@ -30,7 +30,6 @@
 
 namespace ForwardFW\Object;
 
-
 /**
  * A basic object/model inside ForwardFW, which can autoload its data fields.
  *

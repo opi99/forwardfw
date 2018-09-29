@@ -64,7 +64,8 @@ class Templater
      * @return ForwardFW\Templater
      */
     public static function factory(
-        Config\Templater $config, Controller\Application $application
+        Config\Templater $config,
+        Controller\Application $application
     ) {
         if (is_null(self::$instance)) {
             self::$instance = static::createTemplater($config, $application);
@@ -80,7 +81,8 @@ class Templater
      * @return ForwardFW\Templater
      */
     final private static function createTemplater(
-        Config\Templater $config, Controller\Application $application
+        Config\Templater $config,
+        Controller\Application $application
     ) {
         $strTemplaterName = $config->getExecutionClassName();
         $templater = new $strTemplaterName($config, $application);

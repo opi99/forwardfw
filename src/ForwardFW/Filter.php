@@ -75,7 +75,6 @@ abstract class Filter
      */
     abstract public function doIncomingFilter();
 
-
     /**
      * Function to process after your child
      *
@@ -90,7 +89,8 @@ abstract class Filter
      *
      * @return void
      */
-    public function setChild(Filter $child = null) {
+    public function setChild(Filter $child = null)
+    {
         $this->child = $child;
     }
 

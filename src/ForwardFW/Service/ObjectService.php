@@ -107,7 +107,11 @@ class ObjectService extends AbstractService implements ObjectServiceInterface, S
         $this->objects[$className][$object->getId()] = $object;
     }
 
-    public function start() {}
+    public function start()
+    {
+    }
 
-    public function stop() {}
+    public function stop()
+    {
+    }
 }

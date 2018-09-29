@@ -178,7 +178,7 @@ class Request
      */
     public function getRoutePath()
     {
-        if ($this->routePath === NULL) {
+        if ($this->routePath === null) {
             $this->routePath = $this->findRoutePath();
         }
 

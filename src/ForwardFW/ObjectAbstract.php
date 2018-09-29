@@ -30,7 +30,6 @@
 
 namespace ForwardFW;
 
-
 /**
  * A basic object/model inside ForwardFW, which can autoload its data fields.
  *
@@ -43,5 +42,7 @@ namespace ForwardFW;
  */
 abstract class ObjectAbstract
 {
-    public function __construct() {}
+    public function __construct()
+    {
+    }
 }

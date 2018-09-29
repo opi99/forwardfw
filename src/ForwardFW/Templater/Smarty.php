@@ -61,7 +61,8 @@ class Smarty extends \ForwardFW\Controller implements \ForwardFW\Templater\Templ
      * @return void
      */
     public function __construct(
-        \ForwardFW\Config\Templater $config, \ForwardFW\Controller\ApplicationInterface $application
+        \ForwardFW\Config\Templater $config,
+        \ForwardFW\Controller\ApplicationInterface $application
     ) {
         parent::__construct($application);
 

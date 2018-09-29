@@ -72,7 +72,7 @@ class Sqlite3 extends \ForwardFW\Controller\DataHandler
 
         $result = $connection->query($strQuery);
 
-        if ($result === FALSE) {
+        if ($result === false) {
             $this->application->getResponse()->addError($connection->lastErrorMsg());
             throw new \ForwardFW\Exception\DataHandler(
                 'Error while execute: ' . $connection->lastErrorMsg()
@@ -109,7 +109,7 @@ class Sqlite3 extends \ForwardFW\Controller\DataHandler
         $arResult = array();
         $result = $connection->exec($strQuery);
 
-        if ($result === FALSE) {
+        if ($result === false) {
             $this->application->getResponse()->addError($connection->lastErrorMsg());
             throw new \ForwardFW\Exception\DataHandler(
                 'Error while execute: ' . $connection->lastErrorMsg()
@@ -144,7 +144,7 @@ class Sqlite3 extends \ForwardFW\Controller\DataHandler
         $arResult = array();
         $result = $connection->exec($strQuery);
 
-        if ($result === FALSE) {
+        if ($result === false) {
             $this->application->getResponse()->addError($connection->lastErrorMsg());
             throw new \ForwardFW\Exception\DataHandler(
                 'Error while execute: ' . $connection->lastErrorMsg()
@@ -173,7 +173,7 @@ class Sqlite3 extends \ForwardFW\Controller\DataHandler
         // Delete content of table
         $result = $connection->exec('DELETE FROM ' . $table);
 
-        if ($result === FALSE) {
+        if ($result === false) {
             $this->application->getResponse()->addError($connection->lastErrorMsg());
             throw new \ForwardFW\Exception\DataHandler(
                 'Error while execute: ' . $connection->lastErrorMsg()
@@ -183,7 +183,7 @@ class Sqlite3 extends \ForwardFW\Controller\DataHandler
         // Reset auto_inc counter
         $result = $connection->exec('DELETE FROM SQLITE_SEQUENCE WHERE name = \'' . $table . '\'');
 
-        if ($result === FALSE) {
+        if ($result === false) {
             $this->application->getResponse()->addError($connection->lastErrorMsg());
             throw new \ForwardFW\Exception\DataHandler(
                 'Error while execute: ' . $connection->lastErrorMsg()

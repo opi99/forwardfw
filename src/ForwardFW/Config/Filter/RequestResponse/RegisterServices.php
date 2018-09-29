@@ -78,6 +78,4 @@ class RegisterServices extends \ForwardFW\Config\Filter\RequestResponse
     {
         return $this->services;
     }
-
-
 }
