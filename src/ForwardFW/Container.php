@@ -22,7 +22,7 @@
  * @package    ForwardFW
  * @subpackage Main
  * @author     Alexander Opitz <opitz.alexander@primacom.net>
- * @copyright  2009-2015 The Authors
+ * @copyright  2009-2019 The Authors
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @link       http://forwardfw.sourceforge.net
  * @since      File available since Release 0.0.1
@@ -64,7 +64,7 @@ class Container extends \ArrayObject
      * Creates a new object of type $strObjectName which won't be added to list
      * and returns this object.
      *
-     * @return ForwardFW\Object The created object
+     * @return ForwardFW\ObjectAbstract The created object
      */
     public function createNew()
     {
@@ -75,7 +75,7 @@ class Container extends \ArrayObject
      * Creates a new Object of type $strObjectName, adds it to the list and
      * returns the object
      *
-     * @return ForwardFW\Object The created object
+     * @return ForwardFW\ObjectAbstract The created object
      */
     public function createNewToList()
     {
@@ -87,11 +87,11 @@ class Container extends \ArrayObject
     /**
      * Adds object to the list
      *
-     * @param ForwardFW\Object $obj The object which should be add
+     * @param ForwardFW\ObjectAbstract $obj The object which should be add
      *
      * @return boolean if $obj could be add to the list
      */
-    public function add(Object $obj)
+    public function add(ObjectAbstract $obj)
     {
         $bIsUseable = false;
         if ($this->isUseable($obj)) {
@@ -104,12 +104,12 @@ class Container extends \ArrayObject
     /**
      * Removes given Object from List and returns state if it was in list.
      *
-     * @param ForwardFW\Object $obj The object that should be removed from list.
+     * @param ForwardFW\ObjectAbstract $obj The object that should be removed from list.
      *
      * @return boolean True if object could be removed otherwise false
      * @TODO Only possible for statefull objects
      */
-    public function remove(Object $obj)
+    public function remove(ObjectAbstract $obj)
     {
         $bWasRemoveable = false;
         if ($this->isUseable($obj)) {
@@ -178,13 +178,13 @@ class Container extends \ArrayObject
     /**
      * Examines if the given object is from typet this list will hold.
      *
-     * @param ForwardFW\Object $obj Object to examine
+     * @param ForwardFW\ObjectAbstract $obj Object to examine
      *
      * @return boolean True if given object can be managed by this list
      * otherwise false.
      * @TODO: Examine if it is a child of type
      */
-    public function isUseable(Object $obj)
+    public function isUseable(ObjectAbstract $obj)
     {
         if ($this->strObjectName === get_class($obj)) {
             return true;
