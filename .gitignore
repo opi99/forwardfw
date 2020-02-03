@@ -1,3 +1,19 @@
+### project
 vendor/*
 composer.phar
+composer.lock
 cache
+
+### ide
+/.idea/
+*.iml
+nbproject
+*.swp
+*.kdev4
+
+### os
+.DS_Store
+thumbs.db
+desktop.ini
+.directory
+
