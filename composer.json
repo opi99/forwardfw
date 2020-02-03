@@ -6,7 +6,10 @@
         }
     },
     "require": {
-        "kodus/chrome-logger": "^1.0",
-        "smarty/smarty": "^3.1"
+        "kodus/chrome-logger": "^1.0"
+    },
+    "suggest": {
+        "smarty/smarty": "Smarty - One of the possible templating engines",
+        "twig/twig": "Twig - One of the possible templating engines"
     }
 }
