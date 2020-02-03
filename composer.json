@@ -1,4 +1,5 @@
 {
+    "name": "forward/forwardfw",
     "autoload": {
         "psr-4": {
             "ForwardFW\\": "src/ForwardFW"
