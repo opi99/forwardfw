@@ -43,6 +43,7 @@ namespace ForwardFW\Config;
 class Application extends \ForwardFW\Config
 {
     use \ForwardFW\Config\Traits\Execution;
+    use \ForwardFW\Config\Traits\Templater;
 
     /**
      * @var string $executionClassName
@@ -64,11 +65,6 @@ class Application extends \ForwardFW\Config
      */
     private $strIdent = '';
 
-    /**
-     * @var ForwardFW\Config\Templater
-     */
-    private $templaterConfig = null;
-    
     /**
      * Default content type of this application
      */
@@ -113,12 +109,6 @@ class Application extends \ForwardFW\Config
         return $this;
     }
 
-    public function setTemplaterConfig(Templater $templaterConfig)
-    {
-        $this->templaterConfig = $templaterConfig;
-        return $this;
-    }
-
     /**
      * Get name of the application.
      *
@@ -147,16 +137,6 @@ class Application extends \ForwardFW\Config
     public function getIdent()
     {
         return $this->strIdent;
-    }
-
-    /**
-     * Get config of Templater
-     *
-     * @return string
-     */
-    public function getTemplaterConfig()
-    {
-        return $this->templaterConfig;
     }
 
     public function getContentType(): string
