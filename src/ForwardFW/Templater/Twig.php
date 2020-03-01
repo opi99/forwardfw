@@ -79,7 +79,10 @@ class Twig extends \ForwardFW\Controller implements \ForwardFW\Templater\Templat
         $strCompilePath = $config->getCompilePath();
 
         if (!is_dir($strCompilePath)) {
-            mkdir($strCompilePath, 0770, true);
+            if (!@mkdir($strCompilePath, 0770, true)) {
+                $error = error_get_last();
+                throw new \Exception($error['message'] . "\n" . 'Path: ' . $strCompilePath);
+            }
         }
 
         $twigLoader = new \Twig_Loader_Filesystem($config->getTemplatePath());
