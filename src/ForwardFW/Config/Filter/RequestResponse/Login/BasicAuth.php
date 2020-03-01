@@ -22,13 +22,13 @@
  * @package    ForwardFW
  * @subpackage Config
  * @author     Alexander Opitz <opitz.alexander@primacom.net>
- * @copyright  2009-2015 The Authors
+ * @copyright  2009-2020 The Authors
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @link       http://forwardfw.sourceforge.net
- * @since      File available since Release 0.1.0
+ * @since      File available since Release 0.2.0
  */
 
-namespace ForwardFW\Config\Filter\RequestResponse;
+namespace ForwardFW\Config\Filter\RequestResponse\Login;
 
 /**
  * Config for a SimpleRouter Filter.
@@ -40,7 +40,7 @@ namespace ForwardFW\Config\Filter\RequestResponse;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @link       http://forwardfw.sourceforge.net
  */
-class Login extends \ForwardFW\Config\Filter\RequestResponse
+class BasicAuth extends \ForwardFW\Config\Filter\RequestResponse
 {
-    protected $executionClassName = 'ForwardFW\\Filter\\RequestResponse\\Login';
+    protected $executionClassName = \ForwardFW\Filter\RequestResponse\Login\BasicAuth::class';
 }

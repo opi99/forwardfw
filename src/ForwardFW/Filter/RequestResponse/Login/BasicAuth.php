@@ -22,13 +22,13 @@
  * @package    ForwardFW
  * @subpackage RequestResponse
  * @author     Alexander Opitz <opitz.alexander@primacom.net>
- * @copyright  2009-2015 The Authors
+ * @copyright  2009-2020 The Authors
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @link       http://forwardfw.sourceforge.net
- * @since      File available since Release 0.1.0
+ * @since      File available since Release 0.2.0
  */
 
-namespace ForwardFW\Filter\RequestResponse;
+namespace ForwardFW\Filter\RequestResponse\Login;
 
 /**
  * This class sends the log and error message queue to the client via FirePHP.
@@ -40,7 +40,7 @@ namespace ForwardFW\Filter\RequestResponse;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @link       http://forwardfw.sourceforge.net
  */
-class Login extends \ForwardFW\Filter\RequestResponse
+class BasicAuth extends \ForwardFW\Filter\RequestResponse
 {
     /**
      * Function to process before your child
