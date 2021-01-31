@@ -97,13 +97,16 @@ class Request
         $applicationName = null
     ) {
         $return = null;
+        $requestData = [];
         if ($applicationName !== null) {
-            $data = $_REQUEST[$applicationName];
+            if (isset($_REQUEST[$applicationName])) {
+                $requestData = $_REQUEST[$applicationName];
+            }
         } else {
-            $data = $_REQUEST;
+            $requestData = $_REQUEST;
         }
-        if (isset($data[$parameterName])) {
-            $return = $data[$parameterName];
+        if (isset($requestData[$parameterName])) {
+            $return = $requestData[$parameterName];
         }
         return $return;
     }
