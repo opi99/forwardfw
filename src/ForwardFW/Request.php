@@ -96,19 +96,7 @@ class Request
         $parameterName,
         $applicationName = null
     ) {
-        $return = null;
-        $requestData = [];
-        if ($applicationName !== null) {
-            if (isset($_REQUEST[$applicationName])) {
-                $requestData = $_REQUEST[$applicationName];
-            }
-        } else {
-            $requestData = $_REQUEST;
-        }
-        if (isset($requestData[$parameterName])) {
-            $return = $requestData[$parameterName];
-        }
-        return $return;
+        return $this->getParameterFromArray($_REQUEST, $parameterName, $applicationName);
     }
 
     /**
@@ -117,26 +105,46 @@ class Request
      * @param string $parameterName   Name of the parameter to return.
      * @param string $applicationName Name of the application.
      *
-     * @return stdClass The json parameter from the request.
+     * @return mixed The json parameter from the request.
      */
     public function getJsonParameter(
         $parameterName,
         $applicationName = null
     ) {
         if ($this->json === null) {
-            $this->json = json_decode(file_get_contents("php://input"));
+            $this->json = json_decode(file_get_contents("php://input"), true);
             if ($this->json === null) {
-                $this->json = array();
+                $this->json = [];
             }
         }
+
+        return $this->getParameterFromArray($this->json, $parameterName, $applicationName);
+    }
+
+    /**
+     * Gets the value of the parameter
+     *
+     * @param array $parameters The array containing the data to search in
+     * @param string $parameterName Name of the parameter to return
+     * @param string $applicationName Name of the application
+     *
+     * @return mixed The value of the parameter if set otherwise null
+     */
+    protected function getParameterFromArray(
+        array $parameters,
+        $parameterName,
+        $applicationName = null
+    ) {
         $return = null;
         if ($applicationName !== null) {
-            $data = $this->json->$applicationName;
+            if (isset($parameters[$applicationName])) {
+                $requestData = $parameters[$applicationName];
+            }
         } else {
-            $data = $this->json;
+            $requestData = $parameters;
         }
-        if (isset($data->$parameterName)) {
-            $return = $data->$parameterName;
+        if (isset($requestData[$parameterName])) {
+            $return = $requestData[$parameterName];
         }
         return $return;
     }
