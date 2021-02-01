@@ -13,8 +13,6 @@
 
 namespace ForwardFW\Filter\RequestResponse;
 
-require_once 'FirePHPCore/FirePHP.class.php';
-
 /**
  * This class sends the log and error message queue to the client via FirePHP.
  */
