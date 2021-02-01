@@ -6,7 +6,7 @@ For all this I switched to 0.2.0 numbering.
 
 /**
 * cleans up the caching configuration and adds clear
-* caching. Also the DataHandler can now use the caching system. 
+* caching. Also the DataHandler can now use the caching system.
 * How you can see in the demo application most things should now on the shape of
 * pre-alpha quality. So it would be possible to play with it in small applications.
 * This is also demonstrated in the ForwardDemo package.
@@ -24,5 +24,5 @@ Requirements:
 - You can use the Kodus ChromeLogger extension, which you can find on https://packagist.org/packages/kodus/chrome-logger
 
 - You can use Smarty Template Engine (Version 3.1 or newer), which you can find on
-http://www.smarty.net or the Twig Template Engine (1.12.0 or newer), which you can
-find on http://twig.sensiolabs.org/.
+http://www.smarty.net or the Twig Template Engine (3.0.0 or newer), which you can
+find on https://twig.symfony.com/.

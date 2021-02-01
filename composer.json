@@ -18,10 +18,11 @@
         }
     },
     "require": {
-        "kodus/chrome-logger": "^1.0"
+        "php": ">=7.2.5"
     },
     "suggest": {
         "smarty/smarty": "Smarty - One of the possible templating engines",
-        "twig/twig": "Twig - One of the possible templating engines"
+        "twig/twig": "Twig - One of the possible templating engines",
+        "kodus/chrome-logger": "ChromeLogger - For writing logs into chrome console"
     }
 }
