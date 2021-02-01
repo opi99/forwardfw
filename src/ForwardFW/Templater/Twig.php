@@ -85,14 +85,14 @@ class Twig extends \ForwardFW\Controller implements \ForwardFW\Templater\Templat
             }
         }
 
-        $twigLoader = new \Twig_Loader_Filesystem($config->getTemplatePath());
-        $this->twigEnvironment = new \Twig_Environment(
+        $twigLoader = new \Twig\Loader\FilesystemLoader($config->getTemplatePath());
+        $this->twigEnvironment = new \Twig\Environment(
             $twigLoader,
-            array(
+            [
                 'cache'      => $strCompilePath,
                 'debug'      => true,
                 'autoescape' => false,
-            )
+            ]
         );
     }
 
@@ -101,11 +101,11 @@ class Twig extends \ForwardFW\Controller implements \ForwardFW\Templater\Templat
      *
      * @param string $strFile Complete path and filename.
      *
-     * @return ForwardFW_Templater_Twig The instance.
+     * @return \ForwardFW\Templater\Twig The instance.
      */
     public function setTemplateFile($strFile)
     {
-        $this->twigTemplate = $this->twigEnvironment->loadTemplate(
+        $this->twigTemplate = $this->twigEnvironment->load(
             $strFile
         );
         return $this;
@@ -117,7 +117,7 @@ class Twig extends \ForwardFW\Controller implements \ForwardFW\Templater\Templat
      * @param string $strName Name of template var.
      * @param mixed  $mValue  Value of template var.
      *
-     * @return ForwardFW_Templater_Twig The instance.
+     * @return \ForwardFW\Templater\Twig The instance.
      */
     public function setVar($strName, $mValue)
     {
