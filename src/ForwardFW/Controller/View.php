@@ -64,7 +64,7 @@ class View extends \ForwardFW\Controller
             'Processing: ' . $this->getTemplateName() . '.tpl'
         );
         $templater = $this->application->getTemplater();
-        $templater->setVar('ForwardFW_Version', $GLOBALS['ForwardFW']['Version']);
+        $templater->setVar('ForwardFW_Version', \ForwardFW\Environment::VERSION);
         try {
             $templater->setTemplateFile($this->getTemplateName() . '.tpl');
             return $templater->getCompiled();

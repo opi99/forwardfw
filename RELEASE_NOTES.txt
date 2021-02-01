@@ -1,3 +1,5 @@
+No more releases yet, but needed in a new project, so more updates/fixes/rewrites will follow.
+
 This is release 0.2.x which is a restart after years.
 I start with updating the technic behind the scene.
 Introduce ChromeLogger for replacing outdated FirePHP,
