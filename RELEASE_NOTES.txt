@@ -15,14 +15,3 @@ For all this I switched to 0.2.0 numbering.
 * So we are getting closer to the release of 0.1.0. But there will be a 0.0.11 and
 * maybe a 0.0.12 release before.
 */
-
-Requirements:
-
-- PHP 7.2.0 or newer
-
-- You can use the outdated FirePHPCore extension, which you can find on http://www.firephp.org
-- You can use the Kodus ChromeLogger extension, which you can find on https://packagist.org/packages/kodus/chrome-logger
-
-- You can use Smarty Template Engine (Version 3.1 or newer), which you can find on
-http://www.smarty.net or the Twig Template Engine (3.0.0 or newer), which you can
-find on https://twig.symfony.com/.
