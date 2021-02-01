@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of ForwardFW a web application framework.
  *

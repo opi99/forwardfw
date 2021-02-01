@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of ForwardFW a web application framework.
  *
@@ -206,7 +207,7 @@ class Sql extends \ForwardFW\Container
             $this->strDBConnection,
             array(
                 'select' => '*',
-                'from'   => $this->strTableName . ($tableAs ? ' as ' . $tableAs: ''),
+                'from'   => $this->strTableName . ($tableAs ? ' as ' . $tableAs : ''),
                 'where'  => $strWhereClause,
                 'group'  => $strGroupBy,
                 'order'  => (is_null($strOrderBy) ? $this->strOrderBy : $strOrderBy),

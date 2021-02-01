@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of ForwardFW a web application framework.
  *
@@ -20,7 +21,7 @@ class Templater
     /*
      * Array of the application independent Factories
      */
-    static private $instance = null;
+    private static $instance = null;
 
     /**
      * Constructor
