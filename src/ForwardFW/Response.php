@@ -18,44 +18,28 @@ namespace ForwardFW;
  */
 class Response
 {
-    /**
-     * @var ForwardFW\Object\Stateless\Timer Holds every Log message as string.
-     */
+    /** @var \ForwardFW\Object\Stateless\Timer Holds every Log message as string. */
     private $logTimer = null;
 
-    /**
-     * @var ForwardFW\Object\Stateless\Timer Holds every Error message as string.
-     */
+    /** @var \ForwardFW\Object\Stateless\Timer Holds every Error message as string. */
     private $errorTimer = null;
 
-    /**
-     * @var string Holds the content to send back to web server.
-     */
-    private $strContent = '';
-
-    /**
-     * @var integer HTTP Status Code.
-     */
+    /** @var integer HTTP Status Code. */
     private $httpStatusCode = 200;
 
-    /**
-     * @var string HTTP Status Message.
-     */
+    /** @var string HTTP Status Message. */
     private $httpStatusMessage = '';
 
-    /**
-     * @var string Type of content.
-     */
+    /** @var string Type of content */
     private $contentType = 'text/plain';
 
-    /**
-     * @var string The HTTP ContentDisposition
-     */
-    private $strContentDisposition = null;
+    /** @var string Holds the content to send back to web server. */
+    private $content = '';
 
-    /**
-     * @var ArrayObject data
-     */
+    /** @var string The HTTP ContentDisposition */
+    private $contentDisposition = null;
+
+    /** @var \ArrayObject data */
     private $data = null;
 
     /**
@@ -65,7 +49,7 @@ class Response
      */
     public function __construct()
     {
-        $this->logTimer   = new Object\Stateless\Timer();
+        $this->logTimer = new \ForwardFW\Object\Stateless\Timer();
         $this->errorTimer = clone $this->logTimer;
         $this->logTimer->addEntry('Started after: ' . (microtime(true) - $_SERVER["REQUEST_TIME_FLOAT"]));
         $this->data = new \ArrayObject();
@@ -75,10 +59,8 @@ class Response
      * Adds an entry to the log array.
      *
      * @param string $strEntry The entry as string.
-     *
-     * @return ForwardFW_Response Themself.
      */
-    public function addLog($strEntry)
+    public function addLog(string $strEntry): self
     {
         $this->logTimer->addEntry($strEntry);
         return $this;
@@ -89,9 +71,8 @@ class Response
      *
      * @param string $key Name of the data
      * @param mixed $value The data themself
-     * @return void
      */
-    public function addData($key, $value)
+    public function addData(string $key, $value): void
     {
         $this->data[$key] = $value;
     }
@@ -100,9 +81,8 @@ class Response
      * Gets data which was set into response. Please NameSpace your keys!
      *
      * @param string $key Name of the data
-     * @return mixed The data themself for given key
      */
-    public function getData($key)
+    public function getData(string $key)
     {
         return $this->data[$key];
     }
@@ -122,10 +102,8 @@ class Response
      *
      * @param string $errorMessage The entry as string.
      * @param integer $httpStatusCode The HTTP Status Code
-     *
-     * @return ForwardFW_Response Themself.
      */
-    public function addError($errorMessage, $httpStatusCode = 0)
+    public function addError(string $errorMessage, int $httpStatusCode = 0): self
     {
         $this->errorTimer->addEntry($errorMessage);
         if ($httpStatusCode !== 0) {
@@ -141,13 +119,11 @@ class Response
     /**
      * Adds a string to the existent content string.
      *
-     * @param string $strContent The content as string.
-     *
-     * @return ForwardFW_Response Themself.
+     * @param string $content The content as string.
      */
-    public function addContent($strContent)
+    public function addContent(string $content): self
     {
-        $this->content .= $strContent;
+        $this->content .= $content;
         return $this;
     }
 
@@ -155,10 +131,8 @@ class Response
      * Overwrite existent content string.
      *
      * @param string $content The content as string.
-     *
-     * @return ForwardFW_Response Themself.
      */
-    public function setContent($content)
+    public function setContent(string $content): self
     {
         $this->content = $content;
         return $this;
@@ -169,10 +143,8 @@ class Response
      *
      * @param integer $httpStatusCode The HTTP Status Code
      * @param string $httpStatusMessage The HTTP Status Message
-     *
-     * @return ForwardFW_Response Themself.
      */
-    public function setHttpStatus($httpStatusCode, $httpStatusMessage = '')
+    public function setHttpStatus(int $httpStatusCode, string $httpStatusMessage = ''): self
     {
         $this->httpStatusCode = $httpStatusCode;
         $this->httpStatusMessage = $httpStatusMessage;
@@ -181,20 +153,16 @@ class Response
 
     /**
      * Gets the HTTP Status Code
-     *
-     * @return integer The HTTP Status Code
      */
-    public function getHttpStatusCode()
+    public function getHttpStatusCode(): int
     {
         return $this->httpStatusCode;
     }
 
     /**
      * Gets the HTTP Status Message
-     *
-     * @return string The HTTP Status Message
      */
-    public function getHttpStatusMessage()
+    public function getHttpStatusMessage(): string
     {
         return $this->httpStatusMessage;
     }
@@ -203,10 +171,8 @@ class Response
      * Sets the HTTP ContentType
      *
      * @param string $contentType The HTTP ContentType
-     *
-     * @return ForwardFW_Response Themself.
      */
-    public function setContentType($contentType)
+    public function setContentType(string $contentType): self
     {
         $this->contentType = $contentType;
         return $this;
@@ -214,10 +180,8 @@ class Response
 
     /**
      * Gets the HTTP ContentType
-     *
-     * @return string The HTTP content type.
      */
-    public function getContentType()
+    public function getContentType(): string
     {
         return $this->contentType;
     }
@@ -225,62 +189,50 @@ class Response
     /**
      * Sets the HTTP ContentDisposition
      *
-     * @param string $strContentDisposition The HTTP ContentDisposition
-     *
-     * @return ForwardFW_Response Themself.
+     * @param string $contentDisposition The HTTP ContentDisposition
      */
-    public function setContentDisposition($strContentDisposition)
+    public function setContentDisposition(string $contentDisposition): self
     {
-        $this->strContentDisposition = $strContentDisposition;
+        $this->contentDisposition = $contentDisposition;
         return $this;
     }
 
     /**
      * Gets the HTTP ContentDisposition
-     *
-     * @return string The HTTP ContentDisposition
      */
-    public function getContentDisposition()
+    public function getContentDisposition(): string
     {
-        return $this->strContentDisposition;
+        return $this->contentDisposition;
     }
 
     /**
      * Returns the array with all its log entries.
-     *
-     * @return ForwardFW_Object_Timer The entries in a Timer Object.
      */
-    public function getErrors()
+    public function getErrors(): \ForwardFW\Object\Stateless\Timer
     {
         return $this->errorTimer;
     }
 
     /**
      * Returns the array with all its log entries.
-     *
-     * @return ForwardFW_Object_Timer The entries in a Timer Object.
      */
-    public function getLogs()
+    public function getLogs(): \ForwardFW\Object\Stateless\Timer
     {
         return $this->logTimer;
     }
 
     /**
      * Returns the content, which should be send back to web server.
-     *
-     * @return string The content.
      */
-    public function getContent()
+    public function getContent(): string
     {
         return $this->content;
     }
 
     /**
      * Sends content
-     *
-     * @return void
      */
-    public function send()
+    public function send(): void
     {
         header(
             'HTTP/1.1 ' . $this->httpStatusCode
@@ -289,8 +241,8 @@ class Response
         if ($this->contentType) {
             header('Content-Type: ' . $this->contentType);
         }
-        if (null !== $this->strContentDisposition) {
-            header('Content-Disposition: ' . $this->strContentDisposition);
+        if (null !== $this->contentDisposition) {
+            header('Content-Disposition: ' . $this->contentDisposition);
         }
         echo $this->content;
     }
