@@ -1,5 +1,17 @@
 {
     "name": "forward/forwardfw",
+    "license": "GPL-2.0-or-later",
+    "authors": [
+        {
+            "name": "Alexander Opitz",
+            "email": "opitz.alexander@googlemail.com",
+            "homepage": "",
+            "role": "Developer"
+        },
+    ],
+    "support": {
+        "issues": "https://github.com/opi99/forwardfw/issues"
+    },
     "autoload": {
         "psr-4": {
             "ForwardFW\\": "src/ForwardFW"
