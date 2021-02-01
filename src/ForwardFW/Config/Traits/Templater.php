@@ -21,7 +21,7 @@
  * @category   Application
  * @package    ForwardFW
  * @subpackage Config
- * @author     Alexander Opitz <opitz.alexander@primacom.net>
+ * @author     Alexander Opitz <opitz.alexander@googlemail.com>
  * @copyright  2009-2020 The Authors
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @link       http://forwardfw.sourceforge.net
@@ -38,7 +38,7 @@ use ForwardFW\Config\Templater as TemplaterConfig;
  * @category   Traits
  * @package    ForwardFW
  * @subpackage Config
- * @author     Alexander Opitz <opitz.alexander@primacom.net>
+ * @author     Alexander Opitz <opitz.alexander@googlemail.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @link       http://forwardfw.sourceforge.net
  */

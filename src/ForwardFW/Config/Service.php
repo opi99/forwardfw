@@ -21,7 +21,7 @@
  * @category   ServiceManager
  * @package    ForwardFW
  * @subpackage Config
- * @author     Alexander Opitz <opitz.alexander@primacom.net>
+ * @author     Alexander Opitz <opitz.alexander@googlemail.com>
  * @copyright  2015 The Authors
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @link       http://forwardfw.sourceforge.net
@@ -36,7 +36,7 @@ namespace ForwardFW\Config;
  * @category   ServiceManager
  * @package    ForwardFW
  * @subpackage Config
- * @author     Alexander Opitz <opitz.alexander@primacom.net>
+ * @author     Alexander Opitz <opitz.alexander@googlemail.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @link       http://forwardfw.sourceforge.net
  */
