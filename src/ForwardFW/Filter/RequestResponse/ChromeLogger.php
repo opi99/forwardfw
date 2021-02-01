@@ -2,32 +2,23 @@
 /**
  * This file is part of ForwardFW a web application framework.
  *
- * @category   Filter
- * @package    ForwardFW
- * @subpackage RequestResponse
- * @author     Alexander Opitz <opitz.alexander@googlemail.com>
- * @copyright  2009-2018 The Authors
- * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
- * @link       http://forwardfw.sourceforge.net
- * @since      File available since Release 0.2.0
+ * It is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License, either version 2
+ * of the License, or any later version.
+ *
+ * For the full copyright and license information, please read the
+ * LICENSE.txt file that was distributed with this source code.
  */
 
 namespace ForwardFW\Filter\RequestResponse;
 
 /**
  * This class sends the log and error message queue to the client via ChromeLogger.
- *
- * @category   Filter
- * @package    ForwardFW
- * @subpackage RequestResponse
- * @author     Alexander Opitz <opitz.alexander@googlemail.com>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License
- * @link       http://forwardfw.sourceforge.net
  */
 class ChromeLogger extends \ForwardFW\Filter\RequestResponse
 {
     protected $chromeLogger = null;
-    
+
     /**
      * Function to process before your child
      *
