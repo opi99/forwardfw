@@ -1,7 +1,8 @@
 ForwardFW
 =========
 
-Self written framework which uses RequestResponse objects (something like nowadays PSR-3 (Logging interface) PSR-7 (message abstraction) PSR-15 (middleware)) so I may rewrite it again to match such interfaces.
+Self written framework which uses chaining RequestResponse filter objects (something like nowadays PSR-3 (Logging
+interface) PSR-7 (message abstraction) PSR-15 (middleware)) so I may rewrite it again to match such interfaces.
 
 Compatible to:
 --------------
