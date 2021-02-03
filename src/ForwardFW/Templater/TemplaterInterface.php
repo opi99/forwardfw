@@ -22,8 +22,6 @@ interface TemplaterInterface
      * Constructor
      *
      * @param ForwardFW\Controller\ApplicationInterface $application The running application
-     *
-     * @return void
      */
     public function __construct(
         \ForwardFW\Config\Templater $config,
@@ -61,4 +59,9 @@ interface TemplaterInterface
     public function showBlock($strBlockName);
 
     public function hideBlock($strBlockName);
+
+    /**
+     * The filename ending of template files for this Templater
+     */
+    public function getTemplateFileEnding(): string;
 }

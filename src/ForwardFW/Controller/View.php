@@ -61,16 +61,17 @@ class View extends \ForwardFW\Controller
      */
     public function processView(): string
     {
-        $this->application->getResponse()->addLog(
-            'Processing: ' . $this->getTemplateName() . '.tpl'
-        );
         $templater = $this->application->getTemplater();
+        $templateFileName = $this->getTemplateName() . '.' . $templater->getTemplateFileEnding();
+
+        $this->application->getResponse()->addLog('Processing: ' . $templateFileName);
+
         $templater->setVar('ForwardFW_Version', \ForwardFW\Environment::VERSION);
         try {
-            $templater->setTemplateFile($this->getTemplateName() . '.tpl');
+            $templater->setTemplateFile($templateFileName);
             return $templater->getCompiled();
         } catch (\Exception $e) {
-            $this->application->response->addError($e->getMessage());
+            $this->application->getResponse()->addError($e->getMessage());
         }
         return '';
     }

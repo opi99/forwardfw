@@ -150,4 +150,12 @@ class Twig extends \ForwardFW\Controller implements \ForwardFW\Templater\Templat
 
         return $result;
     }
+
+    /**
+     * The filename ending of template files for this Templater
+     */
+    public function getTemplateFileEnding(): string
+    {
+        return 'twig';
+    }
 }

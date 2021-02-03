@@ -158,4 +158,12 @@ class Smarty extends \ForwardFW\Controller implements \ForwardFW\Templater\Templ
 
         return $result;
     }
+
+    /**
+     * The filename ending of template files for this Templater
+     */
+    public function getTemplateFileEnding(): string
+    {
+        return 'tpl';
+    }
 }

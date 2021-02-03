@@ -18,9 +18,7 @@ namespace ForwardFW;
  */
 class Templater
 {
-    /*
-     * Array of the application independent Factories
-     */
+    /** @var \ForwardFW\Templater\TemplaterInterface */
     private static $instance = null;
 
     /**
@@ -42,7 +40,8 @@ class Templater
     public static function factory(
         Config\Templater $config,
         Controller\Application $application
-    ) {
+    ): \ForwardFW\Templater\TemplaterInterface
+    {
         if (is_null(self::$instance)) {
             self::$instance = static::createTemplater($config, $application);
         }
@@ -59,9 +58,10 @@ class Templater
     final private static function createTemplater(
         Config\Templater $config,
         Controller\Application $application
-    ) {
-        $strTemplaterName = $config->getExecutionClassName();
-        $templater = new $strTemplaterName($config, $application);
+    ): \ForwardFW\Templater\TemplaterInterface
+    {
+        $templaterClassName = $config->getExecutionClassName();
+        $templater = new $templaterClassName($config, $application);
         return $templater;
     }
 }
