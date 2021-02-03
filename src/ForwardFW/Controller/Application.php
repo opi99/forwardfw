@@ -68,14 +68,17 @@ class Application extends ApplicationAbstract
      */
     public function run()
     {
+        $content = '';
         $strProcessScreen = $this->getProcessScreen();
         $this->response->setContentType($this->config->getContentType());
 
         try {
-            $this->screen = $this->getScreen($strProcessScreen);
+            $this->screen = $this->getScreenController(
+                $this->getProcessScreen()
+            );
             if (!is_null($this->screen)) {
                 // @TODO evaluate State of Screen
-                $strResult = $this->processView();
+                $content = $this->processView();
             }
         } catch (\ForwardFW\Exception $e) {
             // Todo Inner Exception Logging
@@ -84,7 +87,7 @@ class Application extends ApplicationAbstract
             // Todo Logging
             throw $e;
         }
-        $this->response->addContent($strResult);
+        $this->response->addContent($content);
     }
 
     /**
@@ -104,18 +107,17 @@ class Application extends ApplicationAbstract
     /**
      * Load and return screen $strScreen
      *
-     * @param string $strScreen name of screen
-     *
-     * @return ForwardFW\Controller\ScreenInterface
+     * @param string $screenName name of screen
      */
-    public function getScreen($strScreen)
+    public function getScreenController($screenName):? \ForwardFW\Controller\ScreenInterface
     {
-        $strScreenClass = $this->arScreens[$strScreen];
+        $screenController = null;
+        $screenClassName = $this->arScreens[$screenName];
 
-        if (class_exists($strScreenClass)) {
-            $screenController = new $strScreenClass($this);
+        if (class_exists($screenClassName)) {
+            $screenController = new $screenClassName($this);
         } else {
-            $this->response->addError('ScreenClass "' . $strScreenClass . '" not includeable.');
+            $this->response->addError('ScreenClass "' . $screenClassName . '" not includeable.');
         }
 
         return $screenController;
@@ -144,7 +146,7 @@ class Application extends ApplicationAbstract
         return $this->arScreens;
     }
 
-    public function getTemplater()
+    public function getTemplater(): \ForwardFW\Templater\TemplaterInterface
     {
         if (null === $this->templater) {
             $this->templater = \ForwardFW\Templater::factory($this->config->getTemplaterConfig(), $this);
