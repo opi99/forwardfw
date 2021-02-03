@@ -125,10 +125,8 @@ class Application extends ApplicationAbstract
 
     /**
      * Processes the View.
-     *
-     * @return string what to view
      */
-    public function processView()
+    public function processView(): string
     {
         $templater = $this->getTemplater();
         $templater->setVar('APPLICATION', $this);

@@ -94,10 +94,8 @@ class Screen extends View implements ScreenInterface
 
     /**
      * Processes the View.
-     *
-     * @return string what to view
      */
-    public function processView()
+    public function processView(): string
     {
         $templater = $this->application->getTemplater();
         foreach ($this->views as $view) {

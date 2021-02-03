@@ -58,10 +58,8 @@ class View extends \ForwardFW\Controller
 
     /**
      * Processes the View.
-     *
-     * @return void
      */
-    public function processView()
+    public function processView(): string
     {
         $this->application->getResponse()->addLog(
             'Processing: ' . $this->getTemplateName() . '.tpl'
@@ -74,6 +72,7 @@ class View extends \ForwardFW\Controller
         } catch (\Exception $e) {
             $this->application->response->addError($e->getMessage());
         }
+        return '';
     }
 
     /**
