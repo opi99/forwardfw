@@ -18,6 +18,9 @@ namespace ForwardFW\Controller;
  */
 class View extends \ForwardFW\Controller
 {
+    /** @var string Name of the view, mostly class name */
+    protected $viewName = '';
+
     /**
      * Constructor
      *
@@ -28,7 +31,7 @@ class View extends \ForwardFW\Controller
     public function __construct(ApplicationInterface $application)
     {
         parent::__construct($application);
-        $this->strViewName = get_class($this);
+        $this->viewName = get_class($this);
     }
 
     /**
@@ -38,7 +41,7 @@ class View extends \ForwardFW\Controller
      */
     public function process()
     {
-        $this->application->response->addLog('Processing ' . get_class($this));
+        $this->application->getResponse()->addLog('Processing ' . get_class($this));
         $this->controlView();
         return $this->processView();
     }
@@ -74,32 +77,14 @@ class View extends \ForwardFW\Controller
     }
 
     /**
-     * Returns the template name depending on the strViewName
+     * Returns the template name depending on the viewName
      * It replaces the underscore with path_slashes.
      *
      * @return string Name of the template
      */
     protected function getTemplateName()
     {
-        $strTemplateName = '';
-//         $nLength = strlen($this->strViewName);
-//         $nLastPart = strrpos($this->strViewName, '\\');
-//         $nPreviewsPart = strrpos(
-//             $this->strViewName,
-//             '\\',
-//             -($nLength - $nLastPart + 1)
-//         );
-//         if ($nPreviewsPart === false) {
-//             $nPreviewsPart = -1;
-//         }
-//         $strTemplateName  = substr(
-//             $this->strViewName,
-//             $nPreviewsPart + 1,
-//             $nLastPart - $nPreviewsPart - 1
-//         );
-//         $strTemplateName .= '/';
-//         $strTemplateName .= substr($this->strViewName, $nLastPart + 1);
-        $strTemplateName = strtr($this->strViewName, '\\', '/');
-        return $strTemplateName;
+        // Replacing class slashes by path backslashes
+        return strtr($this->viewName, '\\', '/');
     }
 }
