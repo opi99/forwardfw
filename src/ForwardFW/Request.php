@@ -193,7 +193,7 @@ class Request
         if ($hostPath === '') {
             $routePath = $_SERVER['REQUEST_URI'];
         } else {
-            $routePath = substr($_SERVER['REQUEST_URI'], strlen($hostPath) + 1);
+            $routePath = substr($_SERVER['REQUEST_URI'], strlen($hostPath));
         }
 
         return $routePath;
