@@ -18,21 +18,14 @@ namespace ForwardFW\Controller;
  */
 class Application extends ApplicationAbstract
 {
-    /**
-     * screens for this application
-     *
-     * @var array
-     */
-    private $arScreens = array();
+    /** @var array screens for this application */
+    protected $configuredScreens = [];
 
-    /**
-     * Actuall screen to process.
-     *
-     * @var ForwardFW\Controller\ScreenInterface
-     */
-    private $screen = null;
+    /** @var \ForwardFW\Controller\ScreenInterface Actual screen to process */
+    protected $screen = null;
 
-    private $templater;
+    /** @var \ForwardFW\Templater\TemplaterInterface */
+    protected $templater = null;
 
     /**
      * Constructor
@@ -41,8 +34,6 @@ class Application extends ApplicationAbstract
      * @param \ForwardFW\Request            $request        The request object.
      * @param \ForwardFW\Response           $response       The request object.
      * @param \ForwardFW\Service            $serviceManager The services for this application
-     *
-     * @return void
      */
     public function __construct(
         \ForwardFW\Config\Application $config,
@@ -52,9 +43,9 @@ class Application extends ApplicationAbstract
     ) {
         parent::__construct($config, $request, $response, $serviceManager);
 
-        $this->arScreens = $this->config->getScreens();
+        $this->configuredScreens = $this->config->getScreens();
 
-        if (count($this->arScreens) === 0) {
+        if (count($this->configuredScreens) === 0) {
             die(
                 'No Screen defined for application: ' . $this->strName
             );
@@ -63,10 +54,8 @@ class Application extends ApplicationAbstract
 
     /**
      * Run screen and return generated content
-     *
-     * @return void
      */
-    public function run()
+    public function run(): void
     {
         $content = '';
         $strProcessScreen = $this->getProcessScreen();
@@ -95,24 +84,22 @@ class Application extends ApplicationAbstract
      *
      * @return string name of screen to process
      */
-    public function getProcessScreen()
+    public function getProcessScreen(): string
     {
         $strProcessScreen = $this->getParameter('screen');
-        if (!isset($this->arScreens[$strProcessScreen])) {
-            $strProcessScreen = array_keys($this->arScreens)[0];
+        if (!isset($this->configuredScreens[$strProcessScreen])) {
+            $strProcessScreen = array_keys($this->configuredScreens)[0];
         }
         return $strProcessScreen;
     }
 
     /**
-     * Load and return screen $strScreen
-     *
-     * @param string $screenName name of screen
+     * Load and return screen with given name
      */
-    public function getScreenController($screenName):? \ForwardFW\Controller\ScreenInterface
+    public function getScreenController(string $screenName):? \ForwardFW\Controller\ScreenInterface
     {
         $screenController = null;
-        $screenClassName = $this->arScreens[$screenName];
+        $screenClassName = $this->configuredScreens[$screenName];
 
         if (class_exists($screenClassName)) {
             $screenController = new $screenClassName($this);
@@ -136,12 +123,10 @@ class Application extends ApplicationAbstract
 
     /**
      * Returns the screen configuration for this application.
-     *
-     * @return array With the config entry
      */
-    public function getScreens()
+    public function getScreens(): array
     {
-        return $this->arScreens;
+        return $this->configuredScreens;
     }
 
     public function getTemplater(): \ForwardFW\Templater\TemplaterInterface
