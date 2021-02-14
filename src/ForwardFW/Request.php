@@ -35,9 +35,9 @@ class Request
      * @return mixed The parameter for the application or null.
      */
     public function getParameter(
-        $parameterName,
-        $controllerClass = 'ForwardFW_Request',
-        $applicationName = null
+        string $parameterName,
+        string $controllerClass = 'ForwardFW',
+        string $applicationName = ''
     ) {
         $return = $this->getRequestParameter(
             $parameterName,
@@ -69,8 +69,8 @@ class Request
      * @return mixed The parameter from the request.
      */
     public function getRequestParameter(
-        $parameterName,
-        $applicationName = null
+        string $parameterName,
+        string $applicationName = ''
     ) {
         return $this->getParameterFromArray($_REQUEST, $parameterName, $applicationName);
     }
@@ -84,8 +84,8 @@ class Request
      * @return mixed The json parameter from the request.
      */
     public function getJsonParameter(
-        $parameterName,
-        $applicationName = null
+        string $parameterName,
+        string $applicationName = ''
     ) {
         if ($this->json === null) {
             $this->json = json_decode(file_get_contents("php://input"), true);
@@ -108,11 +108,11 @@ class Request
      */
     protected function getParameterFromArray(
         array $parameters,
-        $parameterName,
-        $applicationName = null
+        string $parameterName,
+        string $applicationName = ''
     ) {
         $return = null;
-        if ($applicationName !== null) {
+        if (!empty($applicationName)) {
             if (isset($parameters[$applicationName])) {
                 $requestData = $parameters[$applicationName];
             }
@@ -129,15 +129,15 @@ class Request
      * Returns the config parameter for the application from configuration.
      *
      * @param string $parameterName   Name of the parameter to return.
-     * @param string $controllerClass Class name of the controller, wh asks.
+     * @param string $controllerClass Class name of the controller, who asks.
      * @param string $applicationName Name of the application.
      *
      * @return mixed The configuration for the application or null.
      */
     public function getConfigParameter(
-        $parameterName,
-        $controllerClass = 'ForwardFW_Request',
-        $applicationName = null
+        string $parameterName,
+        string $controllerClass = 'ForwardFW',
+        string $applicationName = ''
     ) {
         $return = null;
         if (isset($GLOBALS[$parameterName])) {
@@ -146,13 +146,13 @@ class Request
         if (isset($GLOBALS['ForwardFW'][$parameterName])) {
             $return = $GLOBALS['ForwardFW'][$parameterName];
         }
-        if ($applicationName !== null && isset($GLOBALS[$applicationName][$parameterName])) {
+        if (!empty($applicationName) && isset($GLOBALS[$applicationName][$parameterName])) {
             $return = $GLOBALS[$applicationName][$parameterName];
         }
         if (isset($GLOBALS[$controllerClass][$parameterName])) {
             $return = $GLOBALS[$controllerClass][$parameterName];
         }
-        if ($applicationName !== null && isset($GLOBALS[$applicationName][$controllerClass][$parameterName])) {
+        if (!empty($applicationName) && isset($GLOBALS[$applicationName][$controllerClass][$parameterName])) {
             $return = $GLOBALS[$applicationName][$controllerClass][$parameterName];
         }
         return $return;
@@ -160,10 +160,8 @@ class Request
 
     /**
      * Returns the path for routing
-     *
-     * @return string Path to route on
      */
-    public function getRoutePath()
+    public function getRoutePath(): string
     {
         if ($this->routePath === null) {
             $this->routePath = $this->findRoutePath();
@@ -177,17 +175,15 @@ class Request
      *
      * @param string $routePath Path to route on
      */
-    public function setRoutePath($routePath)
+    public function setRoutePath($routePath): void
     {
         $this->routePath = $routePath;
     }
 
     /**
      * Find the path to route out of the server request vars
-     *
-     * @return string Path to route on.
      */
-    protected function findRoutePath()
+    protected function findRoutePath(): string
     {
         $hostPath = $this->getHostPath();
         if ($hostPath === '') {
@@ -199,16 +195,19 @@ class Request
         return $routePath;
     }
 
-    public function getHostPath()
+    public function getHostPath(): string
     {
-        $strPath = dirname($_SERVER['PHP_SELF']);
-        if ($strPath === '/') {
-            $strPath = '';
+        $path = dirname($_SERVER['PHP_SELF']);
+        if ($path === '/') {
+            $path = '';
         }
-        return $strPath;
+        return $path;
     }
 
-    public function getHostName()
+    /**
+     * Name of the host (not set in CLI)
+     */
+    public function getHostName(): string
     {
         return $_SERVER['HTTP_HOST'];
     }
