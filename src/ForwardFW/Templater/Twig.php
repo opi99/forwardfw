@@ -19,19 +19,19 @@ namespace ForwardFW\Templater;
 class Twig extends \ForwardFW\Controller implements \ForwardFW\Templater\TemplaterInterface
 {
     /**
-     * @var Twig_Environment The Twig instance
+     * @var \Twig\Environment The Twig instance
      */
     private $twigEnvironment = null;
 
     /**
-     * @var Twig_Template The loaded template
+     * @var \Twig\Template The loaded template
      */
     private $twigTemplate = null;
 
     /**
      * @var array The array of vars for the template
      */
-    private $arVars = array();
+    private $templateVars = [];
 
     /**
      * @var array Blocks to show
@@ -43,8 +43,6 @@ class Twig extends \ForwardFW\Controller implements \ForwardFW\Templater\Templat
      *
      * @param ForwardFW\Config\Templater $config The twig configuration
      * @param ForwardFW\Controller\ApplicationInterface $application The running application
-     *
-     * @return void
      */
     public function __construct(
         \ForwardFW\Config\Templater $config,
@@ -52,12 +50,12 @@ class Twig extends \ForwardFW\Controller implements \ForwardFW\Templater\Templat
     ) {
         parent::__construct($application);
 
-        $strCompilePath = $config->getCompilePath();
+        $compilePath = $config->getCompilePath();
 
-        if (!is_dir($strCompilePath)) {
-            if (!@mkdir($strCompilePath, 0770, true)) {
+        if (!is_dir($compilePath)) {
+            if (!@mkdir($compilePath, 0770, true)) {
                 $error = error_get_last();
-                throw new \Exception($error['message'] . "\n" . 'Path: ' . $strCompilePath);
+                throw new \Exception($error['message'] . "\n" . 'Path: ' . $compilePath);
             }
         }
 
@@ -65,53 +63,51 @@ class Twig extends \ForwardFW\Controller implements \ForwardFW\Templater\Templat
         $this->twigEnvironment = new \Twig\Environment(
             $twigLoader,
             [
-                'cache'      => $strCompilePath,
+                'cache'      => $compilePath,
                 'debug'      => true,
                 'autoescape' => false,
             ]
         );
+        $this->twigEnvironment->addExtension(new \Twig\Extension\DebugExtension());
     }
 
     /**
      * Sets file to use for templating
      *
-     * @param string $strFile Complete path and filename.
-     *
-     * @return \ForwardFW\Templater\Twig The instance.
+     * @param string $fileName Complete path and filename.
      */
-    public function setTemplateFile($strFile)
+    public function setTemplateFile($fileName): self
     {
-        $this->twigTemplate = $this->twigEnvironment->load(
-            $strFile
-        );
+        $this->twigTemplate = $this->twigEnvironment->load($fileName);
         return $this;
     }
 
     /**
      * Sets a var in the template to a value
      *
-     * @param string $strName Name of template var.
-     * @param mixed  $mValue  Value of template var.
-     *
-     * @return \ForwardFW\Templater\Twig The instance.
+     * @param string $varName Name of template var.
+     * @param mixed  $value  Value of template var.
      */
-    public function setVar($strName, $mValue)
+    public function setVar($varName, $value): self
     {
-        $this->arVars[$strName] = $mValue;
+        $this->templateVars[$varName] = $value;
         return $this;
     }
 
     /**
      * Returns compiled template for outputing.
-     *
-     * @return string Content of template after compiling.
      */
-    public function getCompiled()
+    public function getCompiled(): string
     {
         $result = $this->twigTemplate->render(
-            $this->arVars
+            $this->templateVars
         );
         return $result;
+    }
+
+    public function getTwigEnvironment(): \Twig\Environment
+    {
+        return $this->twigEnvironment;
     }
 
     /**
