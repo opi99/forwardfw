@@ -100,7 +100,7 @@ class Screen extends View implements ScreenInterface
         $templater = $this->application->getTemplater();
         foreach ($this->views as $view) {
             $templater->setVar(
-                'VIEW_' . strtoupper(str_replace('\\', '_', $view->strViewName)),
+                'VIEW_' . strtoupper(str_replace('\\', '_', $view->getViewName())),
                 $view->process()
             );
         }
@@ -123,16 +123,16 @@ class Screen extends View implements ScreenInterface
     /**
      * Loads the view by its Name.
      *
-     * @param string $strViewClass Name of the View.
-     *
-     * @return ForwardFW\Controller\View The instance of the view.
+     * @param string $viewClassName Name of the View.
      */
-    protected function loadView($strViewClass)
+    protected function loadView($viewClassName):? \ForwardFW\Controller\View
     {
-        if (class_exists($strViewClass)) {
-            $view = new $strViewClass($this->application);
+        $view = null;
+
+        if (class_exists($viewClassName)) {
+            $view = new $viewClassName($this->application);
         } else {
-            $this->application->getResponse()->addError('ViewClass "' . $strViewClass . '" not includeable.');
+            $this->application->getResponse()->addError('ViewClass "' . $viewClassName . '" not includeable.');
         }
 
         return $view;

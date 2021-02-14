@@ -76,6 +76,11 @@ class View extends \ForwardFW\Controller
         return '';
     }
 
+    public function getViewName(): string
+    {
+        return $this->viewName;
+    }
+
     /**
      * Returns the template name depending on the viewName
      * It replaces the underscore with path_slashes.
