@@ -55,7 +55,7 @@ class Templater
      *
      * @return ForwardFW\Templater
      */
-    final private static function createTemplater(
+    private static function createTemplater(
         Config\Templater $config,
         Controller\Application $application
     ): \ForwardFW\Templater\TemplaterInterface
