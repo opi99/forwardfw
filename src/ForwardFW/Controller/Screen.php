@@ -25,7 +25,7 @@ class Screen extends View implements ScreenInterface
      */
     private $views;
 
-    protected $strView = null;
+    protected $strView = \ForwardFW\Controller\View::class;
 
     /**
      * Constructor
@@ -98,6 +98,7 @@ class Screen extends View implements ScreenInterface
     public function processView(): string
     {
         $templater = $this->application->getTemplater();
+
         foreach ($this->views as $view) {
             $templater->setVar(
                 'VIEW_' . strtoupper(str_replace('\\', '_', $view->getViewName())),
