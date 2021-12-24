@@ -11,6 +11,8 @@
  * LICENSE.txt file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace ForwardFW\Config;
 
 /**
@@ -20,10 +22,8 @@ class Runner extends \ForwardFW\Config
 {
     use \ForwardFW\Config\Traits\Execution;
 
-    /**
-     * @var string Class Name of executor
-     */
-    protected $executionClassName = 'ForwardFW\\Runner';
+    /** @var string Class Name of executor */
+    protected $executionClassName = \ForwardFW\Runner::class;
 
     /**
      * @var boolean True if runner should send data otherwise false
@@ -31,14 +31,14 @@ class Runner extends \ForwardFW\Config
     private $shouldSend = true;
 
     /**
-     * @var \ForwardFW\Config\Service Config of the services
+     * @var \ArrayObject<int, \ForwardFW\Config\Service> Config of the services
      */
     private $services;
 
     /**
-     * @var \ForwardFW\Config\Processor Config of the processors
+     * @var \ArrayObject<int, \ForwardFW\Config\Middleware> Config of the middlewares
      */
-    private $processors;
+    private $middlewares;
 
     /**
      * @var \ForwardFW\Config\ServiceManager Config of the service manager
@@ -51,17 +51,17 @@ class Runner extends \ForwardFW\Config
     public function __construct()
     {
         $this->services = new \ArrayObject();
-        $this->processors = new \ArrayObject();
+        $this->middlewares = new \ArrayObject();
     }
 
-    public function setShouldSend($shouldSend)
+    public function setShouldSend(bool $shouldSend): self
     {
         $this->shouldSend = $shouldSend;
         return $this;
     }
 
 
-    public function getShouldSend()
+    public function getShouldSend(): bool
     {
         return $this->shouldSend;
     }
@@ -69,10 +69,9 @@ class Runner extends \ForwardFW\Config
     /**
      * Adding the config of a service.
      *
-     * @param ForwardFW\Config\Service $service The service config to add
-     * @return void
+     * @param \ForwardFW\Config\Service $service The service config to add
      */
-    public function addService(\ForwardFW\Config\Service $service)
+    public function addService(\ForwardFW\Config\Service $service): self
     {
         $this->services->append($service);
         return $this;
@@ -81,42 +80,36 @@ class Runner extends \ForwardFW\Config
     /**
      * Returns the configured services.
      *
-     * @return ForwardFW\Config\Service[] Config of services
+     * @return \ArrayObject<int, \ForwardFW\Config\Service> Config of services
      */
-    public function getServices()
+    public function getServices(): \ArrayObject
     {
         return $this->services;
     }
 
     /**
-     * Adding the config of a processor.
-     *
-     * @param ForwardFW\Config\Processor $processor The processor config to add
-     * @return void
+     * @param \ForwardFW\Config\Middleware $middleware The middleware config to add
      */
-    public function addProcessor(\ForwardFW\Config\Processor $processor)
+    public function addMiddleware(\ForwardFW\Config\Middleware $middleware): self
     {
-        $this->processors->append($processor);
+        $this->middlewares->append($middleware);
         return $this;
     }
 
     /**
-     * Returns the configured processors.
-     *
-     * @return ForwardFW\Config\Processor[] Config of processors
+     * @return \ArrayObject<int, \ForwardFW\Config\Middleware> Config of middlewares
      */
-    public function getProcessors()
+    public function getMiddlewaress(): \ArrayObject
     {
-        return $this->processors;
+        return $this->middlewares;
     }
 
     /**
      * Sets the config of the service manager
      *
-     * @param ForwardFW\Config\ServiceManager $serviceManager The config to the service manager
-     * @return void
+     * @param \ForwardFW\Config\ServiceManager $serviceManager The config to the service manager
      */
-    public function setServiceManager(\ForwardFW\Config\ServiceManager $serviceManager)
+    public function setServiceManager(\ForwardFW\Config\ServiceManager $serviceManager): self
     {
         $this->serviceManager = $serviceManager;
         return $this;
@@ -127,7 +120,7 @@ class Runner extends \ForwardFW\Config
      *
      * @return \ForwardFW\Config\ServiceManager Config of processors
      */
-    public function getServiceManager()
+    public function getServiceManager(): \ForwardFW\Config\ServiceManager
     {
         if ($this->serviceManager === null) {
             $this->serviceManager = new ServiceManager();

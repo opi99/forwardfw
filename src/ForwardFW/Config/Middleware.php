@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 
 /**
  * This file is part of ForwardFW a web application framework.
@@ -16,7 +17,7 @@ namespace ForwardFW\Config;
 /**
  * Config for a Cache.
  */
-class Processor extends \ForwardFW\Config
+class Middleware extends \ForwardFW\Config
 {
     use \ForwardFW\Config\Traits\Execution;
 }

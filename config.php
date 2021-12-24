@@ -1,14 +1,18 @@
 <?php
 
-return (new ForwardFW\Config\Runner())
+declare(strict_types=1);
+
+return (new \ForwardFW\Config\Runner())
+/**
         ->addService(
-            (new ForwardFW\Config\Service\DataHandler\Mdb2())
+            (new \ForwardFW\Config\Service\DataHandler\Mdb2())
                 ->setDsn('mysqli://john:doe@localhost/forwardfw')
                 ->setTablePrefix('')
-        )
-        ->addProcessor(
-            new ForwardFW\Config\Filter\RequestResponse\ChromeLogger()
-        )
+        )*/
+        ->addMiddleware(
+            new \ForwardFW\Config\Middleware\ChromeLogger()
+        );
+/**
         ->addProcessor(
             (new ForwardFW\Config\Filter\RequestResponse\Application())
                 ->setConfig(
@@ -26,3 +30,4 @@ return (new ForwardFW\Config\Runner())
                         )
                 )
         );
+*/

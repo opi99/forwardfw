@@ -11,12 +11,15 @@
  * LICENSE.txt file that was distributed with this source code.
  */
 
-namespace ForwardFW\Config\Filter\RequestResponse;
+declare(strict_types=1);
+
+namespace ForwardFW\Config\Middleware;
 
 /**
  * Config for a Filter which outputs logging to ChromeLogger
  */
-class ChromeLogger extends \ForwardFW\Config\Filter\RequestResponse
+class ChromeLogger extends \ForwardFW\Config\Middleware
 {
+    /** @var string */
     protected $executionClassName = \ForwardFW\Filter\RequestResponse\ChromeLogger::class;
 }

@@ -18,13 +18,16 @@ namespace ForwardFW\Config\Traits;
  */
 trait Execution
 {
-    public function setExecutionClassName($executionClassName)
+    /** @var string Class Name of executor */
+//    protected $executionClassName = '';
+
+    public function setExecutionClassName($executionClassName): self
     {
         $this->executionClassName = $executionClassName;
         return $this;
     }
 
-    public function getExecutionClassName()
+    public function getExecutionClassName(): string
     {
         return $this->executionClassName;
     }
