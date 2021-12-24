@@ -99,7 +99,7 @@ class Runner extends \ForwardFW\Config
     /**
      * @return \ArrayObject<int, \ForwardFW\Config\Middleware> Config of middlewares
      */
-    public function getMiddlewaress(): \ArrayObject
+    public function getMiddlewares(): \ArrayObject
     {
         return $this->middlewares;
     }

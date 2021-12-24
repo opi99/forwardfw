@@ -11,32 +11,27 @@
  * LICENSE.txt file that was distributed with this source code.
  */
 
-namespace ForwardFW\Filter\RequestResponse;
+declare(strict_types=1);
+
+namespace ForwardFW\Middleware;
+
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\MiddlewareInterface;
 
 /**
  * This class sends the log and error message queue to the client via ChromeLogger.
  */
-class ChromeLogger extends \ForwardFW\Filter\RequestResponse
+class ChromeLogger extends \ForwardFW\Middleware
 {
     protected $chromeLogger = null;
 
-    /**
-     * Function to process before your child
-     *
-     * @return void
-     */
-    public function doIncomingFilter()
+    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
         $this->response->addLog('Enter Filter');
-    }
 
-    /**
-     * Function to process after your child
-     *
-     * @return void
-     */
-    public function doOutgoingFilter()
-    {
+        $response = $handler->handle($request);
+
         $this->response->addLog('Leave Filter');
         $this->chromeLogger = new \Kodus\Logging\ChromeLogger();
 
@@ -44,6 +39,8 @@ class ChromeLogger extends \ForwardFW\Filter\RequestResponse
         $this->outputError();
 
         $this->chromeLogger->emitHeader();
+
+        return $response;
     }
 
     /**

@@ -11,9 +11,16 @@
  * LICENSE.txt file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace ForwardFW;
 
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\RequestHandlerInterface;
+
 class Runner
+    implements RequestHandlerInterface
 {
     /**
      * @var Request
@@ -25,10 +32,11 @@ class Runner
      */
     private $response;
 
-    /**
-     * @var \ForwardFW\Config\Runner
-     */
+    /** @var \ForwardFW\Config\Runner */
     protected $config;
+
+    /** @var \ArrayIterator */
+    protected $middlewareIterator;
 
     public function __construct(
         \ForwardFW\Config\Runner $config,
@@ -36,6 +44,7 @@ class Runner
         \ForwardFW\Response $response
     ) {
         $this->config = $config;
+        $this->middlewareIterator = $this->config->getMiddlewares()->getIterator();
         $this->request  = $request;
         $this->response = $response;
     }
@@ -44,7 +53,7 @@ class Runner
     {
         $this->initializeServiceManager();
         $this->registerServices();
-        $this->runProcessors();
+        $this->runMiddlewares();
         $this->stopServices();
     }
 
@@ -64,18 +73,17 @@ class Runner
         }
     }
 
-    protected function runProcessors()
+    public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        ob_start();
-        Filter\RequestResponse::getFilters($this->request, $this->response, $this->serviceManager, $this->config->getProcessors())
-            ->doFilter();
+        $middlewareConfig = $this->middlewareIterator->next();
+        $strFilterClass = $middlewareConfig->getExecutionClassName();
+        $middleware = new $strFilterClass($middlewareConfig);
+        $middleware->process($request, $this);
+    }
 
-        if ($this->config->getShouldSend()) {
-            $this->response->send();
-            ob_end_flush();
-        } else {
-            ob_end_clean();
-        }
+    protected function runMiddlewares()
+    {
+        $this->handle($request);
     }
 
     protected function stopServices()
