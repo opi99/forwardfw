@@ -13,10 +13,14 @@
 
 namespace ForwardFW;
 
+use Psr\Http\Message\ResponseInterface;
+
 /**
  * This class represents the Response to the browser.
  */
 class Response
+    extends Message
+    implements ResponseInterface
 {
     /** @var \ForwardFW\Object\Stateless\Timer Holds every Log message as string. */
     private $logTimer = null;
@@ -139,35 +143,6 @@ class Response
     }
 
     /**
-     * Sets the HTTP Status Code and Message
-     *
-     * @param integer $httpStatusCode The HTTP Status Code
-     * @param string $httpStatusMessage The HTTP Status Message
-     */
-    public function setHttpStatus(int $httpStatusCode, string $httpStatusMessage = ''): self
-    {
-        $this->httpStatusCode = $httpStatusCode;
-        $this->httpStatusMessage = $httpStatusMessage;
-        return $this;
-    }
-
-    /**
-     * Gets the HTTP Status Code
-     */
-    public function getHttpStatusCode(): int
-    {
-        return $this->httpStatusCode;
-    }
-
-    /**
-     * Gets the HTTP Status Message
-     */
-    public function getHttpStatusMessage(): string
-    {
-        return $this->httpStatusMessage;
-    }
-
-    /**
      * Sets the HTTP ContentType
      *
      * @param string $contentType The HTTP ContentType
@@ -245,5 +220,42 @@ class Response
             header('Content-Disposition: ' . $this->contentDisposition);
         }
         echo $this->content;
+    }
+
+
+    // NEW
+    /**
+     * Gets the HTTP Status Code
+     * @return int Status code.
+     */
+    public function getStatusCode()
+    {
+        return $this->httpStatusCode;
+    }
+
+    /**
+     * Sets the HTTP Status Code and Message
+     *
+     * @param int $code The HTTP Status Code (3-digits)
+     * @param string $reasonPhrase The HTTP Status Message
+     * @return static
+     * @throws \InvalidArgumentException For invalid status code arguments.
+     */
+    public function withStatus($code, $reasonPhrase = '')
+    {
+        $clone = clone $this;
+        $clone->httpStatusCode = $code;
+        $clone->httpStatusMessage = $reasonPhrase;
+        return $clone;
+    }
+
+
+    /**
+     * Gets the HTTP Status Message
+     * @return string Reason phrase; must return an empty string if none present.
+     */
+    public function getReasonPhrase()
+    {
+        return $this->httpStatusMessage;
     }
 }

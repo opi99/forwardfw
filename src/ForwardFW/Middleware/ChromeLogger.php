@@ -18,6 +18,7 @@ namespace ForwardFW\Middleware;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
+use Psr\Http\Server\RequestHandlerInterface;
 
 /**
  * This class sends the log and error message queue to the client via ChromeLogger.
@@ -28,17 +29,17 @@ class ChromeLogger extends \ForwardFW\Middleware
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
-        $this->response->addLog('Enter Filter');
+//         $this->response->addLog('Enter Filter');
 
         $response = $handler->handle($request);
 
-        $this->response->addLog('Leave Filter');
+//         $this->response->addLog('Leave Filter');
         $this->chromeLogger = new \Kodus\Logging\ChromeLogger();
 
         $this->outputLog();
         $this->outputError();
 
-        $this->chromeLogger->emitHeader();
+        $this->chromeLogger->writeToResponse($response);
 
         return $response;
     }
@@ -50,7 +51,7 @@ class ChromeLogger extends \ForwardFW\Middleware
      */
     private function outputLog()
     {
-        $arLogs = $this->response->getLogs()->getEntries();
+//         $arLogs = $this->response->getLogs()->getEntries();
         foreach ($arLogs as $strMessage) {
             $this->chromeLogger->notice($strMessage);
         }
@@ -64,7 +65,7 @@ class ChromeLogger extends \ForwardFW\Middleware
      */
     public function outputError()
     {
-        $arErrors = $this->response->getErrors()->getEntries();
+//         $arErrors = $this->response->getErrors()->getEntries();
         foreach ($arErrors as $strMessage) {
             $this->chromeLogger->error($strMessage);
         }

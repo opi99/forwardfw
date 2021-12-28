@@ -13,10 +13,15 @@
 
 namespace ForwardFW;
 
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\UriInterface;
+
 /**
  * This class represents the Request from browser.
  */
 class Request
+    extends Message
+    implements RequestInterface
 {
     /** @var string Path to route applications */
     protected $routePath = null;
@@ -210,5 +215,42 @@ class Request
     public function getHostName(): string
     {
         return $_SERVER['HTTP_HOST'];
+    }
+
+
+
+    // NEW
+
+    public function getRequestTarget()
+    {
+
+    }
+
+    public function withRequestTarget($requestTarget)
+    {
+        $clone = clone $this;
+        return $clone;
+    }
+
+    public function getMethod()
+    {
+
+    }
+
+    public function withMethod($method)
+    {
+        $clone = clone $this;
+        return $clone;
+    }
+
+    public function getUri()
+    {
+
+    }
+
+    public function withUri(UriInterface $uri, $preserveHost = false)
+    {
+        $clone = clone $this;
+        return $clone;
     }
 }

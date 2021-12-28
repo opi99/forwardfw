@@ -18,6 +18,7 @@ namespace ForwardFW;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
+use Psr\Http\Server\RequestHandlerInterface;
 
 /**
  * This abstract class needs to be extended to be a callable filter.
@@ -25,5 +26,5 @@ use Psr\Http\Server\MiddlewareInterface;
 abstract class Middleware
     implements MiddlewareInterface
 {
-    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface;
+    abstract public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface;
 }

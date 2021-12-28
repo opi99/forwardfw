@@ -15,6 +15,8 @@ declare(strict_types=1);
 
 namespace ForwardFW;
 
+use ForwardFW\Factory\ResponseFactory;
+use ForwardFW\Factory\ServerRequestFactory;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
@@ -39,22 +41,21 @@ class Runner
     protected $middlewareIterator;
 
     public function __construct(
-        \ForwardFW\Config\Runner $config,
-        \ForwardFW\Request $request,
-        \ForwardFW\Response $response
+        \ForwardFW\Config\Runner $config
     ) {
         $this->config = $config;
         $this->middlewareIterator = $this->config->getMiddlewares()->getIterator();
-        $this->request  = $request;
-        $this->response = $response;
     }
 
     public function run()
     {
-        $this->initializeServiceManager();
-        $this->registerServices();
-        $this->runMiddlewares();
-        $this->stopServices();
+        // Put ServiceManager into own Middleware
+//         $this->initializeServiceManager();
+//         $this->registerServices();
+        $this->outputResponse(
+            $this->runMiddlewares()
+        );
+//         $this->stopServices();
     }
 
     protected function initializeServiceManager()
@@ -75,15 +76,42 @@ class Runner
 
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        $middlewareConfig = $this->middlewareIterator->next();
-        $strFilterClass = $middlewareConfig->getExecutionClassName();
-        $middleware = new $strFilterClass($middlewareConfig);
-        $middleware->process($request, $this);
+        $middlewareConfig = $this->middlewareIterator->current();
+        $this->middlewareIterator->next();
+
+        if ($middlewareConfig !== null) {
+            $strFilterClass = $middlewareConfig->getExecutionClassName();
+            $middleware = new $strFilterClass($middlewareConfig);
+            return $middleware->process($request, $this);
+        } else {
+            // No Middleware which runs?
+            $factory = new ResponseFactory();
+            return $factory->createResponse();
+        }
     }
 
-    protected function runMiddlewares()
+    protected function runMiddlewares(): ResponseInterface
     {
-        $this->handle($request);
+        $factory = new ServerRequestFactory();
+        $request = $factory->createServerRequest('', '', []);
+        return $this->handle($request);
+    }
+
+    protected function outputResponse(ResponseInterface $response)
+    {
+        header('HTTP/' . $response->getProtocolVersion() . ' ' . $response->getStatusCode() . ' ' . $response->getReasonPhrase());
+
+        foreach ($response->getHeaders() as $name => $values) {
+            if (in_array(strtolower($name), self::MULTI_LINE_HEADERS, true)) {
+                foreach ($values as $value) {
+                    header($name . ': ' . $value, false);
+                }
+            } else {
+                header($name . ': ' . implode(', ', $values));
+            }
+        }
+
+        $response->getBody()->__toString();
     }
 
     protected function stopServices()
