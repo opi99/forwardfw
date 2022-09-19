@@ -30,7 +30,7 @@
         "firephp/firephp-core": "FirePHP - Logs to the FirePHP Devtools"
     },
     "require-dev": {
-        "smarty/smarty": "^3.1",
+        "smarty/smarty": "^4.2",
         "kodus/chrome-logger": "^1.1",
         "phpstan/phpstan": "^1.2"
     }
