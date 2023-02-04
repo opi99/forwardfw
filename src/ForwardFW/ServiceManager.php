@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * This file is part of ForwardFW a web application framework.
  *
@@ -18,9 +20,7 @@ namespace ForwardFW;
  */
 class ServiceManager
 {
-    /**
-     * @var \ForwardFW\Request The request instance
-     */
+    /** @var \ForwardFW\Request The request instance */
     protected $request;
 
     /**
@@ -28,14 +28,12 @@ class ServiceManager
      */
     protected $response;
 
-    /**
-     * @var \ForwardFW\Config\ServiceManager The config for the service manager
-     */
+    /** @var \ForwardFW\Config\ServiceManager The config for the service manager */
     protected $config;
 
-    private $registeredServices = array();
+    private $registeredServices = [];
 
-    private $startedServices = array();
+    private $startedServices = [];
 
     /**
      * Constructor
@@ -47,12 +45,9 @@ class ServiceManager
      * @return void
      */
     public function __construct(
-        \ForwardFW\Config\ServiceManager $config,
-        \ForwardFW\Request $request,
-        \ForwardFW\Response $response
+        \ForwardFW\Config\ServiceManager $config
     ) {
-        $this->request = $request;
-        $this->response = $response;
+        $this->config = $config;
     }
 
     public function registerService(\ForwardFW\Config\Service $config)
@@ -91,8 +86,8 @@ class ServiceManager
 
         if ($class instanceof Service\Startable) {
             $class->start();
-            $this->startedServices[$interfaceName] = $class;
         }
+        $this->startedServices[$interfaceName] = $class;
 
         return $class;
     }
@@ -100,28 +95,11 @@ class ServiceManager
     public function stopService($interfaceName)
     {
         if (isset($this->startedServices[$interfaceName])) {
-            $this->startedServices[$interfaceName]->stop();
+            $class = $this->startedServices[$interfaceName];
+            if ($class instanceof Service\Startable) {
+                $class->stop();
+            }
             unset($this->startedServices[$interfaceName]);
         }
-    }
-
-    /**
-     * Returns the request instance
-     *
-     * @return \ForwardFW\Request
-     */
-    public function getRequest()
-    {
-        return $this->request;
-    }
-
-    /**
-     * Returns the response instance
-     *
-     * @return \ForwardFW\Response
-     */
-    public function getResponse()
-    {
-        return $this->response;
     }
 }

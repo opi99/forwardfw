@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9d2b7b770788122119d8c118abe6a62b",
+    "content-hash": "c7cf732b826dcebbdd227cddcb167a8d",
     "packages": [
         {
             "name": "psr/container",
@@ -335,29 +335,30 @@
     "packages-dev": [
         {
             "name": "kodus/chrome-logger",
-            "version": "1.1.2",
+            "version": "1.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/kodus/chrome-logger.git",
-                "reference": "a6e8d64ca8fd27d7739e179219835adeb284ef98"
+                "reference": "4aeed0d949037831a3064b28e67d733e478a8301"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kodus/chrome-logger/zipball/a6e8d64ca8fd27d7739e179219835adeb284ef98",
-                "reference": "a6e8d64ca8fd27d7739e179219835adeb284ef98",
+                "url": "https://api.github.com/repos/kodus/chrome-logger/zipball/4aeed0d949037831a3064b28e67d733e478a8301",
+                "reference": "4aeed0d949037831a3064b28e67d733e478a8301",
                 "shasum": ""
             },
             "require": {
-                "php": ">=7.0",
+                "php": ">=8.0",
                 "psr/http-message": "^1",
                 "psr/http-server-middleware": "^1",
                 "psr/log": "^1"
             },
             "require-dev": {
-                "codeception/codeception": "^2",
-                "mindplay/middleman": "^3.0.3",
-                "mockery/mockery": "^0.9",
-                "zendframework/zend-diactoros": "^1.8.5"
+                "codeception/codeception": "^5",
+                "codeception/module-asserts": "^3",
+                "mindplay/middleman": "^4",
+                "mockery/mockery": "^1.5",
+                "nyholm/psr7": "^1.5"
             },
             "type": "library",
             "autoload": {
@@ -384,26 +385,26 @@
             "description": "PSR-3 (logging), PSR-7 (HTTP) and PSR-15 (middleware) compliant alternative to the original ChromeLogger for PHP",
             "support": {
                 "issues": "https://github.com/kodus/chrome-logger/issues",
-                "source": "https://github.com/kodus/chrome-logger/tree/master"
+                "source": "https://github.com/kodus/chrome-logger/tree/1.2.0"
             },
-            "time": "2019-02-07T14:14:42+00:00"
+            "time": "2022-08-24T10:44:58+00:00"
         },
         {
             "name": "phpstan/phpstan",
-            "version": "1.2.0",
+            "version": "1.9.14",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "cbe085f9fdead5b6d62e4c022ca52dc9427a10ee"
+                "reference": "e5fcc96289cf737304286a9b505fbed091f02e58"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/cbe085f9fdead5b6d62e4c022ca52dc9427a10ee",
-                "reference": "cbe085f9fdead5b6d62e4c022ca52dc9427a10ee",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/e5fcc96289cf737304286a9b505fbed091f02e58",
+                "reference": "e5fcc96289cf737304286a9b505fbed091f02e58",
                 "shasum": ""
             },
             "require": {
-                "php": "^7.1|^8.0"
+                "php": "^7.2|^8.0"
             },
             "conflict": {
                 "phpstan/phpstan-shim": "*"
@@ -413,11 +414,6 @@
                 "phpstan.phar"
             ],
             "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.2-dev"
-                }
-            },
             "autoload": {
                 "files": [
                     "bootstrap.php"
@@ -428,9 +424,13 @@
                 "MIT"
             ],
             "description": "PHPStan - PHP Static Analysis Tool",
+            "keywords": [
+                "dev",
+                "static analysis"
+            ],
             "support": {
                 "issues": "https://github.com/phpstan/phpstan/issues",
-                "source": "https://github.com/phpstan/phpstan/tree/1.2.0"
+                "source": "https://github.com/phpstan/phpstan/tree/1.9.14"
             },
             "funding": [
                 {
@@ -442,28 +442,24 @@
                     "type": "github"
                 },
                 {
-                    "url": "https://www.patreon.com/phpstan",
-                    "type": "patreon"
-                },
-                {
                     "url": "https://tidelift.com/funding/github/packagist/phpstan/phpstan",
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-11-18T14:09:01+00:00"
+            "time": "2023-01-19T10:47:09+00:00"
         },
         {
             "name": "smarty/smarty",
-            "version": "v4.2.1",
+            "version": "v4.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/smarty-php/smarty.git",
-                "reference": "ffa2b81a8e354a49fd8a2f24742dc9dc399e8007"
+                "reference": "c02e9e135ea719b91f457a0072748ded0e852e7d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/smarty-php/smarty/zipball/ffa2b81a8e354a49fd8a2f24742dc9dc399e8007",
-                "reference": "ffa2b81a8e354a49fd8a2f24742dc9dc399e8007",
+                "url": "https://api.github.com/repos/smarty-php/smarty/zipball/c02e9e135ea719b91f457a0072748ded0e852e7d",
+                "reference": "c02e9e135ea719b91f457a0072748ded0e852e7d",
                 "shasum": ""
             },
             "require": {
@@ -514,9 +510,9 @@
             "support": {
                 "forum": "https://github.com/smarty-php/smarty/discussions",
                 "issues": "https://github.com/smarty-php/smarty/issues",
-                "source": "https://github.com/smarty-php/smarty/tree/v4.2.1"
+                "source": "https://github.com/smarty-php/smarty/tree/v4.3.0"
             },
-            "time": "2022-09-14T10:59:01+00:00"
+            "time": "2022-11-22T21:47:32+00:00"
         }
     ],
     "aliases": [],

@@ -25,49 +25,11 @@ use Psr\Http\Server\RequestHandlerInterface;
  */
 class ChromeLogger extends \ForwardFW\Middleware
 {
-    protected $chromeLogger = null;
-
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
-//         $this->response->addLog('Enter Filter');
-
         $response = $handler->handle($request);
 
-//         $this->response->addLog('Leave Filter');
-        $this->chromeLogger = new \Kodus\Logging\ChromeLogger();
-
-        $this->outputLog();
-        $this->outputError();
-
-        $this->chromeLogger->writeToResponse($response);
-
-        return $response;
-    }
-
-    /**
-     * Adds the response log entries to the log group in FirePHP
-     *
-     * @return void
-     */
-    private function outputLog()
-    {
-//         $arLogs = $this->response->getLogs()->getEntries();
-        foreach ($arLogs as $strMessage) {
-            $this->chromeLogger->notice($strMessage);
-        }
-    }
-
-
-    /**
-     * Adds the response error entries to the error group in FirePHP
-     *
-     * @return void
-     */
-    public function outputError()
-    {
-//         $arErrors = $this->response->getErrors()->getEntries();
-        foreach ($arErrors as $strMessage) {
-            $this->chromeLogger->error($strMessage);
-        }
+        $chromeLogger = $this->serviceManager->getService(\Psr\Log\LoggerInterface::class);
+        return $chromeLogger->writeToResponse($response);
     }
 }

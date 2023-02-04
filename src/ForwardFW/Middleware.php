@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * This file is part of ForwardFW a web application framework.
  *
@@ -11,8 +13,6 @@
  * LICENSE.txt file that was distributed with this source code.
  */
 
-declare(strict_types=1);
-
 namespace ForwardFW;
 
 use Psr\Http\Message\ResponseInterface;
@@ -21,10 +21,19 @@ use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
 /**
- * This abstract class needs to be extended to be a callable filter.
+ * This abstract class needs to be extended to be a callable middleware.
  */
 abstract class Middleware
     implements MiddlewareInterface
 {
+    public function __construct(
+        \ForwardFW\Config $config,
+        // We have no DI yet
+        \ForwardFW\ServiceManager $serviceManager
+    ) {
+        $this->config = $config;
+        $this->serviceManager = $serviceManager;
+    }
+
     abstract public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface;
 }

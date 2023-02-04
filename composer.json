@@ -21,7 +21,7 @@
         "psr/http-server-middleware": "^1.0",
         "psr/container": "^2.0",
         "psr/http-factory": "^1.0",
-        "psr/log": "^1"
+        "psr/log": "^1.1"
     },
     "suggest": {
         "smarty/smarty": "Smarty - One of the possible templating engines",
@@ -30,8 +30,8 @@
         "firephp/firephp-core": "FirePHP - Logs to the FirePHP Devtools"
     },
     "require-dev": {
-        "smarty/smarty": "^4.2",
-        "kodus/chrome-logger": "^1.1",
+        "smarty/smarty": "^4.3",
+        "kodus/chrome-logger": "^1.2",
         "phpstan/phpstan": "^1.2"
     }
 }

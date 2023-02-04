@@ -9,6 +9,9 @@ return (new \ForwardFW\Config\Runner())
                 ->setDsn('mysqli://john:doe@localhost/forwardfw')
                 ->setTablePrefix('')
         )*/
+        ->addService(
+            (new \ForwardFW\Config\Service\Logger\ChromeLogger())
+        )
         ->addMiddleware(
             new \ForwardFW\Config\Middleware\ChromeLogger()
         );

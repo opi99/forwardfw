@@ -11,7 +11,7 @@
  * LICENSE.txt file that was distributed with this source code.
  */
 
-namespace ForwardFW;
+namespace ForwardFW\Http\Message;
 
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\UriInterface;

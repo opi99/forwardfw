@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * This file is part of ForwardFW a web application framework.
  *
@@ -11,20 +13,12 @@
  * LICENSE.txt file that was distributed with this source code.
  */
 
-declare(strict_types=1);
+namespace ForwardFW\Config\Service\Logger;
 
-namespace ForwardFW\Factory;
-
-use ForwardFW\Http\Message\Response;
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\ResponseFactoryInterface;
-
-class ResponseFactory
-    implements ResponseFactoryInterface
+/**
+ * Config for a Service.
+ */
+class ChromeLogger extends \ForwardFW\Config\Service\Logger
 {
-    public function createResponse(int $code = 200, string $reasonPhrase = ''): ResponseInterface
-    {
-        return new Response();
-    }
+    protected $executionClassName = \Kodus\Logging\ChromeLogger::class;
 }
-

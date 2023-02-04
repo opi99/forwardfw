@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * This file is part of ForwardFW a web application framework.
  *
@@ -11,7 +13,7 @@
  * LICENSE.txt file that was distributed with this source code.
  */
 
-namespace ForwardFW;
+namespace ForwardFW\Http\Message;
 
 use Psr\Http\Message\ResponseInterface;
 

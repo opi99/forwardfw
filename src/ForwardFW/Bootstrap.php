@@ -16,24 +16,12 @@ namespace ForwardFW;
 class Bootstrap
 {
     /**
-     * @var Request
-     */
-    private $request;
-
-    /**
-     * @var Response
-     */
-    private $response;
-
-    /**
      * @var ForwardFW\Config\Runner
      */
     private $config;
 
     public function __construct()
     {
-        $this->request = new Request();
-        $this->response = new Response();
     }
 
     public function loadConfig(string $file): void
@@ -58,7 +46,7 @@ class Bootstrap
     public function run(): void
     {
         $class = $this->config->getExecutionClassName();
-        $instance = new $class($this->config, $this->request, $this->response);
+        $instance = new $class($this->config);
         $instance->run();
     }
 }

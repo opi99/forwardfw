@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * This file is part of ForwardFW a web application framework.
  *
@@ -11,7 +13,7 @@
  * LICENSE.txt file that was distributed with this source code.
  */
 
-namespace ForwardFW;
+namespace ForwardFW\Http\Message;
 
 use Psr\Http\Message\MessageInterface;
 use Psr\Http\Message\StreamInterface;
@@ -20,6 +22,8 @@ class Message
     implements MessageInterface
 {
     protected $body;
+
+    protected $headers = [];
 
     /**
      * @return string HTTP protocol version.
@@ -43,7 +47,7 @@ class Message
      */
     public function getHeaders()
     {
-        return [];
+        return $this->headers;
     }
 
     /**
@@ -52,7 +56,7 @@ class Message
      */
     public function hasHeader($name)
     {
-        return false;
+        return (bool) count($this->headers);
     }
 
     /**
@@ -86,6 +90,7 @@ class Message
     public function withHeader($name, $value)
     {
         $clone = clone $this;
+        $clone->headers[$name] = $value;
         return $clone;
     }
 
@@ -98,6 +103,11 @@ class Message
     public function withAddedHeader($name, $value)
     {
         $clone = clone $this;
+        if (!isset($clone->headers[$name])) {
+            $clone->headers[$name] = $value;
+        } else {
+            $clone->headers[$name] = array_merge($clone->headers[$name], $value);
+        }
         return $clone;
     }
 
@@ -116,6 +126,9 @@ class Message
      */
     public function getBody()
     {
+        if ($this->body === null) {
+            $this->body = new Stream('php://temp', 'r+');
+        }
         return $this->body;
     }
 

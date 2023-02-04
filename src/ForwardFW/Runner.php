@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * This file is part of ForwardFW a web application framework.
  *
@@ -10,8 +12,6 @@
  * For the full copyright and license information, please read the
  * LICENSE.txt file that was distributed with this source code.
  */
-
-declare(strict_types=1);
 
 namespace ForwardFW;
 
@@ -24,6 +24,10 @@ use Psr\Http\Server\RequestHandlerInterface;
 class Runner
     implements RequestHandlerInterface
 {
+    private const MULTI_LINE_HEADERS = [
+        'set-cookie',
+    ];
+
     /**
      * @var Request
      */
@@ -40,6 +44,9 @@ class Runner
     /** @var \ArrayIterator */
     protected $middlewareIterator;
 
+    /** @var \ForwardFW\ServiceManager */
+    protected $serviceManager = null;
+
     public function __construct(
         \ForwardFW\Config\Runner $config
     ) {
@@ -50,12 +57,12 @@ class Runner
     public function run()
     {
         // Put ServiceManager into own Middleware
-//         $this->initializeServiceManager();
-//         $this->registerServices();
+        $this->initializeServiceManager();
+        $this->registerServices();
         $this->outputResponse(
             $this->runMiddlewares()
         );
-//         $this->stopServices();
+        $this->stopServices();
     }
 
     protected function initializeServiceManager()
@@ -67,8 +74,6 @@ class Runner
 
     protected function registerServices()
     {
-        $this->response->addLog('Register Services');
-
         foreach ($this->config->getServices() as $serviceConfig) {
             $this->serviceManager->registerService($serviceConfig);
         }
@@ -81,7 +86,7 @@ class Runner
 
         if ($middlewareConfig !== null) {
             $strFilterClass = $middlewareConfig->getExecutionClassName();
-            $middleware = new $strFilterClass($middlewareConfig);
+            $middleware = new $strFilterClass($middlewareConfig, $this->serviceManager);
             return $middleware->process($request, $this);
         } else {
             // No Middleware which runs?
@@ -107,7 +112,7 @@ class Runner
                     header($name . ': ' . $value, false);
                 }
             } else {
-                header($name . ': ' . implode(', ', $values));
+                header($name . ': ' . (is_array($values) ? implode(', ', $values) : $values));
             }
         }
 
@@ -116,7 +121,6 @@ class Runner
 
     protected function stopServices()
     {
-        $this->response->addLog('Stop Services');
         foreach ($this->config->getServices() as $serviceConfig) {
             $this->serviceManager->stopService($serviceConfig->getInterfaceName());
         }

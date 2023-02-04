@@ -15,7 +15,7 @@ declare(strict_types=1);
 
 namespace ForwardFW\Factory;
 
-use ForwardFW\ServerRequest;
+use ForwardFW\Http\Message\ServerRequest;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ServerRequestFactoryInterface;
 use Psr\Http\Message\UriInterface;
