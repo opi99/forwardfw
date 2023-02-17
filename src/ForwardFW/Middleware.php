@@ -26,6 +26,10 @@ use Psr\Http\Server\RequestHandlerInterface;
 abstract class Middleware
     implements MiddlewareInterface
 {
+    protected ?\ForwardFW\Config $config = null;
+
+    protected ?\ForwardFW\ServiceManager $serviceManager = null;
+
     public function __construct(
         \ForwardFW\Config $config,
         // We have no DI yet

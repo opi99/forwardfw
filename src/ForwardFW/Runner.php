@@ -97,8 +97,7 @@ class Runner
 
     protected function runMiddlewares(): ResponseInterface
     {
-        $factory = new ServerRequestFactory();
-        $request = $factory->createServerRequest('', '', []);
+        $request = ServerRequestFactory::createFromGlobals();
         return $this->handle($request);
     }
 

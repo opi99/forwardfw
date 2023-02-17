@@ -11,7 +11,7 @@
  * LICENSE.txt file that was distributed with this source code.
  */
 
-namespace ForwardFW\Config\Filter\RequestResponse\SimpleRouter;
+namespace ForwardFW\Config\Middleware\SimpleRouter;
 
 /**
  * Config for a SimpleRouter Filter.

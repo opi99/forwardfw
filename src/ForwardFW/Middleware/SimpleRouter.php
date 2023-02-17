@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * This file is part of ForwardFW a web application framework.
  *
@@ -11,17 +13,44 @@
  * LICENSE.txt file that was distributed with this source code.
  */
 
-namespace ForwardFW\Filter\RequestResponse;
+namespace ForwardFW\Middleware;
+
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\RequestHandlerInterface;
 
 /**
  * This class loads and runs the requested Application.
  */
-class SimpleRouter extends \ForwardFW\Filter\RequestResponse
+class SimpleRouter extends \ForwardFW\Middleware
 {
-    /*
-     * @var string Saved routePath till this point
-     */
-    private $routePath = '';
+    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
+    {
+        /** @var \Psr\Log\LoggerInterface */
+        $logger = $this->serviceManager->getService(\Psr\Log\LoggerInterface::class);
+        $logger->info('Start Route');
+
+        var_dump($request->getRequestTarget());
+
+        foreach ($this->config->getRoutes() as $routeConfig) {
+            if (strncmp($this->routePath, $routeConfig->getStart(), strlen($routeConfig->getStart())) === 0) {
+                $nextRoute = substr($this->routePath, strlen($routeConfig->getStart()));
+                if ($nextRoute === false) {
+                    $nextRoute = '';
+                }
+                $subRequest = $request->withRequestTarget($nextRoute);
+
+                $request = $this->setHandler($request, $route[1]);
+
+                break;
+            }
+        }
+
+        $logger->info('End Route');
+        $response = $handler->handle($request);
+
+        return $response;
+    }
 
     /**
      * Function to process before your child
@@ -30,7 +59,6 @@ class SimpleRouter extends \ForwardFW\Filter\RequestResponse
      */
     public function doIncomingFilter()
     {
-        $this->response->addLog('Start Route');
         $parent = $this;
 
         $this->routePath = $this->request->getRoutePath();
@@ -55,31 +83,6 @@ class SimpleRouter extends \ForwardFW\Filter\RequestResponse
         }
         if ($this->child === null && $this->config->getRouteNotFoundError()) {
             $this->response->addError('No Route "' . $this->routePath . '" found', 404);
-        }
-    }
-
-    /**
-     * Function to process after your child
-     *
-     * @return void
-     */
-    public function doOutgoingFilter()
-    {
-        $this->response->addLog('End Route');
-    }
-
-    /**
-     * Function to process filtering incoming/child/outgoing
-     *
-     * @return void
-     */
-    public function doFilter()
-    {
-        try {
-            parent::doFilter();
-        } finally {
-            // Restore routePath
-            $this->request->setRoutePath($this->routePath);
         }
     }
 }

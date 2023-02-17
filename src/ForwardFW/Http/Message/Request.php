@@ -24,10 +24,16 @@ class Request
     implements RequestInterface
 {
     /** @var string Path to route applications */
-    protected $routePath = null;
+    protected $requestTarget = null;
 
     /** @var array data of json request */
     protected $json = null;
+
+    /** @var string HTTP method */
+    protected $method = 'GET';
+
+    /** @var string URI of request */
+    protected $uri = '/';
 
     /**
      * Returns the parameter for the application from browser request or
@@ -220,15 +226,26 @@ class Request
 
 
     // NEW
+    public function __construct(string $method = null, string $uri = null, $body = 'php://input', array $headers = [])
+    {
+        if ($method === 'GET' || $method === 'POST') {
+            $this->$method = $method;
+        }
+        $this->uri = $uri;
+
+        $uriParts = parse_url($uri);
+        $this->requestTarget = $uriParts['path'];
+    }
 
     public function getRequestTarget()
     {
-
+        return $this->requestTarget;
     }
 
     public function withRequestTarget($requestTarget)
     {
         $clone = clone $this;
+        $clone->requestTarget = $requestTarget;
         return $clone;
     }
 

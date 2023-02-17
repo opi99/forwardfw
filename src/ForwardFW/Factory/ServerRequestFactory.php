@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * This file is part of ForwardFW a web application framework.
  *
@@ -10,8 +12,6 @@
  * For the full copyright and license information, please read the
  * LICENSE.txt file that was distributed with this source code.
  */
-
-declare(strict_types=1);
 
 namespace ForwardFW\Factory;
 
@@ -25,6 +25,19 @@ class ServerRequestFactory
 {
     public function createServerRequest(string $method, $uri, array $serverParams = []): ServerRequestInterface
     {
-        return new ServerRequest();
+        return new ServerRequest($method, $uri, $serverParams);
+    }
+
+    public static function createFromGlobals(): ServerRequestInterface
+    {
+        $request = new ServerRequest(
+            $_SERVER['REQUEST_METHOD'],
+            ($_SERVER['HTTPS'] === 'on' ? 'https' : 'http') . '://' . ($_SERVER['HTTP_HOST'] ?? '') . ($_SERVER['REQUEST_URI'] ?? '/'),
+            $_SERVER
+        );
+        if (!empty($_COOKIE)) {
+            $request = $request->withCookieParams($_COOKIE);
+        }
+        return $request;
     }
 }

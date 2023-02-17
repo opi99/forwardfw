@@ -14,6 +14,9 @@ return (new \ForwardFW\Config\Runner())
         )
         ->addMiddleware(
             new \ForwardFW\Config\Middleware\ChromeLogger()
+        )
+        ->addMiddleware(
+            new \ForwardFW\Config\Middleware\SimpleRouter()
         );
 /**
         ->addProcessor(

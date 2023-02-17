@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * This file is part of ForwardFW a web application framework.
  *
@@ -11,23 +13,19 @@
  * LICENSE.txt file that was distributed with this source code.
  */
 
-namespace ForwardFW\Config\Filter\RequestResponse;
+namespace ForwardFW\Config\Middleware;
 
 /**
  * Config for a SimpleRouter Filter.
  */
-class SimpleRouter extends \ForwardFW\Config\Filter\RequestResponse
+class SimpleRouter extends \ForwardFW\Config\Middleware
 {
-    protected $executionClassName = 'ForwardFW\\Filter\\RequestResponse\\SimpleRouter';
+    protected $executionClassName = \ForwardFW\Middleware\SimpleRouter::class;
 
-    /**
-     * @var ForwardFW\Config\Filter\RequestResponse\SimpleRouter\Route[] Config of the routes
-     */
-    private $routes = null;
+    /** @var ForwardFW\Config\Middleware\SimpleRouter\Route[] Config of the routes */
+    private $routes = [];
 
-    /**
-     * @var boolean Set to false if the SimpleRouter shouldn't add an error if route was not found.
-     */
+    /** @var boolean Set to false if the SimpleRouter shouldn't add an error if route was not found. */
     private $routeNotFoundError = true;
 
     /**
@@ -35,16 +33,14 @@ class SimpleRouter extends \ForwardFW\Config\Filter\RequestResponse
      */
     public function __construct()
     {
-        $this->routes = new \ArrayObject();
     }
 
     /**
      * Adding the config of a Route.
      *
-     * @param ForwardFW\Config\Filter\RequestResponse\SimpleRouter\Route $route The route config to add.
-     * @return $this
+     * @param ForwardFW\Config\Middleware\SimpleRouter\Route $route The route config to add.
      */
-    public function addRoute(SimpleRouter\Route $route)
+    public function addRoute(SimpleRouter\Route $route): self
     {
         $this->routes->append($route);
         return $this;
@@ -53,9 +49,9 @@ class SimpleRouter extends \ForwardFW\Config\Filter\RequestResponse
     /**
      * Returns the configured routes.
      *
-     * @return ForwardFW\Config\Filter\RequestResponse\SimpleRouter\Route[] Config of routes
+     * @return ForwardFW\Config\Middleware\SimpleRouter\Route[] Config of routes
      */
-    public function getRoutes()
+    public function getRoutes(): array
     {
         return $this->routes;
     }
@@ -64,9 +60,8 @@ class SimpleRouter extends \ForwardFW\Config\Filter\RequestResponse
      * Set if a route not found error should be set or not.
      *
      * @param boolean $routeNotFoundError True if you want a route not found error otherwise false
-     * @return $this
      */
-    public function setRouteNotFoundError($routeNotFoundError = true)
+    public function setRouteNotFoundError(bool $routeNotFoundError = true): self
     {
         $this->routeNotFoundError = $routeNotFoundError;
         return $this;
@@ -78,7 +73,7 @@ class SimpleRouter extends \ForwardFW\Config\Filter\RequestResponse
      *
      * @return boolean True if want a route not found error should be set otherwise false.
      */
-    public function getRouteNotFoundError()
+    public function getRouteNotFoundError(): bool
     {
         return $this->routeNotFoundError;
     }
