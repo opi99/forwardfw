@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * This file is part of ForwardFW a web application framework.
  *
@@ -13,6 +15,9 @@
 
 namespace ForwardFW\Controller;
 
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
+
 /**
  * This Interface must be implemented from an application.
  */
@@ -21,15 +26,13 @@ interface ApplicationInterface
     /**
      * Constructor
      *
-     * @param \ForwardFW\Config\Application $config   Name of application.
-     * @param \ForwardFW\Request            $request  The ForwardFW request object.
-     * @param \ForwardFW\Response           $response The ForwardFW response object.
-     * @param \ForwardFW\Service            $serviceManager The services for this application
+     * @param \ForwardFW\Config\Application $config Name of application.
+     * @param RequestInterface $request PSR Request Interface
+     * @param \ForwardFW\ServiceManager $serviceManager The services for this application
      */
     public function __construct(
         \ForwardFW\Config\Application $config,
-        \ForwardFW\Request $request,
-        \ForwardFW\Response $response,
+        RequestInterface $request,
         \ForwardFW\ServiceManager $serviceManager
     );
 
@@ -38,7 +41,7 @@ interface ApplicationInterface
      *
      * @return string generated content form screens
      */
-    public function run();
+    public function run(): ResponseInterface;
 
     /**
      * Returns the name of the application
@@ -56,17 +59,8 @@ interface ApplicationInterface
 
     /**
      * Returns the request object
-     *
-     * @return \ForwardFW\Request
      */
-    public function getRequest();
-
-    /**
-     * Returns the response object
-     *
-     * @return \ForwardFW\Response
-     */
-    public function getResponse();
+    public function getRequest(): RequestInterface;
 
     /**
      * Returns the response object of this process

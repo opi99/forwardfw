@@ -17,16 +17,15 @@ return (new \ForwardFW\Config\Runner())
         )
         ->addMiddleware(
             new \ForwardFW\Config\Middleware\SimpleRouter()
-        );
-/**
-        ->addProcessor(
-            (new ForwardFW\Config\Filter\RequestResponse\Application())
+        )
+        ->addMiddleware(
+            (new \ForwardFW\Config\Middleware\Application())
                 ->setConfig(
                     (new ForwardFW\Config\Application())
                         ->setName('ShortDemo')
                         ->setScreens(
                             array(
-                                'Hello' => 'ForwardFW\\Controller\\Screen'
+                                'Hello' => \ForwardFW\Controller\Screen::class
                             )
                         )
                         ->setTemplaterConfig(
@@ -36,4 +35,4 @@ return (new \ForwardFW\Config\Runner())
                         )
                 )
         );
-*/
+

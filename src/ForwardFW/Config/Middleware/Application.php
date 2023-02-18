@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * This file is part of ForwardFW a web application framework.
  *
@@ -11,17 +13,17 @@
  * LICENSE.txt file that was distributed with this source code.
  */
 
-namespace ForwardFW\Config\Filter\RequestResponse;
+namespace ForwardFW\Config\Middleware;
 
 /**
  * Config for a Application Filter.
  */
-class Application extends \ForwardFW\Config\Filter\RequestResponse
+class Application extends \ForwardFW\Config\Middleware
 {
     /**
      * @var string Class of application to call
      */
-    protected $executionClassName = 'ForwardFW\\Filter\\RequestResponse\\Application';
+    protected $executionClassName = \ForwardFW\Middleware\Application::class;
 
     /**
      * @var ForwardFW\Config\Application Config of the application
@@ -32,10 +34,8 @@ class Application extends \ForwardFW\Config\Filter\RequestResponse
      * Config of the RequestResponse filter
      *
      * @param ForwardFW\Config\Application $config Config of the RequestResponse filter.
-     *
-     * @return ForwardFW\Config\Filter\RequestResponse\Application
      */
-    public function setConfig(\ForwardFW\Config\Application $config)
+    public function setConfig(\ForwardFW\Config\Application $config): self
     {
         $this->config = $config;
         return $this;

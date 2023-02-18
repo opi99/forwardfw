@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * This file is part of ForwardFW a web application framework.
  *
@@ -11,17 +13,17 @@
  * LICENSE.txt file that was distributed with this source code.
  */
 
-namespace ForwardFW\Config\Filter\RequestResponse\Application;
+namespace ForwardFW\Config\Middleware\Application;
 
 /**
  * Config for a Application Filter.
  */
-class Mvc extends \ForwardFW\Config\Filter\RequestResponse
+class Mvc extends \ForwardFW\Config\Middleware
 {
     /**
      * @var string Class of application to call
      */
-    protected $executionClassName = 'ForwardFW\\Filter\\RequestResponse\\Application\\Mvc';
+    protected $executionClassName = \ForwardFW\Middleware\Application\Mvc::class;
 
     /**
      * @var ForwardFW\Config\Filter\RequestResponse[] Config of the controller filter
@@ -37,10 +39,8 @@ class Mvc extends \ForwardFW\Config\Filter\RequestResponse
      * Config of the RequestResponse filter
      *
      * @param ForwardFW\Config\Filter\RequestResponse $filterConfig Config of the RequestResponse filter.
-     *
-     * @return ForwardFW\Config\Filter\RequestResponse\Application\Mvc
      */
-    public function addFilterController(\ForwardFW\Config\Filter\RequestResponse $filterConfig)
+    public function addFilterController(\ForwardFW\Config\Middleware $filterConfig): self
     {
         $this->filterConfigsController[] = $filterConfig;
         return $this;
@@ -50,10 +50,8 @@ class Mvc extends \ForwardFW\Config\Filter\RequestResponse
      * Config of the RequestResponse filter
      *
      * @param ForwardFW\Config\Filter\RequestResponse $filterConfig Config of the RequestResponse filter.
-     *
-     * @return ForwardFW\Config\Filter\RequestResponse\Application\Mvc
      */
-    public function addFilterView(\ForwardFW\Config\Filter\RequestResponse $filterConfig)
+    public function addFilterView(\ForwardFW\Config\Middleware $filterConfig): self
     {
         $this->filterConfigsView[] = $filterConfig;
         return $this;

@@ -41,7 +41,10 @@ class View extends \ForwardFW\Controller
      */
     public function process()
     {
-        $this->application->getResponse()->addLog('Processing ' . get_class($this));
+        /** @var \Psr\Log\LoggerInterface */
+        $logger = $this->application->getServiceManager()->getService(\Psr\Log\LoggerInterface::class);
+        $logger->info('Processing View ' . get_class($this));
+
         $this->controlView();
         return $this->processView();
     }
@@ -64,7 +67,9 @@ class View extends \ForwardFW\Controller
         $templater = $this->application->getTemplater();
         $templateFileName = $this->getTemplateName() . '.' . $templater->getTemplateFileEnding();
 
-        $this->application->getResponse()->addLog('Processing: ' . $templateFileName);
+        /** @var \Psr\Log\LoggerInterface */
+        $logger = $this->application->getServiceManager()->getService(\Psr\Log\LoggerInterface::class);
+        $logger->info('Processing Template ' . get_class($this));
 
         $templater->setVar('ForwardFW_Version', \ForwardFW\Environment::VERSION);
         try {

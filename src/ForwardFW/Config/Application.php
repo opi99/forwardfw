@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * This file is part of ForwardFW a web application framework.
  *
@@ -24,7 +26,7 @@ class Application extends \ForwardFW\Config
     /**
      * @var string $executionClassName
      */
-    protected $executionClassName = 'ForwardFW\\Controller\\Application';
+    protected $executionClassName = \ForwardFW\Controller\Application::class;
 
     /**
      * @var string Name of the application
@@ -44,7 +46,7 @@ class Application extends \ForwardFW\Config
     /**
      * Default content type of this application
      */
-    private $contentType = 'text/html';
+    private $contentType = 'text/html; charset=UTF-8';
 
     /**
      * Sets name of the application.

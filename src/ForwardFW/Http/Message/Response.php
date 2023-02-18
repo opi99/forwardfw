@@ -123,28 +123,6 @@ class Response
     }
 
     /**
-     * Adds a string to the existent content string.
-     *
-     * @param string $content The content as string.
-     */
-    public function addContent(string $content): self
-    {
-        $this->content .= $content;
-        return $this;
-    }
-
-    /**
-     * Overwrite existent content string.
-     *
-     * @param string $content The content as string.
-     */
-    public function setContent(string $content): self
-    {
-        $this->content = $content;
-        return $this;
-    }
-
-    /**
      * Sets the HTTP ContentType
      *
      * @param string $contentType The HTTP ContentType
@@ -204,24 +182,6 @@ class Response
     public function getContent(): string
     {
         return $this->content;
-    }
-
-    /**
-     * Sends content
-     */
-    public function send(): void
-    {
-        header(
-            'HTTP/1.1 ' . $this->httpStatusCode
-            . ($this->httpStatusMessage !== '' ? ' ' . $this->httpStatusMessage : '')
-        );
-        if ($this->contentType) {
-            header('Content-Type: ' . $this->contentType);
-        }
-        if (null !== $this->contentDisposition) {
-            header('Content-Disposition: ' . $this->contentDisposition);
-        }
-        echo $this->content;
     }
 
 

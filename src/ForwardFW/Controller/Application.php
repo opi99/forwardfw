@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * This file is part of ForwardFW a web application framework.
  *
@@ -12,6 +14,10 @@
  */
 
 namespace ForwardFW\Controller;
+
+use ForwardFW\Factory\ResponseFactory;
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
 
 /**
  * This Controller over one application.
@@ -27,21 +33,12 @@ class Application extends ApplicationAbstract
     /** @var \ForwardFW\Templater\TemplaterInterface */
     protected $templater = null;
 
-    /**
-     * Constructor
-     *
-     * @param \ForwardFW\Config\Application $config         Name of application.
-     * @param \ForwardFW\Request            $request        The request object.
-     * @param \ForwardFW\Response           $response       The request object.
-     * @param \ForwardFW\Service            $serviceManager The services for this application
-     */
     public function __construct(
         \ForwardFW\Config\Application $config,
-        \ForwardFW\Request $request,
-        \ForwardFW\Response $response,
+        RequestInterface $request,
         \ForwardFW\ServiceManager $serviceManager
     ) {
-        parent::__construct($config, $request, $response, $serviceManager);
+        parent::__construct($config, $request, $serviceManager);
 
         $this->configuredScreens = $this->config->getScreens();
 
@@ -55,11 +52,13 @@ class Application extends ApplicationAbstract
     /**
      * Run screen and return generated content
      */
-    public function run(): void
+    public function run(): ResponseInterface
     {
         $content = '';
         $strProcessScreen = $this->getProcessScreen();
-        $this->response->setContentType($this->config->getContentType());
+        $factory = new ResponseFactory();
+        $response = $factory->createResponse();
+        $response = $response->withHeader('Content-Type', $this->config->getContentType());
 
         try {
             $this->screen = $this->getScreenController(
@@ -76,7 +75,11 @@ class Application extends ApplicationAbstract
             // Todo Logging
             throw $e;
         }
-        $this->response->addContent($content);
+
+        $body = $response->getBody();
+        $body->write($content);
+
+        return $response;
     }
 
     /**
@@ -104,7 +107,9 @@ class Application extends ApplicationAbstract
         if (class_exists($screenClassName)) {
             $screenController = new $screenClassName($this);
         } else {
-            $this->response->addError('ScreenClass "' . $screenClassName . '" not includeable.');
+            /** @var \Psr\Log\LoggerInterface */
+            $logger = $this->serviceManager->getService(\Psr\Log\LoggerInterface::class);
+            $logger->error('ScreenClass "' . $screenClassName . '" not includeable.');
         }
 
         return $screenController;

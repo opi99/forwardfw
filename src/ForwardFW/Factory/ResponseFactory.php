@@ -24,7 +24,7 @@ class ResponseFactory
 {
     public function createResponse(int $code = 200, string $reasonPhrase = ''): ResponseInterface
     {
-        return new Response();
+        return (new Response())
+            ->withStatus($code, $reasonPhrase);
     }
 }
-

@@ -115,7 +115,18 @@ class Runner
             }
         }
 
-        $response->getBody()->__toString();
+        $this->outputBody($response);
+    }
+
+
+    private function outputBody(ResponseInterface $response): void
+    {
+        $body = $response->getBody();
+        if ($body->isSeekable()) {
+            $body->rewind();
+        }
+
+        echo $body->__toString();die();
     }
 
     protected function stopServices()

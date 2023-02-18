@@ -45,7 +45,10 @@ class Screen extends View implements ScreenInterface
      */
     public function process()
     {
-        $this->application->getResponse()->addLog('Processing ' . get_class($this));
+        /** @var \Psr\Log\LoggerInterface */
+        $logger = $this->application->getServiceManager()->getService(\Psr\Log\LoggerInterface::class);
+        $logger->info('Processing Screen ' . get_class($this));
+
         $this->controlInput();
         $this->processInput();
         $this->controlView();

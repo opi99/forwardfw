@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * This file is part of ForwardFW a web application framework.
  *
@@ -12,6 +14,9 @@
  */
 
 namespace ForwardFW\Controller;
+
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
 
 /**
  * This Controller over one application.
@@ -28,7 +33,7 @@ abstract class ApplicationAbstract extends View implements ApplicationInterface
     /**
      * The response object.
      *
-     * @var \ForwardFW\Response
+     * @var RequestInterface
      */
     protected $response;
 
@@ -42,25 +47,13 @@ abstract class ApplicationAbstract extends View implements ApplicationInterface
      */
     protected $config = null;
 
-    /**
-     * Constructor
-     *
-     * @param \ForwardFW\Config\Application $config         Name of application.
-     * @param \ForwardFW\Request            $request        The request object.
-     * @param \ForwardFW\Response           $response       The request object.
-     * @param \ForwardFW\Service            $serviceManager The services for this application
-     *
-     * @return void
-     */
     public function __construct(
         \ForwardFW\Config\Application $config,
-        \ForwardFW\Request $request,
-        \ForwardFW\Response $response,
+        RequestInterface $request,
         \ForwardFW\ServiceManager $serviceManager
     ) {
         $this->config = $config;
         $this->request = $request;
-        $this->response = $response;
         $this->serviceManager = $serviceManager;
 
         parent::__construct($this);
@@ -71,7 +64,7 @@ abstract class ApplicationAbstract extends View implements ApplicationInterface
      *
      * @return void
      */
-    abstract public function run();
+    abstract public function run(): ResponseInterface;
 
     /**
      * Returns the name of the application
@@ -95,10 +88,8 @@ abstract class ApplicationAbstract extends View implements ApplicationInterface
 
     /**
      * Returns the request object
-     *
-     * @return \ForwardFW\Request
      */
-    public function getRequest()
+    public function getRequest(): RequestInterface
     {
         return $this->request;
     }
