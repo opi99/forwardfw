@@ -19,6 +19,9 @@ return (new \ForwardFW\Config\Runner())
             new \ForwardFW\Config\Middleware\SimpleRouter()
         )
         ->addMiddleware(
+            new \ForwardFW\Config\Middleware\Login\BasicAuth()
+        )
+        ->addMiddleware(
             (new \ForwardFW\Config\Middleware\Application())
                 ->setConfig(
                     (new ForwardFW\Config\Application())

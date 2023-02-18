@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * This file is part of ForwardFW a web application framework.
  *
@@ -11,12 +13,12 @@
  * LICENSE.txt file that was distributed with this source code.
  */
 
-namespace ForwardFW\Config\Filter\RequestResponse\Login;
+namespace ForwardFW\Config\Middleware\Login;
 
 /**
  * Config for a SimpleRouter Filter.
  */
-class BasicAuth extends \ForwardFW\Config\Filter\RequestResponse
+class BasicAuth extends \ForwardFW\Config\Middleware
 {
-    protected $executionClassName = \ForwardFW\Filter\RequestResponse\Login\BasicAuth::class;
+    protected $executionClassName = \ForwardFW\Middleware\Login\BasicAuth::class;
 }
