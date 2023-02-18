@@ -31,7 +31,7 @@ class BasicAuth extends \ForwardFW\Middleware
         $isLoggedIn = false;
 
         if (isset($requestParams['PHP_AUTH_USER']) && isset($requestParams['PHP_AUTH_PW'])) {
-            if ($requestParams['PHP_AUTH_USER'] === 'ao' && $requestParams['PHP_AUTH_PW'] === 'ao') {
+            if ($requestParams['PHP_AUTH_USER'] === $this->config->getUsername() && $requestParams['PHP_AUTH_PW'] === $this->config->getPassword()) {
                 $isLoggedIn = true;
             }
         }

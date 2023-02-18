@@ -16,9 +16,41 @@ declare(strict_types=1);
 namespace ForwardFW\Config\Middleware\Login;
 
 /**
- * Config for a SimpleRouter Filter.
+ * Config for a BasicAuth middleware.
  */
 class BasicAuth extends \ForwardFW\Config\Middleware
 {
     protected $executionClassName = \ForwardFW\Middleware\Login\BasicAuth::class;
+
+    protected string $username = '';
+
+    protected string $password = '';
+
+    /**
+     * Username for BasicAuth
+     */
+    public function setUsername(string $username): self
+    {
+        $this->username = $username;
+        return $this;
+    }
+
+    public function getUsername(): string
+    {
+        return $this->username;
+    }
+
+    /**
+     * Password for BasicAuth
+     */
+    public function setPassword(string $password): self
+    {
+        $this->password = $password;
+        return $this;
+    }
+
+    public function getPassword(): string
+    {
+        return $this->password;
+    }
 }
