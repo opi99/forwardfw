@@ -17,7 +17,7 @@
         }
     },
     "require": {
-        "php": ">=8.0",
+        "php": "^8.2",
         "psr/http-server-middleware": "^1.0",
         "psr/container": "^2.0",
         "psr/http-factory": "^1.0",
