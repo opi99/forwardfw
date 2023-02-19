@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * This file is part of ForwardFW a web application framework.
  *
@@ -31,16 +33,6 @@ class Bootstrap
         if (!$this->config instanceof Config\Runner) {
             throw new \ForwardFW\Exception\BootstrapException('Config didn\'t return a runner configuration.');
         }
-    }
-
-    public function getRequest(): Request
-    {
-        return $this->request;
-    }
-
-    public function getResponse(): Response
-    {
-        return $this->response;
     }
 
     public function run(): void
