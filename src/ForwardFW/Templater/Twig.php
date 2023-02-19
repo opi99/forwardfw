@@ -76,7 +76,7 @@ class Twig extends \ForwardFW\Controller implements \ForwardFW\Templater\Templat
      *
      * @param string $fileName Complete path and filename.
      */
-    public function setTemplateFile($fileName): self
+    public function setTemplateFile(string $fileName): self
     {
         $this->twigTemplate = $this->twigEnvironment->load($fileName);
         return $this;
@@ -85,10 +85,10 @@ class Twig extends \ForwardFW\Controller implements \ForwardFW\Templater\Templat
     /**
      * Sets a var in the template to a value
      *
-     * @param string $varName Name of template var.
+     * @param string $name Name of template var.
      * @param mixed  $value  Value of template var.
      */
-    public function setVar($varName, $value): self
+    public function setVar(string $name, $mValue): self
     {
         $this->templateVars[$varName] = $value;
         return $this;

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * This file is part of ForwardFW a web application framework.
  *
@@ -18,23 +20,20 @@ namespace ForwardFW\Templater;
  */
 class Smarty extends \ForwardFW\Controller implements \ForwardFW\Templater\TemplaterInterface
 {
-    /**
-     * @var Smarty The smarty instance
-     */
-    private $smarty = null;
+    /** @var \Smarty The smarty instance */
+    private \Smarty $smarty;
+
+    /** @var array Blocks to show */
+    private array $arShowBlocks = [];
+
+    /** @var string Name of the template file */
+    private string $fileName;
+
+    private \ForwardFW\Config\Templater $config;
 
     /**
-     * @var array Blocks to show
-     */
-    private $arShowBlocks = array();
-
-    /**
-     * Constructor
-     *
      * @param ForwardFW\Config\Templater $config The smarty configuration
      * @param ForwardFW\Controller\ApplicationInterface $application The running application
-     *
-     * @return void
      */
     public function __construct(
         \ForwardFW\Config\Templater $config,
@@ -42,47 +41,41 @@ class Smarty extends \ForwardFW\Controller implements \ForwardFW\Templater\Templ
     ) {
         parent::__construct($application);
 
-        $strCompilePath = $config->getCompilePath();
+        $this->config = $config;
 
-        if (!is_dir($strCompilePath)) {
-            if (!@mkdir($strCompilePath, 0770, true)) {
+        $compilePath = $config->getCompilePath();
+
+        if (!is_dir($compilePath)) {
+            if (!@mkdir($compilePath, 0770, true)) {
                 $error = error_get_last();
-                throw new \Exception($error['message'] . "\n" . 'Path: ' . $strCompilePath);
+                throw new \Exception($error['message'] . "\n" . 'Path: ' . $compilePath);
             }
         }
 
         $this->smarty = new \Smarty();
-        $this->smarty->setCompileDir($strCompilePath);
+        $this->smarty->setCompileDir($compilePath);
         $this->smarty->registerPlugin('block', 'block', array(&$this, 'smartyBlock'));
         $this->smarty->registerPlugin('function', 'texter', array(&$this, 'smartyTexter'));
-
-        $this->strTemplatePath = $config->getTemplatePath();
     }
 
     /**
      * Sets file to use for templating
-     *
-     * @param string $strFile Complete path and filename.
-     *
-     * @return ForwardFW_Templater_Smarty The instance.
      */
-    public function setTemplateFile($strFile)
+    public function setTemplateFile(string $fileName): self
     {
-        $this->strFile = $strFile;
+        $this->fileName = $fileName;
         return $this;
     }
 
     /**
      * Sets a var in the template to a value
      *
-     * @param string $strName Name of template var.
-     * @param mixed  $mValue  Value of template var.
-     *
-     * @return ForwardFW_Templater_Smarty The instance.
+     * @param string $name Name of template var.
+     * @param mixed $mValue Value of template var.
      */
-    public function setVar($strName, $mValue)
+    public function setVar(string $name, $mValue): self
     {
-        $this->smarty->assign($strName, $mValue);
+        $this->smarty->assign($name, $mValue);
         return $this;
     }
 
@@ -91,12 +84,12 @@ class Smarty extends \ForwardFW\Controller implements \ForwardFW\Templater\Templ
      *
      * @return string Content of template after compiling.
      */
-    public function getCompiled()
+    public function getCompiled(): string
     {
         // Catch Exceptions and clear output cache
         try {
             $result = $this->smarty->fetch(
-                $this->strTemplatePath . '/' . $this->strFile
+                $this->config->getTemplatePath() . '/' . $this->fileName
             );
         } catch (\Exception $e) {
             ob_end_clean();

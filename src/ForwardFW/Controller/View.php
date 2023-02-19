@@ -76,7 +76,9 @@ class View extends \ForwardFW\Controller
             $templater->setTemplateFile($templateFileName);
             return $templater->getCompiled();
         } catch (\Exception $e) {
-            $this->application->getResponse()->addError($e->getMessage());
+            /** @var \Psr\Log\LoggerInterface */
+            $logger = $this->application->getServiceManager()->getService(\Psr\Log\LoggerInterface::class);
+            $logger->error($e->getMessage());
         }
         return '';
     }
