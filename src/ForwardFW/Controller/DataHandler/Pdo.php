@@ -16,21 +16,23 @@ declare(strict_types=1);
 namespace ForwardFW\Controller\DataHandler;
 
 /**
- * Managing DataLoading via PEAR::MDB2
+ * Managing DataLoading via PHPs PDO
  */
-class MDB2 extends \ForwardFW\Controller\DataHandler
+class Pdo extends \ForwardFW\Controller\DataHandler
 {
+    private \Pdo $connection;
+
     /**
      * Loads Data from a connection (DB, SOAP, File)
      *
      * @param string $connectionName Name of connection
      * @param array $options Options to load the data
      *
-     * @return mixed Data from the connection.
+     * @return array Data from the connection.
      */
     public function loadFrom($connectionName, array $options)
     {
-        $conMDB2 = $this->getConnection($connectionName);
+        $connection = $this->getConnection($connectionName);
 
         $strQuery = 'SELECT ' . $options['select'] . ' FROM ' . $this->getTableName($options['from'], $connectionName);
         if (isset($options['where'])) {
@@ -46,20 +48,14 @@ class MDB2 extends \ForwardFW\Controller\DataHandler
             $strQuery .= ' LIMIT ' . $options['limit'];
         }
 
-        $arResult = array();
-        $resultMDB2 = $conMDB2->query($strQuery);
+        $result = $connection->query($strQuery);
 
-        if (\MDB2::isError($resultMDB2)) {
+        if ($result === false) {
             throw new \ForwardFW\Exception\DataHandler(
-                'Error while execute: '
-                . $resultMDB2->getMessage()
-                . $resultMDB2->getUserinfo()
+                'Error while execute: ' . $connection->lastErrorMsg()
             );
         }
-        while ($arRow = $resultMDB2->fetchRow(MDB2_FETCHMODE_ASSOC)) {
-            array_push($arResult, $arRow);
-        }
-        return $arResult;
+        return $result->fetchAll(\PDO::FETCH_ASSOC);
     }
 
     /**
@@ -68,34 +64,30 @@ class MDB2 extends \ForwardFW\Controller\DataHandler
      * @param string $connectionName Name of connection
      * @param array $options Options to load the data
      *
-     * @return mixed Data from the connection.
+     * @return array Empty array
      */
     public function saveTo($connectionName, array $options)
     {
-        $conMDB2 = $this->getConnection($connectionName);
+        $connection = $this->getConnection($connectionName);
 
         $strQuery = 'UPDATE ' . $this->getTableName($options['to'], $connectionName);
 
         $strQuery .= ' SET ';
         foreach ($options['values'] as $strName => $value) {
-            $arSets[] = $strName . '=' . $this->getSqlValue($options['columns'][$strName], $value, $conMDB2);
+            $arSets[] = $strName . '=' . $this->getSqlValue($options['columns'][$strName], $value, $connection);
         }
         $strQuery .= implode(',', $arSets);
 
         $strQuery .= ' WHERE ' . $options['where'];
 
         $arResult = array();
-        $resultMDB2 = $conMDB2->query($strQuery);
+        $result = $connection->exec($strQuery);
 
-        if (\MDB2::isError($resultMDB2)) {
+        if ($result === false) {
+            $this->application->getResponse()->addError($connection->lastErrorMsg());
             throw new \ForwardFW\Exception\DataHandler(
-                'Error while execute: '
-                . $resultMDB2->getMessage()
-                . $resultMDB2->getUserinfo()
+                'Error while execute: ' . $connection->lastErrorMsg()
             );
-        }
-        while ($arRow = $resultMDB2->fetchRow(MDB2_FETCHMODE_ASSOC)) {
-            array_push($arResult, $arRow);
         }
         return $arResult;
     }
@@ -107,11 +99,11 @@ class MDB2 extends \ForwardFW\Controller\DataHandler
      * @param array $options Options to load the data
      * @param ForwardFW\Callback $idCallback Callback to give id of object creation
      *
-     * @return mixed Data from the connection.
+     * @return array Empty array
      */
     public function create($connectionName, array $options, \ForwardFW\Callback $idCallback = null)
     {
-        $conMDB2 = $this->getConnection($connectionName);
+        $connection = $this->getConnection($connectionName);
 
         $strQuery = 'INSERT INTO ' . $this->getTableName($options['to'], $connectionName);
 
@@ -119,23 +111,22 @@ class MDB2 extends \ForwardFW\Controller\DataHandler
         $strQuery .= ' VALUES (';
         $arValues = array();
         foreach ($options['values'] as $strName => $value) {
-            $arValues[] = $this->getSqlValue($options['columns'][$strName], $value, $conMDB2);
+            $arValues[] = $this->getSqlValue($options['columns'][$strName], $value, $connection);
         }
         $strQuery .= implode(',', $arValues) . ')';
 
         $arResult = array();
-        $resultMDB2 = $conMDB2->query($strQuery);
+        $result = $connection->exec($strQuery);
 
-        if (\MDB2::isError($resultMDB2)) {
+        if ($result === false) {
+            $this->application->getResponse()->addError($connection->lastErrorMsg());
             throw new \ForwardFW\Exception\DataHandler(
-                'Error while execute: '
-                . $resultMDB2->getMessage()
-                . $resultMDB2->getUserinfo()
+                'Error while execute: ' . $connection->lastErrorMsg()
             );
         }
-        while ($arRow = $resultMDB2->fetchRow(MDB2_FETCHMODE_ASSOC)) {
-            array_push($arResult, $arRow);
-        }
+
+        // @TODO Callback with new ID
+
         return $arResult;
     }
 
@@ -145,28 +136,34 @@ class MDB2 extends \ForwardFW\Controller\DataHandler
      * @param string $connectionName Name of connection
      * @param array $options Options to load the data
      *
-     * @return mixed Data from the connection.
+     * @return array Empty array
      */
     public function truncate($connectionName, array $options)
     {
-        $conMDB2 = $this->getConnection($connectionName);
+        $connection = $this->getConnection($connectionName);
 
-        $strQuery = 'truncate ' . $this->getTableName($options['table'], $connectionName);
+        $table = $this->getTableName($options['table'], $connectionName);
 
-        $arResult = array();
-        $resultMDB2 = $conMDB2->query($strQuery);
+        // Delete content of table
+        $result = $connection->exec('DELETE FROM ' . $table);
 
-        if (\MDB2::isError($resultMDB2)) {
+        if ($result === false) {
+            $this->application->getResponse()->addError($connection->lastErrorMsg());
             throw new \ForwardFW\Exception\DataHandler(
-                'Error while execute: '
-                . $resultMDB2->getMessage()
-                . $resultMDB2->getUserinfo()
+                'Error while execute: ' . $connection->lastErrorMsg()
             );
         }
-        while ($arRow = $resultMDB2->fetchRow(MDB2_FETCHMODE_ASSOC)) {
-            array_push($arResult, $arRow);
+
+        // Reset auto_inc counter
+        $result = $connection->exec('DELETE FROM SQLITE_SEQUENCE WHERE name = \'' . $table . '\'');
+
+        if ($result === false) {
+            $this->application->getResponse()->addError($connection->lastErrorMsg());
+            throw new \ForwardFW\Exception\DataHandler(
+                'Error while execute: ' . $connection->lastErrorMsg()
+            );
         }
-        return $arResult;
+        return [];
     }
 
     /**
@@ -178,25 +175,25 @@ class MDB2 extends \ForwardFW\Controller\DataHandler
      */
     public function initConnection($connectionName)
     {
-        $options = array('portability' => MDB2_PORTABILITY_ALL ^ MDB2_PORTABILITY_FIX_CASE);
-//         $options = array_merge($options, $arConfig['options']);
-        $conMDB2 = \MDB2::connect($this->config->getDsn(), $options);
-
-        if (\MDB2::isError($conMDB2)) {
+        try {
+            $connection = new \PDO($this->config->getDsn(), $this->config->getUsername(), $this->config->getPassword());
+        } catch (\Exception $e) {
             throw new \ForwardFW\Exception\DataHandler(
-                'Cannot initialize MDB Connection: '
-                . $conMDB2->getMessage()
-                . $conMDB2->getUserinfo()
+                'Cannot initialize PDO Connection: '
+                . $e->getMessage()
             );
         }
 
-        $ret = $conMDB2->exec('set character set utf8');
-        $this->arConnectionCache[$connectionName] = $conMDB2;
+        $ret = $connection->exec('SET NAMES utf8; SET CHARACTER SET utf8');
+        $this->connectionCache[$connectionName] = $connection;
     }
 
-    public function getSqlValue($strType, $value, $conMDB2)
+    public function getSqlValue($strType, $value, $connection)
     {
-        return $conMDB2->quote($value, $strType, true);
+        if ($strType === 'integer') {
+            return (int) $value;
+        }
+        return '\'' . $connection->escapeString($value) . '\'';
     }
 
     /**

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * This file is part of ForwardFW a web application framework.
  *
@@ -18,5 +20,5 @@ namespace ForwardFW\Config\Service\DataHandler;
  */
 class Mdb2 extends \ForwardFW\Config\Service\DataHandler
 {
-    protected $executionClassName = 'ForwardFW\\Controller\\DataHandler\\MDB2';
+    protected $executionClassName = \ForwardFW\Controller\DataHandler\MDB2::class;
 }

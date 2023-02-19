@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * This file is part of ForwardFW a web application framework.
  *
@@ -16,7 +18,7 @@ namespace ForwardFW\Config\Service\DataHandler;
 /**
  * Config for a Sqlite3 DataHandler Service.
  */
-class Mdb2 extends \ForwardFW\Config\Service\DataHandler
+class Sqlite3 extends \ForwardFW\Config\Service\DataHandler
 {
-    protected $executionClassName = 'ForwardFW\\Controller\\DataHandler\\Sqlite3';
+    protected $executionClassName = \ForwardFW\Controller\DataHandler\Sqlite3::class;
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * This file is part of ForwardFW a web application framework.
  *
@@ -31,24 +33,6 @@ class DataHandler extends \ForwardFW\Service\AbstractService implements DataHand
             throw new \Exception('Not my config class');
         }
     }
-    /**
-     * Returns an instance of configured DataHandler.
-     *
-     * @param ForwardFW\Controller\ApplicationInterface $application The running application.
-     *
-     * @return void
-     */
-// No instancing DataHandler is a service now.
-//     public static function getInstance(ApplicationInterface $application)
-//     {
-//         if (isset($GLOBALS['DataLoader']['instance'][$application->getName()])) {
-//             $return = $GLOBALS['DataLoader']['instance'][$application->getName()];
-//         } else {
-//             $return = new self($application);
-//             $GLOBALS['DataLoader']['instance'][$application->getName()] = $return;
-//         }
-//         return $return;
-//     }
 
     /**
      * Loads Data from cache or from a connection (DB, SOAP, File) if cache failed.
@@ -60,6 +44,8 @@ class DataHandler extends \ForwardFW\Service\AbstractService implements DataHand
      */
     public function loadFromCached($connectionName, array $options, $nCacheTimeout = -1)
     {
+        return $this->loadFrom($connectionName, $options);
+
         $handler = $this->getConnection($connectionName);
 
         $cache = $this->getCacheSystem($connectionName);
@@ -89,7 +75,7 @@ class DataHandler extends \ForwardFW\Service\AbstractService implements DataHand
     protected function getCacheSystem($connectionName)
     {
         $backendConfig = new \ForwardFW\Config\Cache\Backend\File();
-        $backendConfig->strPath = getcwd() . '/cache/';
+        $backendConfig->setPath(getcwd() . '/cache/');
 
         $configCacheFrontend = new \ForwardFW\Config\Cache\Frontend\Caller();
         $configCacheFrontend->setBackendConfig($backendConfig);

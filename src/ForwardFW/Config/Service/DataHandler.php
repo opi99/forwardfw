@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * This file is part of ForwardFW a web application framework.
  *
@@ -18,24 +20,22 @@ namespace ForwardFW\Config\Service;
  */
 class DataHandler extends \ForwardFW\Config\Service
 {
-    protected $executionClassName = 'ForwardFW\\Controller\\DataHandler';
+    protected $executionClassName = \ForwardFW\Controller\DataHandler::class;
 
-    protected $interfaceName = 'ForwardFW\\Controller\\DataHandlerInterface';
+    protected $interfaceName = \ForwardFW\Controller\DataHandlerInterface::class;
 
     // No different DataHandler configurable yet. Maybe remove DataHandler and declare this as different startable services?
     /** @var string prefix in tables. */
-    private $tablePrefix = '';
+    private string $tablePrefix = '';
 
-    private $dsn = '';
+    private string $dsn = '';
 
     /**
      * Sets dsn for this connection.
      *
-     * @param string $dsn Prefix for Tables.
-     *
-     * @return \ForwardFW\Config\Service\DataHandler
+     * @param string $dsn DSN for database.
      */
-    public function setDsn($dsn)
+    public function setDsn(string $dsn): self
     {
         $this->dsn = $dsn;
         return $this;
@@ -43,10 +43,8 @@ class DataHandler extends \ForwardFW\Config\Service
 
     /**
      * Gets dsn for this connection.
-     *
-     * @return string
      */
-    public function getDsn()
+    public function getDsn(): string
     {
         return $this->dsn;
     }
@@ -55,10 +53,8 @@ class DataHandler extends \ForwardFW\Config\Service
      * Sets prefix for the used tables.
      *
      * @param string $tablePrefix Prefix for Tables.
-     *
-     * @return \ForwardFW\Config\Service\DataHandler
      */
-    public function setTablePrefix($tablePrefix)
+    public function setTablePrefix(string $tablePrefix): self
     {
         $this->tablePrefix = $tablePrefix;
         return $this;
@@ -66,10 +62,8 @@ class DataHandler extends \ForwardFW\Config\Service
 
     /**
      * Gets prefix for the used tables.
-     *
-     * @return string
      */
-    public function getTablePrefix()
+    public function getTablePrefix(): string
     {
         return $this->tablePrefix;
     }

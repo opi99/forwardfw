@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * This file is part of ForwardFW a web application framework.
  *
@@ -18,15 +20,6 @@ namespace ForwardFW\Controller;
  */
 interface DataHandlerInterface
 {
-    /**
-     * Returns an instance of configured DataHandler.
-     *
-     * @param ForwardFW\Controller\ApplicationInterface $application The running application.
-     *
-     * @return void
-     */
-//     public static function getInstance(ApplicationInterface $application);
-
     /**
      * Loads Data from cache or from a connection (DB, SOAP, File) if cache failed.
      *

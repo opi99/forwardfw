@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * This file is part of ForwardFW a web application framework.
  *
@@ -30,7 +32,7 @@ class Sqlite3 extends \ForwardFW\Controller\DataHandler
     {
         $connection = $this->getConnection($connectionName);
 
-        $strQuery = 'SELECT ' . $options['select'] . ' FROM ' . $this->getTableName($options['to'], $connectionName);
+        $strQuery = 'SELECT ' . $options['select'] . ' FROM ' . $this->getTableName($options['from'], $connectionName);
         if (isset($options['where'])) {
             $strQuery .= ' WHERE ' . $options['where'];
         }
