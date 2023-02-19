@@ -25,8 +25,6 @@ class View extends \ForwardFW\Controller
      * Constructor
      *
      * @param ForwardFW\Controller\Application $application The running application.
-     *
-     * @return void
      */
     public function __construct(ApplicationInterface $application)
     {
@@ -39,7 +37,7 @@ class View extends \ForwardFW\Controller
      *
      * @return string
      */
-    public function process()
+    public function process(): string
     {
         /** @var \Psr\Log\LoggerInterface */
         $logger = $this->application->getServiceManager()->getService(\Psr\Log\LoggerInterface::class);
@@ -54,7 +52,7 @@ class View extends \ForwardFW\Controller
      *
      * @return boolean True if all data exists.
      */
-    public function controlView()
+    public function controlView(): bool
     {
         return true;
     }
@@ -94,7 +92,7 @@ class View extends \ForwardFW\Controller
      *
      * @return string Name of the template
      */
-    protected function getTemplateName()
+    protected function getTemplateName(): string
     {
         // Replacing class slashes by path backslashes
         return strtr($this->viewName, '\\', '/');

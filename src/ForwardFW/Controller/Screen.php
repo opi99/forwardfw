@@ -25,7 +25,7 @@ class Screen extends View implements ScreenInterface
      */
     private $views;
 
-    protected $strView = \ForwardFW\Controller\View::class;
+    protected $viewClassName = \ForwardFW\Controller\View::class;
 
     /**
      * Constructor
@@ -40,10 +40,8 @@ class Screen extends View implements ScreenInterface
 
     /**
      * Processes the Screen.
-     *
-     * @return string result of View
      */
-    public function process()
+    public function process(): string
     {
         /** @var \Psr\Log\LoggerInterface */
         $logger = $this->application->getServiceManager()->getService(\Psr\Log\LoggerInterface::class);
@@ -60,7 +58,7 @@ class Screen extends View implements ScreenInterface
      *
      * @return boolean True if all user input was accepted.
      */
-    public function controlInput()
+    public function controlInput(): bool
     {
         return true;
     }
@@ -71,21 +69,20 @@ class Screen extends View implements ScreenInterface
      *
      * @return boolean True if processing was succesfully.
      */
-    public function processInput()
+    public function processInput(): bool
     {
         return true;
     }
 
     /**
      * Loads Data for views and defines which views to use.
-     * strView is used.
      *
      * @return boolean True if screen wants to be viewed. Necessary for MultiApps.
      */
-    public function controlView()
+    public function controlView(): bool
     {
-        if ($this->strView) {
-            $view = $this->loadView($this->strView);
+        if ($this->viewClassName) {
+            $view = $this->loadView($this->viewClassName);
             if (null === $view) {
                 return false;
             }
@@ -118,7 +115,7 @@ class Screen extends View implements ScreenInterface
      *
      * @return ForwardFW\Controller\Screen This Screen.
      */
-    protected function addView(View $view)
+    protected function addView(View $view): self
     {
         $this->views->append($view);
         return $this;
@@ -147,7 +144,7 @@ class Screen extends View implements ScreenInterface
      *
      * @return ArrayObject of ForwardFW\Controller\View The list of views.
      */
-    public function getViews()
+    public function getViews(): \ArrayObject
     {
         return $this->views;
     }
