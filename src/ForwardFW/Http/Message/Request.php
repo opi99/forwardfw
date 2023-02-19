@@ -229,7 +229,7 @@ class Request
     public function __construct(string $method = null, string $uri = null, $body = 'php://input', array $headers = [])
     {
         if ($method === 'GET' || $method === 'POST') {
-            $this->$method = $method;
+            $this->method = $method;
         }
         $this->uri = $uri;
 
