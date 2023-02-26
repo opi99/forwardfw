@@ -35,6 +35,9 @@ class Request
     /** @var string URI of request */
     protected $uri = '/';
 
+    /** @var string */
+    protected $routePath;
+
     /**
      * Returns the parameter for the application from browser request or
      * the session data.

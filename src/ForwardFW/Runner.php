@@ -15,43 +15,23 @@ declare(strict_types=1);
 
 namespace ForwardFW;
 
-use ForwardFW\Factory\ResponseFactory;
 use ForwardFW\Factory\ServerRequestFactory;
+use ForwardFW\Middleware\MiddlewareIterator;
 use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
 class Runner
+    extends MiddlewareIterator
     implements RequestHandlerInterface
 {
     private const MULTI_LINE_HEADERS = [
         'set-cookie',
     ];
 
-    /**
-     * @var Request
-     */
-    private $request;
-
-    /**
-     * @var Response
-     */
-    private $response;
-
-    /** @var \ForwardFW\Config\Runner */
-    protected $config;
-
-    /** @var \ArrayIterator */
-    protected $middlewareIterator;
-
-    /** @var \ForwardFW\ServiceManager */
-    protected $serviceManager = null;
-
     public function __construct(
         \ForwardFW\Config\Runner $config
     ) {
-        $this->config = $config;
-        $this->middlewareIterator = $this->config->getMiddlewares()->getIterator();
+        parent::__construct($config);
     }
 
     public function run()
@@ -69,29 +49,13 @@ class Runner
     {
         $serviceManagerConfig = $this->config->getServiceManager();
         $class = $serviceManagerConfig->getExecutionClassName();
-        $this->serviceManager = new $class($serviceManagerConfig, $this->request, $this->response);
+        $this->serviceManager = new $class($serviceManagerConfig);
     }
 
     protected function registerServices()
     {
         foreach ($this->config->getServices() as $serviceConfig) {
             $this->serviceManager->registerService($serviceConfig);
-        }
-    }
-
-    public function handle(ServerRequestInterface $request): ResponseInterface
-    {
-        $middlewareConfig = $this->middlewareIterator->current();
-        $this->middlewareIterator->next();
-
-        if ($middlewareConfig !== null) {
-            $strFilterClass = $middlewareConfig->getExecutionClassName();
-            $middleware = new $strFilterClass($middlewareConfig, $this->serviceManager);
-            return $middleware->process($request, $this);
-        } else {
-            // No Middleware which runs?
-            $factory = new ResponseFactory();
-            return $factory->createResponse();
         }
     }
 

@@ -88,9 +88,9 @@ class Twig extends \ForwardFW\Controller implements \ForwardFW\Templater\Templat
      * @param string $name Name of template var.
      * @param mixed  $value  Value of template var.
      */
-    public function setVar(string $name, $mValue): self
+    public function setVar(string $name, $value): self
     {
-        $this->templateVars[$varName] = $value;
+        $this->templateVars[$name] = $value;
         return $this;
     }
 

@@ -30,24 +30,25 @@ class SimpleRouter extends \ForwardFW\Middleware
         $logger = $this->serviceManager->getService(\Psr\Log\LoggerInterface::class);
         $logger->info('Start Route');
 
-        var_dump($request->getRequestTarget());
+        $requestTargetPath = $request->getRequestTarget();
 
         foreach ($this->config->getRoutes() as $routeConfig) {
-            if (strncmp($this->routePath, $routeConfig->getStart(), strlen($routeConfig->getStart())) === 0) {
-                $nextRoute = substr($this->routePath, strlen($routeConfig->getStart()));
+            if (strncmp($requestTargetPath, $routeConfig->getStart(), strlen($routeConfig->getStart())) === 0) {
+                $nextRoute = substr($requestTargetPath, strlen($routeConfig->getStart()));
                 if ($nextRoute === false) {
                     $nextRoute = '';
                 }
                 $subRequest = $request->withRequestTarget($nextRoute);
 
-                $request = $this->setHandler($request, $route[1]);
+                $middlewareIterator = new MiddlewareIterator($routeConfig);
+                $middlewareIterator->setServiceManager($this->serviceManager);
+                $response = $middlewareIterator->handle($subRequest);
 
                 break;
             }
         }
 
         $logger->info('End Route');
-        $response = $handler->handle($request);
 
         return $response;
     }

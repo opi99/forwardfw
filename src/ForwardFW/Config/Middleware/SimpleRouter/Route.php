@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * This file is part of ForwardFW a web application framework.
  *
@@ -17,40 +19,29 @@ namespace ForwardFW\Config\Middleware\SimpleRouter;
  * Config for a SimpleRouter Filter.
  */
 class Route extends \ForwardFW\Config
+    implements \ForwardFW\Config\Middleware\MiddlewareIteratorInterface
 {
-    /**
-     * @var string Startpoint of the route
-     */
-    private $start = '';
+    use \ForwardFW\Config\Traits\Middleware;
+
+    /** @var string Startpoint of the route */
+    private string $start;
 
     /**
-     * @var ForwardFW\Config\Filter\RequestResponse[] Config of the filter
+     * Constructor
      */
-    private $filterConfigs = array();
+    public function __construct()
+    {
+        $this->middlewares = new \ArrayObject();
+    }
 
     /**
      * Sets Startpoint of the route
      *
      * @param string $strStart Startpoint of the route
-     *
-     * @return ForwardFW\Config\Filter\RequestResponse\SimpleRouter
      */
-    public function setStart($strStart)
+    public function setStart(string $start): self
     {
-        $this->strStart = $strStart;
-        return $this;
-    }
-
-    /**
-     * Config of the RequestResponse filter
-     *
-     * @param ForwardFW\Config\Filter\RequestResponse $filterConfig Config of the RequestResponse filter.
-     *
-     * @return ForwardFW\Config\Filter\RequestResponse\SimpleRouter
-     */
-    public function addFilter(\ForwardFW\Config\Filter\RequestResponse $filterConfig)
-    {
-        $this->filterConfigs[] = $filterConfig;
+        $this->start = $start;
         return $this;
     }
 
@@ -59,18 +50,8 @@ class Route extends \ForwardFW\Config
      *
      * @return string
      */
-    public function getStart()
+    public function getStart(): string
     {
-        return $this->strStart;
-    }
-
-    /**
-     * Get config of the RequestResponse filter.
-     *
-     * @return ForwardFW\Config\Filter\RequestResponse[]
-     */
-    public function getFilterConfigs()
-    {
-        return $this->filterConfigs;
+        return $this->start;
     }
 }

@@ -42,7 +42,7 @@ class SimpleRouter extends \ForwardFW\Config\Middleware
      */
     public function addRoute(SimpleRouter\Route $route): self
     {
-        $this->routes->append($route);
+        $this->routes[] = $route;
         return $this;
     }
 

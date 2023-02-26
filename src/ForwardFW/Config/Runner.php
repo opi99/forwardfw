@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * This file is part of ForwardFW a web application framework.
  *
@@ -11,16 +13,16 @@
  * LICENSE.txt file that was distributed with this source code.
  */
 
-declare(strict_types=1);
-
 namespace ForwardFW\Config;
 
 /**
  * Config for the Runner.
  */
 class Runner extends \ForwardFW\Config
+    implements \ForwardFW\Config\Middleware\MiddlewareIteratorInterface
 {
     use \ForwardFW\Config\Traits\Execution;
+    use \ForwardFW\Config\Traits\Middleware;
 
     /** @var string Class Name of executor */
     protected $executionClassName = \ForwardFW\Runner::class;
@@ -34,11 +36,6 @@ class Runner extends \ForwardFW\Config
      * @var \ArrayObject<int, \ForwardFW\Config\Service> Config of the services
      */
     private $services;
-
-    /**
-     * @var \ArrayObject<int, \ForwardFW\Config\Middleware> Config of the middlewares
-     */
-    private $middlewares;
 
     /**
      * @var \ForwardFW\Config\ServiceManager Config of the service manager
@@ -85,23 +82,6 @@ class Runner extends \ForwardFW\Config
     public function getServices(): \ArrayObject
     {
         return $this->services;
-    }
-
-    /**
-     * @param \ForwardFW\Config\Middleware $middleware The middleware config to add
-     */
-    public function addMiddleware(\ForwardFW\Config\Middleware $middleware): self
-    {
-        $this->middlewares->append($middleware);
-        return $this;
-    }
-
-    /**
-     * @return \ArrayObject<int, \ForwardFW\Config\Middleware> Config of middlewares
-     */
-    public function getMiddlewares(): \ArrayObject
-    {
-        return $this->middlewares;
     }
 
     /**
