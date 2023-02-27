@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * This file is part of ForwardFW a web application framework.
  *
@@ -18,6 +20,10 @@ namespace ForwardFW\Cache;
  */
 abstract class Frontend implements FrontendInterface
 {
+    private \ForwardFW\Controller\ApplicationInterface $application;
+
+    private \ForwardFW\Cache\BackendInterface $backend;
+
     /**
      * Constructor
      *
@@ -140,7 +146,7 @@ abstract class Frontend implements FrontendInterface
             $mData = $this->getDataToCache($config);
             $this->backend->setData($hash, $mData);
         } catch (\Exception $e) {
-            $this->application->getResponse()->addError($e->getMessage());
+//            $this->application->getResponse()->addError($e->getMessage());
             if ($config->getReserveOld() && $isOldAvailable) {
                 $mData = $this->backend->getData($hash, 0);
             }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * This file is part of ForwardFW a web application framework.
  *
@@ -18,12 +20,10 @@ namespace ForwardFW\Config\Cache\Backend;
  */
 class File extends \ForwardFW\Config\Cache\Backend
 {
-    protected $executionClassName = 'ForwardFW\\Cache\\Backend\\File';
+    protected $executionClassName = \ForwardFW\Cache\Backend\File::class;
 
-    /*
-     * @var string Path to cache
-     */
-    private $path;
+    /** @var string Path to cache */
+    private string $path;
 
     /**
      * Sets the path where this cache lies.
@@ -32,7 +32,7 @@ class File extends \ForwardFW\Config\Cache\Backend
      *
      * @return ForwardFW\Config\Cache\Backend\File This.
      */
-    public function setPath($path)
+    public function setPath($path): self
     {
         $this->path = $path;
         return $this;
@@ -43,8 +43,8 @@ class File extends \ForwardFW\Config\Cache\Backend
      *
      * @return string The path to cache data into.
      */
-    public function getPath()
+    public function getPath(): string
     {
-        return $this->Path;
+        return $this->path;
     }
 }

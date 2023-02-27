@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * This file is part of ForwardFW a web application framework.
  *
@@ -18,11 +20,15 @@ namespace ForwardFW\Cache;
  */
 abstract class Backend implements BackendInterface
 {
+    private \ForwardFW\Controller\ApplicationInterface $application;
+
+    protected \ForwardFW\Config\Cache\Backend $config;
+
     /**
      * Constructor
      *
-     * @param ForwardFW\Controller\ApplicationInterface $application The running application.
-     * @param ForwardFW\Config\Cache\Backend  $config      Backend config.
+     * @param \ForwardFW\Controller\ApplicationInterface $application The running application.
+     * @param \ForwardFW\Config\Cache\Backend $config Backend config.
      */
     public function __construct(
         \ForwardFW\Controller\ApplicationInterface $application,
@@ -69,9 +75,9 @@ abstract class Backend implements BackendInterface
             }
         } else {
             // No Data Exception
-            $this->application->getResponse()->addLog(
-                'Cache Backend: No data available'
-            );
+//            $this->application->getResponse()->addLog(
+//                'Cache Backend: No data available'
+//            );
             throw new \ForwardFW\Cache\Exception\NoData();
         }
     }
