@@ -32,7 +32,7 @@ class ServerRequestFactory
     {
         $request = new ServerRequest(
             $_SERVER['REQUEST_METHOD'],
-            ($_SERVER['HTTPS'] === 'on' ? 'https' : 'http') . '://' . ($_SERVER['HTTP_HOST'] ?? '') . ($_SERVER['REQUEST_URI'] ?? '/'),
+            (($_SERVER['HTTPS'] ?? null) === 'on' ? 'https' : 'http') . '://' . ($_SERVER['HTTP_HOST'] ?? '') . ($_SERVER['REQUEST_URI'] ?? '/'),
             $_SERVER
         );
         if (!empty($_COOKIE)) {

@@ -23,29 +23,14 @@ use Psr\Http\Message\ResponseInterface;
  */
 abstract class ApplicationAbstract extends View implements ApplicationInterface
 {
-    /**
-     * The request object.
-     *
-     * @var \ForwardFW\Request
-     */
-    protected $request;
+    /** @var RequestInterface The request object */
+    protected RequestInterface $request;
 
-    /**
-     * The response object.
-     *
-     * @var RequestInterface
-     */
-    protected $response;
+    /** @var \ForwardFW\ServiceManager The ServiceManager object */
+    protected \ForwardFW\ServiceManager $serviceManager;
 
-    /**
-     * @var ForwardFW\ServiceManager The ServiceManager object
-     */
-    protected $serviceManager = null;
-
-    /**
-     * @var \ForwardFW\Config\Application Configuration
-     */
-    protected $config = null;
+    /** @var \ForwardFW\Config\Application Configuration */
+    protected \ForwardFW\Config\Application $config;
 
     public function __construct(
         \ForwardFW\Config\Application $config,
@@ -92,16 +77,6 @@ abstract class ApplicationAbstract extends View implements ApplicationInterface
     public function getRequest(): RequestInterface
     {
         return $this->request;
-    }
-
-    /**
-     * Returns the response object
-     *
-     * @return \ForwardFW\Response
-     */
-    public function getResponse()
-    {
-        return $this->response;
     }
 
     /**
