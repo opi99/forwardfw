@@ -23,14 +23,13 @@ use Psr\Http\Server\RequestHandlerInterface;
 class MiddlewareIterator
     implements RequestHandlerInterface
 {
+    use MiddlewareIteratorTrait;
+
     /** @var \ForwardFW\Config */
     protected $config;
 
-    /** @var \ArrayIterator */
-    protected $middlewareIterator;
-
     /** @var \ForwardFW\ServiceManager */
-    protected $serviceManager = null;
+    protected $serviceManager;
 
     public function __construct(
         \ForwardFW\Config\Middleware\MiddlewareIteratorInterface $config
@@ -42,21 +41,5 @@ class MiddlewareIterator
     public function setServiceManager(\ForwardFW\ServiceManager $serviceManager): void
     {
         $this->serviceManager = $serviceManager;
-    }
-
-    public function handle(ServerRequestInterface $request): ResponseInterface
-    {
-        $middlewareConfig = $this->middlewareIterator->current();
-        $this->middlewareIterator->next();
-
-        if ($middlewareConfig !== null) {
-            $strFilterClass = $middlewareConfig->getExecutionClassName();
-            $middleware = new $strFilterClass($middlewareConfig, $this->serviceManager);
-            return $middleware->process($request, $this);
-        } else {
-            // No Middleware which runs?
-            $factory = new ResponseFactory();
-            return $factory->createResponse();
-        }
     }
 }

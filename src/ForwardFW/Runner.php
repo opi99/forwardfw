@@ -21,28 +21,35 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
 class Runner
-    extends MiddlewareIterator
-    implements RequestHandlerInterface
 {
-    private const MULTI_LINE_HEADERS = [
-        'set-cookie',
-    ];
+    /** @var \ForwardFW\Config\Runner */
+    protected $config;
+
+    /** @var \ForwardFW\ServiceManager */
+    protected $serviceManager;
 
     public function __construct(
         \ForwardFW\Config\Runner $config
     ) {
-        parent::__construct($config);
+        $this->config = $config;
     }
 
-    public function run()
+    protected function preRun()
     {
         // Put ServiceManager into own Middleware
         $this->initializeServiceManager();
         $this->registerServices();
-        $this->outputResponse(
-            $this->runMiddlewares()
-        );
+    }
+
+    protected function postRun()
+    {
         $this->stopServices();
+    }
+
+    public function run()
+    {
+        $this->preRun();
+        $this->postRun();
     }
 
     protected function initializeServiceManager()
@@ -57,40 +64,6 @@ class Runner
         foreach ($this->config->getServices() as $serviceConfig) {
             $this->serviceManager->registerService($serviceConfig);
         }
-    }
-
-    protected function runMiddlewares(): ResponseInterface
-    {
-        $request = ServerRequestFactory::createFromGlobals();
-        return $this->handle($request);
-    }
-
-    protected function outputResponse(ResponseInterface $response)
-    {
-        header('HTTP/' . $response->getProtocolVersion() . ' ' . $response->getStatusCode() . ' ' . $response->getReasonPhrase());
-
-        foreach ($response->getHeaders() as $name => $values) {
-            if (in_array(strtolower($name), self::MULTI_LINE_HEADERS, true)) {
-                foreach ($values as $value) {
-                    header($name . ': ' . $value, false);
-                }
-            } else {
-                header($name . ': ' . (is_array($values) ? implode(', ', $values) : $values));
-            }
-        }
-
-        $this->outputBody($response);
-    }
-
-
-    private function outputBody(ResponseInterface $response): void
-    {
-        $body = $response->getBody();
-        if ($body->isSeekable()) {
-            $body->rewind();
-        }
-
-        echo $body->__toString();die();
     }
 
     protected function stopServices()

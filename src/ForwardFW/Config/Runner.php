@@ -18,19 +18,12 @@ namespace ForwardFW\Config;
 /**
  * Config for the Runner.
  */
-class Runner extends \ForwardFW\Config
-    implements \ForwardFW\Config\Middleware\MiddlewareIteratorInterface
+abstract class Runner extends \ForwardFW\Config
 {
     use \ForwardFW\Config\Traits\Execution;
-    use \ForwardFW\Config\Traits\Middleware;
 
     /** @var string Class Name of executor */
     protected $executionClassName = \ForwardFW\Runner::class;
-
-    /**
-     * @var boolean True if runner should send data otherwise false
-     */
-    private $shouldSend = true;
 
     /**
      * @var \ArrayObject<int, \ForwardFW\Config\Service> Config of the services
@@ -48,19 +41,6 @@ class Runner extends \ForwardFW\Config
     public function __construct()
     {
         $this->services = new \ArrayObject();
-        $this->middlewares = new \ArrayObject();
-    }
-
-    public function setShouldSend(bool $shouldSend): self
-    {
-        $this->shouldSend = $shouldSend;
-        return $this;
-    }
-
-
-    public function getShouldSend(): bool
-    {
-        return $this->shouldSend;
     }
 
     /**
