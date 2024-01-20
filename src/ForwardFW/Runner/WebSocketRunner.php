@@ -16,14 +16,15 @@ declare(strict_types=1);
 namespace ForwardFW\Runner;
 
 use ForwardFW\Runner;
+use ForwardFW\WebSocket\Client;
 
 class WebSocketRunner
     extends Runner
 {
     protected \Socket $serverSocket;
 
-    /** @var array<\Socket> */
-    protected array $clientSockets = [];
+    /** @var array<Client> */
+    protected array $clients = [];
 
     public function __construct(
         \ForwardFW\Config\Runner\WebSocketRunner $config
@@ -113,23 +114,24 @@ class WebSocketRunner
     protected function closeAllSockets(): void
     {
         socket_close($this->serverSocket);
-        foreach($this->clientSockets as $clientSocket)
+        foreach($this->clients as $client)
         {
-            $this->sendData(
+            $this->sendDataToSocket(
                 'message',
                 [
                     'message' => 'Unknown reason',
-                ]
+                ],
+                $client->getSocket()
             );
-            @socket_close($clientSocket);
+            @socket_close($client->getSocket());
         }
     }
 
     protected function sendDataToAllClients(string $type, array $data): void
     {
-        foreach($this->clientSockets as $clientSocket)
+        foreach($this->clients as $client)
         {
-            $this->sendData($type, $data, $clientSocket);
+            $this->sendDataToSocket($type, $data, $client->getSocket());
         }
     }
 
@@ -199,15 +201,21 @@ class WebSocketRunner
         socket_select($socketsToCheck, $unused, $unused, 0, 10);
 
         if (count($socketsToCheck)) {
-            echo 'New connection';
             $newSocket = socket_accept($this->serverSocket);
-            $this->clientSockets[] = $newSocket;
             $header = socket_read($newSocket, 1024);
             $this->doHandshake($header, $newSocket);
-            socket_getpeername($newSocket, $clientIp);
-            echo $clientIp . "\n";
+
+            $client = new Client($newSocket);
+            $this->clients[] = $client;
+            echo 'New connection from ' . $client->getIp() . "\n";
+            $this->sendNewConnectionEvent($client);
             // $this->sendBaseData(true);
         }
+
+    }
+
+    protected function sendNewConnectionEvent(Client $client): void
+    {
 
     }
 
