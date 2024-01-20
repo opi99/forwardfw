@@ -23,7 +23,7 @@ class Service extends \ForwardFW\Config
     /**
      * @var string Interface which this service represents.
      */
-    protected $interfaceName = '';
+    protected string $interfaceName = '';
 
     /**
      * Sets name of interface this service represents.
@@ -32,7 +32,7 @@ class Service extends \ForwardFW\Config
      *
      * @return ForwardFW\Config\Service
      */
-    public function setInterfaceName($interfaceName)
+    public function setInterfaceName(string $interfaceName)
     {
         $this->interfaceName = $interfaceName;
         return $this;
@@ -40,10 +40,8 @@ class Service extends \ForwardFW\Config
 
     /**
      * Get name of interface this service represents.
-     *
-     * @return string
      */
-    public function getInterfaceName()
+    public function getInterfaceName(): string
     {
         return $this->interfaceName;
     }

@@ -20,5 +20,5 @@ namespace ForwardFW\Config\Service\Logger;
  */
 class ChromeLogger extends \ForwardFW\Config\Service\Logger
 {
-    protected $executionClassName = \Kodus\Logging\ChromeLogger::class;
+    protected string $executionClassName = \Kodus\Logging\ChromeLogger::class;
 }

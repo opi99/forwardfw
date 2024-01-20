@@ -18,6 +18,6 @@ namespace ForwardFW\Config\Service;
  */
 class ObjectService extends \ForwardFW\Config\Service
 {
-    protected $executionClassName = 'ForwardFW\\Service\\ObjectService';
-    protected $interfaceName = 'ForwardFW\\Service\\ObjectServiceInterface';
+    protected string $executionClassName = \ForwardFW\Service\ObjectService::class;
+    protected string $interfaceName = \ForwardFW\Service\ObjectServiceInterface::class;
 }

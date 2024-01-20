@@ -20,6 +20,6 @@ namespace ForwardFW\Config\Service;
  */
 class Logger extends \ForwardFW\Config\Service
 {
-    protected $executionClassName = \ForwardFW\Service\Logger::class;
-    protected $interfaceName = \Psr\Log\LoggerInterface::class;
+    protected string $executionClassName = \ForwardFW\Service\Logger::class;
+    protected string $interfaceName = \Psr\Log\LoggerInterface::class;
 }
