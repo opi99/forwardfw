@@ -26,5 +26,4 @@ interface MiddlewareIteratorInterface
      * @return \ArrayObject<int, \ForwardFW\Config\Middleware> Config of middlewares
      */
     public function getMiddlewares(): \ArrayObject;
-
 }
