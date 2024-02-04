@@ -16,15 +16,21 @@ declare(strict_types=1);
 namespace ForwardFW\Event\WebSocket;
 
 use ForwardFW\Event\WebSocketEvent;
+use ForwardFW\WebSocket\Client;
 
 abstract class AbstractClientEvent
     extends WebSocketEvent
 {
-    protected $client;
+    protected Client $client;
 
-    public function __construct($client)
+    public function __construct(Client $client)
     {
         $this->client = $client;
     }
-}
 
+    public function getClient(): Client
+    {
+        return $this->client;
+
+    }
+}

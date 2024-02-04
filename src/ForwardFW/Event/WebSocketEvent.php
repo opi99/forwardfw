@@ -15,7 +15,7 @@ declare(strict_types=1);
 
 namespace ForwardFW\Event;
 
-use ForwardFW\Runner;
+use ForwardFW\Event;
 
 class WebSocketEvent
     extends Event

@@ -15,6 +15,7 @@ declare(strict_types=1);
 
 namespace ForwardFW\Runner;
 
+use ForwardFW\Event\WebSocket\NewClientEvent;
 use ForwardFW\Runner;
 use ForwardFW\WebSocket\Client;
 
@@ -32,28 +33,28 @@ class WebSocketRunner
         parent::__construct($config);
     }
 
-    protected function preRun()
+    protected function preRun(): void
     {
         parent::preRun();
         $this->registerSignals();
         $this->initServerSocket();
     }
 
-    public function run()
+    public function run(): void
     {
         $this->preRun();
         $this->mainLoop();
         $this->postRun();
     }
 
-    protected function postRun()
+    protected function postRun(): void
     {
         $this->closeAllSockets();
         parent::postRun();
     }
 
 
-    protected function mainLoop()
+    protected function mainLoop(): void
     {
         while (!$this->shutDown) {
             $this->checkNewConnections();
@@ -141,7 +142,7 @@ class WebSocketRunner
             'type' => $type,
             'data' => $data,
         ]);
-
+var_dump($jsonMessage);
         $message = $this->seal($jsonMessage);
         $messageLength = strlen($message);
 
@@ -207,16 +208,18 @@ class WebSocketRunner
 
             $client = new Client($newSocket);
             $this->clients[] = $client;
-            echo 'New connection from ' . $client->getIp() . "\n";
             $this->sendNewConnectionEvent($client);
-            // $this->sendBaseData(true);
         }
 
     }
 
     protected function sendNewConnectionEvent(Client $client): void
     {
+        $newClientEvent = new NewClientEvent($client);
 
+        /** @var \Psr\EventDispatcher\EventDispatcherInterface $eventDispatcher */
+        $eventDispatcher = $this->serviceManager->getService(\Psr\EventDispatcher\EventDispatcherInterface::class);
+        $eventDispatcher->dispatch($newClientEvent);
     }
 
     protected function doHandshake($headers, $clientSocket)

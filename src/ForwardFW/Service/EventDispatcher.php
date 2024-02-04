@@ -44,4 +44,12 @@ class EventDispatcher
 
         return $this->listeners[$eventname] ?? [];
     }
+
+    public function addListener(callable $listener, string $event)
+    {
+        if (!isset($this->listener[$event])) {
+            $this->listeners[$event] = [];
+        }
+        $this->listeners[$event][] = $listener;
+    }
 }
