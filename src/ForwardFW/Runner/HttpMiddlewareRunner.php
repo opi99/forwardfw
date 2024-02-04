@@ -39,7 +39,7 @@ class HttpMiddlewareRunner
         $this->setMiddlewareIterator($this->config->getMiddlewares()->getIterator());
     }
 
-    public function run()
+    public function run(): void
     {
         $this->preRun();
         $this->outputResponse(
@@ -54,7 +54,7 @@ class HttpMiddlewareRunner
         return $this->handle($request);
     }
 
-    protected function outputResponse(ResponseInterface $response)
+    protected function outputResponse(ResponseInterface $response): void
     {
         header('HTTP/' . $response->getProtocolVersion() . ' ' . $response->getStatusCode() . ' ' . $response->getReasonPhrase());
 
@@ -70,7 +70,9 @@ class HttpMiddlewareRunner
 
         $this->outputBody($response);
         flush();
-        ob_flush();
+        while (ob_get_level() !== 0) {
+            ob_end_flush();
+        }
     }
 
     private function outputBody(ResponseInterface $response): void

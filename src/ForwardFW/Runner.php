@@ -34,39 +34,39 @@ class Runner
         $this->config = $config;
     }
 
-    protected function preRun()
+    protected function preRun(): void
     {
         // Put ServiceManager into own Middleware
         $this->initializeServiceManager();
         $this->registerServices();
     }
 
-    protected function postRun()
+    protected function postRun(): void
     {
         $this->stopServices();
     }
 
-    public function run()
+    public function run(): void
     {
         $this->preRun();
         $this->postRun();
     }
 
-    protected function initializeServiceManager()
+    protected function initializeServiceManager(): void
     {
         $serviceManagerConfig = $this->config->getServiceManager();
         $class = $serviceManagerConfig->getExecutionClassName();
         $this->serviceManager = new $class($serviceManagerConfig);
     }
 
-    protected function registerServices()
+    protected function registerServices(): void
     {
         foreach ($this->config->getServices() as $serviceConfig) {
             $this->serviceManager->registerService($serviceConfig);
         }
     }
 
-    protected function stopServices()
+    protected function stopServices(): void
     {
         foreach ($this->config->getServices() as $serviceConfig) {
             $this->serviceManager->stopService($serviceConfig->getInterfaceName());
