@@ -120,15 +120,29 @@ class WebSocketRunner
         socket_close($this->serverSocket);
         foreach($this->clients as $client)
         {
-            $this->sendDataToSocket(
-                'message',
-                [
-                    'message' => 'Unknown reason',
-                ],
-                $client->getSocket()
-            );
-            @socket_close($client->getSocket());
+            $this->closeClientConnection($client, 'UNKNOWN REASON', 1001);
         }
+    }
+
+    protected function closeClientConnection(Client $client, string $message, int $code)
+    {
+        $this->sendCloseFrame($message, $code, $client->getSocket());
+        // Do not wait for CLOSE frame echo, FF and Chromium do not do this.
+        @socket_close($client->getSocket());
+
+        foreach ($this->clients as $key => $clientFound) {
+            if ($clientFound === $client) {
+                unset($this->clients[$key]);
+                return;
+            }
+        }
+    }
+
+    protected function sendCloseFrame(string $message, int $code, \Socket $clientSocket)
+    {
+        $content = $this->seal(self::FRAME_CLOSE, $message, $code);
+        $contentLength = strlen($content);
+        $send = @socket_write($clientSocket, $content, $contentLength);
     }
 
     protected function sendDataToAllClients(string $type, array $data): void
@@ -146,7 +160,7 @@ class WebSocketRunner
             'data' => $data,
         ]);
 
-        $message = $this->seal($jsonMessage);
+        $message = $this->seal(self::FRAME_TEXT, $jsonMessage);
         $messageLength = strlen($message);
 
         $send = @socket_write($clientSocket, $message, $messageLength);
@@ -176,7 +190,7 @@ class WebSocketRunner
 
     const IS_MASKED = 0x80;
 
-    protected function unseal(string $socketData)
+    protected function unseal(string $socketData, Client $client)
     {
         $isClose = false;
 
@@ -188,6 +202,7 @@ class WebSocketRunner
         if (!$lastFrame) {
             /** @TODO This is not last frame, we should read till last frame, before we give the data back. */
             var_dump('NOT YET SUPPORTED! Data send over multiple frames, yet last frame would produce garbage.');
+            $this->closeClientConnection($client, 'Multiple frames not supported', 1003);
             return '';
         }
 
@@ -196,19 +211,17 @@ class WebSocketRunner
 
         switch ($opcode) {
             case self::FRAME_CONTINUATION:
-                var_dump('NOT YET SUPPORTED! Continuation frame?');
+                $this->closeClientConnection($client, 'Frame continuation not supported', 1003);
                 return;
                 break;
             case self::FRAME_TEXT:
-                var_dump('text');
                 break;
             case self::FRAME_BIN:
                 /** @TODO Binary data. */
-                var_dump('NOT YET SUPPORTED! Do we need binary?');
+                $this->closeClientConnection($client, 'Frame binary not supported', 1003);
                 return '';
                 break;
             case self::FRAME_CLOSE:
-                var_dump('close');
                 $isClose = true;
                 break;
             case self::FRAME_PING:
@@ -220,7 +233,7 @@ class WebSocketRunner
                 return '';
                 break;
             default:
-                var_dump('NOT YET SUPPORTED! Frametype ' . $opcode . ' not defined in RFC6455?');
+                $this->closeClientConnection($client, 'Your frame opcode is not defined in RFC6455', 1003);
         }
 
         $masked = (bool) ($secondByte & self::IS_MASKED);
@@ -244,6 +257,7 @@ class WebSocketRunner
         if ($totalLength > strlen($socketData)) {
             /** @TODO The frame is longer then we read from socket => Need buffer */
             var_dump('NOT YET SUPPORTED! Not all data for WebSocket frame read from socket. So we will read garbage next.');
+            $this->closeClientConnection($client, 'Only max 4096 bytes supported yet', 1009);
             return '';
         }
 
@@ -264,11 +278,12 @@ class WebSocketRunner
 
         if ($isClose) {
             $closeCode = unpack('n', substr($content, 0, 2))[1];
-
-            var_dump('Connection closed with code: "' . $closeCode . '". See https://datatracker.ietf.org/doc/html/rfc6455#section-7.4');
             $content = substr($content, 2);
 
-            /** @TODO Need to implement Close frame response https://datatracker.ietf.org/doc/html/rfc6455#section-5.5.1 */
+            echo 'Connection closed with code: "' . $closeCode . '" and message "' . $content . '"' . "\n";
+
+            /** Close frame response https://datatracker.ietf.org/doc/html/rfc6455#section-5.5.1 */
+            $this->closeClientConnection($client, $content, $closeCode);
 
             return '';
         }
@@ -278,17 +293,33 @@ class WebSocketRunner
         return $content;
     }
 
-    protected function seal($message)
+    protected function seal(int $type, string $message, int $code = 0)
     {
-        $b1 = 0x80 | (0x1 & 0x0f);
+        if ($type === self::FRAME_CLOSE)
+        {
+            $message = pack('n', $code) . $message;
+        }
+
         $length = strlen($message);
 
-        if($length <= 125)
-            $header = pack('CC', $b1, $length);
-        elseif($length > 125 && $length < 65536)
-            $header = pack('CCn', $b1, 126, $length);
-        elseif($length >= 65536)
-            $header = pack('CCNN', $b1, 127, $length);
+        /** @TODO Support masking? */
+        /** @TODO Support fragmentation? */
+
+        $firstByte = self::IS_LAST_FRAME | $type;
+        $secondByte = /** self::IS_MASKED | */ 0;
+        $header = '';
+
+        if ($length <= 125) {
+            $secondByte |= $length;
+            $header = pack('CC', $firstByte, $secondByte);
+        } elseif($length > 125 && $length < 65536) {
+            $secondByte |= self::MASK_126;
+            $header = pack('CCn', $firstByte, $secondByte, $length);
+        } else {
+            $secondByte |= self::MASK_127;
+            $header = pack('CCJ', $firstByte, $secondByte, $length);
+        }
+
         return $header . $message;
     }
 
@@ -298,17 +329,20 @@ class WebSocketRunner
         $socketsToCheck = [
             $this->serverSocket
         ];
-        $unused = [];
+        $unused = null;
         socket_select($socketsToCheck, $unused, $unused, 0, 10);
 
         if (count($socketsToCheck)) {
             $newSocket = socket_accept($this->serverSocket);
             $header = socket_read($newSocket, 1024);
-            $this->doHandshake($header, $newSocket);
 
-            $client = new Client($newSocket);
-            $this->clients[] = $client;
-            $this->sendNewConnectionEvent($client);
+            if ($this->doHandshake($header, $newSocket)) {
+                $client = new Client($newSocket);
+                $this->clients[] = $client;
+                $this->sendNewConnectionEvent($client);
+            } else {
+                socket_close($newSocket);
+            }
         }
 
     }
@@ -333,15 +367,16 @@ class WebSocketRunner
         foreach ($this->clients as $client) {
             $socketsToCheck[] = $client->getSocket();
         }
-
-        $unused = [];
+        $unused = null;
         socket_select($socketsToCheck, $unused, $unused, 0, 10);
-
         if (count($socketsToCheck)) {
             foreach ($socketsToCheck as $socketToRead) {
-                while (socket_recv($socketToRead, $socketData, 4096, MSG_DONTWAIT) >= 1) {
+                if (socket_recv($socketToRead, $socketData, 4096, MSG_DONTWAIT) >= 1) {
                     /** @TODO read longer message blocks */
-                    $socketMessage = $this->unseal($socketData);
+
+                    $client = $this->findClientFromSocket($socketToRead);
+
+                    $socketMessage = $this->unseal($socketData, $client);
                     $message = json_decode($socketMessage, true);
                     // $this->processMessage($message);
                 }
@@ -349,8 +384,18 @@ class WebSocketRunner
         }
     }
 
+    protected function findClientFromSocket(\Socket $socket): Client
+    {
+        foreach ($this->clients as $client) {
+            if ($client->getSocket() === $socket) {
+                return $client;
+            }
+        }
 
-    protected function doHandshake($headers, $clientSocket)
+        throw new \Exception('We have no client with this socket');
+    }
+
+    protected function doHandshake($headers, $clientSocket): bool
     {
         $headerLines = [];
         $lines = preg_split("/\r\n/", $headers);
@@ -363,14 +408,38 @@ class WebSocketRunner
             }
         }
 
+        if (count($headerLines) === 0) {
+            return false;
+        }
+        if (($headerLines['Upgrade'] ?? null) !== 'websocket') {
+            $buffer = 'HTTP/1.1 412 You need to request Upgrade to websocket' . "\r\n\r\n";
+            socket_write($clientSocket, $buffer, strlen($buffer));
+            return false;
+        }
+        if (($headerLines['Sec-WebSocket-Version'] ?? null) !== '13') {
+            $buffer = 'HTTP/1.1 412 Only Sec-WebSocket-Version 13 supported' . "\r\n\r\n";
+            socket_write($clientSocket, $buffer, strlen($buffer));
+            return false;
+        }
+
+        if (!isset($headerLines['Sec-WebSocket-Key'])) {
+            $buffer = 'HTTP/1.1 412 No Sec-WebSocket-Key given' . "\r\n\r\n";
+            socket_write($clientSocket, $buffer, strlen($buffer));
+            return false;
+        }
+
+
         $secKey = $headerLines['Sec-WebSocket-Key'];
         $secAccept = base64_encode(pack('H*', sha1($secKey . '258EAFA5-E914-47DA-95CA-C5AB0DC85B11')));
         $buffer = 'HTTP/1.1 101 Web Socket Protocol Handshake' . "\r\n"
             . 'Upgrade: websocket' . "\r\n"
+            . 'Sec-WebSocket-Version: 13' . "\r\n"
             . 'Connection: Upgrade' . "\r\n"
             . 'WebSocket-Origin: ' . $this->config->getHost() . "\r\n"
             . 'WebSocket-Location: ws://' . $this->config->getHost() . ':' . $this->config->getPort() . "\r\n"
             . 'Sec-WebSocket-Accept:' . $secAccept . "\r\n\r\n";
         socket_write($clientSocket, $buffer, strlen($buffer));
+
+        return true;
     }
 }
