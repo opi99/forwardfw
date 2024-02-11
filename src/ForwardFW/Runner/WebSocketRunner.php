@@ -58,7 +58,7 @@ class WebSocketRunner
     {
         while (!$this->shutDown) {
             $this->checkNewConnections();
-            // $this->readAndExecute();
+            $this->readAndExecute();
 
             /** @TODO Only on changes */
             // $this->sendBaseData();
@@ -97,6 +97,9 @@ class WebSocketRunner
                 break;
             case SIGHUP:
                 // Aufgaben zum Neustart bearbeiten
+                break;
+            case SIGCHLD:
+                // Ignored, that a child changed state
                 break;
             default:
                 echo 'SIGNAL' . $signo;
@@ -142,7 +145,7 @@ class WebSocketRunner
             'type' => $type,
             'data' => $data,
         ]);
-var_dump($jsonMessage);
+
         $message = $this->seal($jsonMessage);
         $messageLength = strlen($message);
 
@@ -156,26 +159,123 @@ var_dump($jsonMessage);
         return true;
     }
 
+    const MASK_126 = 126;
+    const MASK_127 = 127;
+    const MASK_FRAME = 0b1111;
+    const MASK_RSV = 0b1110000;
+    const MASK_PAYLOAD = 0b1111111;
 
-    protected function unseal($socketData) {
-        $length = ord($socketData[1]) & 127;
-        if($length == 126) {
-            $masks = substr($socketData, 4, 4);
-            $data = substr($socketData, 8);
+    const IS_LAST_FRAME = 0x80;
+
+    const FRAME_CONTINUATION = 0x0;
+    const FRAME_TEXT = 0x1;
+    const FRAME_BIN = 0x2;
+    const FRAME_CLOSE = 0x8;
+    const FRAME_PING = 0x9;
+    const FRAME_PONG = 0xA;
+
+    const IS_MASKED = 0x80;
+
+    protected function unseal(string $socketData)
+    {
+        $isClose = false;
+
+        $firstByte = ord($socketData[0]);
+        $secondByte = ord($socketData[1]);
+
+        $lastFrame = (bool) ($firstByte & self::IS_LAST_FRAME);
+
+        if (!$lastFrame) {
+            /** @TODO This is not last frame, we should read till last frame, before we give the data back. */
+            var_dump('NOT YET SUPPORTED! Data send over multiple frames, yet last frame would produce garbage.');
+            return '';
         }
-        elseif($length == 127) {
-            $masks = substr($socketData, 10, 4);
-            $data = substr($socketData, 14);
+
+        $opcode = $firstByte & self::MASK_FRAME;
+        $rsv = $firstByte & self::MASK_RSV;
+
+        switch ($opcode) {
+            case self::FRAME_CONTINUATION:
+                var_dump('NOT YET SUPPORTED! Continuation frame?');
+                return;
+                break;
+            case self::FRAME_TEXT:
+                var_dump('text');
+                break;
+            case self::FRAME_BIN:
+                /** @TODO Binary data. */
+                var_dump('NOT YET SUPPORTED! Do we need binary?');
+                return '';
+                break;
+            case self::FRAME_CLOSE:
+                var_dump('close');
+                $isClose = true;
+                break;
+            case self::FRAME_PING:
+                var_dump('NOT YET SUPPORTED! We should send a pong here?');
+                return '';
+                break;
+            case self::FRAME_PONG:
+                var_dump('NOT YET SUPPORTED! We didn\'t send a ping yet.');
+                return '';
+                break;
+            default:
+                var_dump('NOT YET SUPPORTED! Frametype ' . $opcode . ' not defined in RFC6455?');
         }
-        else {
-            $masks = substr($socketData, 2, 4);
-            $data = substr($socketData, 6);
+
+        $masked = (bool) ($secondByte & self::IS_MASKED);
+        $length = $secondByte & self::MASK_PAYLOAD;
+
+        $dataStart = 2;
+        if ($length === self::MASK_126) {
+            $dataStart = 6;
+        } elseif ($length === self::MASK_127) {
+            $dataStart = 10;
         }
-        $socketData = "";
-        for ($i = 0; $i < strlen($data); ++$i) {
-            $socketData .= $data[$i] ^ $masks[$i%4];
+
+        $totalLength = $dataStart + $length;
+        $mask = '';
+        if ($masked) {
+            $totalLength += 4;
+            $mask = substr($socketData, $dataStart, 4);
+            $dataStart += 4;
         }
-        return $socketData;
+
+        if ($totalLength > strlen($socketData)) {
+            /** @TODO The frame is longer then we read from socket => Need buffer */
+            var_dump('NOT YET SUPPORTED! Not all data for WebSocket frame read from socket. So we will read garbage next.');
+            return '';
+        }
+
+        $content = substr($socketData, $dataStart, $length);
+
+        if ($masked) {
+            $unmaskedContent = '';
+            for ($i = 0; $i < $length; ++$i) {
+                $unmaskedContent .= $content[$i] ^ $mask[$i % 4];
+            }
+            $content = $unmaskedContent;
+        }
+
+        if ($totalLength < strlen($socketData)) {
+            /** @TODO We read more from socket as this frame is long => Continue handling! */
+            var_dump('NOT YET SUPPORTED! We read more data from WebSocket as this frame has, should be handled as next.');
+        }
+
+        if ($isClose) {
+            $closeCode = unpack('n', substr($content, 0, 2))[1];
+
+            var_dump('Connection closed with code: "' . $closeCode . '". See https://datatracker.ietf.org/doc/html/rfc6455#section-7.4');
+            $content = substr($content, 2);
+
+            /** @TODO Need to implement Close frame response https://datatracker.ietf.org/doc/html/rfc6455#section-5.5.1 */
+
+            return '';
+        }
+
+        // Do not return, create events with the data out of frames.
+
+        return $content;
     }
 
     protected function seal($message)
@@ -221,6 +321,34 @@ var_dump($jsonMessage);
         $eventDispatcher = $this->serviceManager->getService(\Psr\EventDispatcher\EventDispatcherInterface::class);
         $eventDispatcher->dispatch($newClientEvent);
     }
+
+    protected function readAndExecute()
+    {
+        if (!count($this->clients)) {
+            return;
+        }
+
+        $socketsToCheck = [];
+
+        foreach ($this->clients as $client) {
+            $socketsToCheck[] = $client->getSocket();
+        }
+
+        $unused = [];
+        socket_select($socketsToCheck, $unused, $unused, 0, 10);
+
+        if (count($socketsToCheck)) {
+            foreach ($socketsToCheck as $socketToRead) {
+                while (socket_recv($socketToRead, $socketData, 4096, MSG_DONTWAIT) >= 1) {
+                    /** @TODO read longer message blocks */
+                    $socketMessage = $this->unseal($socketData);
+                    $message = json_decode($socketMessage, true);
+                    // $this->processMessage($message);
+                }
+            }
+        }
+    }
+
 
     protected function doHandshake($headers, $clientSocket)
     {
