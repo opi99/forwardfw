@@ -229,7 +229,7 @@ class Request
 
 
     // NEW
-    public function __construct(string $method = null, string $uri = null, $body = 'php://input', array $headers = [])
+    public function __construct(string $method, string $uri, $body = 'php://input', array $headers = [])
     {
         if ($method === 'GET' || $method === 'POST') {
             $this->method = $method;
@@ -245,7 +245,7 @@ class Request
         return $this->requestTarget;
     }
 
-    public function withRequestTarget($requestTarget)
+    public function withRequestTarget(string $requestTarget)
     {
         $clone = clone $this;
         $clone->requestTarget = $requestTarget;
@@ -254,12 +254,15 @@ class Request
 
     public function getMethod()
     {
-
+        return $this->method;
     }
 
-    public function withMethod($method)
+    public function withMethod(string $method)
     {
         $clone = clone $this;
+        if ($method === 'GET' || $method === 'POST') {
+            $clone->method = $method;
+        }
         return $clone;
     }
 

@@ -40,7 +40,7 @@ class ServerRequest
 
     public function getQueryParams()
     {
-
+        return [];
     }
 
     public function withQueryParams(array $query)
@@ -51,7 +51,7 @@ class ServerRequest
 
     public function getUploadedFiles()
     {
-
+        return [];
     }
 
     public function withUploadedFiles(array $uploadedFiles)
@@ -73,12 +73,12 @@ class ServerRequest
 
     public function getAttributes()
     {
-
+        return [];
     }
 
     public function getAttribute($name, $default = null)
     {
-
+        return $default;
     }
 
     public function withAttribute($name, $value)
@@ -95,7 +95,7 @@ class ServerRequest
 
     public function getUri()
     {
-
+        return $this->uri;
     }
 
     public function withUri(UriInterface $uri, $preserveHost = false)

@@ -25,20 +25,24 @@ class Message
 
     protected $headers = [];
 
+    protected string $protocolVersion = '1.0';
+
     /**
      * @return string HTTP protocol version.
      */
     public function getProtocolVersion()
     {
+        return $this->protocolVersion;
     }
 
     /**
      * @param string $version HTTP protocol version
      * @return static
      */
-    public function withProtocolVersion($version)
+    public function withProtocolVersion(string $version)
     {
         $clone = clone $this;
+        $clone->protocolVersion = $version;
         return $clone;
     }
 
@@ -54,7 +58,7 @@ class Message
      * @param string $name Case-insensitive header field name.
      * @return bool
      */
-    public function hasHeader($name)
+    public function hasHeader(string $name)
     {
         return (bool) count($this->headers);
     }
@@ -65,7 +69,7 @@ class Message
      *    header. If the header does not appear in the message, this method MUST
      *    return an empty array.
      */
-    public function getHeader($name)
+    public function getHeader(string $name)
     {
         return [];
     }

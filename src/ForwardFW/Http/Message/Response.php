@@ -113,10 +113,11 @@ class Response
     {
         $this->errorTimer->addEntry($errorMessage);
         if ($httpStatusCode !== 0) {
-            $this->setHttpStatus($httpStatusCode, $errorMessage);
+            $this->httpStatusCode = $httpStatusCode;
+            $this->httpStatusMessage = $errorMessage;
         } else {
             if ($this->httpStatusCode === 200) {
-                $this->setHttpStatus(500);
+                $this->httpStatusCode = 500;
             }
         }
         return $this;

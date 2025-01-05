@@ -53,14 +53,17 @@ class Stream implements StreamInterface
 
     public function tell()
     {
+        return 0;
     }
 
     public function eof()
     {
+        return true;
     }
 
     public function isSeekable()
     {
+        return false;
     }
 
     public function seek($offset, $whence = SEEK_SET)
@@ -74,19 +77,22 @@ class Stream implements StreamInterface
 
     public function isWritable()
     {
+        return true;
     }
 
     public function write($string)
     {
-        fwrite($this->stream, $string);
+        return fwrite($this->stream, $string) || 0;
     }
 
     public function isReadable()
     {
+        return false;
     }
 
     public function read($length)
     {
+        return 0;
     }
 
     public function getContents()
