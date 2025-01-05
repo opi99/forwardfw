@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-return (new \ForwardFW\Config\Runner())
+return (new \ForwardFW\Config\Runner\HttpMiddlewareRunner())
 /**
         ->addService(
             (new \ForwardFW\Config\Service\DataHandler\Mdb2())
@@ -29,9 +29,9 @@ return (new \ForwardFW\Config\Runner())
                     (new ForwardFW\Config\Application())
                         ->setName('ShortDemo')
                         ->setScreens(
-                            array(
+                            [
                                 'Hello' => \ForwardFW\Controller\Screen::class
-                            )
+                            ]
                         )
                         ->setTemplaterConfig(
                             (new ForwardFW\Config\Templater\Smarty())
@@ -40,4 +40,3 @@ return (new \ForwardFW\Config\Runner())
                         )
                 )
         );
-

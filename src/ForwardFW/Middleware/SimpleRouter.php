@@ -15,6 +15,7 @@ declare(strict_types=1);
 
 namespace ForwardFW\Middleware;
 
+use ForwardFW\Factory\ResponseFactory;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
@@ -29,6 +30,9 @@ class SimpleRouter extends \ForwardFW\Middleware
         /** @var \Psr\Log\LoggerInterface */
         $logger = $this->serviceManager->getService(\Psr\Log\LoggerInterface::class);
         $logger->info('Start Route');
+
+        /** @var ResponseInterface || null */
+        $response = null;
 
         $requestTargetPath = $request->getRequestTarget();
 
@@ -49,6 +53,14 @@ class SimpleRouter extends \ForwardFW\Middleware
         }
 
         $logger->info('End Route');
+
+        if (!$response) {
+            /** @TODO Own response with Error or proceed handling middlewares? */
+            //$factory = new ResponseFactory();
+            // §respons = $factory->createResponse
+            $response = $handler->handle($request);
+
+        }
 
         return $response;
     }

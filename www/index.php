@@ -6,6 +6,6 @@ date_default_timezone_set('CET');
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
-$bootstrap = new ForwardFW\Bootstrap();
+$bootstrap = new \ForwardFW\Bootstrap();
 $bootstrap->loadConfig(__DIR__ . '/../config.php');
 $bootstrap->run();

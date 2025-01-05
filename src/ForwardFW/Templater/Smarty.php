@@ -20,8 +20,8 @@ namespace ForwardFW\Templater;
  */
 class Smarty extends \ForwardFW\Controller implements \ForwardFW\Templater\TemplaterInterface
 {
-    /** @var \Smarty The smarty instance */
-    private \Smarty $smarty;
+    /** @var \Smarty\Smarty The smarty instance */
+    private \Smarty\Smarty $smarty;
 
     /** @var array Blocks to show */
     private array $arShowBlocks = [];
@@ -52,7 +52,7 @@ class Smarty extends \ForwardFW\Controller implements \ForwardFW\Templater\Templ
             }
         }
 
-        $this->smarty = new \Smarty();
+        $this->smarty = new \Smarty\Smarty();
         $this->smarty->setCompileDir($compilePath);
         $this->smarty->registerPlugin('block', 'block', array(&$this, 'smartyBlock'));
         $this->smarty->registerPlugin('function', 'texter', array(&$this, 'smartyTexter'));
