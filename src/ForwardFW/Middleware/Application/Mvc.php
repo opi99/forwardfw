@@ -13,6 +13,7 @@
 
 namespace ForwardFW\Middleware\Application;
 
+use ForwardFW\Factory\ResponseFactory;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
@@ -34,11 +35,8 @@ class Mvc extends \ForwardFW\Middleware
 
         $logger->info('Start Mvc View chaining');
         $filters = $this->config->getFiltersView();
-        $this->runFilters($filters, $request);
+        $response = $this->runFilters($filters, $request);
         $logger->info('Stop Mvc View chaining');
-
-        /** @TODO No response? */
-        // $response = $handler->handle($request);
 
         return $response;
     }
@@ -50,12 +48,14 @@ class Mvc extends \ForwardFW\Middleware
      */
     protected function runFilters(array $filtersConfig, ServerRequestInterface $request): ResponseInterface
     {
+        $response = new ResponseFactory()->createResponse();
+
         if ($filtersConfig) {
             $filter = null;
 
             foreach (array_reverse($filtersConfig) as $filterConfig) {
                 $filterClass = $filterConfig->getExecutionClassName();
-                $filter = new $filterClass($filter, $filterConfig, $this->request, $this->response, $this->serviceManager);
+                $filter = new $filterClass($filter, $filterConfig, $request, $response, $this->serviceManager);
             }
 
             try {
@@ -66,5 +66,7 @@ class Mvc extends \ForwardFW\Middleware
                 $logger->error($e->getMessage());
             }
         }
+
+        return $response;
     }
 }
