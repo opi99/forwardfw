@@ -11,7 +11,7 @@
  * LICENSE.txt file that was distributed with this source code.
  */
 
-namespace \ForwardFW\Container;
+namespace ForwardFW\Container;
 
 /**
  * A list of Timer models.
