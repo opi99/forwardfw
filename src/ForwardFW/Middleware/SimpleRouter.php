@@ -56,8 +56,7 @@ class SimpleRouter extends \ForwardFW\Middleware
 
         if (!$response) {
             /** @TODO Own response with Error or proceed handling middlewares? */
-            // $factory = new ResponseFactory();
-            // §respons = $factory->createResponse
+            // §respons = new ResponseFactory()->createResponse();
             // $response->addError('No Route "' . $routePath . '" found', 404);
             $response = $handler->handle($request);
 
