@@ -13,7 +13,7 @@ return (new \ForwardFW\Config\Runner\HttpMiddlewareRunner())
             (new \ForwardFW\Config\Service\Logger\ChromeLogger())
         )
         ->addMiddleware(
-            new \ForwardFW\Config\Middleware\ChromeLogger()
+            new \ForwardFW\Config\Middleware\Logger\ChromeLogger()
         )
         ->addMiddleware(
             new \ForwardFW\Config\Middleware\SimpleRouter()
