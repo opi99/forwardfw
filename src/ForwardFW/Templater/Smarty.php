@@ -144,12 +144,12 @@ class Smarty extends \ForwardFW\Controller implements \ForwardFW\Templater\Templ
      */
     public function smartyTexter($params, &$smarty)
     {
-        $strTextKey = $params['key'];
+        /**
+         * $texter = ForwardFW_Texter::factory($this->application->getName());
+         * $result = $texter->getText($params['key']);
+         */
 
-        $texter = ForwardFW_Texter::factory($this->strApplicationName);
-        $result = $texter->getText($strTextKey);
-
-        return $result;
+        return $params['key'];
     }
 
     /**

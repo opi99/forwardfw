@@ -139,12 +139,12 @@ class Twig extends \ForwardFW\Controller implements \ForwardFW\Templater\Templat
 
     public function twigTexter($params, &$smarty)
     {
-        $strTextKey = $params['key'];
+        /**
+         * $texter = ForwardFW_Texter::factory($this->strApplicationName);
+         * $result = $texter->getText($params['key']);
+         */
 
-        $texter = ForwardFW_Texter::factory($this->strApplicationName);
-        $result = $texter->getText($strTextKey);
-
-        return $result;
+        return $params['key'];
     }
 
     /**
