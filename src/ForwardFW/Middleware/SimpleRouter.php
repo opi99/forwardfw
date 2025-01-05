@@ -56,46 +56,13 @@ class SimpleRouter extends \ForwardFW\Middleware
 
         if (!$response) {
             /** @TODO Own response with Error or proceed handling middlewares? */
-            //$factory = new ResponseFactory();
+            // $factory = new ResponseFactory();
             // §respons = $factory->createResponse
+            // $response->addError('No Route "' . $routePath . '" found', 404);
             $response = $handler->handle($request);
 
         }
 
         return $response;
-    }
-
-    /**
-     * Function to process before your child
-     *
-     * @return void
-     */
-    public function doIncomingFilter()
-    {
-        $parent = $this;
-
-        $this->routePath = $this->request->getRoutePath();
-
-        foreach ($this->config->getRoutes() as $routeConfig) {
-            if (strncmp($this->routePath, $routeConfig->getStart(), strlen($routeConfig->getStart())) === 0) {
-                $nextRoute = substr($this->routePath, strlen($routeConfig->getStart()));
-                if ($nextRoute === false) {
-                    $nextRoute = '';
-                }
-                $this->request->setRoutePath($nextRoute);
-
-                $filterConfigs = $routeConfig->getFilterConfigs();
-                foreach ($filterConfigs as $filterConfig) {
-                    $filterClassName = $filterConfig->getExecutionClassName();
-                    $child = new $filterClassName(null, $filterConfig, $this->request, $this->response, $this->serviceManager);
-                    $parent->setChild($child);
-                    $parent = $child;
-                }
-                break;
-            }
-        }
-        if ($this->child === null && $this->config->getRouteNotFoundError()) {
-            $this->response->addError('No Route "' . $this->routePath . '" found', 404);
-        }
     }
 }
