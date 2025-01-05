@@ -27,6 +27,9 @@ class WebSocketRunner
     /** @var array<Client> */
     protected array $clients = [];
 
+    /** @var bool Is true, if we are in shutDown process after SIGTERM or related signals */
+    protected bool $shutDown;
+
     public function __construct(
         \ForwardFW\Config\Runner\WebSocketRunner $config
     ) {
