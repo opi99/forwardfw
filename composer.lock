@@ -460,20 +460,20 @@
         },
         {
             "name": "kodus/chrome-logger",
-            "version": "1.2.0",
+            "version": "1.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/kodus/chrome-logger.git",
-                "reference": "4aeed0d949037831a3064b28e67d733e478a8301"
+                "reference": "b64c967599eeaf5624abe4a8e16eb2a208548619"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kodus/chrome-logger/zipball/4aeed0d949037831a3064b28e67d733e478a8301",
-                "reference": "4aeed0d949037831a3064b28e67d733e478a8301",
+                "url": "https://api.github.com/repos/kodus/chrome-logger/zipball/b64c967599eeaf5624abe4a8e16eb2a208548619",
+                "reference": "b64c967599eeaf5624abe4a8e16eb2a208548619",
                 "shasum": ""
             },
             "require": {
-                "php": ">=8.0",
+                "php": ">=8.4",
                 "psr/http-message": "^1",
                 "psr/http-server-middleware": "^1",
                 "psr/log": "^1"
@@ -510,9 +510,9 @@
             "description": "PSR-3 (logging), PSR-7 (HTTP) and PSR-15 (middleware) compliant alternative to the original ChromeLogger for PHP",
             "support": {
                 "issues": "https://github.com/kodus/chrome-logger/issues",
-                "source": "https://github.com/kodus/chrome-logger/tree/1.2.0"
+                "source": "https://github.com/kodus/chrome-logger/tree/1.3.0"
             },
-            "time": "2022-08-24T10:44:58+00:00"
+            "time": "2025-01-17T09:54:31+00:00"
         },
         {
             "name": "phpstan/phpstan",
