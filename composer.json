@@ -33,6 +33,7 @@
     "require-dev": {
         "smarty/smarty": "^5.4",
         "kodus/chrome-logger": "^1.2",
-        "phpstan/phpstan": "^2.1"
+        "phpstan/phpstan": "^2.1",
+        "itsgoingd/clockwork": "^5.3"
     }
 }
