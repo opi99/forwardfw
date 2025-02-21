@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * This file is part of ForwardFW a web application framework.
  *
@@ -11,12 +13,12 @@
  * LICENSE.txt file that was distributed with this source code.
  */
 
-namespace ForwardFW\Config\Filter\RequestResponse;
+namespace ForwardFW\Config\Middleware\Logger;
 
 /**
- * Config for a SimpleRouter Filter.
+ * Config for a middleware which outputs logging to clockwork.
  */
-class Clockwork extends \ForwardFW\Config\Filter\RequestResponse
+class ClockworkLogger extends \ForwardFW\Config\Middleware
 {
-    protected $executionClassName = 'ForwardFW\\Filter\\RequestResponse\\Clockwork';
+    protected string $executionClassName = \ForwardFW\Middleware\Logger\ClockworkLogger::class;
 }
