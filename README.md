@@ -10,6 +10,8 @@ Compatible to:
 - [PSR-4](http://www.php-fig.org/psr/psr-4/) - Autoloading Standard
 - [PSR-7](http://www.php-fig.org/psr/psr-7/) - HTTP Message Interface
 - [PSR-12](http://www.php-fig.org/psr/psr-12/) - Extended Coding Style Guide
+- [PSR-14](http://www.php-fig.org/psr/psr-14/) - Event Dispatcher
+- [PSR-15](http://www.php-fig.org/psr/psr-15/) - HTTP Server Request Handlers
 - [PSR-17](http://www.php-fig.org/psr/psr-17/) - HTTP Factories
 
 Requirements:
