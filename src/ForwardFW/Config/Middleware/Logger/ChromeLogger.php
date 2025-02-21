@@ -16,7 +16,7 @@ declare(strict_types=1);
 namespace ForwardFW\Config\Middleware\Logger;
 
 /**
- * Config for a Filter which outputs logging to ChromeLogger
+ * Config for a middleware which outputs logging to ChromeLogger
  */
 class ChromeLogger extends \ForwardFW\Config\Middleware
 {
