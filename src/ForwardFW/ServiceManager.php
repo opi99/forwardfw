@@ -82,7 +82,7 @@ class ServiceManager
 
         $className = $config->getExecutionClassName();
 
-        $class = new $className($this, $config);
+        $class = new $className($config, $this);
 
         if ($class instanceof Service\Startable) {
             $class->start();
