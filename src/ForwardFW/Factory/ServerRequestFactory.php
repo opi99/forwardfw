@@ -25,19 +25,30 @@ class ServerRequestFactory
 {
     public function createServerRequest(string $method, $uri, array $serverParams = []): ServerRequestInterface
     {
-        return new ServerRequest($method, $uri, $serverParams);
+        if (is_string($uri)) {
+            $uriFactory = new UriFactory();
+            $uri = $uriFactory->createUri($uri);
+        }
+
+        if (!$uri instanceof UriInterface) {
+            throw new \InvalidArgumentException();
+        }
+
+        return new ServerRequest($method, $uri, [], $serverParams);
     }
 
     public static function createFromGlobals(): ServerRequestInterface
     {
+        $uriFactory = new UriFactory();
+        $uri = $uriFactory->createUri(
+            (($_SERVER['HTTPS'] ?? null) === 'on' ? 'https' : 'http') . '://' . ($_SERVER['HTTP_HOST'] ?? '') . ($_SERVER['REQUEST_URI'] ?? '/')
+        );
         $request = new ServerRequest(
             $_SERVER['REQUEST_METHOD'],
-            (($_SERVER['HTTPS'] ?? null) === 'on' ? 'https' : 'http') . '://' . ($_SERVER['HTTP_HOST'] ?? '') . ($_SERVER['REQUEST_URI'] ?? '/'),
+            $uri,
+            $_COOKIE,
             $_SERVER
         );
-        if (!empty($_COOKIE)) {
-            $request = $request->withCookieParams($_COOKIE);
-        }
         return $request;
     }
 }
