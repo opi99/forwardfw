@@ -29,10 +29,8 @@ class Service extends \ForwardFW\Config
      * Sets name of interface this service represents.
      *
      * @param string $interfaceName Name of interface this service represents.
-     *
-     * @return ForwardFW\Config\Service
      */
-    public function setInterfaceName(string $interfaceName)
+    public function setInterfaceName(string $interfaceName): self
     {
         $this->interfaceName = $interfaceName;
         return $this;
