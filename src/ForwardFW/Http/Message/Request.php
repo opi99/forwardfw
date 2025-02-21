@@ -29,12 +29,6 @@ class Request
     /** @var array data of json request */
     protected $json = null;
 
-    /** @var string HTTP method */
-    protected $method = 'GET';
-
-    /** @var string URI of request */
-    protected $uri = '/';
-
     /** @var string */
     protected $routePath;
 
@@ -229,7 +223,15 @@ class Request
 
 
     // NEW
-    public function __construct(string $method, string $uri, $body = 'php://input', array $headers = [])
+
+
+    /** @var string HTTP method */
+    protected string $method = 'GET';
+
+    /** @var UriInterface URI of request */
+    protected UriInterface $uri;
+
+    public function __construct(string $method, UriInterface $uri, $body = 'php://input', array $headers = [])
     {
         if ($method === 'GET' || $method === 'POST') {
             $this->method = $method;
@@ -238,6 +240,11 @@ class Request
 
         $uriParts = parse_url($uri);
         $this->requestTarget = $uriParts['path'];
+    }
+
+    public function getUri(): UriInterface
+    {
+        return $this->uri;
     }
 
     public function getRequestTarget()
@@ -266,14 +273,10 @@ class Request
         return $clone;
     }
 
-    public function getUri()
-    {
-
-    }
-
     public function withUri(UriInterface $uri, $preserveHost = false)
     {
         $clone = clone $this;
+        $clone->uri = $uri;
         return $clone;
     }
 }

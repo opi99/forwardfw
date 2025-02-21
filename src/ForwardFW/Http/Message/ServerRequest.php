@@ -22,22 +22,35 @@ class ServerRequest
     extends Request
     implements ServerRequestInterface
 {
-    public function getServerParams()
-    {
-        return $_SERVER;
+    public function __construct(
+        string $method,
+        UriInterface $uri,
+        // HeadersInterface $headers,
+        protected array $cookieParams,
+        protected array $serverParams
+    ) {
+        parent::__construct($method, $uri);
     }
 
-    public function getCookieParams()
+    public function getServerParams(): array
     {
-        return $_COOKIE;
+        return $this->serverParams;
     }
 
-    public function withCookieParams(array $cookies)
+    public function getCookieParams(): array
+    {
+        return $this->cookieParams;
+    }
+
+    public function withCookieParams(array $cookieParams)
     {
         $clone = clone $this;
+        $clone->setCookieParams($cookieParams);
         return $clone;
     }
 
+
+    // @TODO
     public function getQueryParams()
     {
         return [];
@@ -88,17 +101,6 @@ class ServerRequest
     }
 
     public function withoutAttribute($name)
-    {
-        $clone = clone $this;
-        return $clone;
-    }
-
-    public function getUri()
-    {
-        return $this->uri;
-    }
-
-    public function withUri(UriInterface $uri, $preserveHost = false)
     {
         $clone = clone $this;
         return $clone;

@@ -60,7 +60,7 @@ class Message
      */
     public function hasHeader(string $name)
     {
-        return (bool) count($this->headers);
+        return isset($this->headers[strtolower($name)]);
     }
 
     /**
@@ -71,7 +71,7 @@ class Message
      */
     public function getHeader(string $name)
     {
-        return [];
+        return ($this->headers[strtolower($name)] ?? []);
     }
 
     /**
@@ -82,7 +82,7 @@ class Message
      */
     public function getHeaderLine($name)
     {
-        return '';
+        return implode(',', $this->headers[strtolower($name)]);
     }
 
     /**
@@ -94,7 +94,7 @@ class Message
     public function withHeader($name, $value)
     {
         $clone = clone $this;
-        $clone->headers[$name] = $value;
+        $clone->headers[strtolower($name)] = $value;
         return $clone;
     }
 
@@ -107,8 +107,9 @@ class Message
     public function withAddedHeader($name, $value)
     {
         $clone = clone $this;
+        $name = strtolower($name);
         if (!isset($clone->headers[$name])) {
-            $clone->headers[$name] = $value;
+            $clone->headers[$name] = [$value];
         } else {
             $clone->headers[$name] = array_merge($clone->headers[$name], $value);
         }
@@ -121,7 +122,9 @@ class Message
      */
     public function withoutHeader($name)
     {
+        $name = strtolower($name);
         $clone = clone $this;
+        unset($clone->headers[$name]);
         return $clone;
     }
 
