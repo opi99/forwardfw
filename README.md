@@ -1,25 +1,27 @@
 ForwardFW
 =========
 
-Self written framework which uses chaining RequestResponse filter objects (something like nowadays PSR-3 (Logging
-interface) PSR-7 (message abstraction) PSR-15 (middleware)) so I may rewrite it again to match such interfaces.
+Self written framework.
 
 Compatible to:
 --------------
 
-- [PSR-4](http://www.php-fig.org/psr/psr-4/) - Class autoloading
-- [PSR-12](http://www.php-fig.org/psr/psr-12/) - Coding Standard
+- [PSR-3](http://www.php-fig.org/psr/psr-3/) - Logger Interface
+- [PSR-4](http://www.php-fig.org/psr/psr-4/) - Autoloading Standard
+- [PSR-7](http://www.php-fig.org/psr/psr-7/) - HTTP Message Interface
+- [PSR-12](http://www.php-fig.org/psr/psr-12/) - Extended Coding Style Guide
+- [PSR-17](http://www.php-fig.org/psr/psr-17/) - HTTP Factories
 
 Requirements:
 -------------
 
-- PHP 7.2.0 or newer
+- PHP 8.4.0 or newer
 
 Supported Template Engines:
 ---------------------------
 
-- Smarty 3.1.x http://www.smarty.net/
-- Twig 3.x.x https://twig.symfony.com/
+- Smarty 5.4.x http://www.smarty.net/
+- Twig 3.20.x https://twig.symfony.com/
 
 Supported Remote Loggers:
 -------------------------
