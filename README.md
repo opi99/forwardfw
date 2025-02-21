@@ -24,5 +24,5 @@ Supported Template Engines:
 Supported Remote Loggers:
 -------------------------
 
-- FirePHP http://www.firephp.org
 - Kodus ChromeLogger https://packagist.org/packages/kodus/chrome-logger
+- Clockwork https://packagist.org/packages/itsgoingd/clockwork
