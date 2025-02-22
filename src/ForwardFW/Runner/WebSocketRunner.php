@@ -15,7 +15,12 @@ declare(strict_types=1);
 
 namespace ForwardFW\Runner;
 
-use ForwardFW\Event\WebSocket\NewClientEvent;
+use ForwardFW\Event\WebSocket\CloseConnectionClientEvent;
+use ForwardFW\Event\WebSocket\LoopServerEvent;
+use ForwardFW\Event\WebSocket\NewConnectionClientEvent;
+use ForwardFW\Event\WebSocket\PingClientEvent;
+use ForwardFW\Event\WebSocket\PongClientEvent;
+use ForwardFW\Event\WebSocket\TextClientEvent;
 use ForwardFW\Runner;
 use ForwardFW\WebSocket\Client;
 
@@ -26,6 +31,7 @@ class WebSocketRunner
 
     /** @var array<Client> */
     protected array $clients = [];
+    protected bool $shutDown = false;
 
     /** @var bool Is true, if we are in shutDown process after SIGTERM or related signals */
     protected bool $shutDown;
@@ -41,6 +47,15 @@ class WebSocketRunner
         parent::preRun();
         $this->registerSignals();
         $this->initServerSocket();
+        $this->addEventListeners();
+    }
+
+    protected function addEventListeners(): void
+    {
+        /** @var \Psr\EventDispatcher\EventDispatcherInterface $eventDispatcher */
+        $eventDispatcher = $this->serviceManager->getService(\Psr\EventDispatcher\EventDispatcherInterface::class);
+        $eventDispatcher->addListener([$this, 'closeConnectionClientEvent'], CloseConnectionClientEvent::class);
+        $eventDispatcher->addListener([$this, 'pingClientEvent'], PingClientEvent::class);
     }
 
     public function run(): void
@@ -61,15 +76,11 @@ class WebSocketRunner
     {
         while (!$this->shutDown) {
             $this->checkNewConnections();
-            $this->readAndExecute();
-
-            /** @TODO Only on changes */
-            // $this->sendBaseData();
-
+            $this->checkForClientData();
+            $this->sendLoopServerEvent();
             usleep(5000);
         }
     }
-
 
     protected function registerSignals(): void
     {
@@ -123,13 +134,26 @@ class WebSocketRunner
         socket_close($this->serverSocket);
         foreach($this->clients as $client)
         {
-            $this->closeClientConnection($client, 'UNKNOWN REASON', 1001);
+            $this->closeClientConnection($client, 1001, 'UNKNOWN REASON');
         }
     }
 
-    protected function closeClientConnection(Client $client, string $message, int $code)
+    public function closeConnectionClientEvent(CloseConnectionClientEvent $event)
     {
-        $this->sendCloseFrame($message, $code, $client->getSocket());
+        /** Close frame response https://datatracker.ietf.org/doc/html/rfc6455#section-5.5.1 */
+        echo 'Connection close request with code: "' . $event->getCode() . '" and message "' . $event->getMessage() . '"' . "\n";
+        $this->closeClientConnection($event->getClient(), $event->getCode(), $event->getMessage());
+    }
+
+    public function pingClientEvent(PingClientEvent $event)
+    {
+        echo 'Ping request with code: "' . $event->getMessage() . '"' . "\n";
+        $this->sendPongFrame($event->getClient()->getSocket());
+    }
+
+    protected function closeClientConnection(Client $client, int $code, string $message)
+    {
+        $this->sendCloseFrame($client->getSocket(), $code, $message);
         // Do not wait for CLOSE frame echo, FF and Chromium do not do this.
         @socket_close($client->getSocket());
 
@@ -141,29 +165,31 @@ class WebSocketRunner
         }
     }
 
-    protected function sendCloseFrame(string $message, int $code, \Socket $clientSocket)
+    protected function sendCloseFrame(\Socket $clientSocket, int $code, string $message)
     {
         $content = $this->seal(self::FRAME_CLOSE, $message, $code);
         $contentLength = strlen($content);
         $send = @socket_write($clientSocket, $content, $contentLength);
     }
 
-    protected function sendDataToAllClients(string $type, array $data): void
+    protected function sendPongFrame(\Socket $clientSocket)
+    {
+        $content = $this->seal(self::FRAME_PONG, '');
+        $contentLength = strlen($content);
+        $send = @socket_write($clientSocket, $content, $contentLength);
+    }
+
+    protected function sendDataToAllClients(string $data): void
     {
         foreach($this->clients as $client)
         {
-            $this->sendDataToSocket($type, $data, $client->getSocket());
+            $this->sendDataToSocket($data, $client->getSocket());
         }
     }
 
-    protected function sendDataToSocket(string $type, array $data, \Socket $clientSocket): bool
+    protected function sendDataToSocket(string $data, \Socket $clientSocket): bool
     {
-        $jsonMessage = json_encode([
-            'type' => $type,
-            'data' => $data,
-        ]);
-
-        $message = $this->seal(self::FRAME_TEXT, $jsonMessage);
+        $message = $this->seal(self::FRAME_TEXT, $data);
         $messageLength = strlen($message);
 
         $send = @socket_write($clientSocket, $message, $messageLength);
@@ -193,7 +219,7 @@ class WebSocketRunner
 
     const IS_MASKED = 0x80;
 
-    protected function unseal(string $socketData, Client $client)
+    protected function processClientData(string $socketData, Client $client)
     {
         $isClose = false;
 
@@ -212,40 +238,15 @@ class WebSocketRunner
         $opcode = $firstByte & self::MASK_FRAME;
         $rsv = $firstByte & self::MASK_RSV;
 
-        switch ($opcode) {
-            case self::FRAME_CONTINUATION:
-                $this->closeClientConnection($client, 'Frame continuation not supported', 1003);
-                return;
-                break;
-            case self::FRAME_TEXT:
-                break;
-            case self::FRAME_BIN:
-                /** @TODO Binary data. */
-                $this->closeClientConnection($client, 'Frame binary not supported', 1003);
-                return '';
-                break;
-            case self::FRAME_CLOSE:
-                $isClose = true;
-                break;
-            case self::FRAME_PING:
-                var_dump('NOT YET SUPPORTED! We should send a pong here?');
-                return '';
-                break;
-            case self::FRAME_PONG:
-                var_dump('NOT YET SUPPORTED! We didn\'t send a ping yet.');
-                return '';
-                break;
-            default:
-                $this->closeClientConnection($client, 'Your frame opcode is not defined in RFC6455', 1003);
-        }
-
         $masked = (bool) ($secondByte & self::IS_MASKED);
         $length = $secondByte & self::MASK_PAYLOAD;
 
         $dataStart = 2;
         if ($length === self::MASK_126) {
-            $dataStart = 6;
+            $length = unpack('n', substr($content, 2, 4)[0]);
+            $dataStart = 4;
         } elseif ($length === self::MASK_127) {
+            $length = unpack('J', substr($content, 2, 8)[0]);
             $dataStart = 10;
         }
 
@@ -279,21 +280,34 @@ class WebSocketRunner
             var_dump('NOT YET SUPPORTED! We read more data from WebSocket as this frame has, should be handled as next.');
         }
 
-        if ($isClose) {
-            $closeCode = unpack('n', substr($content, 0, 2))[1];
-            $content = substr($content, 2);
+        switch ($opcode) {
+            case self::FRAME_CONTINUATION:
+                $this->closeClientConnection($client, 'Frame continuation not supported', 1003);
+                return;
+                break;
+            case self::FRAME_TEXT:
+                $this->sendTextEvent($client, $content);
+                break;
+            case self::FRAME_BIN:
+                /** @TODO Binary data. */
+                $this->closeClientConnection($client, 'Frame binary not supported', 1003);
+                return '';
+                break;
+            case self::FRAME_CLOSE:
+                $closeCode = unpack('n', substr($content, 0, 2))[1];
+                $content = substr($content, 2);
 
-            echo 'Connection closed with code: "' . $closeCode . '" and message "' . $content . '"' . "\n";
-
-            /** Close frame response https://datatracker.ietf.org/doc/html/rfc6455#section-5.5.1 */
-            $this->closeClientConnection($client, $content, $closeCode);
-
-            return '';
+                $this->sendCloseConnectionEvent($client, $closeCode, $content);
+                break;
+            case self::FRAME_PING:
+                $this->sendPingEvent($client, $content);
+                break;
+            case self::FRAME_PONG:
+                $this->sendPongEvent($client, $content);
+                break;
+            default:
+                $this->closeClientConnection($client, 'Your frame opcode is not defined in RFC6455', 1003);
         }
-
-        // Do not return, create events with the data out of frames.
-
-        return $content;
     }
 
     protected function seal(int $type, string $message, int $code = 0)
@@ -352,14 +366,59 @@ class WebSocketRunner
 
     protected function sendNewConnectionEvent(Client $client): void
     {
-        $newClientEvent = new NewClientEvent($client);
+        $newConnectionClientEvent = new NewConnectionClientEvent($client);
 
         /** @var \Psr\EventDispatcher\EventDispatcherInterface $eventDispatcher */
         $eventDispatcher = $this->serviceManager->getService(\Psr\EventDispatcher\EventDispatcherInterface::class);
-        $eventDispatcher->dispatch($newClientEvent);
+        $eventDispatcher->dispatch($newConnectionClientEvent);
     }
 
-    protected function readAndExecute()
+    protected function sendCloseConnectionEvent(Client $client, int $code, string $message): void
+    {
+        $newConnectionClientEvent = new CloseConnectionClientEvent($client, $code, $message);
+
+        /** @var \Psr\EventDispatcher\EventDispatcherInterface $eventDispatcher */
+        $eventDispatcher = $this->serviceManager->getService(\Psr\EventDispatcher\EventDispatcherInterface::class);
+        $eventDispatcher->dispatch($newConnectionClientEvent);
+    }
+
+    protected function sendTextEvent(Client $client, string $message): void
+    {
+        $textClientEvent = new TextClientEvent($client, $message);
+
+        /** @var \Psr\EventDispatcher\EventDispatcherInterface $eventDispatcher */
+        $eventDispatcher = $this->serviceManager->getService(\Psr\EventDispatcher\EventDispatcherInterface::class);
+        $eventDispatcher->dispatch($textClientEvent);
+    }
+
+    protected function sendPingEvent(Client $client, string $message): void
+    {
+        $pingClientEvent = new PingClientEvent($client, $message);
+
+        /** @var \Psr\EventDispatcher\EventDispatcherInterface $eventDispatcher */
+        $eventDispatcher = $this->serviceManager->getService(\Psr\EventDispatcher\EventDispatcherInterface::class);
+        $eventDispatcher->dispatch($pingClientEvent);
+    }
+
+    protected function sendPongEvent(Client $client, string $message): void
+    {
+        $pingClientEvent = new PongClientEvent($client);
+
+        /** @var \Psr\EventDispatcher\EventDispatcherInterface $eventDispatcher */
+        $eventDispatcher = $this->serviceManager->getService(\Psr\EventDispatcher\EventDispatcherInterface::class);
+        $eventDispatcher->dispatch($pingClientEvent);
+    }
+
+    protected function sendLoopServerEvent(): void
+    {
+        $loopServerEvent = new LoopServerEvent();
+
+        /** @var \Psr\EventDispatcher\EventDispatcherInterface $eventDispatcher */
+        $eventDispatcher = $this->serviceManager->getService(\Psr\EventDispatcher\EventDispatcherInterface::class);
+        $eventDispatcher->dispatch($loopServerEvent);
+    }
+
+    protected function checkForClientData()
     {
         if (!count($this->clients)) {
             return;
@@ -374,14 +433,13 @@ class WebSocketRunner
         socket_select($socketsToCheck, $unused, $unused, 0, 10);
         if (count($socketsToCheck)) {
             foreach ($socketsToCheck as $socketToRead) {
+                $socketData = '';
                 if (socket_recv($socketToRead, $socketData, 4096, MSG_DONTWAIT) >= 1) {
                     /** @TODO read longer message blocks */
 
                     $client = $this->findClientFromSocket($socketToRead);
-
-                    $socketMessage = $this->unseal($socketData, $client);
-                    $message = json_decode($socketMessage, true);
-                    // $this->processMessage($message);
+                    $this->processClientData($socketData, $client);
+                    // $message = json_decode($socketMessage, true);
                 }
             }
         }
@@ -430,7 +488,6 @@ class WebSocketRunner
             socket_write($clientSocket, $buffer, strlen($buffer));
             return false;
         }
-
 
         $secKey = $headerLines['Sec-WebSocket-Key'];
         $secAccept = base64_encode(pack('H*', sha1($secKey . '258EAFA5-E914-47DA-95CA-C5AB0DC85B11')));

@@ -15,7 +15,7 @@ declare(strict_types=1);
 
 namespace ForwardFW\Event\WebSocket;
 
-class NewClientEvent
+class NewConnectionClientEvent
     extends AbstractClientEvent
 {
 
