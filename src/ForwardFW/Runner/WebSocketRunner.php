@@ -31,7 +31,6 @@ class WebSocketRunner
 
     /** @var array<Client> */
     protected array $clients = [];
-    protected bool $shutDown = false;
 
     /** @var bool Is true, if we are in shutDown process after SIGTERM or related signals */
     protected bool $shutDown = false;
