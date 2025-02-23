@@ -27,15 +27,15 @@ class AbstractService
     /**
      * Constructor
      *
-     * @param \ForwardFW\ServiceManager $response The ServiceManager instance.
      * @param \ForwardFW\Config\Service $config Config for the service, needs to be verified in the service.
+     * @param \ForwardFW\ServiceManager $response The ServiceManager instance.
      *
      * @return void
      */
-    public function __construct(\ForwardFW\ServiceManager $serviceManager, \ForwardFW\Config\Service $config)
+    public function __construct(\ForwardFW\Config\Service $config, \ForwardFW\ServiceManager $serviceManager)
     {
-        $this->serviceManager = $serviceManager;
         $this->config = $config;
+        $this->serviceManager = $serviceManager;
     }
 
     /**

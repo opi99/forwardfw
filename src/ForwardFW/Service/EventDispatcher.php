@@ -14,9 +14,9 @@ class EventDispatcher
 {
     private array $listeners = [];
 
-    public function __construct(\ForwardFW\ServiceManager $serviceManager, \ForwardFW\Config\Service\EventDispatcher $config)
+    public function __construct(\ForwardFW\Config\Service\EventDispatcher $config, \ForwardFW\ServiceManager $serviceManager)
     {
-        parent::__construct($serviceManager, $config);
+        parent::__construct($config, $serviceManager);
 
         $this->listeners = $config->getListeners();
     }
