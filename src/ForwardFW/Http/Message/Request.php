@@ -238,8 +238,11 @@ class Request
         }
         $this->uri = $uri;
 
-        $uriParts = parse_url($uri);
-        $this->requestTarget = $uriParts['path'];
+        $this->requestTarget = $uri->getPath() ?: '/';
+        $query = $uri->getQuery();
+        if ($query) {
+            $this->requestTarget .= '?' . $query;
+        };
     }
 
     public function getUri(): UriInterface
