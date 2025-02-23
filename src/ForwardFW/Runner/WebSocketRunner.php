@@ -34,7 +34,7 @@ class WebSocketRunner
     protected bool $shutDown = false;
 
     /** @var bool Is true, if we are in shutDown process after SIGTERM or related signals */
-    protected bool $shutDown;
+    protected bool $shutDown = false;
 
     public function __construct(
         \ForwardFW\Config\Runner\WebSocketRunner $config
