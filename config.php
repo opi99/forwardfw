@@ -9,16 +9,17 @@ return (new \ForwardFW\Config\Runner\HttpMiddlewareRunner())
                 ->setDsn('mysqli://john:doe@localhost/forwardfw')
                 ->setTablePrefix('')
         )*/
-        // ->addService(
-        //     (new \ForwardFW\Config\Service\Logger\ChromeLogger())
-        // )
         ->addService(
-            (new \ForwardFW\Config\Service\Logger\ClockworkLogger())
-                ->enable()
+            (new \ForwardFW\Config\Service\Logger\Manager())
+                ->addLoggerService(new \ForwardFW\Config\Service\Logger\ChromeLogger())
+                ->addLoggerService(
+                    (new \ForwardFW\Config\Service\Logger\ClockworkLogger())
+                    ->enable()
+                )
         )
-        // ->addMiddleware(
-        //     new \ForwardFW\Config\Middleware\Logger\ChromeLogger()
-        // )
+        ->addMiddleware(
+            new \ForwardFW\Config\Middleware\Logger\ChromeLogger()
+        )
         ->addMiddleware(
             (new \ForwardFW\Config\Middleware\Logger\ClockworkLogger())
         )

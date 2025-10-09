@@ -33,7 +33,11 @@ class ServiceManager
 
     private $registeredServices = [];
 
-    private $startedServices = [];
+    private $registeredServiceClasses = [];
+
+    private $startedServicesByInterface = [];
+
+    private $startedServicesByClass = [];
 
     /**
      * Constructor
@@ -50,36 +54,51 @@ class ServiceManager
         $this->config = $config;
     }
 
-    public function registerService(\ForwardFW\Config\Service $config)
+    public function registerService(\ForwardFW\Config\Service $config, bool $registerInterface = true)
     {
         $className = $config->getExecutionClassName();
-        $interfaceName = $config->getInterfaceName();
 
-        $reflection = new \ReflectionClass($className);
-        if ($reflection->implementsInterface($interfaceName)) {
-            $this->registeredServices[$interfaceName] = $config;
-        } else {
-            throw new \Exception('Class doesn\'t implement given interface.');
+        if (isset($this->registeredServiceClasses[$className])) {
+            throw new \Exception('Class already registered as service.');
+        }
+
+        $this->registeredServiceClasses[$className] = $config;
+
+        if ($registerInterface) {
+            $interfaceName = $config->getInterfaceName();
+
+            $reflection = new \ReflectionClass($className);
+            if ($reflection->implementsInterface($interfaceName)) {
+                $this->registeredServices[$interfaceName] = $config;
+            } else {
+                throw new \Exception('Class doesn\'t implement given interface.');
+            }
         }
     }
 
     public function getService($interfaceName)
     {
-        if (isset($this->startedServices[$interfaceName])) {
-            return $this->startedServices[$interfaceName];
+        if (isset($this->startedServicesByInterface[$interfaceName])) {
+            return $this->startedServicesByInterface[$interfaceName];
+        }
+
+        if (isset($this->startedServicesByClass[$interfaceName])) {
+            return $this->startedServicesByClass[$interfaceName];
         }
 
         if (isset($this->registeredServices[$interfaceName])) {
-            return $this->createAndStartService($interfaceName);
+            return $this->createAndStartService($this->registeredServices[$interfaceName]);
         }
 
-        throw new \Exception('Service not registered.');
+        if (isset($this->registeredServiceClasses[$interfaceName])) {
+            return $this->createAndStartService($this->registeredServiceClasses[$interfaceName]);
+        }
+
+        throw new \Exception('Service "'. $interfaceName . '" not registered.');
     }
 
-    protected function createAndStartService($interfaceName)
+    protected function createAndStartService(\ForwardFW\Config\Service $config)
     {
-        $config = $this->registeredServices[$interfaceName];
-
         $className = $config->getExecutionClassName();
 
         $class = new $className($config, $this);
@@ -87,7 +106,8 @@ class ServiceManager
         if ($class instanceof Service\Startable) {
             $class->start();
         }
-        $this->startedServices[$interfaceName] = $class;
+        $this->startedServicesByInterface[$interfaceName] = $class;
+        $this->startedServicesByClass[$className] = $class;
 
         return $class;
     }

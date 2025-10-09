@@ -28,10 +28,14 @@ class Bootstrap
 
     public function loadConfig(string $file): void
     {
-        $this->config = require $file;
-
-        if (!$this->config instanceof Config\Runner) {
-            throw new \ForwardFW\Exception\BootstrapException('Config didn\'t return a runner configuration.');
+        try {
+            $this->config = require $file;
+            if (!$this->config instanceof Config\Runner) {
+                throw new \ForwardFW\Exception\BootstrapException('Config didn\'t return a runner configuration.');
+            }
+        } catch (\Error $e) {
+            echo 'Config not loadable';
+            exit(1);
         }
     }
 

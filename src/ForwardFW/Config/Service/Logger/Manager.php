@@ -1,0 +1,39 @@
+<?php
+
+declare(strict_types=1);
+
+/**
+ * This file is part of ForwardFW a web application framework.
+ *
+ * It is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License, either version 2
+ * of the License, or any later version.
+ *
+ * For the full copyright and license information, please read the
+ * LICENSE.txt file that was distributed with this source code.
+ */
+
+namespace ForwardFW\Config\Service\Logger;
+
+/**
+ * Config for a Service.
+ */
+class Manager extends \ForwardFW\Config\Service\Logger
+{
+    protected string $executionClassName = \ForwardFW\Service\Logger\Manager::class;
+
+    protected array $loggerConfigs = [];
+
+    public function addLoggerService(\ForwardFW\Config\Service\Logger $loggerConfig): self
+    {
+        $this->loggerConfigs[] = $loggerConfig;
+
+        return $this;
+    }
+
+    public function getLoggerServices(): array
+    {
+        return $this->loggerConfigs;
+    }
+}
+

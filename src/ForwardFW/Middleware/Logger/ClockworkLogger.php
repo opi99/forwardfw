@@ -34,7 +34,7 @@ class ClockworkLogger extends \ForwardFW\Middleware
         \ForwardFW\ServiceManager $serviceManager
     ) {
         parent::__construct($config, $serviceManager);
-        $this->clockwork = $this->serviceManager->getService(\Psr\Log\LoggerInterface::class)->getClockwork();
+        $this->clockwork = $this->serviceManager->getService(\ForwardFW\Service\Logger\Clockwork::class)->getClockwork();
     }
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
