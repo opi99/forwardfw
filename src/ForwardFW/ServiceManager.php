@@ -69,10 +69,20 @@ class ServiceManager
 
             $reflection = new \ReflectionClass($className);
             if ($reflection->implementsInterface($interfaceName)) {
-                $this->registeredServices[$interfaceName] = $config;
+                if (!isset($this->registeredServices[$interfaceName])) {
+                    $this->registeredServices[$interfaceName] = $config;
+                }
             } else {
                 throw new \Exception('Class doesn\'t implement given interface.');
             }
+        }
+
+        if ($config->hasSubServices()) {
+            $subServicesConfig = $config->getSubServicesConfig();
+            foreach ($subServicesConfig as $subServiceConfig) {
+                $this->registerService($subServiceConfig);
+            }
+
         }
     }
 
@@ -106,7 +116,14 @@ class ServiceManager
         if ($class instanceof Service\Startable) {
             $class->start();
         }
-        $this->startedServicesByInterface[$interfaceName] = $class;
+
+        // Search if for given class an interface entry was registered, if yes, save this class in startedServicesByInterface
+        $possibleInterfaceName = array_find_key($this->registeredServices, function ($serviceConfig) use ($className) {
+            return $serviceConfig->getExecutionClassName() === $className;
+        });
+        if ($possibleInterfaceName) {
+            $this->startedServicesByInterface[$possibleInterfaceName] = $class;
+        }
         $this->startedServicesByClass[$className] = $class;
 
         return $class;

@@ -16,24 +16,16 @@ declare(strict_types=1);
 namespace ForwardFW\Config\Service\Logger;
 
 /**
- * Config for a Service.
+ * Config for the Logger Manager service.
  */
 class Manager extends \ForwardFW\Config\Service\Logger
 {
     protected string $executionClassName = \ForwardFW\Service\Logger\Manager::class;
 
-    protected array $loggerConfigs = [];
-
     public function addLoggerService(\ForwardFW\Config\Service\Logger $loggerConfig): self
     {
-        $this->loggerConfigs[] = $loggerConfig;
+        $this->addSubService($loggerConfig);
 
         return $this;
     }
-
-    public function getLoggerServices(): array
-    {
-        return $this->loggerConfigs;
-    }
 }
-

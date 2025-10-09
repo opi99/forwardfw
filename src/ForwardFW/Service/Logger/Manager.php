@@ -28,21 +28,18 @@ class Manager
 {
     protected array $loggers = [];
 
-
-    public function __construct(\ForwardFW\Config\Logger\MultiLogger $config, \ForwardFW\ServiceManager $manager)
+    public function __construct(\ForwardFW\Config\Service\Logger\Manager $config, \ForwardFW\ServiceManager $manager)
     {
-        foreach ($config->getLoggerServices() as $loggerConfig) {
-var_dump($loggerConfig);
-            $manager->registerService($loggerConfig, false);
+        foreach ($config->getSubServicesConfig() as $loggerConfig) {
+            $this->loggers[] = $manager->getService($loggerConfig->getExecutionClassName());
         }
 
     }
 
     public function log($level, $message, $context = []): void
     {
-        foreach ($loggers as $logger) {
-            $loggers->log($level, $message, $context);
+        foreach ($this->loggers as $logger) {
+            $logger->log($level, $message, $context);
         }
-
     }
 }

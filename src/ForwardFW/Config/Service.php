@@ -26,6 +26,11 @@ class Service extends \ForwardFW\Config
     protected string $interfaceName = '';
 
     /**
+     * @var array Array of subservice configs for this service
+     */
+    protected array $subServicesConfig = [];
+
+    /**
      * Sets name of interface this service represents.
      *
      * @param string $interfaceName Name of interface this service represents.
@@ -42,5 +47,23 @@ class Service extends \ForwardFW\Config
     public function getInterfaceName(): string
     {
         return $this->interfaceName;
+    }
+
+    /**
+     * Add subservices
+     */
+    protected function addSubService(self $serviceConfig): void
+    {
+        $this->subServicesConfig[] = $serviceConfig;
+    }
+
+    public function hasSubServices(): bool
+    {
+        return !empty($this->subServicesConfig);
+    }
+
+    public function getSubServicesConfig(): array
+    {
+        return $this->subServicesConfig;
     }
 }

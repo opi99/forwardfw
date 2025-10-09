@@ -28,7 +28,7 @@ class ChromeLogger extends \ForwardFW\Middleware
     {
         $response = $handler->handle($request);
 
-        $chromeLogger = $this->serviceManager->getService(\Psr\Log\LoggerInterface::class);
+        $chromeLogger = $this->serviceManager->getService(\Kodus\Logging\ChromeLogger::class);
         return $chromeLogger->writeToResponse($response);
     }
 }
