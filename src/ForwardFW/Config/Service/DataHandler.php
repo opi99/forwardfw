@@ -20,8 +20,8 @@ namespace ForwardFW\Config\Service;
  */
 class DataHandler extends \ForwardFW\Config\Service
 {
-    protected string $executionClassName = \ForwardFW\Controller\DataHandler::class;
-    protected string $interfaceName = \ForwardFW\Controller\DataHandlerInterface::class;
+    protected string $executionClassName = \ForwardFW\Service\DataHandler::class;
+    protected string $interfaceName = \ForwardFW\Service\DataHandlerInterface::class;
 
     // No different DataHandler configurable yet. Maybe remove DataHandler and declare this as different startable services?
     /** @var string prefix in tables. */
