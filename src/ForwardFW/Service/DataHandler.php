@@ -111,7 +111,7 @@ class DataHandler extends \ForwardFW\Service\AbstractService implements DataHand
      *
      * @return mixed Data from the connection.
      */
-    public function create($connectionName, array $options, ?\ForwardFW\Callback)
+    public function create($connectionName, array $options, ?\ForwardFW\Callback $idCallback)
     {
         $handler = $this->getConnection($connectionName);
         return $handler->create($connectionName, $options, $idCallback);
