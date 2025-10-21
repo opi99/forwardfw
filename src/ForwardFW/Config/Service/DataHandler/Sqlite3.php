@@ -20,5 +20,5 @@ namespace ForwardFW\Config\Service\DataHandler;
  */
 class Sqlite3 extends \ForwardFW\Config\Service\DataHandler
 {
-    protected $executionClassName = \ForwardFW\Controller\DataHandler\Sqlite3::class;
+    protected string $executionClassName = \ForwardFW\Service\DataHandler\Sqlite3::class;
 }

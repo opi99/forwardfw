@@ -13,13 +13,15 @@ declare(strict_types=1);
  * LICENSE.txt file that was distributed with this source code.
  */
 
-namespace ForwardFW\Controller\DataHandler;
+namespace ForwardFW\Service\DataHandler;
 
 /**
- * Managing DataLoading via SQLite v3
+ * Managing DataLoading via PHPs PDO
  */
-class Sqlite3 extends \ForwardFW\Controller\DataHandler
+class Pdo extends \ForwardFW\Controller\DataHandler
 {
+    private \Pdo $connection;
+
     /**
      * Loads Data from a connection (DB, SOAP, File)
      *
@@ -46,20 +48,14 @@ class Sqlite3 extends \ForwardFW\Controller\DataHandler
             $strQuery .= ' LIMIT ' . $options['limit'];
         }
 
-        $arResult = array();
-
         $result = $connection->query($strQuery);
 
         if ($result === false) {
-            $this->application->getResponse()->addError($connection->lastErrorMsg());
             throw new \ForwardFW\Exception\DataHandler(
                 'Error while execute: ' . $connection->lastErrorMsg()
             );
         }
-        while ($arRow = $result->fetchArray(SQLITE3_ASSOC)) {
-            array_push($arResult, $arRow);
-        }
-        return $arResult;
+        return $result->fetchAll(\PDO::FETCH_ASSOC);
     }
 
     /**
@@ -167,7 +163,7 @@ class Sqlite3 extends \ForwardFW\Controller\DataHandler
                 'Error while execute: ' . $connection->lastErrorMsg()
             );
         }
-        return array();
+        return [];
     }
 
     /**
@@ -180,20 +176,16 @@ class Sqlite3 extends \ForwardFW\Controller\DataHandler
     public function initConnection($connectionName)
     {
         try {
-            $connection = new \SQLite3($this->config->getDsn(), SQLITE3_OPEN_READWRITE);
+            $connection = new \PDO($this->config->getDsn(), $this->config->getUsername(), $this->config->getPassword());
         } catch (\Exception $e) {
-            $this->application->getResponse()->addError(
-                $e->getMessage()
-            );
             throw new \ForwardFW\Exception\DataHandler(
-                'Cannot initialize SQLite Connection: '
+                'Cannot initialize PDO Connection: '
                 . $e->getMessage()
             );
         }
 
-        $ret = $connection->exec('PRAGMA encoding = "utf-8"');
-        $connection->busyTimeout(5000);
-        $this->arConnectionCache[$connectionName] = $connection;
+        $ret = $connection->exec('SET NAMES utf8; SET CHARACTER SET utf8');
+        $this->connectionCache[$connectionName] = $connection;
     }
 
     public function getSqlValue($strType, $value, $connection)

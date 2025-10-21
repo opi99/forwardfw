@@ -20,7 +20,7 @@ namespace ForwardFW\Config\Service\DataHandler;
  */
 class Pdo extends \ForwardFW\Config\Service\DataHandler
 {
-    protected $executionClassName = \ForwardFW\Controller\DataHandler\Pdo::class;
+    protected string $executionClassName = \ForwardFW\Service\DataHandler\Pdo::class;
 
     private string $username;
 
