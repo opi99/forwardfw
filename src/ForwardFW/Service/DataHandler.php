@@ -18,20 +18,18 @@ namespace ForwardFW\Service;
 /**
  * Factory(?) Holder of DataHandler handlers.
  */
-class DataHandler extends \ForwardFW\Service\AbstractService implements DataHandlerInterface
+class DataHandler
+    extends AbstractService
+    implements DataHandlerInterface
 {
     /**
      * @var array Cache of connections
      */
-    protected $connectionCache = array();
+    protected array $connectionCache = [];
 
-    public function __construct(\ForwardFW\ServiceManager $serviceManager, \ForwardFW\Config\Service $config)
+    public function __construct(\ForwardFW\Config\Service\DataHandler $config, \ForwardFW\ServiceManager $serviceManager)
     {
-        if ($config instanceof \ForwardFW\Config\Service\DataHandler) {
-            parent::__construct($serviceManager, $config);
-        } else {
-            throw new \Exception('Not my config class');
-        }
+        parent::__construct($config, $serviceManager);
     }
 
     /**
@@ -42,7 +40,7 @@ class DataHandler extends \ForwardFW\Service\AbstractService implements DataHand
      *
      * @return mixed Data from the connection.
      */
-    public function loadFromCached($connectionName, array $options, $nCacheTimeout = -1)
+    public function loadFromCached(string $connectionName, array $options, $nCacheTimeout = -1)
     {
         return $this->loadFrom($connectionName, $options);
 
@@ -72,7 +70,7 @@ class DataHandler extends \ForwardFW\Service\AbstractService implements DataHand
      *
      * @return ForwardFW_Cache_Frontend The Cache Frontend.
      */
-    protected function getCacheSystem($connectionName)
+    protected function getCacheSystem(string $connectionName)
     {
         $backendConfig = new \ForwardFW\Config\Cache\Backend\File();
         $backendConfig->setPath(getcwd() . '/cache/');
@@ -96,7 +94,7 @@ class DataHandler extends \ForwardFW\Service\AbstractService implements DataHand
      *
      * @return mixed Data from the connection.
      */
-    public function loadFrom($connectionName, array $options)
+    public function loadFrom(string $connectionName, array $options)
     {
         $handler = $this->getConnection($connectionName);
         return $handler->loadFrom($connectionName, $options);
@@ -111,7 +109,7 @@ class DataHandler extends \ForwardFW\Service\AbstractService implements DataHand
      *
      * @return mixed Data from the connection.
      */
-    public function create($connectionName, array $options, ?\ForwardFW\Callback $idCallback)
+    public function create(string $connectionName, array $options, ?\ForwardFW\Callback $idCallback)
     {
         $handler = $this->getConnection($connectionName);
         return $handler->create($connectionName, $options, $idCallback);
@@ -125,7 +123,7 @@ class DataHandler extends \ForwardFW\Service\AbstractService implements DataHand
      *
      * @return mixed Data from the connection.
      */
-    public function truncate($connectionName, array $options)
+    public function truncate(string $connectionName, array $options)
     {
         $handler = $this->getConnection($connectionName);
         return $handler->truncate($connectionName, $options);
@@ -139,7 +137,7 @@ class DataHandler extends \ForwardFW\Service\AbstractService implements DataHand
      *
      * @return mixed Data from the connection.
      */
-    public function saveTo($connectionName, array $options)
+    public function saveTo(string $connectionName, array $options)
     {
         $handler = $this->getConnection($connectionName);
         return $handler->saveTo($connectionName, $options);
@@ -152,7 +150,7 @@ class DataHandler extends \ForwardFW\Service\AbstractService implements DataHand
      *
      * @return mixed ConnectionHandler
      */
-    protected function getConnection($connectionName)
+    protected function getConnection(string $connectionName)
     {
         if (!isset($this->connectionCache[$connectionName])) {
             $this->initConnection($connectionName);
@@ -168,7 +166,7 @@ class DataHandler extends \ForwardFW\Service\AbstractService implements DataHand
      *
      * @return void
      */
-    public function initConnection($connectionName)
+    public function initConnection(string $connectionName)
     {
         $config = $this->getConfigParameter($connectionName);
         $handlerClassName = $config['handler'];
@@ -190,7 +188,7 @@ class DataHandler extends \ForwardFW\Service\AbstractService implements DataHand
      *
      * @return string
      */
-    public function quoteString($connectionName, $value)
+    public function quoteString(string $connectionName, $value)
     {
         $handler = $this->getConnection($connectionName);
         return $handler->quoteString($connectionName, $value);
