@@ -13,7 +13,7 @@ declare(strict_types=1);
  * LICENSE.txt file that was distributed with this source code.
  */
 
-namespace ForwardFW\Controller;
+namespace ForwardFW\Service;
 
 /**
  * Interface for DataHandlers
@@ -49,7 +49,7 @@ interface DataHandlerInterface
      *
      * @return mixed Data from the connection.
      */
-    public function create($connectionName, array $options, \ForwardFW\Callback $idCallback = null);
+    public function create($connectionName, array $options, ?\ForwardFW\Callback $idCallback);
 
     /**
      * Saves Data to a connection (DB, SOAP, File)

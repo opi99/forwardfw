@@ -18,7 +18,7 @@ namespace ForwardFW\Service\DataHandler;
 /**
  * Managing DataLoading via PHPs PDO
  */
-class Pdo extends \ForwardFW\Controller\DataHandler
+class Pdo extends \ForwardFW\Service\DataHandler
 {
     private \Pdo $connection;
 
@@ -101,7 +101,7 @@ class Pdo extends \ForwardFW\Controller\DataHandler
      *
      * @return array Empty array
      */
-    public function create($connectionName, array $options, \ForwardFW\Callback $idCallback = null)
+    public function create($connectionName, array $options, ?\ForwardFW\Callback $idCallback)
     {
         $connection = $this->getConnection($connectionName);
 
@@ -119,7 +119,6 @@ class Pdo extends \ForwardFW\Controller\DataHandler
         $result = $connection->exec($strQuery);
 
         if ($result === false) {
-            $this->application->getResponse()->addError($connection->lastErrorMsg());
             throw new \ForwardFW\Exception\DataHandler(
                 'Error while execute: ' . $connection->lastErrorMsg()
             );

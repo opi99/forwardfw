@@ -13,7 +13,7 @@ declare(strict_types=1);
  * LICENSE.txt file that was distributed with this source code.
  */
 
-namespace ForwardFW\Controller;
+namespace ForwardFW\Service;
 
 /**
  * Factory(?) Holder of DataHandler handlers.
@@ -111,7 +111,7 @@ class DataHandler extends \ForwardFW\Service\AbstractService implements DataHand
      *
      * @return mixed Data from the connection.
      */
-    public function create($connectionName, array $options, \ForwardFW\Callback $idCallback = null)
+    public function create($connectionName, array $options, ?\ForwardFW\Callback)
     {
         $handler = $this->getConnection($connectionName);
         return $handler->create($connectionName, $options, $idCallback);

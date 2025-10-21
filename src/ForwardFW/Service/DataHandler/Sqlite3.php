@@ -18,7 +18,7 @@ namespace ForwardFW\Service\DataHandler;
 /**
  * Managing DataLoading via SQLite v3
  */
-class Sqlite3 extends \ForwardFW\Controller\DataHandler
+class Sqlite3 extends \ForwardFW\Service\DataHandler
 {
     /**
      * Loads Data from a connection (DB, SOAP, File)
