@@ -20,7 +20,7 @@ namespace ForwardFW\Config\Middleware\Login;
  */
 class BasicAuth extends \ForwardFW\Config\Middleware
 {
-    protected $executionClassName = \ForwardFW\Middleware\Login\BasicAuth::class;
+    protected string $executionClassName = \ForwardFW\Middleware\Login\BasicAuth::class;
 
     protected string $username = '';
 

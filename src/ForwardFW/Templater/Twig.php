@@ -36,7 +36,7 @@ class Twig extends \ForwardFW\Controller implements \ForwardFW\Templater\Templat
     /**
      * @var array Blocks to show
      */
-    private $arShowBlocks = array();
+    private $arShowBlocks = [];
 
     /**
      * Constructor
@@ -68,7 +68,10 @@ class Twig extends \ForwardFW\Controller implements \ForwardFW\Templater\Templat
                 'autoescape' => false,
             ]
         );
-        $this->twigEnvironment->addExtension(new \Twig\Extension\DebugExtension());
+
+        foreach ($config->getExtensionClasses() as $className) {
+            $this->twigEnvironment->addExtension(new $className());
+        }
     }
 
     /**

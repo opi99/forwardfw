@@ -26,7 +26,7 @@ class Application extends \ForwardFW\Config
     /**
      * @var string $executionClassName
      */
-    protected $executionClassName = \ForwardFW\Controller\Application::class;
+    protected string $executionClassName = \ForwardFW\Controller\Application::class;
 
     /**
      * @var string Name of the application

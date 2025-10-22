@@ -23,32 +23,32 @@ abstract class Templater extends \ForwardFW\Config
     /**
      * @var string Path to save the compiled versions of templates.
      */
-    private $strCompilePath = '';
+    private $compilePath = '';
 
     /**
      * @var string Path to the templates
      */
-    private $strTemplatePath = '';
+    private $templatePath = '';
 
-    public function setCompilePath($strCompilePath)
+    public function setCompilePath(string $compilePath): self
     {
-        $this->strCompilePath = $strCompilePath;
+        $this->compilePath = $compilePath;
         return $this;
     }
 
-    public function setTemplatePath($strTemplatePath)
+    public function setTemplatePath(string $templatePath): self
     {
-        $this->strTemplatePath = $strTemplatePath;
+        $this->templatePath = $templatePath;
         return $this;
     }
 
-    public function getCompilePath()
+    public function getCompilePath(): string
     {
-        return $this->strCompilePath;
+        return $this->compilePath;
     }
 
-    public function getTemplatePath()
+    public function getTemplatePath(): string
     {
-        return $this->strTemplatePath;
+        return $this->templatePath;
     }
 }

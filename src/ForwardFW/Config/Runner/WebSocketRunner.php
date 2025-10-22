@@ -21,7 +21,7 @@ namespace ForwardFW\Config\Runner;
 class WebSocketRunner extends \ForwardFW\Config\Runner
 {
     /** @var string Class Name of executor */
-    protected $executionClassName = \ForwardFW\Runner\WebSocketRunner::class;
+    protected string $executionClassName = \ForwardFW\Runner\WebSocketRunner::class;
 
     protected int $port;
 

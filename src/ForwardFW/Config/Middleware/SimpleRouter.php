@@ -20,7 +20,7 @@ namespace ForwardFW\Config\Middleware;
  */
 class SimpleRouter extends \ForwardFW\Config\Middleware
 {
-    protected $executionClassName = \ForwardFW\Middleware\SimpleRouter::class;
+    protected string $executionClassName = \ForwardFW\Middleware\SimpleRouter::class;
 
     /** @var ForwardFW\Config\Middleware\SimpleRouter\Route[] Config of the routes */
     private $routes = [];

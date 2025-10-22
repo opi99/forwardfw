@@ -24,7 +24,7 @@ class HttpMiddlewareRunner extends \ForwardFW\Config\Runner
     use \ForwardFW\Config\Traits\Middleware;
 
     /** @var string Class Name of executor */
-    protected $executionClassName = \ForwardFW\Runner\HttpMiddlewareRunner::class;
+    protected string $executionClassName = \ForwardFW\Runner\HttpMiddlewareRunner::class;
 
     /**
      * @var boolean True if runner should send data otherwise false

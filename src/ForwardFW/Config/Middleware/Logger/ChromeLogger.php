@@ -21,5 +21,5 @@ namespace ForwardFW\Config\Middleware\Logger;
 class ChromeLogger extends \ForwardFW\Config\Middleware
 {
     /** @var string */
-    protected $executionClassName = \ForwardFW\Middleware\Logger\ChromeLogger::class;
+    protected string $executionClassName = \ForwardFW\Middleware\Logger\ChromeLogger::class;
 }

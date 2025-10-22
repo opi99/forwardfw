@@ -21,5 +21,18 @@ class Twig extends \ForwardFW\Config\Templater
     /**
      * @var string TemplaterClass to call
      */
-    protected $executionClassName = 'ForwardFW\\Templater\\Twig';
+    protected string $executionClassName = \ForwardFW\Templater\Twig::class;
+
+    protected array $extensionClasses = [];
+
+    public function addExtensionClass(string $className): self
+    {
+        $this->extensionClasses[] = $className;
+        return $this;
+    }
+
+    public function getExtensionClasses(): array
+    {
+        return $this->extensionClasses;
+    }
 }

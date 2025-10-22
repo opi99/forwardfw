@@ -34,7 +34,7 @@ class Bootstrap
                 throw new \ForwardFW\Exception\BootstrapException('Config didn\'t return a runner configuration.');
             }
         } catch (\Error $e) {
-            echo 'Config not loadable';
+            echo 'Config not loadable' . $e->getMessage();
             exit(1);
         }
     }

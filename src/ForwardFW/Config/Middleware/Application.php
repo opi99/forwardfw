@@ -23,7 +23,7 @@ class Application extends \ForwardFW\Config\Middleware
     /**
      * @var string Class of application to call
      */
-    protected $executionClassName = \ForwardFW\Middleware\Application::class;
+    protected string $executionClassName = \ForwardFW\Middleware\Application::class;
 
     /**
      * @var ForwardFW\Config\Application Config of the application

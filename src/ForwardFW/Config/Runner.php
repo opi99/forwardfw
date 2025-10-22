@@ -23,7 +23,7 @@ abstract class Runner extends \ForwardFW\Config
     use \ForwardFW\Config\Traits\Execution;
 
     /** @var string Class Name of executor */
-    protected $executionClassName = \ForwardFW\Runner::class;
+    protected string $executionClassName = \ForwardFW\Runner::class;
 
     /**
      * @var \ArrayObject<int, \ForwardFW\Config\Service> Config of the services

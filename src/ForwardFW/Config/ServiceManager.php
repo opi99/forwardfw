@@ -23,5 +23,5 @@ class ServiceManager extends \ForwardFW\Config
     /**
      * @var string $executionClassName
      */
-    protected $executionClassName = 'ForwardFW\\ServiceManager';
+    protected string $executionClassName = \ForwardFW\ServiceManager::class;
 }
