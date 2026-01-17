@@ -16,13 +16,14 @@ declare(strict_types=1);
 namespace ForwardFW\DataHandling;
 
 /**
- * Manager for different entities
+ * Metadata for an entity to get it mapped/managed
  */
 class EntityMetadata
 {
     public function __construct(
         public readonly string $tableName,
         public readonly string $entityClassName,
+        public readonly string $identifierField,
         public readonly array $fieldsMetadata,
     ) {
 
@@ -37,6 +38,11 @@ class EntityMetadata
     public function getTableName(): string
     {
         return $this->tableName;
+    }
+
+    public function getIdentifierField(): string
+    {
+        return $this->identifierField;
     }
 
     public function getEntityClassName(): string

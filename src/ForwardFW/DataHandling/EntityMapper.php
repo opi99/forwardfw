@@ -43,14 +43,42 @@ class EntityMapper
 
     public function mapEntity(array $values): object
     {
-        $className = $this->entityMetadata->getEntityClassName();
-        $entity = new $className();
+        $entityClassName = $this->entityMetadata->getEntityClassName();
+        $identifierField = $this->entityMetadata->getIdentifierField();
+        $identifier = $values[$identifierField];
+
+        if ($this->entityManager->has($entityClassName, $identifier)) {
+            return $this->entityManager->get($entityClassName, $identifier);
+        }
+
+        $entity = new $entityClassName();
+
+        $this->entityManager->register($entityClassName, $identifier, $entity, $values);
 
         foreach ($this->entityMetadata->getFieldsMetadata() as $fieldName => $fieldMeta) {
+            $value = $values[$fieldName];
+            if ($fieldMeta->isRelation()) {
+                $value = $this->resolveRelation($fieldMeta, $values[$fieldName]);
+            }
             $functionName = 'set' . ucfirst(str_replace(' ', '', ucwords(str_replace('_', ' ', $fieldName))));
-            $entity->$functionName($values[$fieldName]);
+            $entity->$functionName($value);
         }
 
         return $entity;
+    }
+
+    protected function resolveRelation(FieldMetadata $fieldMetadata, mixed $value): object
+    {
+        $config = $fieldMetadata->getConfig();
+
+        // 1:1 Mapper, for the moment
+        $foreignEntityClassName = $config['foreign_entity'];
+        $identifier = $value;
+
+        if ($this->entityManager->has($foreignEntityClassName, $identifier)) {
+            return $this->entityManager->get($foreignEntityClassName, $identifier);
+        } else {
+            return $this->entityManager->load($foreignEntityClassName, $identifier);
+        }
     }
 }

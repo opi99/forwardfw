@@ -56,4 +56,29 @@ class EntityManager
         /** @TODO Factory? */
         return new EntityMapper($this, $this->getMetadata($entityName));
     }
+
+    /** @TODO Rename functions? Move into "entitiesContainer"? */
+    public function has(string $entityName, int|string $identifier): bool
+    {
+        return isset($this->entitiesLoaded[$entityName][$identifier]);
+    }
+
+    public function get(string $entityName, int|string $identifier): object
+    {
+        return $this->entitiesLoaded[$entityName][$identifier];
+    }
+
+    public function load(string $entityName, int|string $identifier): object
+    {
+        return $this->getRepository($entityName)->findByIdentifier($identifier);
+    }
+
+    public function register(string $entityName, int|string $identifier, object $entity, array $dataOriginal): void
+    {
+        if ($this->has($entityName, $identifier)) {
+            throw new \LogicException('Entity "' . $entityName . '" with identifier "' . $identifier . '" already registered');
+        }
+        $this->entitiesLoaded[$entityName][$identifier] = $entity;
+        $this->entitiesDataOriginal[$entityName][$identifier] = $dataOriginal;
+    }
 }

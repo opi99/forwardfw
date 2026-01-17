@@ -38,7 +38,37 @@ class TcaEntityMetadataFactory
         return new EntityMetadata(
             $localTca['ctrl']['table'],
             $localTca['ctrl']['entity'],
-            $localTca['columns'],
+            $localTca['ctrl']['identityField'] ?? 'uid',
+            $this->buildFields($localTca['columns']),
+        );
+    }
+
+    protected function buildFields(array $columns): array
+    {
+        $fields = [];
+
+        foreach ($columns as $name => $column) {
+            $config = $column['config'] ?? [];
+            $type = $config['type'] ?? 'input';
+            $isRelation = $this->isRelation($type);
+
+            $fields[$name] = new FieldMetadata(
+                $name,
+                $type,
+                $isRelation,
+                $config,
+            );
+        }
+
+        return $fields;
+    }
+
+    private function isRelation(string $fieldType): bool
+    {
+        return in_array(
+            $fieldType,
+            ['inline', 'select', 'group'],
+            true
         );
     }
 

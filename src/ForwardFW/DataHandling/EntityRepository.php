@@ -33,7 +33,7 @@ class EntityRepository
         $tableName = $this->entityMetadata->getTableName();
         $dataHandler = $this->entityManager->getServiceManager()->getService(\ForwardFW\Service\DataHandlerInterface::class);
 
-        $data = $dataHandler->loadFromCached(
+        $data = $dataHandler->loadFrom(
             'default',
             [
                 'select' => '*',
@@ -42,6 +42,25 @@ class EntityRepository
         );
 
         return $this->entityManager->getEntityMapper($this->entityMetadata->getRealName())->mapCollection($data);
+    }
+
+    public function findByIdentifier(int|string $identifier): object
+    {
+        $tableName = $this->entityMetadata->getTableName();
+        $identifierField = $this->entityMetadata->getIdentifierField();
+        $dataHandler = $this->entityManager->getServiceManager()->getService(\ForwardFW\Service\DataHandlerInterface::class);
+
+        $data = $dataHandler->loadFrom(
+            'default',
+            [
+                'select' => '*',
+                'from' => $tableName,
+                'where' => $identifierField . '=' . $identifier,
+                'limit' => 1,
+            ]
+        );
+
+        return $this->entityManager->getEntityMapper($this->entityMetadata->getRealName())->mapEntity($data[0]);
     }
 
     public function findOne()
