@@ -15,19 +15,16 @@ declare(strict_types=1);
 
 namespace ForwardFW;
 
+use ForwardFW\Exception\ServiceManagerException;
+use ForwardFW\Exception\ServiceNotFoundException;
+use Psr\Container\ContainerInterface;
+
 /**
  * This class represents available Services.
  */
 class ServiceManager
+    implements ContainerInterface
 {
-    /** @var \ForwardFW\Request The request instance */
-    protected $request;
-
-    /**
-     * @var \ForwardFW\Response The response instance
-     */
-    protected $response;
-
     /** @var \ForwardFW\Config\ServiceManager The config for the service manager */
     protected $config;
 
@@ -43,8 +40,6 @@ class ServiceManager
      * Constructor
      *
      * @param \ForwardFW\Config\ServiceManager $config Config of this ServiceManager
-     * @param \ForwardFW\Request $request The request instance
-     * @param \ForwardFW\Response $response The request instance
      *
      * @return void
      */
@@ -59,7 +54,7 @@ class ServiceManager
         $className = $config->getExecutionClassName();
 
         if (isset($this->registeredServiceClasses[$className])) {
-            throw new \Exception('Class already registered as service.');
+            throw new ServiceManagerException('Class already registered as service.');
         }
 
         $this->registeredServiceClasses[$className] = $config;
@@ -73,7 +68,7 @@ class ServiceManager
                     $this->registeredServices[$interfaceName] = $config;
                 }
             } else {
-                throw new \Exception('Class doesn\'t implement given interface.');
+                throw new ServiceManagerException('Class doesn\'t implement given interface.');
             }
         }
 
@@ -86,25 +81,46 @@ class ServiceManager
         }
     }
 
+    public function get(string $id)
+    {
+        if (isset($this->startedServicesByInterface[$id])) {
+            return $this->startedServicesByInterface[$id];
+        }
+
+        if (isset($this->startedServicesByClass[$id])) {
+            return $this->startedServicesByClass[$id];
+        }
+
+        if (isset($this->registeredServices[$id])) {
+            return $this->createAndStartService($this->registeredServices[$id]);
+        }
+
+        if (isset($this->registeredServiceClasses[$id])) {
+            return $this->createAndStartService($this->registeredServiceClasses[$id]);
+        }
+
+        throw new ServiceNotFoundException('Service "'. $id . '" not registered.');
+    }
+
+    public function has(string $id): bool
+    {
+        if (isset($this->startedServicesByInterface[$id])
+            || isset($this->startedServicesByClass[$id])
+            || isset($this->registeredServices[$id])
+            || isset($this->registeredServiceClasses[$id])
+        ) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Compatibility function to PSR-11 get function
+     */
     public function getService($interfaceName)
     {
-        if (isset($this->startedServicesByInterface[$interfaceName])) {
-            return $this->startedServicesByInterface[$interfaceName];
-        }
-
-        if (isset($this->startedServicesByClass[$interfaceName])) {
-            return $this->startedServicesByClass[$interfaceName];
-        }
-
-        if (isset($this->registeredServices[$interfaceName])) {
-            return $this->createAndStartService($this->registeredServices[$interfaceName]);
-        }
-
-        if (isset($this->registeredServiceClasses[$interfaceName])) {
-            return $this->createAndStartService($this->registeredServiceClasses[$interfaceName]);
-        }
-
-        throw new \Exception('Service "'. $interfaceName . '" not registered.');
+        return $this->get($interfaceName);
     }
 
     protected function createAndStartService(\ForwardFW\Config\Service $config)
@@ -129,7 +145,7 @@ class ServiceManager
         return $class;
     }
 
-    public function stopService($interfaceName)
+    public function stopService($interfaceName): void
     {
         if (isset($this->startedServices[$interfaceName])) {
             $class = $this->startedServices[$interfaceName];
