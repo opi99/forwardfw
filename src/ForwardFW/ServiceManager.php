@@ -26,15 +26,19 @@ class ServiceManager
     implements ContainerInterface
 {
     /** @var \ForwardFW\Config\ServiceManager The config for the service manager */
-    protected $config;
+    protected \ForwardFW\Config\ServiceManager $config;
 
-    private $registeredServices = [];
+    /** @var array<string, \ForwardFW\Config\Service> */
+    private array $registeredServices = [];
 
-    private $registeredServiceClasses = [];
+    /** @var array<string, \ForwardFW\Config\Service> */
+    private array $registeredServiceClasses = [];
 
-    private $startedServicesByInterface = [];
+    /** @var array<string, object> */
+    private array $startedServicesByInterface = [];
 
-    private $startedServicesByClass = [];
+    /** @var array<string, object> */
+    private array $startedServicesByClass = [];
 
     /**
      * Constructor
@@ -77,10 +81,12 @@ class ServiceManager
             foreach ($subServicesConfig as $subServiceConfig) {
                 $this->registerService($subServiceConfig);
             }
-
         }
     }
 
+    /**
+     * @return mixed
+     */
     public function get(string $id)
     {
         if (isset($this->startedServicesByInterface[$id])) {
@@ -118,7 +124,7 @@ class ServiceManager
     /**
      * Compatibility function to PSR-11 get function
      */
-    public function getService($interfaceName)
+    public function getService($interfaceName): object
     {
         return $this->get($interfaceName);
     }
@@ -145,14 +151,24 @@ class ServiceManager
         return $class;
     }
 
-    public function stopService($interfaceName): void
+    public function stopService(\ForwardFW\Config\Service $config): void
     {
-        if (isset($this->startedServices[$interfaceName])) {
-            $class = $this->startedServices[$interfaceName];
+        $className = $config->getExecutionClassName();
+        if (isset($this->startedServicesByClass[$className])) {
+            $class = $this->startedServicesByClass[$className];
             if ($class instanceof Service\Startable) {
                 $class->stop();
             }
-            unset($this->startedServices[$interfaceName]);
+
+            if ($config->hasSubServices()) {
+                $subServicesConfig = $config->getSubServicesConfig();
+                foreach ($subServicesConfig as $subServiceConfig) {
+                    $this->stopService($subServiceConfig);
+                }
+            }
+
+            unset($this->startedServicesByClass[$className]);
+            unset($this->startedServicesByInterface[$config->getInterfaceName()]);
         }
     }
 }

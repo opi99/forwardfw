@@ -69,7 +69,7 @@ class Runner
     protected function stopServices(): void
     {
         foreach ($this->config->getServices() as $serviceConfig) {
-            $this->serviceManager->stopService($serviceConfig->getInterfaceName());
+            $this->serviceManager->stopService($serviceConfig);
         }
     }
 }
