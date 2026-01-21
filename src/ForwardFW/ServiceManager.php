@@ -31,6 +31,9 @@ class ServiceManager
     /** @var array<string, \ForwardFW\Config\Service> */
     private array $registeredServices = [];
 
+    /** @var array<string, mixed> */
+    private array $registeredContainerVars = [];
+
     /** @var array<string, \ForwardFW\Config\Service> */
     private array $registeredServiceClasses = [];
 
@@ -53,12 +56,17 @@ class ServiceManager
         $this->config = $config;
     }
 
-    public function registerService(\ForwardFW\Config\Service $config, bool $registerInterface = true)
+    public function registerContainerVars(array $containerVars): void
+    {
+        $this->registeredContainerVars = $containerVars;
+    }
+
+    public function registerService(\ForwardFW\Config\Service $config, bool $registerInterface = true): void
     {
         $className = $config->getExecutionClassName();
 
         if (isset($this->registeredServiceClasses[$className])) {
-            throw new ServiceManagerException('Class already registered as service.');
+            throw new ServiceManagerException('Class "' . $className . '" already registered as service.');
         }
 
         $this->registeredServiceClasses[$className] = $config;
@@ -72,7 +80,7 @@ class ServiceManager
                     $this->registeredServices[$interfaceName] = $config;
                 }
             } else {
-                throw new ServiceManagerException('Class doesn\'t implement given interface.');
+                throw new ServiceManagerException('Class doesn\'t implement the interface named "' . $interfaceName . '".');
             }
         }
 
@@ -105,7 +113,11 @@ class ServiceManager
             return $this->createAndStartService($this->registeredServiceClasses[$id]);
         }
 
-        throw new ServiceNotFoundException('Service "'. $id . '" not registered.');
+        if (isset($this->registeredContainerVars[$id])) {
+            return $this->registeredContainerVars[$id];
+        }
+
+        throw new ServiceNotFoundException('Service or variable "'. $id . '" not registered.');
     }
 
     public function has(string $id): bool
@@ -114,6 +126,7 @@ class ServiceManager
             || isset($this->startedServicesByClass[$id])
             || isset($this->registeredServices[$id])
             || isset($this->registeredServiceClasses[$id])
+            || isset($this->registeredContainerVars[$id])
         ) {
             return true;
         }
@@ -132,13 +145,20 @@ class ServiceManager
     protected function createAndStartService(\ForwardFW\Config\Service $config)
     {
         $className = $config->getExecutionClassName();
-
-        $class = new $className($config, $this);
+        if ($factoryFunction = $config->getFactoryFunction()) {
+            if (is_callable($factoryFunction)) {
+                $class = call_user_func($factoryFunction, $this);
+            } else {
+                $factoryInstance = new $factoryFunction;
+                $class = $factoryInstance($this);
+            }
+        } else {
+            $class = new $className($config, $this);;
+        }
 
         if ($class instanceof Service\Startable) {
             $class->start();
         }
-
         // Search if for given class an interface entry was registered, if yes, save this class in startedServicesByInterface
         $possibleInterfaceName = array_find_key($this->registeredServices, function ($serviceConfig) use ($className) {
             return $serviceConfig->getExecutionClassName() === $className;

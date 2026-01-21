@@ -39,8 +39,17 @@ trait MiddlewareIteratorTrait
         $this->middlewareIterator->next();
 
         if ($middlewareConfig !== null) {
-            $middlewareClass = $middlewareConfig->getExecutionClassName();
-            $middleware = new $middlewareClass($middlewareConfig, $this->serviceManager);
+            if ($factoryFunction = $middlewareConfig->getFactoryFunction()) {
+                if (is_callable($factoryFunction)) {
+                    $middleware = call_user_func($factoryFunction, $this->serviceManager);
+                } else {
+                    $factoryInstance = new $factoryFunction;
+                    $middleware = $factoryInstance($this->serviceManager);
+                }
+            } else {
+                $middlewareClass = $middlewareConfig->getExecutionClassName();
+                $middleware = new $middlewareClass($middlewareConfig, $this->serviceManager);
+            }
             return $middleware->process($request, $this);
         } else {
             // No Middleware which runs?

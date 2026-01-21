@@ -14,21 +14,22 @@
 namespace ForwardFW\Config\Traits;
 
 /**
- * Config for a Application Filter.
+ * Trait to config factory function functionality
  */
-trait Execution
+trait Factory
 {
-    /** @var string Class Name of executor */
-    // protected string $executionClassName = '';
+    /** @var string Function to a factory */
+    // protected string $factoryFunction = null;
 
-    public function setExecutionClassName(string $executionClassName): self
+    public function setFactoryFunction(string $factoryFunction): self
     {
-        $this->executionClassName = $executionClassName;
+        $this->factoryFunction = $factoryFunction;
         return $this;
     }
 
-    public function getExecutionClassName(): ?string
+    public function getFactoryFunction(): ?string
     {
-        return isset($this->executionClassName) ? $this->executionClassName : null;
+        return isset($this->factoryFunction) ? $this->factoryFunction : null;
     }
 }
+

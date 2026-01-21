@@ -20,4 +20,5 @@ namespace ForwardFW\Config;
 class Middleware extends \ForwardFW\Config
 {
     use \ForwardFW\Config\Traits\Execution;
+    use \ForwardFW\Config\Traits\Factory;
 }

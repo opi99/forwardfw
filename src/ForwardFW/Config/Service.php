@@ -19,11 +19,22 @@ namespace ForwardFW\Config;
 class Service extends \ForwardFW\Config
 {
     use \ForwardFW\Config\Traits\Execution;
+    use \ForwardFW\Config\Traits\Factory;
 
     /**
      * @var string Interface which this service represents.
      */
     protected string $interfaceName = '';
+
+    /**
+     * @var string Name of the class, which needs to be executed for this service
+     */
+    protected string $executionClassName = '';
+
+    /**
+     * @var string Name of the function wich creates this service (Or class which gets invoked)
+     */
+    protected string $factoryFunction = '';
 
     /**
      * @var array Array of subservice configs for this service

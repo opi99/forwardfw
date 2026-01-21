@@ -31,6 +31,11 @@ abstract class Runner extends \ForwardFW\Config
     private $services;
 
     /**
+     * @var \ArrayObject<string, mixed> Extra vars which are no services but needs to exist in PSR-11 container
+     */
+    private $containerVars = [];
+
+    /**
      * @var \ForwardFW\Config\ServiceManager Config of the service manager
      */
     private $serviceManager;
@@ -62,6 +67,17 @@ abstract class Runner extends \ForwardFW\Config
     public function getServices(): \ArrayObject
     {
         return $this->services;
+    }
+
+    public function addContainerVar(string $key, mixed $value): self
+    {
+        $this->containerVars[$key] = $value;
+        return $this;
+    }
+
+    public function getContainerVars(): array
+    {
+        return $this->containerVars;
     }
 
     /**

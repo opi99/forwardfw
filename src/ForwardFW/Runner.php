@@ -38,6 +38,7 @@ class Runner
     {
         // Put ServiceManager into own Middleware
         $this->initializeServiceManager();
+        $this->registerContainerVars();
         $this->registerServices();
     }
 
@@ -57,6 +58,11 @@ class Runner
         $serviceManagerConfig = $this->config->getServiceManager();
         $class = $serviceManagerConfig->getExecutionClassName();
         $this->serviceManager = new $class($serviceManagerConfig);
+    }
+
+    protected function registerContainerVars(): void
+    {
+        $this->serviceManager->registerContainerVars($this->config->getContainerVars());
     }
 
     protected function registerServices(): void
