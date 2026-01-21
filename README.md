@@ -9,7 +9,7 @@ Compatible to:
 - [PSR-3](http://www.php-fig.org/psr/psr-3/) - Logger Interface
 - [PSR-4](http://www.php-fig.org/psr/psr-4/) - Autoloading Standard
 - [PSR-7](http://www.php-fig.org/psr/psr-7/) - HTTP Message Interface
-- [PSR-12](http://www.php-fig.org/psr/psr-11/) - Container Interface
+- [PSR-11](http://www.php-fig.org/psr/psr-11/) - Container Interface
 - [PSR-12](http://www.php-fig.org/psr/psr-12/) - Extended Coding Style Guide
 - [PSR-14](http://www.php-fig.org/psr/psr-14/) - Event Dispatcher
 - [PSR-15](http://www.php-fig.org/psr/psr-15/) - HTTP Server Request Handlers
