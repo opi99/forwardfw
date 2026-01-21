@@ -243,6 +243,8 @@ class Request
         if ($query) {
             $this->requestTarget .= '?' . $query;
         };
+
+        $this->headers = $headers;
     }
 
     public function getUri(): UriInterface

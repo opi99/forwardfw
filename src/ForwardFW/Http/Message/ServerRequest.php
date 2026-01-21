@@ -25,11 +25,12 @@ class ServerRequest
     public function __construct(
         string $method,
         UriInterface $uri,
-        // HeadersInterface $headers,
-        protected array $cookieParams,
-        protected array $serverParams
+        $body = 'php://input',
+        array $headers = [],
+        protected array $cookieParams = [],
+        protected array $serverParams = []
     ) {
-        parent::__construct($method, $uri);
+        parent::__construct($method, $uri, $body, $headers);
     }
 
     public function getServerParams(): array

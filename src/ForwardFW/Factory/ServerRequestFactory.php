@@ -43,12 +43,52 @@ class ServerRequestFactory
         $uri = $uriFactory->createUri(
             (($_SERVER['HTTPS'] ?? null) === 'on' ? 'https' : 'http') . '://' . ($_SERVER['HTTP_HOST'] ?? '') . ($_SERVER['REQUEST_URI'] ?? '/')
         );
+
+        $headers = static::prepareHeaders($_SERVER);
+
         $request = new ServerRequest(
-            $_SERVER['REQUEST_METHOD'],
+            $_SERVER['REQUEST_METHOD'] ?? 'GET',
             $uri,
+            'php://input',
+            $headers,
             $_COOKIE,
             $_SERVER
         );
         return $request;
+    }
+
+
+    /**
+     * Fetch headers from $_SERVER variables
+     * which are only the ones starting with HTTP_* and CONTENT_*
+     *
+     * @return array
+     */
+    protected static function prepareHeaders(array $server)
+    {
+        $headers = [];
+        foreach ($server as $key => $value) {
+            if (!is_string($key)) {
+                continue;
+            }
+            if (str_starts_with($key, 'HTTP_COOKIE')) {
+                // Cookies are handled using the $_COOKIE superglobal
+                continue;
+            }
+            if (!empty($value)) {
+                if (str_starts_with($key, 'HTTP_')) {
+                    $name = str_replace('_', ' ', substr($key, 5));
+                    $name = str_replace(' ', '-', ucwords(strtolower($name)));
+                    $name = strtolower($name);
+                    $headers[$name][] = $value;
+                } elseif (str_starts_with($key, 'CONTENT_')) {
+                    $name = substr($key, 8); // Content-
+                    $name = 'Content-' . (($name === 'MD5') ? $name : ucfirst(strtolower($name)));
+                    $name = strtolower($name);
+                    $headers[$name][] = $value;
+                }
+            }
+        }
+        return $headers;
     }
 }
