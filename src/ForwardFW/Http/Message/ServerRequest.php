@@ -22,11 +22,14 @@ class ServerRequest
     extends Request
     implements ServerRequestInterface
 {
+    protected array $attributes = [];
+
     public function __construct(
         string $method,
         UriInterface $uri,
         $body = 'php://input',
         array $headers = [],
+        protected array $queryParams = [],
         protected array $cookieParams = [],
         protected array $serverParams = []
     ) {
@@ -51,18 +54,19 @@ class ServerRequest
     }
 
 
-    // @TODO
     public function getQueryParams()
     {
-        return [];
+        return $this->queryParams;
     }
 
     public function withQueryParams(array $query)
     {
         $clone = clone $this;
+        $clone->queryParams = $query;
         return $clone;
     }
 
+    /** @TODO */
     public function getUploadedFiles()
     {
         return [];
@@ -87,23 +91,25 @@ class ServerRequest
 
     public function getAttributes()
     {
-        return [];
+        return $this->attributes;
     }
 
     public function getAttribute($name, $default = null)
     {
-        return $default;
+        return $this->attributes[$name] ?? $default;
     }
 
     public function withAttribute($name, $value)
     {
         $clone = clone $this;
+        $clone->attributes[$name] = $value;
         return $clone;
     }
 
     public function withoutAttribute($name)
     {
         $clone = clone $this;
+        unset($clone->attributes[$name]);
         return $clone;
     }
 }

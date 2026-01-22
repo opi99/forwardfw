@@ -51,6 +51,7 @@ class ServerRequestFactory
             $uri,
             'php://input',
             $headers,
+            $_GET,
             $_COOKIE,
             $_SERVER
         );
