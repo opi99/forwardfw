@@ -21,4 +21,15 @@ class Middleware extends \ForwardFW\Config
 {
     use \ForwardFW\Config\Traits\Execution;
     use \ForwardFW\Config\Traits\Factory;
+
+
+    /**
+     * @var string Name of the class, which needs to be executed for this middleware
+     */
+    protected string $executionClassName = '';
+
+    /**
+     * @var string Name of the function wich creates this middleware (Or class which gets invoked)
+     */
+    protected string $factoryFunction = '';
 }
