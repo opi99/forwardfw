@@ -82,7 +82,8 @@ class Message
      */
     public function getHeaderLine($name)
     {
-        return implode(',', $this->headers[strtolower($name)]);
+        $headers = ($this->headers[strtolower($name)] ?? []);
+        return implode(',', $headers);
     }
 
     /**
