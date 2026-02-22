@@ -53,7 +53,8 @@ class ServerRequestFactory
             $headers,
             $_GET,
             $_COOKIE,
-            $_SERVER
+            $_SERVER,
+            $_POST
         );
         return $request;
     }

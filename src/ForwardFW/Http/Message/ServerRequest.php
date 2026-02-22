@@ -31,7 +31,8 @@ class ServerRequest
         array $headers = [],
         protected array $queryParams = [],
         protected array $cookieParams = [],
-        protected array $serverParams = []
+        protected array $serverParams = [],
+        protected array | object | null $parsedBody = null
     ) {
         parent::__construct($method, $uri, $body, $headers);
     }
@@ -78,14 +79,21 @@ class ServerRequest
         return $clone;
     }
 
+    /**
+     * @return null|array|object
+     */
     public function getParsedBody()
     {
-
+        return $this->parsedBody;
     }
 
+    /**
+     * @param null|array|object $data The deserialized body data. This will typically be in an array or object.
+     */
     public function withParsedBody($data)
     {
         $clone = clone $this;
+        $clone->parsedBody = $data;
         return $clone;
     }
 
