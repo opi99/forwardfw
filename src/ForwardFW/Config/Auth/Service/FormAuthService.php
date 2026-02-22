@@ -13,18 +13,31 @@ declare(strict_types=1);
  * LICENSE.txt file that was distributed with this source code.
  */
 
-namespace ForwardFW\Config\Middleware\Login;
+namespace ForwardFW\Config\Auth\Service;
 
 /**
- * Config for a BasicAuth middleware.
+ * Config for form based auth service.
  */
-class BasicAuth extends \ForwardFW\Config\Middleware
+class FormAuthService extends AbstractAuthService
 {
-    protected string $executionClassName = \ForwardFW\Middleware\Login\BasicAuth::class;
+    protected string $executionClassName = \ForwardFW\Auth\Service\FormAuthService::class;
+
+    protected string $loginPath = '';
 
     protected string $username = '';
 
     protected string $password = '';
+
+    public function setLoginPath(string $loginPath): self
+    {
+        $this->loginPath = $loginPath;
+        return $this;
+    }
+
+    public function getLoginPath(): string
+    {
+        return $this->loginPath;
+    }
 
     /**
      * Username for BasicAuth

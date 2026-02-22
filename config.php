@@ -17,6 +17,11 @@ return (new \ForwardFW\Config\Runner\HttpMiddlewareRunner())
                     ->enable()
                 )
         )
+        ->addService(
+            (new \ForwardFW\Config\Auth\Service\BasicAuthService())
+                ->setUsername('ao')
+                ->setPassword('ao')
+        )
         ->addMiddleware(
             new \ForwardFW\Config\Middleware\Logger\ChromeLogger()
         )
@@ -27,9 +32,7 @@ return (new \ForwardFW\Config\Runner\HttpMiddlewareRunner())
             new \ForwardFW\Config\Middleware\SimpleRouter()
         )
         ->addMiddleware(
-            (new \ForwardFW\Config\Middleware\Login\BasicAuth())
-                ->setUsername('ao')
-                ->setPassword('ao')
+            (new \ForwardFW\Config\Auth\AuthenticationMiddleware())
         )
         ->addMiddleware(
             (new \ForwardFW\Config\Middleware\Application())
