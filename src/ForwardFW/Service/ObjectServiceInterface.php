@@ -14,7 +14,7 @@
 namespace ForwardFW\Service;
 
 /**
- * This interface defines services which can be started.
+ * This interface defines services which handles objects.
  */
 interface ObjectServiceInterface
 {
