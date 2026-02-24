@@ -24,10 +24,11 @@ use ForwardFW\Auth\AuthReason;
 final class AuthResult
 {
     public function __construct(
-        public readonly AuthDecision $decision,
-        public readonly ?Identity $identity = null,
-        public readonly int $level = 0,
-        public readonly AuthReason $reason = AuthReason::NONE,
+        protected readonly AuthDecision $decision,
+        protected readonly ?Identity $identity = null,
+        protected readonly int $level = 0,
+        protected readonly AuthReason $reason = AuthReason::NONE,
+        protected readonly bool $freshLogin = false,
     ) {}
 
     public function getReason(): AuthReason
@@ -40,13 +41,42 @@ final class AuthResult
         return $this->decision;
     }
 
-    public static function deny(string $reason): self
+    public function isFreshLogin(): bool
+    {
+        return $this->freshLogin;
+    }
+
+    public static function deny(AuthReason $reason): self
     {
         return new self(
             AuthDecision::DENIED,
             null,
             0,
-            $reason
+            $reason,
+            false
+        );
+    }
+
+    public static function abstain(AuthReason $reason = AuthReason::NOT_APPLICABLE): self
+    {
+        return new self(
+            AuthDecision::ABSTAIN,
+            null,
+            0,
+            $reason,
+            false
+        );
+
+    }
+
+    public static function grant(?Identity $identity = null, int $level = 0, bool $freshLogin = true): self
+    {
+        return new self(
+            AuthDecision::GRANT,
+            $identity,
+            $level,
+            AuthReason::NONE,
+            true
         );
     }
 }

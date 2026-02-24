@@ -55,7 +55,7 @@ class IpAuthService
         if ($decision === AuthDecision::DENIED) {
             $reason = AuthReason::IP_BLOCKED;
         } else {
-            $reason = AuthReason::NOT_APPLICABLE;
+            return AuthResult::abstain();
         }
 
         return new AuthResult(

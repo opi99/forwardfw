@@ -15,38 +15,41 @@ declare(strict_types=1);
 
 namespace ForwardFW\Auth\Service;
 
-use ForwardFW\Auth\AuthDecision;
 use ForwardFW\Auth\AuthResult;
-use ForwardFW\Factory\ResponseFactory;
+use ForwardFW\Service\AbstractService;
+use ForwardFW\Service\SessionServiceInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
 /**
- * HTTP Basic Auth auth service.
+ * Load and verify session data auth service.
  */
-class BasicAuthService
-    extends \ForwardFW\Service\AbstractService
+class SessionAuthService
+    extends AbstractService
     implements AuthServiceInterface
 {
     public function authenticate(ServerRequestInterface $request): AuthResult
     {
-        $serverParams = $request->getServerParams();
+        /** @var SessionServiceInterface */
+        $session = $this->serviceManager->getService(SessionServiceInterface::class);
+        /** @var AuthResult */
+        $authResult = $session->get(AuthResult::class);
 
-        if (isset($serverParams['PHP_AUTH_USER']) && isset($serverParams['PHP_AUTH_PW'])) {
-            if ($serverParams['PHP_AUTH_USER'] === $this->config->getUsername() && $serverParams['PHP_AUTH_PW'] === $this->config->getPassword()) {
-                return AuthResult::grant();
-            }
-            return AuthResult::deny(AuthReason::INVALID_CREDENTIALS);
-        } else {
-            return AuthResult::abstain(AuthReason::BASIC_AUTH_REQUIRED);
+        if ($authResult) {
+            /** @TODO Some verification here? */
+            return new AuthResult(
+                $authResult->getDecision(),
+                null,
+                0,
+                $authResult->getReason()
+            );
         }
+        return AuthResult::abstain();
     }
 
     public function getLoginResponse(): ?ResponseInterface
     {
-        $factory = new ResponseFactory();
-        return $factory->createResponse(401, 'Authentication failed')
-                ->withHeader('WWW-Authenticate', 'Basic realm="My Realm"');
+        return null;
     }
 
     public function getLogoutResponse(): ?ResponseInterface
@@ -54,3 +57,4 @@ class BasicAuthService
         return null;
     }
 }
+

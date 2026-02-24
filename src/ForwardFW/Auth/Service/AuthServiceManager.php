@@ -16,6 +16,7 @@ declare(strict_types=1);
 namespace ForwardFW\Auth\Service;
 
 use ForwardFW\Auth\AuthDecision;
+use ForwardFW\Auth\AuthReason;
 use ForwardFW\Auth\AuthResult;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -31,6 +32,7 @@ class AuthServiceManager
 
     public function authenticate(ServerRequestInterface $request): AuthResult
     {
+        $bestResult = null;
         foreach ($this->config->getSubServicesConfig() as $authServiceConfig) {
             $authService = $this->serviceManager->getService($authServiceConfig->getExecutionClassName());
             $result = $authService->authenticate($request);
@@ -38,11 +40,25 @@ class AuthServiceManager
             $this->lastAuthService = $authService;
 
             if ($result->getDecision() === AuthDecision::DENIED) {
-                break;
+                return $result;
+            }
+
+            if (!$bestResult
+                || $bestResult->getDecision() === AuthDecision::ABSTAIN
+                || $result->isFreshLogin()
+            ) {
+                $bestResult = $result;
+                continue;
+            }
+
+            if ($bestResult->getDecision() === AuthDecision::GRANT
+                && $result->getDecision() === AuthDecision::GRANT
+            ) {
+                /** @TODO Check for Level? FA2 etc */
             }
         }
 
-        return $result;
+        return $bestResult ?? AuthResult::deny(AuthReason::SYSTEM_FAILURE);
     }
 
     public function getLoginResponse(): ?ResponseInterface

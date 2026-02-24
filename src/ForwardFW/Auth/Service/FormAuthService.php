@@ -33,9 +33,6 @@ class FormAuthService
     {
         $serverParams = $request->getServerParams();
 
-        $decision = AuthDecision::DENIED;
-        $reason = AuthReason::SYSTEM_FAILURE;
-
         if ($request->getMethod() === 'POST'
             && $request->getUri()->getPath() === $this->config->getLoginPath()
         ) {
@@ -51,28 +48,21 @@ class FormAuthService
                 return AuthResult::deny(AuthReason::INVALID_CREDENTIALS);
             }
 
-            $reason = AuthReason::INVALID_CREDENTIALS;
-
             if ($username === $this->config->getUsername() && $password === $this->config->getPassword()) {
-                $decision = AuthDecision::GRANT;
-                $reason = AuthReason::NONE;
+                return AuthResult::grant();
             }
-        } else {
-            $decision = AuthDecision::ABSTAIN;
-            $reason = AuthReason::NOT_APPLICABLE;
-        }
 
-        return new AuthResult(
-            $decision,
-            null,
-            0,
-            $reason
-        );
+            return AuthResult::deny(AuthReason::INVALID_CREDENTIALS);
+        } else {
+            return AuthResult::abstain();
+        }
     }
 
     public function getLoginResponse(): ?ResponseInterface
     {
-        return null;
+        $factory = new ResponseFactory();
+        return $factory->createResponse(401, 'Authentication failed')
+                ->withHeader('Location', $this->config->getLoginPath());
     }
 
     public function getLogoutResponse(): ?ResponseInterface
@@ -80,4 +70,3 @@ class FormAuthService
         return null;
     }
 }
-

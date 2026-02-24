@@ -18,6 +18,7 @@ namespace ForwardFW\Auth;
 use ForwardFW\Auth\Service\AuthServiceInterface;
 use ForwardFW\Auth\AuthDecision;
 use ForwardFW\Auth\AuthResult;
+use ForwardFW\Auth\Event\LoginEvent;
 use ForwardFW\Factory\ResponseFactory;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -41,10 +42,11 @@ class AuthenticationMiddleware extends \ForwardFW\Middleware
 
         $authResult = $authService->authenticate($request);
 
-        $request = $request->withAttribute(
-            AuthResult::class,
-            $authResult
-        );
+        if ($authResult->isFreshLogin()) {
+            /** @var \Psr\EventDispatcher\EventDispatcherInterface */
+            $eventDispatcher = $this->serviceManager->getService(\Psr\EventDispatcher\EventDispatcherInterface::class);
+            $eventDispatcher->dispatch(new LoginEvent($authResult));
+        }
 
         if ($authResult->getDecision() === AuthDecision::DENIED && !$this->config->canProcessIfDenied()
             || $authResult->getDecision() === AuthDecision::ABSTAIN && !$this->config->canProcessIfAbstein()
@@ -55,6 +57,7 @@ class AuthenticationMiddleware extends \ForwardFW\Middleware
         $logger->info('End Authentication ' . $authResult->getDecision()->value);
 
         if (!$response) {
+            $request = $request->withAttribute(AuthResult::class, $authResult);
             $response = $handler->handle($request);
         }
 
