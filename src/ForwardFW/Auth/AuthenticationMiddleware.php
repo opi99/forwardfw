@@ -43,9 +43,7 @@ class AuthenticationMiddleware extends \ForwardFW\Middleware
         $authResult = $authService->authenticate($request);
 
         if ($authResult->isFreshLogin()) {
-            /** @var \Psr\EventDispatcher\EventDispatcherInterface */
-            $eventDispatcher = $this->serviceManager->getService(\Psr\EventDispatcher\EventDispatcherInterface::class);
-            $eventDispatcher->dispatch(new LoginEvent($authResult));
+            $this->sendLoginEvent($authResult);
         }
 
         if ($authResult->getDecision() === AuthDecision::DENIED && !$this->config->canProcessIfDenied()
@@ -62,6 +60,17 @@ class AuthenticationMiddleware extends \ForwardFW\Middleware
         }
 
         return $response;
+    }
+
+    protected function sendLoginEvent(AuthResult $authResult): void
+    {
+        try {
+            /** @var \Psr\EventDispatcher\EventDispatcherInterface */
+            $eventDispatcher = $this->serviceManager->getService(\Psr\EventDispatcher\EventDispatcherInterface::class);
+            $eventDispatcher->dispatch(new LoginEvent($authResult));
+        } catch (\ForwardFW\Exception\ServiceNotFoundException $e) {
+            // Empty by design
+        }
     }
 
     protected function buildResponse(AuthServiceInterface $authService, AuthResult $authResult): ResponseInterface
