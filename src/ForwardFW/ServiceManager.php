@@ -82,6 +82,9 @@ class ServiceManager
             } else {
                 throw new ServiceManagerException('Class doesn\'t implement the interface named "' . $interfaceName . '".');
             }
+            if ($reflection->implementsInterface(Service\StartAlways::class)) {
+                $this->createAndStartService($config);
+            }
         }
 
         if ($config->hasSubServices()) {
