@@ -24,7 +24,7 @@ interface TemplaterInterface
      * @param ForwardFW\Controller\ApplicationInterface $application The running application
      */
     public function __construct(
-        \ForwardFW\Config\Templater $config,
+        \ForwardFW\Config\Templater\AbstractTemplater $config,
         \ForwardFW\Controller\ApplicationInterface $application
     );
 

@@ -38,7 +38,7 @@ class Templater
      * @return ForwardFW\Templater
      */
     public static function factory(
-        Config\Templater $config,
+        Config\Templater\AbstractTemplater $config,
         Controller\Application $application
     ): \ForwardFW\Templater\TemplaterInterface
     {
@@ -56,7 +56,7 @@ class Templater
      * @return ForwardFW\Templater
      */
     private static function createTemplater(
-        Config\Templater $config,
+        Config\Templater\AbstractTemplater $config,
         Controller\Application $application
     ): \ForwardFW\Templater\TemplaterInterface
     {

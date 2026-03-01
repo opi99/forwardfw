@@ -16,7 +16,7 @@ namespace ForwardFW\Config\Templater;
 /**
  * Config for a Application Filter.
  */
-class Twig extends \ForwardFW\Config\Templater
+class Twig extends AbstractTemplater
 {
     /**
      * @var string TemplaterClass to call

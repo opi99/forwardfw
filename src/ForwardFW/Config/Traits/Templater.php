@@ -13,7 +13,7 @@
 
 namespace ForwardFW\Config\Traits;
 
-use ForwardFW\Config\Templater as TemplaterConfig;
+use ForwardFW\Config\Templater\AbstractTemplater;
 
 /**
  * Config for a Application Filter.
@@ -25,7 +25,7 @@ trait Templater
      */
     private $templaterConfig;
 
-    public function setTemplaterConfig(TemplaterConfig $templaterConfig): object
+    public function setTemplaterConfig(AbstractTemplater $templaterConfig): object
     {
         $this->templaterConfig = $templaterConfig;
         return $this;
@@ -34,7 +34,7 @@ trait Templater
     /**
      * Get config of Templater
      */
-    public function getTemplaterConfig(): TemplaterConfig
+    public function getTemplaterConfig(): AbstractTemplater
     {
         return $this->templaterConfig;
     }

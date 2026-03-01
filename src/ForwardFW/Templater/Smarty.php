@@ -18,7 +18,9 @@ namespace ForwardFW\Templater;
 /**
  * Class to use Smarty as Templater.
  */
-class Smarty extends \ForwardFW\Controller implements \ForwardFW\Templater\TemplaterInterface
+class Smarty
+    extends \ForwardFW\Controller
+    implements \ForwardFW\Templater\TemplaterInterface
 {
     /** @var \Smarty\Smarty The smarty instance */
     private \Smarty\Smarty $smarty;
@@ -36,7 +38,7 @@ class Smarty extends \ForwardFW\Controller implements \ForwardFW\Templater\Templ
      * @param ForwardFW\Controller\ApplicationInterface $application The running application
      */
     public function __construct(
-        \ForwardFW\Config\Templater $config,
+        \ForwardFW\Config\Templater\AbstractTemplater $config,
         \ForwardFW\Controller\ApplicationInterface $application
     ) {
         parent::__construct($application);
@@ -54,6 +56,7 @@ class Smarty extends \ForwardFW\Controller implements \ForwardFW\Templater\Templ
 
         $this->smarty = new \Smarty\Smarty();
         $this->smarty->setCompileDir($compilePath);
+        $this->smarty->setTemplateDir($this->config->getTemplatePaths());
         $this->smarty->registerPlugin('block', 'block', array(&$this, 'smartyBlock'));
         $this->smarty->registerPlugin('function', 'texter', array(&$this, 'smartyTexter'));
     }
@@ -89,7 +92,7 @@ class Smarty extends \ForwardFW\Controller implements \ForwardFW\Templater\Templ
         // Catch Exceptions and clear output cache
         try {
             $result = $this->smarty->fetch(
-                $this->config->getTemplatePath() . '/' . $this->fileName
+                $this->fileName
             );
         } catch (\Exception $e) {
             ob_end_clean();

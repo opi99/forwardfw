@@ -45,7 +45,7 @@ class Twig extends \ForwardFW\Controller implements \ForwardFW\Templater\Templat
      * @param ForwardFW\Controller\ApplicationInterface $application The running application
      */
     public function __construct(
-        \ForwardFW\Config\Templater $config,
+        \ForwardFW\Config\Templater\AbstractTemplater $config,
         \ForwardFW\Controller\ApplicationInterface $application
     ) {
         parent::__construct($application);
@@ -59,7 +59,7 @@ class Twig extends \ForwardFW\Controller implements \ForwardFW\Templater\Templat
             }
         }
 
-        $twigLoader = new \Twig\Loader\FilesystemLoader($config->getTemplatePath());
+        $twigLoader = new \Twig\Loader\FilesystemLoader($config->getTemplatePaths());
         $this->twigEnvironment = new \Twig\Environment(
             $twigLoader,
             [
