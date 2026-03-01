@@ -44,7 +44,7 @@ class Application extends ApplicationAbstract
 
         if (count($this->configuredScreens) === 0) {
             die(
-                'No Screen defined for application: ' . $this->strName
+                'No Screen defined for application: ' . $this->config->getName()
             );
         }
     }

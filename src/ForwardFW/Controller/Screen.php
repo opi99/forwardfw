@@ -133,7 +133,9 @@ class Screen extends View implements ScreenInterface
         if (class_exists($viewClassName)) {
             $view = new $viewClassName($this->application);
         } else {
-            $this->application->getResponse()->addError('ViewClass "' . $viewClassName . '" not includeable.');
+            /** @var \Psr\Log\LoggerInterface */
+            $logger = $this->application->getServiceManager()->getService(\Psr\Log\LoggerInterface::class);
+            $logger->error('ViewClass "' . $viewClassName . '" not includeable.');
         }
 
         return $view;
