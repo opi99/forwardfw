@@ -1,0 +1,33 @@
+    {% for field in nodes %}
+        {% if field.renderType !== 'none' %}
+            <div class="form-group">
+                <label for="{{ field.htmlName }}">{{ field.htmlName|capitalize }}{% if field.attributes.required %}*{% endif %}:</label>
+                {% if field.renderType == 'input' %}
+                    <input type="text" name="{{ field.htmlName }}" value="{{ field.value|default('')|e }}" type="text" size="{{ field.attributes.size }}"{% if field.attributes.required %} required{% endif %}{% if field.attributes.readonly %} readonly disabled{% endif %}>
+                {% elseif field.renderType == 'date' %}
+                    <input type="datetime-local" name="{{ field.htmlName }}" value="{{ field.value|default('')|e }}" type="text" size="{{ field.attributes.size }}"{% if field.attributes.required %} required{% endif %}>
+                {% elseif field.renderType == 'file' %}
+                    {{ dump(field.value) }}
+                    <input type="file" name="{{ field.htmlName }}" value="{{ field.value|default('')|e }}" type="text" size="{{ field.attributes.size }}"{% if field.attributes.required %} required{% endif %}>
+                {% elseif field.renderType == 'text' %}
+                    <textarea name="{{ field.htmlName }}" cols="{{ field.attributes.cols }}" rows="{{ field.attributes.rows }}"{% if field.attributes.required %} required{% endif %}>{{ field.value|default('')|e }}</textarea>
+                {% elseif field.renderType == 'select' %}
+                    <select name="{{ field.htmlName }}"{% if field.attributes.required %} required{% endif %}>
+                        {% for option in field.choices %}
+                            <option value="{{ option.id }}" {% if option.id == field.value %}selected{% endif %}>
+                                {{ option.label }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                {% elseif field.renderType == 'checkbox' %}
+                    <input type="checkbox" name="{{ field.htmlName }}" value="1" {% if field.value %}checked{% endif %}>
+                {% elseif field.renderType == 'inline' %}
+                    <fieldset class="inline">
+                        {% include 'Form/Nodes.twig' with {'nodes': field.children} %}
+                    </fieldset>
+                {% else %}
+                    {{ field.value|e }}
+                {% endif %}
+            </div>
+        {% endif %}
+    {% endfor %}
