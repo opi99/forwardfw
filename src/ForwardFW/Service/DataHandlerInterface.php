@@ -46,11 +46,10 @@ interface DataHandlerInterface
      *
      * @param string $connectionName Name of connection
      * @param array $options Options to load the data
-     * @param ForwardFW\Callback $idCallback Callback to give id of object creation
      *
-     * @return mixed Data from the connection.
+     * @return ?int Last insert id if requested
      */
-    public function create(string $connectionName, array $options, ?\ForwardFW\Callback $idCallback);
+    public function create(string $connectionName, array $options): ?int;
 
     /**
      * Saves Data to a connection (DB, SOAP, File)

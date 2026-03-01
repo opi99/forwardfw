@@ -74,13 +74,12 @@ class Pdo extends \ForwardFW\Service\DataHandler
 
         $strQuery .= ' SET ';
         foreach ($options['values'] as $strName => $value) {
-            $arSets[] = $strName . '=' . $this->getSqlValue($options['columns'][$strName], $value, $connection);
+            $arSets[] = $strName . '=' . $this->getSqlValue($value, $connection);
         }
         $strQuery .= implode(',', $arSets);
 
         $strQuery .= ' WHERE ' . $options['where'];
 
-        $arResult = array();
         $result = $connection->exec($strQuery);
 
         if ($result === false) {
@@ -89,7 +88,7 @@ class Pdo extends \ForwardFW\Service\DataHandler
                 'Error while execute: ' . $connection->lastErrorMsg()
             );
         }
-        return $arResult;
+        return $result;
     }
 
     /**
@@ -97,11 +96,10 @@ class Pdo extends \ForwardFW\Service\DataHandler
      *
      * @param string $connectionName Name of connection
      * @param array $options Options to load the data
-     * @param ForwardFW\Callback $idCallback Callback to give id of object creation
      *
-     * @return array Empty array
+     * @return ?int Last insert id if requested
      */
-    public function create($connectionName, array $options, ?\ForwardFW\Callback $idCallback)
+    public function create($connectionName, array $options): ?int
     {
         $connection = $this->getConnection($connectionName);
 
@@ -111,11 +109,10 @@ class Pdo extends \ForwardFW\Service\DataHandler
         $strQuery .= ' VALUES (';
         $arValues = array();
         foreach ($options['values'] as $strName => $value) {
-            $arValues[] = $this->getSqlValue($options['columns'][$strName], $value, $connection);
+            $arValues[] = $this->getSqlValue($value, $connection);
         }
         $strQuery .= implode(',', $arValues) . ')';
 
-        $arResult = array();
         $result = $connection->exec($strQuery);
 
         if ($result === false) {
@@ -124,9 +121,11 @@ class Pdo extends \ForwardFW\Service\DataHandler
             );
         }
 
-        // @TODO Callback with new ID
+        if ($options['returnId'] ?? false) {
+            return (int)$connection->lastInsertId();
+        }
 
-        return $arResult;
+        return null;
     }
 
     /**
@@ -187,12 +186,12 @@ class Pdo extends \ForwardFW\Service\DataHandler
         $this->connectionCache[$connectionName] = $connection;
     }
 
-    public function getSqlValue($strType, $value, $connection)
+    public function getSqlValue($value, $connection)
     {
-        if ($strType === 'integer') {
-            return (int) $value;
+        if (is_numeric($value) && !is_string($value)) {
+            return $value;
         }
-        return '\'' . $connection->escapeString($value) . '\'';
+        return $connection->quote($value, \PDO::PARAM_STR);
     }
 
     /**

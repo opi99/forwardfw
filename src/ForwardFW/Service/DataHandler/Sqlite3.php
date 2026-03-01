@@ -101,11 +101,10 @@ class Sqlite3 extends \ForwardFW\Service\DataHandler
      *
      * @param string $connectionName Name of connection
      * @param array $options Options to load the data
-     * @param ForwardFW\Callback $idCallback Callback to give id of object creation
      *
-     * @return array Empty array
+     * @return ?int Last insert id if requested
      */
-    public function create($connectionName, array $options, \ForwardFW\Callback $idCallback = null)
+    public function create($connectionName, array $options): ?int
     {
         $connection = $this->getConnection($connectionName);
 
@@ -119,7 +118,6 @@ class Sqlite3 extends \ForwardFW\Service\DataHandler
         }
         $strQuery .= implode(',', $arValues) . ')';
 
-        $arResult = array();
         $result = $connection->exec($strQuery);
 
         if ($result === false) {
@@ -129,9 +127,7 @@ class Sqlite3 extends \ForwardFW\Service\DataHandler
             );
         }
 
-        // @TODO Callback with new ID
-
-        return $arResult;
+        return null;
     }
 
     /**
