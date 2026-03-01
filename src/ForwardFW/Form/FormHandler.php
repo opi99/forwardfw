@@ -30,11 +30,9 @@ class FormHandler
         $this->entityManager = $serviceManager->getService(\ForwardFW\DataHandling\EntityManagerInterface::class);
     }
 
-    public function handle(Form $form, object $entity, array $data): object
+    public function handle(Form $form, object $entity, array $data): void
     {
         $this->mapNodes($form->getNodes(), $entity, $data);
-
-        return $entity;
     }
 
     protected function mapNodes(array $nodes, object $entity, array $data): void
@@ -42,24 +40,26 @@ class FormHandler
         foreach ($nodes as $node) {
             $fieldName = $node->getMetadata()->getFieldName();
 
-            if (!array_key_exists($fieldName, $data)) {
+            if (!array_key_exists($fieldName, $data)
+                || $node->getMetadata()->isIdentifier()
+            ) {
                 continue;
             }
 
             $value = $data[$fieldName];
 
-            // Rekursiv bei Sub-Nodes
+            // Rekursiv bei Sub-Nodes/inline
             if ($node->getChildren()) {
                 $childEntity = $node->getValue();
-
-                if ($childEntity !== null && is_array($value)) {
+                if ($childEntity === null) {
+                    $childNodeName = $node->getMetadata()->getConfig()['foreign_entity'];
+                    $childEntity = new $childNodeName();
+                }
+                if (is_array($value)) {
                     $this->mapNodes($node->getChildren(), $childEntity, $value);
                 }
-
-                continue;
-            }
-
-            if ($node->getMetadata()->isRelation()) {
+                $value = $childEntity;
+            } elseif ($node->getMetadata()->isRelation()) {
                 $foreignEntityName = $node->getMetadata()->getConfig()['foreign_entity'];
                 // Only 1:1 relation
                 $value = $this->entityManager->getRepository($foreignEntityName)->findByIdentifier($value);

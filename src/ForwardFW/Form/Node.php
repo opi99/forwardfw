@@ -34,6 +34,11 @@ class Node
         return $this->metadata;
     }
 
+    public function getValue(): mixed
+    {
+        return $this->value;
+    }
+
     public function getChildren(): array
     {
         return $this->children;

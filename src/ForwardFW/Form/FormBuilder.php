@@ -15,6 +15,7 @@ declare(strict_types=1);
 
 namespace ForwardFW\Form;
 
+use ForwardFW\DataHandling\EntityHelper;
 use ForwardFW\DataHandling\EntityManagerInterface;
 use ForwardFW\DataHandling\EntityMetadata;
 use ForwardFW\DataHandling\FieldMetadata;
@@ -42,14 +43,27 @@ class FormBuilder
     {
         $entityMetadata = $this->entityManager->getMetadata($entityName);
         $nodes = [];
-        foreach ($entityMetadata->getFieldsMetadata() as $fieldMetadata) {
+        $fieldNameIdentifier = $entityMetadata->getIdentifierField();
+        foreach ($entityMetadata->getFieldsMetadata() as $fieldName => $fieldMetadata) {
             $fieldHtmlName = $this->buildHtmlName($fieldMetadata, $parentHtmlName);
             $fieldRenderType = $this->buildRenderType($fieldMetadata, $entity);
             $fieldValue = $this->getFieldValue($fieldMetadata, $entity);
             $fieldAttributes = $this->buildAttributes($fieldMetadata, $fieldRenderType);
             $fieldChoices = $this->buildChoices($fieldMetadata);
             $fieldChildren = $this->buildChildren($fieldMetadata, $entity, $fieldHtmlName);
-            $node = new Node(
+
+            if ($fieldNameIdentifier === $fieldName) {
+                $node = new Node(
+                    $fieldMetadata,
+                    $fieldHtmlName,
+                    'hidden',
+                    $fieldValue
+                );
+
+                array_unshift($nodes, $node);
+            }
+
+            $nodes[] = new Node(
                 $fieldMetadata,
                 $fieldHtmlName,
                 $fieldRenderType,
@@ -58,7 +72,6 @@ class FormBuilder
                 $fieldChoices,
                 $fieldChildren
             );
-            $nodes[] = $node;
         }
         return $nodes;
     }
@@ -139,26 +152,27 @@ class FormBuilder
 
         if ($fieldMetadata->isRelation() && $fieldMetadata->getType() === 'inline') {
             $foreignEntityName = $fieldMetadata->getConfig()['foreign_entity'];
-
             /** @TODO More then 1:1 relations */
-            $foreignEntity = $this->getFieldValue($fieldMetadata, $entity);
+            $foreignEntity = $this->getFieldValue($fieldMetadata, $entity, true);
             $children = $this->buildNodes($foreignEntityName, $foreignEntity, $parentHtmlName);
         }
 
         return $children;
     }
 
-    protected function getFieldValue(FieldMetadata $fieldMetadata, ?object $entity): mixed
+    protected function getFieldValue(FieldMetadata $fieldMetadata, ?object $entity, bool $relationObject = false): mixed
     {
         if (null === $entity) {
             return null;
         }
-        $methodName = 'get' . str_replace(' ', '', ucwords(str_replace('_', ' ', $fieldMetadata->getFieldName())));
-        if (!method_exists($entity, $methodName)) {
+        try {
+            $methodName = EntityHelper::getterForProperty($entity, $fieldMetadata->getFieldName());
+        } catch(\Exception $e) {
             return null;
         }
+
         $value = $entity->$methodName();
-        if ($fieldMetadata->isRelation()) {
+        if ($fieldMetadata->isRelation() && $fieldMetadata->getType() !== 'inline') {
             /** @TODO Check fieldname for id */
             $value = $value->getId();
         }
