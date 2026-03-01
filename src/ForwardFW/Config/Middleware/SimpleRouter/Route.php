@@ -26,6 +26,9 @@ class Route extends \ForwardFW\Config
     /** @var string Startpoint of the route */
     private string $start;
 
+    /** @var bool $loginRequired Defines, if a login is required for this route */
+    private bool $loginRequired = false;
+
     /**
      * Constructor
      */
@@ -46,12 +49,27 @@ class Route extends \ForwardFW\Config
     }
 
     /**
+     * Sets requirement of a login
+     */
+    public function loginRequired(): self
+    {
+        $this->loginRequired = true;
+        return $this;
+    }
+
+    /**
      * Get Startpoint of the route.
-     *
-     * @return string
      */
     public function getStart(): string
     {
         return $this->start;
+    }
+
+    /**
+     * Check if login is required for route
+     */
+    public function isLoginRequired(): bool
+    {
+        return $this->loginRequired;
     }
 }

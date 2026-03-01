@@ -15,6 +15,8 @@ declare(strict_types=1);
 
 namespace ForwardFW\Middleware;
 
+use ForwardFW\Auth\AuthDecision;
+use ForwardFW\Auth\AuthResult;
 use ForwardFW\Factory\ResponseFactory;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -38,6 +40,9 @@ class SimpleRouter extends \ForwardFW\Middleware
 
         foreach ($this->config->getRoutes() as $routeConfig) {
             if (strncmp($requestTargetPath, $routeConfig->getStart(), strlen($routeConfig->getStart())) === 0) {
+                if ($routeConfig->isLoginRequired() && !$this->isLoggedIn($request)) {
+                    continue;
+                }
                 $nextRoute = substr($requestTargetPath, strlen($routeConfig->getStart()));
                 if ($nextRoute === false) {
                     $nextRoute = '';
@@ -63,5 +68,16 @@ class SimpleRouter extends \ForwardFW\Middleware
         }
 
         return $response;
+    }
+
+    protected function isLoggedIn(ServerRequestInterface $request): bool
+    {
+        /** @var AuthResult */
+        $authResult = $request->getAttribute(AuthResult::class);
+
+        if ($authResult->getDecision() === AuthDecision::GRANT) {
+            return true;
+        }
+        return false;
     }
 }
