@@ -18,7 +18,7 @@ namespace ForwardFW\DataHandling;
 use ForwardFW\Service\AbstractService;
 
 /**
- * Manager for different entities
+ * DataArray to Entity
  */
 class EntityMapper
     implements EntityMapperInterface
@@ -56,12 +56,14 @@ class EntityMapper
         $this->entityManager->register($entityClassName, $identifier, $entity, $values);
 
         foreach ($this->entityMetadata->getFieldsMetadata() as $fieldName => $fieldMeta) {
-            $value = $values[$fieldName];
+            $value = ($values[$fieldName] ?? '');
             if ($fieldMeta->isRelation()) {
                 $value = $this->resolveRelation($fieldMeta, $values[$fieldName]);
             }
-            $functionName = 'set' . ucfirst(str_replace(' ', '', ucwords(str_replace('_', ' ', $fieldName))));
-            $entity->$functionName($value);
+            $methodName = 'set' . str_replace(' ', '', ucwords(str_replace('_', ' ', $fieldName)));
+            if (method_exists($entity, $methodName)) {
+                $entity->$methodName($value);
+            }
         }
 
         return $entity;

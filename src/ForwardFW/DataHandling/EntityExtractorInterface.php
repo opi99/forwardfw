@@ -16,19 +16,8 @@ declare(strict_types=1);
 namespace ForwardFW\DataHandling;
 
 /**
- * Manager for different entities
+ * Interface for entities to array extraction
  */
-interface EntityRepositoryInterface
+interface EntityExtractorInterface
 {
-    public function findAll();
-
-    public function findByIdentifier(int|string $identifier): object;
-
-    public function findOne();
-
-    public function countAll();
-
-    public function insert(object $entity): void;
-
-    public function update(object $entity): void;
 }

@@ -57,6 +57,12 @@ class EntityManager
         return new EntityMapper($this, $this->getMetadata($entityName));
     }
 
+    public function getEntityExtractor(string $entityName): EntityExtractorInterface
+    {
+        /** @TODO Factory? */
+        return new EntityExtractor($this, $this->getMetadata($entityName));
+    }
+
     /** @TODO Rename functions? Move into "entitiesContainer"? */
     public function has(string $entityName, int|string $identifier): bool
     {
@@ -81,4 +87,40 @@ class EntityManager
         $this->entitiesLoaded[$entityName][$identifier] = $entity;
         $this->entitiesDataOriginal[$entityName][$identifier] = $dataOriginal;
     }
+
+    public function persist(object $entity): void
+    {
+        $class = get_class($entity);
+        $idMethod = 'getId';
+        if (!method_exists($entity, $idMethod)) {
+            throw new \LogicException("Entity of class $class has no getId method");
+        }
+
+        $id = $entity->$idMethod();
+
+        $this->entitiesForUpdates[$class][$id ?? spl_object_id($entity)] = $entity;
+    }
+
+    public function flush(): void
+    {
+        foreach ($this->entitiesForUpdates as $class => $entities) {
+            $repo = $this->getRepository($class);
+
+            foreach ($entities as $entity) {
+                $id = $entity->getId();
+
+                if ($id === null) {
+                    // Neue Entity → INSERT
+                    $repo->insert($entity);
+                } else {
+                    // Existierende Entity → UPDATE
+                    $repo->update($entity);
+                }
+            }
+        }
+
+        // Danach alles zurücksetzen
+        $this->entitiesForUpdates = [];
+    }
+
 }

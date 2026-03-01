@@ -72,4 +72,45 @@ class EntityRepository
     {
 
     }
+
+    public function insert(object $entity): void
+    {
+        $tableName = $this->entityMetadata->getTableName();
+        $data = $this->entityManager->getEntityExtractor($this->entityMetadata->getRealName())->extractEntity($entity);
+        $dataHandler = $this->entityManager->getServiceManager()->getService(\ForwardFW\Service\DataHandlerInterface::class);
+
+        unset($data['id']);
+
+        $id = $dataHandler->create(
+            'default',
+            [
+                'to' => $tableName,
+                'values' => $data,
+                'returnId' => true,
+            ]
+        );
+
+        $entity->setId($id);
+        $this->entityManager->register($this->entityMetadata->getRealName(), $id, $entity, $data);
+    }
+
+    public function update(object $entity): void
+    {
+        $tableName = $this->entityMetadata->getTableName();
+        $data = $this->entityManager->getEntityExtractor($this->entityMetadata->getRealName())->extractEntity($entity);
+        $dataHandler = $this->entityManager->getServiceManager()->getService(\ForwardFW\Service\DataHandlerInterface::class);
+
+        $id = $data['id'];
+        unset($data['id']);
+
+        $dataHandler->update(
+            'default',
+            [
+                'to' => $tableName,
+                'values' => $data,
+            ]
+        );
+
+        $this->entityManager->updateOriginalData($entity, $data);
+    }
 }
