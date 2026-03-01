@@ -24,6 +24,7 @@ class FieldMetadata
         public readonly string $fieldName,
         public readonly string $type,
         public readonly bool $isRelation,
+        public readonly bool $isIdentifier,
         public readonly array $config,
     ) {
 
@@ -42,6 +43,11 @@ class FieldMetadata
     public function isRelation(): bool
     {
         return $this->isRelation;
+    }
+
+    public function isIdentifier(): bool
+    {
+        return $this->isIdentifier;
     }
 
     public function getConfig(): array

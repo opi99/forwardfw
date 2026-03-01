@@ -24,7 +24,9 @@ class EntityMetadata
         public readonly string $tableName,
         public readonly string $entityClassName,
         public readonly string $identifierField,
+        public readonly ?string $identifierFieldPublic,
         public readonly array $fieldsMetadata,
+        public readonly array $fieldsRelation,
     ) {
 
     }
@@ -45,6 +47,11 @@ class EntityMetadata
         return $this->identifierField;
     }
 
+    public function getIdentifierFieldPublic(): ?string
+    {
+        return $this->identifierFieldPublic;
+    }
+
     public function getEntityClassName(): string
     {
         return $this->entityClassName;
@@ -53,6 +60,16 @@ class EntityMetadata
     public function getFieldsMetadata(): array
     {
         return $this->fieldsMetadata;
+    }
+
+    public function getFieldsRelation(): array
+    {
+        return $this->fieldsRelation;
+    }
+
+    public function hasFieldsRelation(): bool
+    {
+        return !empty($this->fieldsRelation);
     }
 
     public function getRepositoryClassname(): ?string

@@ -44,7 +44,7 @@ class EntityRepository
         return $this->entityManager->getEntityMapper($this->entityMetadata->getRealName())->mapCollection($data);
     }
 
-    public function findByIdentifier(int|string $identifier): object
+    public function findByIdentifier(int|string $identifier): ?object
     {
         $tableName = $this->entityMetadata->getTableName();
         $identifierField = $this->entityMetadata->getIdentifierField();
@@ -60,7 +60,7 @@ class EntityRepository
             ]
         );
 
-        return $this->entityManager->getEntityMapper($this->entityMetadata->getRealName())->mapEntity($data[0]);
+        return isset($data[0]) ? $this->entityManager->getEntityMapper($this->entityMetadata->getRealName())->mapEntity($data[0]) : null;
     }
 
     public function findOne()
@@ -103,11 +103,12 @@ class EntityRepository
         $id = $data['id'];
         unset($data['id']);
 
-        $dataHandler->update(
+        $dataHandler->saveTo(
             'default',
             [
                 'to' => $tableName,
                 'values' => $data,
+                'where' => 'id = ' . $id,
             ]
         );
 

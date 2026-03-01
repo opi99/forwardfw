@@ -22,7 +22,7 @@ interface EntityRepositoryInterface
 {
     public function findAll();
 
-    public function findByIdentifier(int|string $identifier): object;
+    public function findByIdentifier(int|string $identifier): ?object;
 
     public function findOne();
 

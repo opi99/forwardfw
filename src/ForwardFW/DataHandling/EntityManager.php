@@ -88,39 +88,71 @@ class EntityManager
         $this->entitiesDataOriginal[$entityName][$identifier] = $dataOriginal;
     }
 
+    public function updateOriginalData(object $entity, array $dataOriginal): void
+    {
+        $entityName = get_class($entity);
+        $identifier = $this->getIdentifier($entity);
+        $this->entitiesDataOriginal[$entityName][$identifier] = $dataOriginal;
+    }
+
+    public function getIdentifier(object $entity): int|string|null
+    {
+        $class = get_class($entity);
+        $metadata = $this->getMetadata($class);
+        $identifierField = $this->getMetadata($class)->getIdentifierField();
+
+        $identifierMethod = EntityHelper::getterForProperty($entity, $identifierField);
+
+        return $entity->$identifierMethod();
+    }
+
     public function persist(object $entity): void
     {
         $class = get_class($entity);
-        $idMethod = 'getId';
-        if (!method_exists($entity, $idMethod)) {
-            throw new \LogicException("Entity of class $class has no getId method");
+        $metadata = $this->getMetadata($class);
+
+        $id = $this->getIdentifier($entity);
+
+        if ($metadata->hasFieldsRelation()) {
+            $fieldsMetadata = $metadata->getFieldsMetadata();
+            foreach ($metadata->getFieldsRelation() as $fieldName)
+            {
+                if ($fieldsMetadata[$fieldName]->getType() === 'inline') {
+                    $relationMethod = EntityHelper::getterForProperty($entity, $fieldName);
+                    $this->persist($entity->$relationMethod());
+                }
+            }
         }
 
-        $id = $entity->$idMethod();
+        $publicIdField = $metadata->getIdentifierFieldPublic();
 
-        $this->entitiesForUpdates[$class][$id ?? spl_object_id($entity)] = $entity;
+        if ($publicIdField) {
+            $relationMethod = EntityHelper::getterForProperty($entity, $publicIdField);
+            $publicId = $entity->$relationMethod();
+            if ($publicId === '') {
+                // Generate publicId
+            }
+        }
+
+        $this->entitiesForUpdates[$class . '|' . ($id ?? 'NEW' . spl_object_id($entity))] = $entity;
     }
 
     public function flush(): void
     {
-        foreach ($this->entitiesForUpdates as $class => $entities) {
+        foreach ($this->entitiesForUpdates as $updateIdent => $entity) {
+            list($class, $id) = explode('|', $updateIdent, 2);
             $repo = $this->getRepository($class);
 
-            foreach ($entities as $entity) {
-                $id = $entity->getId();
-
-                if ($id === null) {
-                    // Neue Entity → INSERT
-                    $repo->insert($entity);
-                } else {
-                    // Existierende Entity → UPDATE
-                    $repo->update($entity);
-                }
+            if (is_numeric($id)) {
+                // Existierende Entity → UPDATE
+                $repo->update($entity);
+            } else {
+                // Neue Entity → INSERT
+                $repo->insert($entity);
             }
         }
 
         // Danach alles zurücksetzen
         $this->entitiesForUpdates = [];
     }
-
 }

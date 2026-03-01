@@ -35,29 +35,42 @@ class TcaEntityMetadataFactory
 
         $localTca = $this->tca[$entityName];
 
+        $fieldConfiguration = $this->buildFields($localTca['columns'], $localTca['ctrl']);
+
         return new EntityMetadata(
             $localTca['ctrl']['table'],
             $localTca['ctrl']['entity'],
             $localTca['ctrl']['identityField'] ?? 'uid',
-            $this->buildFields($localTca['columns']),
+            $localTca['ctrl']['identityFieldPublic'] ?? null,
+            $fieldConfiguration['fields'],
+            $fieldConfiguration['relations'],
         );
     }
 
-    protected function buildFields(array $columns): array
+    protected function buildFields(array $columns, array $ctrl): array
     {
-        $fields = [];
+        $fields = [
+            'fields' => [],
+            'relations' => [],
+        ];
 
         foreach ($columns as $name => $column) {
             $config = $column['config'] ?? [];
             $type = $config['type'] ?? 'input';
             $isRelation = $this->isRelation($type);
+            $isIdentifier = $this->isIdentifier($name, $ctrl);
 
-            $fields[$name] = new FieldMetadata(
+            $fields['fields'][$name] = new FieldMetadata(
                 $name,
                 $type,
                 $isRelation,
+                $isIdentifier,
                 $config,
             );
+
+            if ($isRelation) {
+                $fields['relations'][] = $name;
+            }
         }
 
         return $fields;
@@ -70,6 +83,12 @@ class TcaEntityMetadataFactory
             ['inline', 'select', 'group'],
             true
         );
+    }
+
+    private function isIdentifier(string $fieldName, array $ctrl): bool
+    {
+        return ($fieldName === ($ctrl['identityField'] ?? 'uid'))
+            || ($fieldName === ($ctrl['identityFieldPublic'] ?? null));
     }
 
     private function loadAllTca()
