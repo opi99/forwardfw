@@ -42,6 +42,8 @@ class TcaEntityMetadataFactory
             $localTca['ctrl']['entity'],
             $localTca['ctrl']['identityField'] ?? 'uid',
             $localTca['ctrl']['identityFieldPublic'] ?? null,
+            $localTca['ctrl']['crdate'] ?? null,
+            $localTca['ctrl']['tstamp'] ?? null,
             $fieldConfiguration['fields'],
             $fieldConfiguration['relations'],
         );

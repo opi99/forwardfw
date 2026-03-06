@@ -25,6 +25,8 @@ class EntityMetadata
         public readonly string $entityClassName,
         public readonly string $identifierField,
         public readonly ?string $identifierFieldPublic,
+        public readonly ?string $creationTimeField,
+        public readonly ?string $changeTimeField,
         public readonly array $fieldsMetadata,
         public readonly array $fieldsRelation,
     ) {
@@ -52,6 +54,16 @@ class EntityMetadata
         return $this->identifierFieldPublic;
     }
 
+    public function getCreationTimeField(): ?string
+    {
+        return $this->creationTimeField;
+    }
+
+    public function getChangeTimeField(): ?string
+    {
+        return $this->changeTimeField;
+    }
+
     public function getEntityClassName(): string
     {
         return $this->entityClassName;
@@ -60,6 +72,11 @@ class EntityMetadata
     public function getFieldsMetadata(): array
     {
         return $this->fieldsMetadata;
+    }
+
+    public function getFieldMetadata(string $fieldName): FieldMetadata
+    {
+        return $this->fieldsMetadata[$fieldName];
     }
 
     public function getFieldsRelation(): array

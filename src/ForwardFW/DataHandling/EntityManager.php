@@ -145,14 +145,87 @@ class EntityManager
 
             if (is_numeric($id)) {
                 // Existierende Entity → UPDATE
+                $this->prepareUpdate($entity);
                 $repo->update($entity);
             } else {
                 // Neue Entity → INSERT
+                $this->prepareInsert($entity);
                 $repo->insert($entity);
             }
         }
 
         // Danach alles zurücksetzen
         $this->entitiesForUpdates = [];
+    }
+
+    protected function prepareUpdate(object $entity): void
+    {
+        $entityMetadata = $this->getMetadata(get_class($entity));
+        $this->setChangeTimeField($entity, $entityMetadata);
+    }
+
+    protected function prepareInsert(object $entity): void
+    {
+        $entityMetadata = $this->getMetadata(get_class($entity));
+        $this->setIdentifierField($entity, $entityMetadata);
+        $this->setIdentifierPublicField($entity, $entityMetadata);
+        $this->setCreationTimeField($entity, $entityMetadata);
+        $this->setChangeTimeField($entity, $entityMetadata);
+    }
+
+    protected function setIdentifierField(object $entity, EntityMetadata $entityMetadata): void
+    {
+        $identifierField = $entityMetadata->getIdentifierField();
+        $identifierFieldMetadata = $entityMetadata->getFieldMetadata($identifierField);
+        $identifierMethod = EntityHelper::setterForProperty($entity, $identifierField);
+        if ($identifierFieldMetadata->getType() === 'ULID') {
+            $ulid = new \Ulid\Ulid();
+            $entity->$identifierMethod(
+                $ulid->generate()
+            );
+        }
+        if ($identifierFieldMetadata->getType() === 'NanoID') {
+            $entity->$identifierMethod(
+                \Snortlin\NanoId\NanoId::nanoId()
+            );
+        }
+    }
+
+    protected function setIdentifierPublicField(object $entity, EntityMetadata $entityMetadata): void
+    {
+        $identifierFieldPublic = $entityMetadata->getIdentifierFieldPublic();
+        if (null !== $identifierFieldPublic) {
+            $identifierFieldPublicMetadata = $entityMetadata->getFieldMetadata($identifierFieldPublic);
+            $identifierPublicMethod = EntityHelper::setterForProperty($entity, $identifierFieldPublic);
+            if ($identifierFieldPublicMetadata->getType() === 'ULID') {
+                $ulid = new \Ulid\Ulid();
+                $entity->$identifierPublicMethod(
+                    $ulid->generate()
+                );
+            }
+            if ($identifierFieldPublicMetadata->getType() === 'NanoID') {
+                $entity->$identifierPublicMethod(
+                    \Snortlin\NanoId\NanoId::nanoId()
+                );
+            }
+        }
+    }
+
+    protected function setCreationTimeField(object $entity, EntityMetadata $entityMetadata): void
+    {
+        $creationTimeField = $entityMetadata->getCreationTimeField();
+        if (null !== $creationTimeField) {
+            $creationTimeMethod = EntityHelper::setterForProperty($entity, $creationTimeField);
+            $entity->$creationTimeMethod(time());
+        }
+    }
+
+    protected function setChangeTimeField(object $entity, EntityMetadata $entityMetadata): void
+    {
+        $changeTimeField = $entityMetadata->getChangeTimeField();
+        if (null !== $changeTimeField) {
+            $creationTimeMethod = EntityHelper::setterForProperty($entity, $changeTimeField);
+            $entity->$creationTimeMethod(time());
+        }
     }
 }
