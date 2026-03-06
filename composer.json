@@ -29,7 +29,9 @@
         "smarty/smarty": "Smarty - One of the possible templating engines",
         "twig/twig": "Twig - One of the possible templating engines",
         "kodus/chrome-logger": "ChromeLogger - For writing logs into chrome console",
-        "firephp/firephp-core": "FirePHP - Logs to the FirePHP Devtools"
+        "firephp/firephp-core": "FirePHP - Logs to the FirePHP Devtools",
+        "not-empty/ulid-php-lib": "ULID Generator",
+        "snortlin/nano-id": "NanoId Generator"
     },
     "require-dev": {
         "smarty/smarty": "^5.4",
