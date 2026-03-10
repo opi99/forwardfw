@@ -32,6 +32,7 @@ class ServerRequest
         protected array $queryParams = [],
         protected array $cookieParams = [],
         protected array $serverParams = [],
+        protected array $uploadedFiles = [],
         protected array | object | null $parsedBody = null
     ) {
         parent::__construct($method, $uri, $body, $headers);
@@ -70,12 +71,13 @@ class ServerRequest
     /** @TODO */
     public function getUploadedFiles()
     {
-        return [];
+        return $this->uploadedFiles;
     }
 
     public function withUploadedFiles(array $uploadedFiles)
     {
         $clone = clone $this;
+        $clone->uploadedFiles = $uploadedFiles;
         return $clone;
     }
 

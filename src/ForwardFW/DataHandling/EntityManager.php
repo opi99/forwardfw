@@ -196,6 +196,10 @@ class EntityManager
         $identifierFieldPublic = $entityMetadata->getIdentifierFieldPublic();
         if (null !== $identifierFieldPublic) {
             $identifierFieldPublicMetadata = $entityMetadata->getFieldMetadata($identifierFieldPublic);
+            $identifierPublicMethod = EntityHelper::getterForProperty($entity, $identifierFieldPublic);
+            if ($entity->$identifierPublicMethod() !== '' && $entity->$identifierPublicMethod() !== 0) {
+                return;
+            }
             $identifierPublicMethod = EntityHelper::setterForProperty($entity, $identifierFieldPublic);
             if ($identifierFieldPublicMetadata->getType() === 'ULID') {
                 $ulid = new \Ulid\Ulid();

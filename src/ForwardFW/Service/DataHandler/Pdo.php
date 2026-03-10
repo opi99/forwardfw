@@ -48,7 +48,11 @@ class Pdo extends \ForwardFW\Service\DataHandler
             $strQuery .= ' LIMIT ' . $options['limit'];
         }
 
-        $result = $connection->query($strQuery);
+        try {
+            $result = $connection->query($strQuery);
+        } catch (\PDOException $e) {
+            throw new \Exception($e->getMessage() . ' Used query: ' . $strQuery);
+        }
 
         if ($result === false) {
             throw new \ForwardFW\Exception\DataHandler(

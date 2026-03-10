@@ -45,6 +45,8 @@ class ServerRequestFactory
         );
 
         $headers = static::prepareHeaders($_SERVER);
+        
+        $files = (empty($_FILES) ? [] : UploadedFileFactory::createFromGlobals());
 
         $request = new ServerRequest(
             $_SERVER['REQUEST_METHOD'] ?? 'GET',
@@ -54,6 +56,7 @@ class ServerRequestFactory
             $_GET,
             $_COOKIE,
             $_SERVER,
+            $files,
             $_POST
         );
         return $request;

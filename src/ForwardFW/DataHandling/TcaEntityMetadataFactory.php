@@ -82,7 +82,7 @@ class TcaEntityMetadataFactory
     {
         return in_array(
             $fieldType,
-            ['inline', 'select', 'group'],
+            ['inline', 'select', 'group', 'media'],
             true
         );
     }
@@ -100,9 +100,11 @@ class TcaEntityMetadataFactory
         }
 
         /** @TODO Caching in one array */
-        foreach (glob($this->config->getTcaPath() . '/*.php') as $file) {
-            $localTca = include $file;
-            $this->tca[$localTca['ctrl']['entity']] = $localTca;
+        foreach ($this->config->getTcaPaths() as $tcaPath) {
+            foreach (glob($tcaPath . '/*.php') as $file) {
+                $localTca = include $file;
+                $this->tca[$localTca['ctrl']['entity']] = $localTca;
+            }
         }
     }
 }

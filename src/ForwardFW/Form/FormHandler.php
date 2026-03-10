@@ -60,7 +60,11 @@ class FormHandler
                 }
                 $value = $childEntity;
             } elseif ($node->getMetadata()->isRelation()) {
-                $foreignEntityName = $node->getMetadata()->getConfig()['foreign_entity'];
+                if ($node->getMetadata()->getType() === 'media') {
+                    $foreignEntityName = \ForwardFW\Entity\Media::class;
+                } else {
+                    $foreignEntityName = $node->getMetadata()->getConfig()['foreign_entity'];
+                }
                 // Only 1:1 relation
                 $value = $this->entityManager->getRepository($foreignEntityName)->findByIdentifier($value);
             }

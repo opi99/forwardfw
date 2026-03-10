@@ -22,16 +22,16 @@ class TcaEntityMetadataFactory extends EntityMetadataFactoryAbstract
 {
     protected string $executionClassName = \ForwardFW\DataHandling\TcaEntityMetadataFactory::class;
 
-    private string $tcaPath = '';
+    private array $tcaPaths = [];
 
-    public function setTcaPath(string $tcaPath): self
+    public function addTcaPath(string $tcaPath): self
     {
-        $this->tcaPath = $tcaPath;
+        $this->tcaPaths[] = $tcaPath;
         return $this;
     }
 
-    public function getTcaPath(): string
+    public function getTcaPaths(): array
     {
-        return $this->tcaPath;
+        return $this->tcaPaths;
     }
 }

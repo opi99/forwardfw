@@ -69,12 +69,19 @@ class EntityMapper
         return $entity;
     }
 
-    protected function resolveRelation(FieldMetadata $fieldMetadata, mixed $value): object
+    protected function resolveRelation(FieldMetadata $fieldMetadata, mixed $value): ?object
     {
+        if (empty($value)) {
+            return null;
+        }
         $config = $fieldMetadata->getConfig();
 
-        // 1:1 Mapper, for the moment
-        $foreignEntityClassName = $config['foreign_entity'];
+        if ($fieldMetadata->getType() === 'media') {
+            $foreignEntityClassName = \ForwardFW\Entity\Media::class;
+        } else {
+            // 1:1 Mapper, for the moment
+            $foreignEntityClassName = $config['foreign_entity'];
+        }
         $identifier = $value;
 
         if ($this->entityManager->has($foreignEntityClassName, $identifier)) {

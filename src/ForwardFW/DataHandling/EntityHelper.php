@@ -67,6 +67,6 @@ class EntityHelper
             return $method;
         }
 
-        throw new \Exception('No setter for field: ' . $fieldName);
+        throw new \Exception('No setter for field: "' . $fieldName . '" in object "' . get_class($entity) . '"');
     }
 }

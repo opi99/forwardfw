@@ -1,0 +1,10 @@
+<div class="dam-upload" data-target="{{ field.htmlName }}">
+    <input type="hidden"
+           name="{{ field.htmlName }}"
+           value="{{ field.value|default('')|e }}"
+           {% if field.attributes.required %}required{% endif %}>
+
+    <input type="file" class="dam-file-input">
+
+    <div class="dam-preview"></div>
+</div>

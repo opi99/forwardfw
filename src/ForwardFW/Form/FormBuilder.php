@@ -173,8 +173,10 @@ class FormBuilder
 
         $value = $entity->$methodName();
         if ($fieldMetadata->isRelation() && $fieldMetadata->getType() !== 'inline') {
-            /** @TODO Check fieldname for id */
-            $value = $value->getId();
+            if (is_object($value) && get_class($value) !== \ForwardFW\Entity\Media::class) {
+                /** @TODO Check fieldname for id */
+                $value = $value->getId();
+            }
         }
         return $value;
     }

@@ -1,0 +1,14 @@
+<div class="dam-upload" data-target="{{ field.htmlName }}">
+    <input type="hidden"
+           name="{{ field.htmlName }}"
+           value="{{ field.value.id|default('')|e }}"
+           {% if field.attributes.required %}required{% endif %}>
+
+    <input type="file" class="dam-file-input">
+
+    <div class="dam-preview">
+        {% if field.value %}
+        <img src="{{ field.value.publicPath }}/{{ field.value.filename }}" style="max-width:200px">
+        {% endif %}
+    </div>
+</div>

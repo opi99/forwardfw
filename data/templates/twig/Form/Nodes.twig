@@ -10,9 +10,8 @@
                     <input type="text" name="{{ field.htmlName }}" value="{{ field.value|default('')|e }}" size="{{ field.attributes.size }}"{% if field.attributes.required %} required{% endif %}{% if field.attributes.readonly %} readonly disabled{% endif %}>
                 {% elseif field.renderType == 'date' %}
                     <input type="datetime-local" name="{{ field.htmlName }}" value="{{ field.value|default('')|e }}" size="{{ field.attributes.size }}"{% if field.attributes.required %} required{% endif %}>
-                {% elseif field.renderType == 'file' %}
-                    {{ dump(field.value) }}
-                    <input type="file" name="{{ field.htmlName }}" value="{{ field.value|default('')|e }}" size="{{ field.attributes.size }}"{% if field.attributes.required %} required{% endif %}>
+                {% elseif field.renderType == 'media' %}
+                    {% include 'Form/Nodes/Media.twig' with {'field': field} %}
                 {% elseif field.renderType == 'text' %}
                     <textarea name="{{ field.htmlName }}" cols="{{ field.attributes.cols }}" rows="{{ field.attributes.rows }}"{% if field.attributes.required %} required{% endif %}>{{ field.value|default('')|e }}</textarea>
                 {% elseif field.renderType == 'select' %}
