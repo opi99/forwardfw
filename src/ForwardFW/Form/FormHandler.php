@@ -66,7 +66,11 @@ class FormHandler
                     $foreignEntityName = $node->getMetadata()->getConfig()['foreign_entity'];
                 }
                 // Only 1:1 relation
-                $value = $this->entityManager->getRepository($foreignEntityName)->findByIdentifier($value);
+                if ($value) {
+                    $value = $this->entityManager->getRepository($foreignEntityName)->findByIdentifier($value);
+                } else {
+                    $value = null;
+                }
             }
 
             $this->setValue($entity, $fieldName, $value);
