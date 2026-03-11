@@ -35,11 +35,14 @@ class TcaEntityMetadataFactory
 
         $localTca = $this->tca[$entityName];
 
+        $repositoryClassName = $this->buildRepositoryClassName($localTca['ctrl']);
+
         $fieldConfiguration = $this->buildFields($localTca['columns'], $localTca['ctrl']);
 
         return new EntityMetadata(
             $localTca['ctrl']['table'],
             $localTca['ctrl']['entity'],
+            $repositoryClassName,
             $localTca['ctrl']['identityField'] ?? 'uid',
             $localTca['ctrl']['identityFieldPublic'] ?? null,
             $localTca['ctrl']['crdate'] ?? null,
@@ -47,6 +50,23 @@ class TcaEntityMetadataFactory
             $fieldConfiguration['fields'],
             $fieldConfiguration['relations'],
         );
+    }
+
+    protected function buildRepositoryClassName(array $ctrl): ?string
+    {
+        $repoClass = $ctrl['repository'] ?? null;
+        if ($repoClass && class_exists($repoClass))
+        {
+            return $repoClass;
+        }
+
+        $repoClass = str_replace('\\Entity\\', '\\Entity\\Repository\\', $ctrl['entity']) . 'Repository';
+        if (class_exists($repoClass))
+        {
+            return $repoClass;
+        }
+
+        return null;
     }
 
     protected function buildFields(array $columns, array $ctrl): array
