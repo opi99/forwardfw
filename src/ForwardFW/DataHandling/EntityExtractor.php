@@ -44,8 +44,12 @@ class EntityExtractor
             } else {
                 $values[$fieldName] = '';
             }
-            if ($fieldMeta->isRelation() && is_object($values[$fieldName])) {
-                $values[$fieldName] = $values[$fieldName]->getId();
+            if ($fieldMeta->isRelation()) {
+                if (is_object($values[$fieldName])) {
+                    $values[$fieldName] = $values[$fieldName]->getId();
+                } else {
+                    $values[$fieldName] = '';
+                }
             }
         }
 
