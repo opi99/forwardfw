@@ -16,7 +16,7 @@ declare(strict_types=1);
 namespace ForwardFW\Config\Middleware;
 
 /**
- * Config for a SimpleRouter Filter.
+ * Config for a SimpleRouter Middleware.
  */
 class SimpleRouter extends \ForwardFW\Config\Middleware
 {
