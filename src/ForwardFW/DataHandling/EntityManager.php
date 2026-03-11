@@ -162,6 +162,7 @@ class EntityManager
     {
         $entityMetadata = $this->getMetadata(get_class($entity));
         $this->setChangeTimeField($entity, $entityMetadata);
+        $this->setSlugFields($entity, $entityMetadata);
     }
 
     protected function prepareInsert(object $entity): void
@@ -171,6 +172,7 @@ class EntityManager
         $this->setIdentifierPublicField($entity, $entityMetadata);
         $this->setCreationTimeField($entity, $entityMetadata);
         $this->setChangeTimeField($entity, $entityMetadata);
+        $this->setSlugFields($entity, $entityMetadata);
     }
 
     protected function setIdentifierField(object $entity, EntityMetadata $entityMetadata): void
@@ -230,6 +232,21 @@ class EntityManager
         if (null !== $changeTimeField) {
             $creationTimeMethod = EntityHelper::setterForProperty($entity, $changeTimeField);
             $entity->$creationTimeMethod(time());
+        }
+    }
+
+    protected function setSlugFields(object $entity, EntityMetadata $entityMetadata): void
+    {
+        foreach ($entityMetadata->getFieldsMetadata() as $fieldMetadata) {
+            if ($fieldMetadata->getType() === 'slug') {
+                $slugSourceMethod = EntityHelper::getterForProperty($entity, $fieldMetadata->getConfig()['source']);
+                $source = $entity->$slugSourceMethod();
+
+                $slug = SlugHelper::slugify($source, $fieldMetadata->getConfig());
+
+                $slugMethod = EntityHelper::setterForProperty($entity, $fieldMetadata->getFieldName());
+                $entity->$slugMethod($slug);
+            }
         }
     }
 }

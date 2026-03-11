@@ -23,6 +23,7 @@ class EntityMetadata
     public function __construct(
         public readonly string $tableName,
         public readonly string $entityClassName,
+        public readonly ?string $repositoryClassName,
         public readonly string $identifierField,
         public readonly ?string $identifierFieldPublic,
         public readonly ?string $creationTimeField,
@@ -89,8 +90,8 @@ class EntityMetadata
         return !empty($this->fieldsRelation);
     }
 
-    public function getRepositoryClassname(): ?string
+    public function getRepositoryClassName(): ?string
     {
-        return null;
+        return $this->repositoryClassName;
     }
 }
