@@ -55,7 +55,9 @@ class EntityRepository
             [
                 'select' => '*',
                 'from' => $tableName,
-                'where' => $identifierField . '=' . $identifier,
+                'where' => [
+                    $identifierField . '=' => $identifier,
+                ],
                 'limit' => 1,
             ]
         );

@@ -15,13 +15,13 @@ declare(strict_types=1);
 
 namespace ForwardFW\Service\DataHandler;
 
+use \ForwardFW\Exception\DataHandlerException;
+
 /**
  * Managing DataLoading via PHPs PDO
  */
 class Pdo extends \ForwardFW\Service\DataHandler
 {
-    private \Pdo $connection;
-
     /**
      * Loads Data from a connection (DB, SOAP, File)
      *
@@ -30,36 +30,33 @@ class Pdo extends \ForwardFW\Service\DataHandler
      *
      * @return array Data from the connection.
      */
-    public function loadFrom($connectionName, array $options)
+    public function loadFrom(string $connectionName, array $options): array
     {
         $connection = $this->getConnection($connectionName);
 
-        $strQuery = 'SELECT ' . $options['select'] . ' FROM ' . $this->getTableName($options['from'], $connectionName);
+        $params = [];
+
+        $query = 'SELECT ' . $options['select'] . ' FROM ' . $this->getTableName($options['from'], $connectionName);
         if (isset($options['where'])) {
-            $strQuery .= ' WHERE ' . $options['where'];
+            $query .= ' WHERE ' . $this->buildWhere($options['where'], $params);
         }
-        if (isset($options['group'])) {
-            $strQuery .= ' GROUP BY ' . $options['group'];
+
+        if (!empty($options['order'])) {
+            $query .= ' ORDER BY ' . $this->buildOrder($options['order']);
         }
-        if (isset($options['order'])) {
-            $strQuery .= ' ORDER BY ' . $options['order'];
-        }
+
         if (isset($options['limit'])) {
-            $strQuery .= ' LIMIT ' . $options['limit'];
+            $query .= ' LIMIT ' . $this->buildLimit($options['limit']);
         }
 
-        try {
-            $result = $connection->query($strQuery);
+        try {            
+            $stmt = $connection->prepare($query);
+            $stmt->execute($params);
         } catch (\PDOException $e) {
-            throw new \Exception($e->getMessage() . ' Used query: ' . $strQuery);
+            throw new DataHandlerException($e->getMessage() . ' Used query: ' . $query);
         }
 
-        if ($result === false) {
-            throw new \ForwardFW\Exception\DataHandler(
-                'Error while execute: ' . $connection->lastErrorMsg()
-            );
-        }
-        return $result->fetchAll(\PDO::FETCH_ASSOC);
+        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
     }
 
     /**
@@ -68,31 +65,28 @@ class Pdo extends \ForwardFW\Service\DataHandler
      * @param string $connectionName Name of connection
      * @param array $options Options to load the data
      *
-     * @return array Empty array
+     * @return int rows updated
      */
-    public function saveTo($connectionName, array $options)
+    public function update(string $connectionName, array $options): int
     {
         $connection = $this->getConnection($connectionName);
 
-        $strQuery = 'UPDATE ' . $this->getTableName($options['to'], $connectionName);
+        $table = $this->getTableName($options['to'], $connectionName);
 
-        $strQuery .= ' SET ';
-        foreach ($options['values'] as $strName => $value) {
-            $arSets[] = $strName . '=' . $this->getSqlValue($value, $connection);
+        $params = [];
+
+        $sql =
+            'UPDATE ' . $table .
+            ' SET ' . $this->buildUpdate($options['values'], $params);
+
+        if (!empty($options['where'])) {
+            $sql .= ' WHERE ' . $this->buildWhere($options['where'], $params);
         }
-        $strQuery .= implode(',', $arSets);
 
-        $strQuery .= ' WHERE ' . $options['where'];
+        $stmt = $connection->prepare($sql);
+        $stmt->execute($params);
 
-        $result = $connection->exec($strQuery);
-
-        if ($result === false) {
-            $this->application->getResponse()->addError($connection->lastErrorMsg());
-            throw new \ForwardFW\Exception\DataHandler(
-                'Error while execute: ' . $connection->lastErrorMsg()
-            );
-        }
-        return $result;
+        return $stmt->rowCount();
     }
 
     /**
@@ -103,27 +97,23 @@ class Pdo extends \ForwardFW\Service\DataHandler
      *
      * @return ?int Last insert id if requested
      */
-    public function create($connectionName, array $options): ?int
+    public function create(string $connectionName, array $options): ?int
     {
         $connection = $this->getConnection($connectionName);
 
-        $strQuery = 'INSERT INTO ' . $this->getTableName($options['to'], $connectionName);
+        $table = $this->getTableName($options['to'], $connectionName);
 
-        $strQuery .= ' (' . implode(',', array_keys($options['values'])) . ')';
-        $strQuery .= ' VALUES (';
-        $arValues = array();
-        foreach ($options['values'] as $strName => $value) {
-            $arValues[] = $this->getSqlValue($value, $connection);
-        }
-        $strQuery .= implode(',', $arValues) . ')';
+        $params = [];
 
-        $result = $connection->exec($strQuery);
+        $insert = $this->buildInsert($options['values'], $params);
 
-        if ($result === false) {
-            throw new \ForwardFW\Exception\DataHandler(
-                'Error while execute: ' . $connection->lastErrorMsg()
-            );
-        }
+        $sql =
+            'INSERT INTO ' . $table .
+            ' (' . $insert['columns'] . ')' .
+            ' VALUES (' . $insert['values'] . ')';
+
+        $stmt = $connection->prepare($sql);
+        $stmt->execute($params);
 
         if ($options['returnId'] ?? false) {
             return (int)$connection->lastInsertId();
@@ -132,15 +122,33 @@ class Pdo extends \ForwardFW\Service\DataHandler
         return null;
     }
 
+    public function delete($connectionName, array $options): int
+    {
+        $connection = $this->getConnection($connectionName);
+
+        $table = $this->getTableName($options['from'], $connectionName);
+
+        $params = [];
+
+        $sql = 'DELETE FROM ' . $table;
+
+        if (!empty($options['where'])) {
+            $sql .= ' WHERE ' . $this->buildWhere($options['where'], $params);
+        }
+
+        $stmt = $connection->prepare($sql);
+        $stmt->execute($params);
+
+        return $stmt->rowCount();
+    }
+
     /**
      * Truncates Data to a connection (DB, SOAP, File)
      *
      * @param string $connectionName Name of connection
      * @param array $options Options to load the data
-     *
-     * @return array Empty array
      */
-    public function truncate($connectionName, array $options)
+    public function truncate(string $connectionName, array $options): void
     {
         $connection = $this->getConnection($connectionName);
 
@@ -150,8 +158,7 @@ class Pdo extends \ForwardFW\Service\DataHandler
         $result = $connection->exec('DELETE FROM ' . $table);
 
         if ($result === false) {
-            $this->application->getResponse()->addError($connection->lastErrorMsg());
-            throw new \ForwardFW\Exception\DataHandler(
+            throw new DataHandlerException(
                 'Error while execute: ' . $connection->lastErrorMsg()
             );
         }
@@ -160,12 +167,11 @@ class Pdo extends \ForwardFW\Service\DataHandler
         $result = $connection->exec('DELETE FROM SQLITE_SEQUENCE WHERE name = \'' . $table . '\'');
 
         if ($result === false) {
-            $this->application->getResponse()->addError($connection->lastErrorMsg());
-            throw new \ForwardFW\Exception\DataHandler(
+            throw new DataHandlerException(
                 'Error while execute: ' . $connection->lastErrorMsg()
             );
         }
-        return [];
+        return;
     }
 
     /**
@@ -175,27 +181,175 @@ class Pdo extends \ForwardFW\Service\DataHandler
      *
      * @return void
      */
-    public function initConnection($connectionName)
+    public function initConnection($connectionName): void
     {
         try {
             $connection = new \PDO($this->config->getDsn(), $this->config->getUsername(), $this->config->getPassword());
+            $connection->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+            $connection->setAttribute(\PDO::ATTR_DEFAULT_FETCH_MODE, \PDO::FETCH_ASSOC);
         } catch (\Exception $e) {
-            throw new \ForwardFW\Exception\DataHandler(
+            throw new DataHandlerException(
                 'Cannot initialize PDO Connection: '
                 . $e->getMessage()
             );
         }
 
-        $ret = $connection->exec('SET NAMES utf8; SET CHARACTER SET utf8');
         $this->connectionCache[$connectionName] = $connection;
     }
 
-    public function getSqlValue($value, $connection)
+    private function buildWhere(array $where, array &$params, string $logic = 'AND'): string
     {
-        if (is_numeric($value) && !is_string($value)) {
-            return $value;
+        $parts = [];
+
+        foreach ($where as $key => $value) {
+
+            // Support nested OR / AND groups
+            if ($key === 'OR' || $key === 'AND') {
+                $nested = $this->buildWhere($value, $params, $key);
+
+                if ($nested !== '') {
+                    $parts[] = '(' . $nested . ')';
+                }
+
+                continue;
+            }
+
+            // Extract operator from key
+            if (preg_match('/^(.+?)\s*(>=|<=|!=|=|>|<|LIKE|IN)$/i', $key, $match)) {
+                $field = trim($match[1]);
+                $operator = strtoupper($match[2]);
+            } else {
+                throw new DataHandlerException('Operator is missing');
+            }
+
+            if (!preg_match('/^[a-zA-Z0-9_\.]+$/', $field)) {
+                throw new DataHandlerException('Invalid field name: ' . $field);
+            }
+
+            // NULL handling
+            if ($value === null) {
+
+                if ($operator === '!=') {
+                    $parts[] = $field . ' IS NOT NULL';
+                } else {
+                    $parts[] = $field . ' IS NULL';
+                }
+
+                continue;
+            }
+
+            // IN operator
+            if ($operator === 'IN') {
+
+                if (!is_array($value) || empty($value)) {
+                    throw new DataHandlerException('IN operator requires a non-empty array');
+                }
+
+                $inParams = [];
+
+                foreach ($value as $v) {
+                    $param = 'p' . count($params);
+                    $params[$param] = $v;
+                    $inParams[] = ':' . $param;
+                }
+
+                $parts[] = $field . ' IN (' . implode(',', $inParams) . ')';
+
+                continue;
+            }
+
+            // Normal comparison
+            $param = 'p' . count($params);
+            $params[$param] = $value;
+
+            $parts[] = $field . ' ' . $operator . ' :' . $param;
         }
-        return $connection->quote($value, \PDO::PARAM_STR);
+
+        return implode(' ' . $logic . ' ', $parts);
+    }
+
+    private function buildOrder(array $order): string
+    {
+        $parts = [];
+
+        foreach ($order as $field => $direction) {
+
+            if (is_int($field)) {
+                $field = $direction;
+                $direction = 'ASC';
+            }
+
+            $direction = strtoupper($direction);
+
+            if (!in_array($direction, ['ASC', 'DESC'], true)) {
+                throw new DataHandlerException('Invalid ORDER direction');
+            }
+
+            if (!preg_match('/^[a-zA-Z0-9_\.]+$/', $field)) {
+                throw new DataHandlerException('Invalid ORDER field');
+            }
+
+            $parts[] = $field . ' ' . $direction;
+        }
+
+        return implode(', ', $parts);
+    }
+
+    private function buildLimit($limit): string
+    {
+        if (is_array($limit)) {
+
+            $offset = (int)($limit['offset'] ?? 0);
+            $count  = (int)($limit['count'] ?? 0);
+
+            return $offset . ',' . $count;
+        }
+
+        return (string)(int)$limit;
+    }
+
+    private function buildInsert(array $values, array &$params): array
+    {
+        $columns = [];
+        $placeholders = [];
+
+        foreach ($values as $column => $value) {
+
+            if (!preg_match('/^[a-zA-Z0-9_]+$/', $column)) {
+                throw new DataHandlerException('Invalid column name: ' . $column);
+            }
+
+            $param = 'p' . count($params);
+
+            $columns[] = $column;
+            $placeholders[] = ':' . $param;
+
+            $params[$param] = $value;
+        }
+
+        return [
+            'columns' => implode(',', $columns),
+            'values' => implode(',', $placeholders)
+        ];
+    }
+
+    private function buildUpdate(array $values, array &$params): string
+    {
+        $parts = [];
+
+        foreach ($values as $column => $value) {
+
+            if (!preg_match('/^[a-zA-Z0-9_]+$/', $column)) {
+                throw new DataHandlerException('Invalid column name: ' . $column);
+            }
+
+            $param = 'p' . count($params);
+
+            $parts[] = $column . ' = :' . $param;
+            $params[$param] = $value;
+        }
+
+        return implode(', ', $parts);
     }
 
     /**
@@ -206,7 +360,7 @@ class Pdo extends \ForwardFW\Service\DataHandler
      *
      * @return string Name of table inside DB
      */
-    protected function getTableName($tableName, $connectionName)
+    protected function getTableName(string $tableName, string $connectionName): string
     {
         $tablePrefix = $this->config->getTablePrefix();
 

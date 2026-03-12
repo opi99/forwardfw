@@ -14,8 +14,8 @@
 namespace ForwardFW\Exception;
 
 /**
- * Base Exception inside Framework.
+ * Base Exception of the Datahandler.
  */
-class DataHandler extends \ForwardFW\Exception
+class DataHandlerException extends \ForwardFW\Exception
 {
 }
