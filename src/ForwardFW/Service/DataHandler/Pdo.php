@@ -49,7 +49,7 @@ class Pdo extends \ForwardFW\Service\DataHandler
             $query .= ' LIMIT ' . $this->buildLimit($options['limit']);
         }
 
-        try {            
+        try {
             $stmt = $connection->prepare($query);
             $stmt->execute($params);
         } catch (\PDOException $e) {
@@ -75,16 +75,20 @@ class Pdo extends \ForwardFW\Service\DataHandler
 
         $params = [];
 
-        $sql =
+        $query =
             'UPDATE ' . $table .
             ' SET ' . $this->buildUpdate($options['values'], $params);
 
         if (!empty($options['where'])) {
-            $sql .= ' WHERE ' . $this->buildWhere($options['where'], $params);
+            $query .= ' WHERE ' . $this->buildWhere($options['where'], $params);
         }
 
-        $stmt = $connection->prepare($sql);
-        $stmt->execute($params);
+        try {
+            $stmt = $connection->prepare($query);
+            $stmt->execute($params);
+        } catch (\PDOException $e) {
+            throw new DataHandlerException($e->getMessage() . ' Used query: ' . $query);
+        }
 
         return $stmt->rowCount();
     }
@@ -107,13 +111,17 @@ class Pdo extends \ForwardFW\Service\DataHandler
 
         $insert = $this->buildInsert($options['values'], $params);
 
-        $sql =
+        $query =
             'INSERT INTO ' . $table .
             ' (' . $insert['columns'] . ')' .
             ' VALUES (' . $insert['values'] . ')';
 
-        $stmt = $connection->prepare($sql);
-        $stmt->execute($params);
+        try {
+            $stmt = $connection->prepare($query);
+            $stmt->execute($params);
+        } catch (\PDOException $e) {
+            throw new DataHandlerException($e->getMessage() . ' Used query: ' . $query);
+        }
 
         if ($options['returnId'] ?? false) {
             return (int)$connection->lastInsertId();
@@ -130,14 +138,18 @@ class Pdo extends \ForwardFW\Service\DataHandler
 
         $params = [];
 
-        $sql = 'DELETE FROM ' . $table;
+        $query = 'DELETE FROM ' . $table;
 
         if (!empty($options['where'])) {
-            $sql .= ' WHERE ' . $this->buildWhere($options['where'], $params);
+            $query .= ' WHERE ' . $this->buildWhere($options['where'], $params);
         }
 
-        $stmt = $connection->prepare($sql);
-        $stmt->execute($params);
+        try {
+            $stmt = $connection->prepare($query);
+            $stmt->execute($params);
+        } catch (\PDOException $e) {
+            throw new DataHandlerException($e->getMessage() . ' Used query: ' . $query);
+        }
 
         return $stmt->rowCount();
     }
