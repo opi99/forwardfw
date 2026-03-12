@@ -37,7 +37,6 @@ class ExceptionHandlingMiddleware implements \Psr\Http\Server\MiddlewareInterfac
                 ->createResponse(301, 'Moved')
                 ->withHeader('Location', $e->getLocation());
         } catch (\Throwable $e) {
-var_dump($e);flush();ob_flush();
             // Generic 500-Error
             $response = (new ResponseFactory())
                 ->createResponse(500, 'Not Found');
