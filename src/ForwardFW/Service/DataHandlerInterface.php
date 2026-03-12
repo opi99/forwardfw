@@ -59,7 +59,7 @@ interface DataHandlerInterface
      *
      * @return mixed Data from the connection.
      */
-    public function saveTo(string $connectionName, array $options);
+    public function update(string $connectionName, array $options);
 
     /**
      * Loads and initialize the connection handler.

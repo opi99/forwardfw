@@ -105,12 +105,14 @@ class EntityRepository
         $id = $data['id'];
         unset($data['id']);
 
-        $dataHandler->saveTo(
+        $dataHandler->update(
             'default',
             [
                 'to' => $tableName,
                 'values' => $data,
-                'where' => 'id = ' . $id,
+                'where' => [
+                    'id =' => $id,
+                ],
             ]
         );
 

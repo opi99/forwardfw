@@ -136,10 +136,10 @@ class DataHandler
      *
      * @return mixed Data from the connection.
      */
-    public function saveTo(string $connectionName, array $options)
+    public function update(string $connectionName, array $options)
     {
         $handler = $this->getConnection($connectionName);
-        return $handler->saveTo($connectionName, $options);
+        return $handler->update($connectionName, $options);
     }
 
     /**
