@@ -24,14 +24,12 @@ return [
         ],
         'crdate' => [
             'config' => [
-                'type' => 'input',
-                'readonly' => true,
+                'type' => 'passthrough',
             ],
         ],
         'tstamp' => [
             'config' => [
-                'type' => 'input',
-                'readonly' => true,
+                'type' => 'passthrough',
             ],
         ],
         'filename' => [

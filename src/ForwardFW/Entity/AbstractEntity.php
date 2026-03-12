@@ -18,7 +18,7 @@ namespace ForwardFW\Entity;
 abstract class AbstractEntity
 {
     protected ?int $id = null;
-    protected string $publicId;
+    protected ?string $publicId = null;
 
     protected int $crdate;
     protected int $tstamp;
@@ -34,7 +34,7 @@ abstract class AbstractEntity
         $this->id = $id;
     }
 
-    public function getPublicId(): string
+    public function getPublicId(): ?string
     {
         return $this->publicId;
     }

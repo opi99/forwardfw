@@ -199,7 +199,7 @@ class EntityManager
         if (null !== $identifierFieldPublic) {
             $identifierFieldPublicMetadata = $entityMetadata->getFieldMetadata($identifierFieldPublic);
             $identifierPublicMethod = EntityHelper::getterForProperty($entity, $identifierFieldPublic);
-            if ($entity->$identifierPublicMethod() !== '' && $entity->$identifierPublicMethod() !== 0) {
+            if ($entity->$identifierPublicMethod() !== null) {
                 return;
             }
             $identifierPublicMethod = EntityHelper::setterForProperty($entity, $identifierFieldPublic);
