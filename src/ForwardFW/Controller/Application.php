@@ -55,7 +55,6 @@ class Application extends ApplicationAbstract
     public function run(): ResponseInterface
     {
         $content = '';
-        $strProcessScreen = $this->getProcessScreen();
         $factory = new ResponseFactory();
         $response = $factory->createResponse();
         $response = $response->withHeader('Content-Type', $this->config->getContentType());
@@ -82,6 +81,11 @@ class Application extends ApplicationAbstract
         return $response;
     }
 
+    public function setRequest(RequestInterface $request): void
+    {
+        $this->request = $request;
+    }
+
     /**
      * Returns name of screen to be processed
      *
@@ -89,11 +93,26 @@ class Application extends ApplicationAbstract
      */
     public function getProcessScreen(): string
     {
-        $strProcessScreen = $this->getParameter('screen');
-        if (!isset($this->configuredScreens[$strProcessScreen])) {
-            $strProcessScreen = array_keys($this->configuredScreens)[0];
+        $processScreen = $this->getParameter('screen');
+
+        if ($processScreen === null) {
+            $paths = preg_split('/\//', $this->application->getRequest()->getRequestTarget(), 2, PREG_SPLIT_NO_EMPTY);
+
+            if (isset($paths[0])) {
+                $processScreen = mb_ucfirst($paths[0]);
+                if (isset($this->configuredScreens[$processScreen])) {
+                    $this->application->setRequest(
+                        $this->application->getRequest()->withRequestTarget($paths[1])
+                    );
+                    return $processScreen;
+                }
+            }
         }
-        return $strProcessScreen;
+
+        if ($processScreen === null || !isset($this->configuredScreens[$processScreen])) {
+            $processScreen = array_keys($this->configuredScreens)[0];
+        }
+        return $processScreen;
     }
 
     /**
@@ -103,7 +122,6 @@ class Application extends ApplicationAbstract
     {
         $screenController = null;
         $screenClassName = $this->configuredScreens[$screenName];
-
         if (class_exists($screenClassName)) {
             $screenController = new $screenClassName($this);
         } else {
