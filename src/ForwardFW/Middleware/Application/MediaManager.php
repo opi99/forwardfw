@@ -89,7 +89,7 @@ class MediaManager extends \ForwardFW\Middleware
         }
 
         // MIME Validierung
-        $allowed = ['image/jpeg', 'image/png', 'image/webp'];
+        $allowed = ['image/jpeg', 'image/png', 'image/webp', 'image/avif'];
         $mimeType = $file->getClientMediaType();
         if (!in_array($mimeType, $allowed, true)) {
             throw new \Exception('Invalid file type: ' . $mimeType);
@@ -109,7 +109,7 @@ class MediaManager extends \ForwardFW\Middleware
         $bb = substr($publicId, 2, 2);
          
         // Storage-Pfad: /storage/user/aa/bb/filename.ext
-        $baseStorage = $this->config->getStoragePath();
+        $baseStorage = rtrim($this->config->getStoragePath(), '/');
         $userPublicId = 'user123'; // @TODO später aus User-Entity
         $targetStoragePath = 'user/' . $userPublicId . '/' . $aa . '/' . $bb;
         $targetDir = $baseStorage . '/' . $targetStoragePath;
