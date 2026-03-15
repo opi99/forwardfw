@@ -25,13 +25,15 @@ use Psr\Http\Message\ResponseInterface;
 class Application extends ApplicationAbstract
 {
     /** @var array screens for this application */
-    protected $configuredScreens = [];
+    protected array $configuredScreens = [];
 
     /** @var \ForwardFW\Controller\ScreenInterface Actual screen to process */
-    protected $screen = null;
+    protected ?\ForwardFW\Controller\ScreenInterface $processScreen = null;
+
+    protected string $processScreenName = '';
 
     /** @var \ForwardFW\Templater\TemplaterInterface */
-    protected $templater = null;
+    protected ?\ForwardFW\Templater\TemplaterInterface $templater = null;
 
     public function __construct(
         \ForwardFW\Config\Application $config,
@@ -60,10 +62,11 @@ class Application extends ApplicationAbstract
         $response = $response->withHeader('Content-Type', $this->config->getContentType());
 
         try {
-            $this->screen = $this->getScreenController(
-                $this->getProcessScreen()
+            $this->processScreenName = $this->getProcessScreen();
+            $this->processScreen = $this->getScreenController(
+                $this->processScreenName
             );
-            if (!is_null($this->screen)) {
+            if (!is_null($this->processScreen)) {
                 // @TODO evaluate State of Screen
                 $content = $this->processView();
             }
@@ -81,11 +84,6 @@ class Application extends ApplicationAbstract
         return $response;
     }
 
-    public function setRequest(RequestInterface $request): void
-    {
-        $this->request = $request;
-    }
-
     /**
      * Returns name of screen to be processed
      *
@@ -101,9 +99,7 @@ class Application extends ApplicationAbstract
             if (isset($paths[0])) {
                 $processScreen = mb_ucfirst($paths[0]);
                 if (isset($this->configuredScreens[$processScreen])) {
-                    $this->application->setRequest(
-                        $this->application->getRequest()->withRequestTarget($paths[1])
-                    );
+                    $this->request = $this->request->withRequestTarget($paths[1] ?? '');
                     return $processScreen;
                 }
             }
@@ -140,16 +136,13 @@ class Application extends ApplicationAbstract
     {
         $templater = $this->getTemplater();
         $templater->setVar('APPLICATION', $this);
-        $templater->setVar('SCREEN', $this->screen->process());
+        $templater->setVar('SCREEN', $this->processScreen->process());
         return parent::processView();
     }
 
-    /**
-     * Returns the screen configuration for this application.
-     */
-    public function getScreens(): array
+    public function getProcessScreenName(): string
     {
-        return $this->configuredScreens;
+        return $this->processScreenName;
     }
 
     public function getTemplater(): \ForwardFW\Templater\TemplaterInterface
