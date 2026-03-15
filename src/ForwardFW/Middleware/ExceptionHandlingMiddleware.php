@@ -22,7 +22,7 @@ use ForwardFW\Factory\ResponseFactory;
 use ForwardFW\Exception\NotFoundException;
 use ForwardFW\Exception\RedirectException;
 
-class ExceptionHandlingMiddleware implements \Psr\Http\Server\MiddlewareInterface
+class ExceptionHandlingMiddleware extends \ForwardFW\Middleware
 {
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
@@ -37,7 +37,10 @@ class ExceptionHandlingMiddleware implements \Psr\Http\Server\MiddlewareInterfac
                 ->createResponse(301, 'Moved')
                 ->withHeader('Location', $e->getLocation());
         } catch (\Throwable $e) {
-            // Generic 500-Error
+            /** @var \Psr\Log\LoggerInterface */
+            $logger = $this->serviceManager->getService(\Psr\Log\LoggerInterface::class);
+            $logger->error('Error: ' . $e->getMessage());
+
             $response = (new ResponseFactory())
                 ->createResponse(500, 'Not Found');
             //$response->getBody()->write('Internal Server Error');
