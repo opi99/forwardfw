@@ -239,10 +239,13 @@ class EntityManager
     {
         foreach ($entityMetadata->getFieldsMetadata() as $fieldMetadata) {
             if ($fieldMetadata->getType() === 'slug') {
-                $slugSourceMethod = EntityHelper::getterForProperty($entity, $fieldMetadata->getConfig()['source']);
-                $source = $entity->$slugSourceMethod();
+                $slugSource = '';
+                foreach ($fieldMetadata->getConfig()['source'] as $sourceFieldName) {
+                    $slugSourceMethod = EntityHelper::getterForProperty($entity, $sourceFieldName);
+                    $slugSource .= $entity->$slugSourceMethod() . ' ';
+                }
 
-                $slug = SlugHelper::slugify($source, $fieldMetadata->getConfig());
+                $slug = SlugHelper::slugify(trim($slugSource), $fieldMetadata->getConfig());
 
                 $slugMethod = EntityHelper::setterForProperty($entity, $fieldMetadata->getFieldName());
                 $entity->$slugMethod($slug);
