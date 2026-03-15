@@ -48,7 +48,7 @@ class EntityExtractor
                 if (is_object($values[$fieldName])) {
                     $values[$fieldName] = $values[$fieldName]->getId();
                 } else {
-                    $values[$fieldName] = '';
+                    $values[$fieldName] = null;
                 }
             }
         }
