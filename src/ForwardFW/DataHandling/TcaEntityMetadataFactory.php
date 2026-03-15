@@ -30,7 +30,7 @@ class TcaEntityMetadataFactory
         $this->loadAllTca();
 
         if (!isset($this->tca[$entityName])) {
-            throw new \Exception('Entity not configured');
+            throw new \Exception('Entity "' . $entityName . '" not configured');
         }
 
         $localTca = $this->tca[$entityName];
