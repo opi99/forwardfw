@@ -31,17 +31,17 @@ class Application extends \ForwardFW\Config
     /**
      * @var string Name of the application
      */
-    private $strName = '';
+    private string $name = '';
 
     /**
      * @var array Screens of the application
      */
-    private $arScreens = '';
+    private array $screens = [];
 
     /**
      * @var string Identity of the application for get/post parameters
      */
-    private $strIdent = '';
+    private string $ident = '';
 
     /**
      * Default content type of this application
@@ -51,70 +51,64 @@ class Application extends \ForwardFW\Config
     /**
      * Sets name of the application.
      *
-     * @param string $strName Name of the application.
+     * @param string $name Name of the application.
      *
      * @return ForwardFW\Config\Application
      */
-    public function setName($strName)
+    public function setName(string $name): self
     {
-        $this->strName = $strName;
+        $this->name = $name;
         return $this;
     }
 
     /**
      * Sets screens of the application
      *
-     * @param array $arScreens Screens of the application.
+     * @param array $screens Screens of the application.
      *
      * @return ForwardFW\Config\Application
      */
-    public function setScreens(array $arScreens)
+    public function setScreens(array $screens): self
     {
-        $this->arScreens = $arScreens;
+        $this->screens = $screens;
         return $this;
     }
 
     /**
      * Sets the ident of the application.
      *
-     * @param string $strIdent Identity of the application for post/get parameters.
+     * @param string $ident Identity of the application for post/get parameters.
      *
      * @return ForwardFW\Config\Application
      */
-    public function setIdent($strIdent)
+    public function setIdent(string $ident): self
     {
-        $this->strIdent = $strIdent;
+        $this->ident = $ident;
         return $this;
     }
 
     /**
      * Get name of the application.
-     *
-     * @return string
      */
-    public function getName()
+    public function getName(): string
     {
-        return $this->strName;
+        return $this->name;
     }
 
     /**
      * Get screens of the application
-     *
-     * @return array
      */
-    public function getScreens()
+    public function getScreens(): array
     {
-        return $this->arScreens;
+        return $this->screens;
     }
 
     /**
      * Get ident of the application.
-     *
-     * @return string
      */
-    public function getIdent()
+    public function getIdent(): string
     {
-        return $this->strIdent;
+        return $this->ident;
     }
 
     public function getContentType(): string
@@ -122,8 +116,9 @@ class Application extends \ForwardFW\Config
         return $this->contentType;
     }
 
-    public function setContentType(string $contentType)
+    public function setContentType(string $contentType): self
     {
         $this->contentType = $contentType;
+        return $this;
     }
 }
