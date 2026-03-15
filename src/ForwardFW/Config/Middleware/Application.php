@@ -30,6 +30,18 @@ class Application extends \ForwardFW\Config\Middleware
      */
     private $config = '';
 
+    private string $xFrameOption = 'SAMEORIGIN';
+
+    private string $contentSecurityPolicy = 'default-src \'self\'';
+
+    /**
+     * Get config of the RequestResponse filter.
+     */
+    public function getConfig(): \ForwardFW\Config\Application
+    {
+        return $this->config;
+    }
+
     /**
      * Config of the RequestResponse filter
      *
@@ -41,13 +53,25 @@ class Application extends \ForwardFW\Config\Middleware
         return $this;
     }
 
-    /**
-     * Get config of the RequestResponse filter.
-     *
-     * @return ForwardFW\Config\Application
-     */
-    public function getConfig()
+    public function getXFrameOption(): string
     {
-        return $this->config;
+        return $this->xFrameOption;
+    }
+
+    public function setXFrameOption(string $xFrameOption): self
+    {
+        $this->xFrameOption = $xFrameOption;
+        return $this;
+    }
+
+    public function getContentSecurityPolicy(): string
+    {
+        return $this->contentSecurityPolicy;
+    }
+
+    public function setContentSecurityPolicy(string $contentSecurityPolicy): self
+    {
+        $this->contentSecurityPolicy = $contentSecurityPolicy;
+        return $this;
     }
 }

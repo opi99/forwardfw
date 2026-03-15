@@ -38,6 +38,9 @@ class Application extends \ForwardFW\Middleware
         );
         $response = $application->run();
 
+        $response = $response->withHeader('X-Frame-Options', $this->config->getXFrameOption());
+        $response = $response->withHeader('Content-Security-Policy', 'default-src \'self\'');
+
         $logger->info('End Application');
 
         /** @TODO No response? */
