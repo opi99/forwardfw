@@ -40,6 +40,8 @@ class MediaManager extends Application
     private string $storagePath = '/';
 
     private string $publicPath = '/';
+
+    private int $maxFileSize = 1024 * 1024; // 1 MB
     
     public function getStoragePath(): string
     {
@@ -60,6 +62,17 @@ class MediaManager extends Application
     public function setPublicPath(string $publicPath): self
     {
         $this->publicPath = $publicPath;
+        return $this;
+    }
+
+    public function getMaxFileSize(): int
+    {
+        return $this->maxFileSize;
+    }
+
+    public function setMaxFileSize(int $maxFileSize): self
+    {
+        $this->maxFileSize = $maxFileSize;
         return $this;
     }
 
