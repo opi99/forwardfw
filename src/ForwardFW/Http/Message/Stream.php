@@ -45,6 +45,14 @@ class Stream implements StreamInterface
 
     public function detach()
     {
+        if (!isset($this->stream)) {
+            throw new \RuntimeException('Stream is detached');
+        }
+
+        $stream = $this->stream;
+        unset($this->stream);
+
+        return $stream;
     }
 
     public function getSize()
@@ -72,6 +80,10 @@ class Stream implements StreamInterface
 
     public function rewind()
     {
+        if (!isset($this->stream)) {
+            throw new \RuntimeException('Stream is detached');
+        }
+
         rewind($this->stream);
     }
 
@@ -82,6 +94,10 @@ class Stream implements StreamInterface
 
     public function write($string)
     {
+        if (!isset($this->stream)) {
+            throw new \RuntimeException('Stream is detached');
+        }
+
         return fwrite($this->stream, $string) || 0;
     }
 
@@ -92,7 +108,25 @@ class Stream implements StreamInterface
 
     public function read($length)
     {
-        return 0;
+        if (!isset($this->stream)) {
+            throw new \RuntimeException('Stream is detached');
+        }
+
+        if (0 === $length) {
+            return '';
+        }
+
+        try {
+            $data = fread($this->stream, $length);
+        } catch (\Exception $e) {
+            throw new \RuntimeException('Unable to read from stream', 0, $e);
+        }
+
+        if (false === $data) {
+            throw new \RuntimeException('Unable to read from stream');
+        }
+
+        return $data;
     }
 
     public function getContents()
@@ -102,6 +136,10 @@ class Stream implements StreamInterface
 
     public function getMetadata($key = null)
     {
+        if (!isset($this->stream)) {
+            throw new \RuntimeException('Stream is detached');
+        }
+
         $metadata = stream_get_meta_data($this->stream);
         if ($key === null) {
             return $metadata;
