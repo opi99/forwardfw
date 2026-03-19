@@ -33,7 +33,8 @@ class BasicAuthService
         $serverParams = $request->getServerParams();
 
         if (isset($serverParams['PHP_AUTH_USER']) && isset($serverParams['PHP_AUTH_PW'])) {
-            if ($serverParams['PHP_AUTH_USER'] === $this->config->getUsername() && $serverParams['PHP_AUTH_PW'] === $this->config->getPassword()) {
+            $hash = $this->config->getPassword();
+            if ($serverParams['PHP_AUTH_USER'] === $this->config->getUsername() && password_verify($serverParams['PHP_AUTH_PW'], $hash)) {
                 return AuthResult::grant();
             }
             return AuthResult::deny(AuthReason::INVALID_CREDENTIALS);

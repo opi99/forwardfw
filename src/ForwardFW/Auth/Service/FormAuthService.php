@@ -48,7 +48,8 @@ class FormAuthService
                 return AuthResult::deny(AuthReason::INVALID_CREDENTIALS);
             }
 
-            if ($username === $this->config->getUsername() && $password === $this->config->getPassword()) {
+            $hash = $this->config->getPassword();
+            if ($username === $this->config->getUsername() && password_verify($password, $hash)) {
                 return AuthResult::grant();
             }
 
