@@ -131,7 +131,7 @@ class FormBuilder
     {
         $choices = [];
 
-        if ($fieldMetadata->getType() === 'select') {
+        if ($fieldMetadata->getUiType() === 'select') {
             $foreignEntityName = $fieldMetadata->getConfig()['foreign_entity'];
             $foreignEntities = $this->entityManager->getRepository($foreignEntityName)->findAll();
             // $foreignEntityMetadata = $this->entityManager->getMetadata($foreignEntityName);
@@ -150,7 +150,7 @@ class FormBuilder
     {
         $children = [];
 
-        if ($fieldMetadata->isRelation() && $fieldMetadata->getType() === 'inline') {
+        if ($fieldMetadata->isRelation() && $fieldMetadata->getUiType() === 'inline') {
             $foreignEntityName = $fieldMetadata->getConfig()['foreign_entity'];
             /** @TODO More then 1:1 relations */
             $foreignEntity = $this->getFieldValue($fieldMetadata, $entity, true);
@@ -172,7 +172,7 @@ class FormBuilder
         }
 
         $value = $entity->$methodName();
-        if ($fieldMetadata->isRelation() && $fieldMetadata->getType() !== 'inline') {
+        if ($fieldMetadata->isRelation() && $fieldMetadata->getUiType() !== 'inline') {
             if (is_object($value) && get_class($value) !== \ForwardFW\Entity\Media::class) {
                 /** @TODO Check fieldname for id */
                 $value = $value->getId();

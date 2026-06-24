@@ -38,9 +38,12 @@ class EntityExtractor
         $values = [];
 
         foreach ($this->entityMetadata->getFieldsMetadata() as $fieldName => $fieldMeta) {
-            $methodName = 'get' . str_replace(' ', '', ucwords(str_replace('_', ' ', $fieldName)));
-            if (method_exists($entity, $methodName)) {
-                $values[$fieldName] = $entity->$methodName();
+            $methodNameGet = 'get' . str_replace(' ', '', ucwords(str_replace('_', ' ', $fieldName)));
+            $methodNameIs = 'is' . str_replace(' ', '', ucwords(str_replace('_', ' ', $fieldName)));
+            if (method_exists($entity, $methodNameGet)) {
+                $values[$fieldName] = $entity->$methodNameGet();
+            } elseif (method_exists($entity, $methodNameIs)) {
+                $values[$fieldName] = $entity->$methodNameIs();
             } else {
                 $values[$fieldName] = '';
             }
@@ -50,9 +53,19 @@ class EntityExtractor
                 } else {
                     $values[$fieldName] = null;
                 }
+            } else {
+                $values[$fieldName] = $this->castValue($values[$fieldName], $fieldMeta);
             }
         }
 
         return $values;
+    }
+
+    protected function castValue(mixed $value, FieldMetadata $fieldMeta): mixed
+    {
+        return match ($fieldMeta->getDataType()) {
+            'int' => (int)$value,
+            default => (string)$value,
+        };
     }
 }

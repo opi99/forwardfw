@@ -23,6 +23,8 @@ abstract class AbstractEntity
     protected int $crdate;
     protected int $tstamp;
 
+    protected bool $hidden = false;
+
 
     public function getId(): ?int
     {
@@ -62,5 +64,15 @@ abstract class AbstractEntity
     public function setTstamp(int $tstamp): void
     {
         $this->tstamp = $tstamp;
+    }
+
+    public function isHidden(): bool
+    {
+        return $this->hidden;
+    }
+
+    public function setHidden(bool $hidden = true): void
+    {
+        $this->hidden = $hidden;
     }
 }

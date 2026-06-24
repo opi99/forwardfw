@@ -78,13 +78,17 @@ class TcaEntityMetadataFactory
 
         foreach ($columns as $name => $column) {
             $config = $column['config'] ?? [];
-            $type = $config['type'] ?? 'input';
-            $isRelation = $this->isRelation($type);
+            $uiType = $config['type'] ?? 'input';
+            $phpType = $config['phpType'] ?? $this->resolvePhpType($uiType, $name, $ctrl);
+            $dataType = $config['dataType'] ?? $this->resolveDataType($phpType, $name, $ctrl);
+            $isRelation = $this->isRelation($uiType);
             $isIdentifier = $this->isIdentifier($name, $ctrl);
 
             $fields['fields'][$name] = new FieldMetadata(
                 $name,
-                $type,
+                $dataType,
+                $phpType,
+                $uiType,
                 $isRelation,
                 $isIdentifier,
                 $config,
@@ -96,6 +100,25 @@ class TcaEntityMetadataFactory
         }
 
         return $fields;
+    }
+
+    private function resolvePhpType(string $uiType, string $name, array $ctrl): string
+    {
+        return match ($uiType) {
+            'check' => 'bool',
+            'autoincrement' => 'int',
+            default => ($ctrl['tstamp'] === $name || $ctrl['crdate'] === $name) ? 'int' : 'string',
+        };
+    }
+
+    private function resolveDataType(string $phpType, string $name, array $ctrl): string
+    {
+        return match ($phpType) {
+            'int' => 'int',
+            'bool' => 'int',
+            'string' => 'string',
+            default => 'string',
+        };
     }
 
     private function isRelation(string $fieldType): bool

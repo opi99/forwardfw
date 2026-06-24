@@ -58,7 +58,9 @@ class EntityMapper
         foreach ($this->entityMetadata->getFieldsMetadata() as $fieldName => $fieldMeta) {
             $value = ($values[$fieldName] ?? '');
             if ($fieldMeta->isRelation()) {
-                $value = $this->resolveRelation($fieldMeta, $values[$fieldName]);
+                $value = $this->resolveRelation($fieldMeta, $value);
+            } else {
+                $value = $this->castValue($value, $fieldMeta);
             }
             $methodName = 'set' . str_replace(' ', '', ucwords(str_replace('_', ' ', $fieldName)));
             if (method_exists($entity, $methodName)) {
@@ -76,7 +78,7 @@ class EntityMapper
         }
         $config = $fieldMetadata->getConfig();
 
-        if ($fieldMetadata->getType() === 'media') {
+        if ($fieldMetadata->getUiType() === 'media') {
             $foreignEntityClassName = \ForwardFW\Entity\Media::class;
         } else {
             // 1:1 Mapper, for the moment
@@ -89,5 +91,14 @@ class EntityMapper
         } else {
             return $this->entityManager->load($foreignEntityClassName, $identifier);
         }
+    }
+
+    protected function castValue(mixed $value, FieldMetadata $fieldMeta): mixed
+    {
+        return match ($fieldMeta->getPhpType()) {
+            'bool' => filter_var($value, FILTER_VALIDATE_BOOL, FILTER_NULL_ON_FAILURE),
+            'int' => (int)$value,
+            default => (string)$value,
+        };
     }
 }

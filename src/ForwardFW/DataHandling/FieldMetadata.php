@@ -22,7 +22,9 @@ class FieldMetadata
 {
     public function __construct(
         public readonly string $fieldName,
-        public readonly string $type,
+        public readonly string $dataType,
+        public readonly string $phpType,
+        public readonly string $uiType,
         public readonly bool $isRelation,
         public readonly bool $isIdentifier,
         public readonly array $config,
@@ -35,9 +37,19 @@ class FieldMetadata
         return $this->fieldName;
     }
 
-    public function getType(): string
+    public function getDataType(): string
     {
-        return $this->type;
+        return $this->dataType;
+    }
+
+    public function getPhpType(): string
+    {
+        return $this->phpType;
+    }
+
+    public function getUiType(): string
+    {
+        return $this->uiType;
     }
 
     public function isRelation(): bool

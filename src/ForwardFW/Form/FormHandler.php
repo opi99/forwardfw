@@ -60,7 +60,7 @@ class FormHandler
                 }
                 $value = $childEntity;
             } elseif ($node->getMetadata()->isRelation()) {
-                if ($node->getMetadata()->getType() === 'media') {
+                if ($node->getMetadata()->getUiType() === 'media') {
                     $foreignEntityName = \ForwardFW\Entity\Media::class;
                 } else {
                     $foreignEntityName = $node->getMetadata()->getConfig()['foreign_entity'];
@@ -71,10 +71,21 @@ class FormHandler
                 } else {
                     $value = null;
                 }
+            } else {
+                $value = $this->castValue($value, $node->getMetadata());
             }
 
             $this->setValue($entity, $fieldName, $value);
         }
+    }
+
+    protected function castValue(mixed $value, FieldMetadata $fieldMeta): mixed
+    {
+        return match ($fieldMeta->getPhpType()) {
+            'bool' => filter_var($value, FILTER_VALIDATE_BOOL, FILTER_NULL_ON_FAILURE),
+            'int' => (int)$value,
+            default => (string)$value,
+        };
     }
 
     protected function setValue(object $entity, string $fieldName, mixed $value): void

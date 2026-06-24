@@ -117,7 +117,7 @@ class EntityManager
             $fieldsMetadata = $metadata->getFieldsMetadata();
             foreach ($metadata->getFieldsRelation() as $fieldName)
             {
-                if ($fieldsMetadata[$fieldName]->getType() === 'inline') {
+                if ($fieldsMetadata[$fieldName]->getUiType() === 'inline') {
                     $relationMethod = EntityHelper::getterForProperty($entity, $fieldName);
                     $this->persist($entity->$relationMethod());
                 }
@@ -180,13 +180,13 @@ class EntityManager
         $identifierField = $entityMetadata->getIdentifierField();
         $identifierFieldMetadata = $entityMetadata->getFieldMetadata($identifierField);
         $identifierMethod = EntityHelper::setterForProperty($entity, $identifierField);
-        if ($identifierFieldMetadata->getType() === 'ULID') {
+        if ($identifierFieldMetadata->getUiType() === 'ULID') {
             $ulid = new \Ulid\Ulid();
             $entity->$identifierMethod(
                 $ulid->generate()
             );
         }
-        if ($identifierFieldMetadata->getType() === 'NanoID') {
+        if ($identifierFieldMetadata->getUiType() === 'NanoID') {
             $entity->$identifierMethod(
                 \Snortlin\NanoId\NanoId::nanoId()
             );
@@ -203,13 +203,13 @@ class EntityManager
                 return;
             }
             $identifierPublicMethod = EntityHelper::setterForProperty($entity, $identifierFieldPublic);
-            if ($identifierFieldPublicMetadata->getType() === 'ULID') {
+            if ($identifierFieldPublicMetadata->getUiType() === 'ULID') {
                 $ulid = new \Ulid\Ulid();
                 $entity->$identifierPublicMethod(
                     $ulid->generate()
                 );
             }
-            if ($identifierFieldPublicMetadata->getType() === 'NanoID') {
+            if ($identifierFieldPublicMetadata->getUiType() === 'NanoID') {
                 $entity->$identifierPublicMethod(
                     \Snortlin\NanoId\NanoId::nanoId()
                 );
@@ -238,7 +238,7 @@ class EntityManager
     protected function setSlugFields(object $entity, EntityMetadata $entityMetadata): void
     {
         foreach ($entityMetadata->getFieldsMetadata() as $fieldMetadata) {
-            if ($fieldMetadata->getType() === 'slug') {
+            if ($fieldMetadata->getUiType() === 'slug') {
                 $slugSource = '';
                 foreach ($fieldMetadata->getConfig()['source'] as $sourceFieldName) {
                     $slugSourceMethod = EntityHelper::getterForProperty($entity, $sourceFieldName);
