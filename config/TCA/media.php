@@ -53,18 +53,21 @@ return [
         'width' => [
             'config' => [
                 'type' => 'input',
+                'phpType' => 'int',
                 'readonly' => true,
             ],
         ],
         'height' => [
             'config' => [
                 'type' => 'input',
+                'phpType' => 'int',
                 'readonly' => true,
             ],
         ],
         'size' => [
             'config' => [
                 'type' => 'input',
+                'phpType' => 'int',
                 'readonly' => true,
             ],
         ],
