@@ -32,14 +32,16 @@ class EntityRepository
     {
         $tableName = $this->entityMetadata->getTableName();
         $dataHandler = $this->entityManager->getServiceManager()->getService(\ForwardFW\Service\DataHandlerInterface::class);
+        $restrictionService = $this->entityManager->getServiceManager()->getService(\ForwardFW\Service\RestrictionService::class);
 
-        $data = $dataHandler->loadFrom(
-            'default',
-            [
-                'select' => '*',
-                'from' => $tableName,
-            ]
-        );
+        $dataHandlerOptions = [
+            'select' => '*',
+            'from' => $tableName,
+        ];
+
+        $restrictionService->applyRestrictions($dataHandlerOptions, $this->entityMetadata);
+
+        $data = $dataHandler->loadFrom('default', $dataHandlerOptions);
 
         return $this->entityManager->getEntityMapper($this->entityMetadata->getRealName())->mapCollection($data);
     }
@@ -49,18 +51,20 @@ class EntityRepository
         $tableName = $this->entityMetadata->getTableName();
         $identifierField = $this->entityMetadata->getIdentifierField();
         $dataHandler = $this->entityManager->getServiceManager()->getService(\ForwardFW\Service\DataHandlerInterface::class);
+        $restrictionService = $this->entityManager->getServiceManager()->getService(\ForwardFW\Service\RestrictionService::class);
 
-        $data = $dataHandler->loadFrom(
-            'default',
-            [
-                'select' => '*',
-                'from' => $tableName,
-                'where' => [
-                    $identifierField . '=' => $identifier,
-                ],
-                'limit' => 1,
-            ]
-        );
+        $dataHandlerOptions = [
+            'select' => '*',
+            'from' => $tableName,
+            'where' => [
+                $identifierField . '=' => $identifier,
+            ],
+            'limit' => 1,
+        ];
+
+        $restrictionService->applyRestrictions($dataHandlerOptions, $this->entityMetadata);
+
+        $data = $dataHandler->loadFrom('default', $dataHandlerOptions);
 
         return isset($data[0]) ? $this->entityManager->getEntityMapper($this->entityMetadata->getRealName())->mapEntity($data[0]) : null;
     }

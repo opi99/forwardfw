@@ -49,6 +49,13 @@ class SimpleRouter extends \ForwardFW\Middleware
                 }
                 $subRequest = $request->withRequestTarget($nextRoute);
 
+                if ($routeConfig->hasRemoveRestrictions()) {
+                    /** @TODO Restore after Routing? */
+                    $restrictionService = $this->serviceManager->getService(\ForwardFW\Service\RestrictionServiceInterface::class);
+                    foreach ($routeConfig->getRemoveRestrictions() as $removeRestrictionClassName) {
+                        $restrictionService->removeRestriction($removeRestrictionClassName);
+                    }
+                }
                 $middlewareIterator = new MiddlewareIterator($routeConfig);
                 $middlewareIterator->setServiceManager($this->serviceManager);
                 $response = $middlewareIterator->handle($subRequest);

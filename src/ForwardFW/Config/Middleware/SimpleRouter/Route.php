@@ -29,6 +29,9 @@ class Route extends \ForwardFW\Config
     /** @var bool $loginRequired Defines, if a login is required for this route */
     private bool $loginRequired = false;
 
+    /** @var array $removeRestrictions Restrictions that can be removed on this route (maybe caused by login) */
+    private array $removeRestrictions = [];
+
     /**
      * Constructor
      */
@@ -58,6 +61,15 @@ class Route extends \ForwardFW\Config
     }
 
     /**
+     * Sets the class names, that should be removed from RestrictionManager by this path
+     */
+    public function removeRestriction(string $restrictionClassName): self
+    {
+        $this->removeRestrictions[] = $restrictionClassName;
+        return $this;
+    }
+
+    /**
      * Get Startpoint of the route.
      */
     public function getStart(): string
@@ -71,5 +83,15 @@ class Route extends \ForwardFW\Config
     public function isLoginRequired(): bool
     {
         return $this->loginRequired;
+    }
+
+    public function getRemoveRestrictions(): array
+    {
+        return $this->removeRestrictions;
+    }
+
+    public function hasRemoveRestrictions(): bool
+    {
+        return empty($this->removeRestrictions) ? false : true;
     }
 }

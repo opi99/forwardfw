@@ -67,7 +67,6 @@ class SimpleRouter extends \ForwardFW\Config\Middleware
         return $this;
     }
 
-
     /**
      * Get if a route not found error should be set or not.
      *
