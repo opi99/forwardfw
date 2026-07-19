@@ -20,48 +20,38 @@ use ForwardFW\Config\Middleware\Application;
 /**
  * Config for the MediaManager Application.
  */
-class MediaManager extends Application
+class UploadApplicationConfig extends Application
 {
     /**
      * @var string $executionClassName
      */
-    protected string $executionClassName = \ForwardFW\Middleware\Application\MediaManager::class;
+    protected string $executionClassName = \ForwardFW\Middleware\Application\UploadApplication::class;
 
     /**
      * @var string Name of the application
      */
-    private string $name = 'MediaManager';
+    private string $name = 'UploadApplication';
 
     /**
      * @var string Identity of the application for get/post parameters
      */
     private string $ident = '';
 
-    private string $storagePath = '/';
+    /**
+     * @var string Identifier of the storage in the Media Service
+     */
+    private string $storageIdentifier = '';
 
-    private string $publicPath = '/';
-
-    private int $maxFileSize = 1024 * 1024; // 1 MB
+    private int $maxFileSize = 1048576; // 1 MB
     
-    public function getStoragePath(): string
+    public function getStorageIdentifier(): string
     {
-        return $this->storagePath;
+        return $this->storageIdentifier;
     }
     
-    public function setStoragePath(string $storagePath): self
+    public function setStorageIdentifier(string $storageIdentifier): self
     {
-        $this->storagePath = $storagePath;
-        return $this;
-    }
-
-    public function getPublicPath(): string
-    {
-        return $this->publicPath;
-    }
-
-    public function setPublicPath(string $publicPath): self
-    {
-        $this->publicPath = $publicPath;
+        $this->storageIdentifier = $storageIdentifier;
         return $this;
     }
 

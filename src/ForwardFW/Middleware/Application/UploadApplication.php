@@ -18,6 +18,7 @@ namespace ForwardFW\Middleware\Application;
 use ForwardFW\Controller\ApplicationAbstract;
 use ForwardFW\Entity\Media;
 use ForwardFW\Factory\ResponseFactory;
+use ForwardFW\Service\MediaService;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\UploadedFileInterface;
@@ -26,7 +27,7 @@ use Psr\Http\Server\RequestHandlerInterface;
 /**
  * This Controller over one application.
  */
-class MediaManager extends \ForwardFW\Middleware
+class UploadApplication extends \ForwardFW\Middleware
 {
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
@@ -79,7 +80,7 @@ class MediaManager extends \ForwardFW\Middleware
     /**
      * Implementation for only one file per upload in the field named 'file'.
      */
-    protected function validateUploads(UploadedFileInterface $uploadedFile, Media $media): void
+    protected function validateUploads(UploadedFileInterface $uploadedFile, MediaService $mediaService): array
     {
         if ($uploadedFile->getError() !== UPLOAD_ERR_OK) {
             throw new \Exception('File upload error');
@@ -92,31 +93,14 @@ class MediaManager extends \ForwardFW\Middleware
             throw new \Exception('Not supported client mime type: ' . $mimeType);
         }
 
-        $originalFileName = $uploadedFile->getClientFilename();
-
-        $originalFileExtension = pathinfo($originalFileName, PATHINFO_EXTENSION);
-
-        $finfo = new \finfo(FILEINFO_MIME_TYPE + FILEINFO_EXTENSION);
-
-        $content = $uploadedFile->getStream()->read(8192);
-        $realMimeType = $finfo->buffer($content, FILEINFO_MIME_TYPE);
-        $mimeTypeExtensions = explode('/', $finfo->buffer($content, FILEINFO_EXTENSION));
-
-        if (!in_array($realMimeType, $allowed, true)) {
-            throw new \Exception('Not supported client mime type: ' . $realMimeType);
-        }
-        if ($realMimeType !== $mimeType) {
-            throw new \Exception('MimeType Cheating?');
-        }
-        if (!in_array($originalFileExtension, $mimeTypeExtensions, true)) {
-            throw new \Exception('File extension is not covered by file mime type');
-        }
-
         if ($uploadedFile->getSize() > $this->config->getMaxFileSize()) {
             throw new \Exception('File too large');
         }
-        
-        $media->setMimeType($realMimeType);
+
+        $originalFileName = $uploadedFile->getClientFilename();
+        $originalFileExtension = pathinfo($originalFileName, PATHINFO_EXTENSION);
+
+        return $mediaService->validateMimeTypeAndExtension($allowed, $originalFileName, $uploadedFile->getStream());
     }
     
     protected function moveUploadToTmp(UploadedFileInterface $uploadedFile): string
@@ -133,67 +117,6 @@ class MediaManager extends \ForwardFW\Middleware
         return $tmpFile;
     }
 
-    protected function processFileToRealLocation(UploadedFileInterface $uploadedFile, string $tmpFile, string $targetFullName, Media $media): \Imagick
-    {
-        try {
-            $image = new \Imagick($tmpFile);
-        } catch (\ImagickException $e) {
-            throw new \Exception("Keine gültige Bilddatei");
-        }
-        $image->stripImage();
-        $image->writeImage($targetFullName);
-
-        $media->setWidth($image->getImageWidth());
-        $media->setHeight($image->getImageHeight());
-        $media->setSize(filesize($targetFullName));
-
-        return $image;
-    }
-
-    protected function calculateTargetFilePathAndName(UploadedFileInterface $uploadedFile, Media $media): string
-    {
-        $originalName = $uploadedFile->getClientFilename();
-
-        $publicId = \Snortlin\NanoId\NanoId::nanoId();
-
-        // cleanen Dateinamen aus Originalname
-        $cleanFilename = preg_replace('/[^a-zA-Z0-9_-]/', '-', pathinfo($originalName, PATHINFO_FILENAME));
-        $cleanFilename = trim(preg_replace('/-+/', '-', $cleanFilename), '-');
-        $extension = strtolower(pathinfo($originalName, PATHINFO_EXTENSION));
-
-        // Unterordner aus der public_id
-        $aa = substr($publicId, 0, 2);
-        $bb = substr($publicId, 2, 2);
-
-        // Storage-Pfad: /storage/user/aa/bb/filename.ext
-        $baseStorage = rtrim($this->config->getStoragePath(), '/');
-        $userPublicId = 'user123'; // @TODO später aus User-Entity
-        $targetStoragePath = 'user/' . $userPublicId . '/' . $aa . '/' . $bb;
-        $targetDir = $baseStorage . '/' . $targetStoragePath;
-        $publicPath = rtrim($this->config->getPublicPath(), '/') . '/' . $targetStoragePath;
-
-        if (!is_dir($targetDir)) {
-            mkdir($targetDir, 0755, true);
-        }
-
-        // endgültiger Dateiname
-        $filename = $cleanFilename . '-' . $publicId . '.' . $extension;
-
-        $media->setPublicId($publicId);
-        $media->setFilename($filename);
-        $media->setExtension($extension);
-        $media->setPublicPath($publicPath);
-        return $targetDir . '/' . $filename;
-    }
-
-    protected function persistMedia(Media $media)
-    {
-        // Persist
-        $entityManager = $this->serviceManager->getService(\ForwardFW\DataHandling\EntityManagerInterface::class);
-        $entityManager->persist($media);
-        $entityManager->flush();
-    }
-
     protected function upload(ServerRequestInterface $request): array
     {
         $success = true;
@@ -204,21 +127,23 @@ class MediaManager extends \ForwardFW\Middleware
         }
 
         $uploadedFilesArray = is_array($uploadedFiles['file']) ? $uploadedFiles['file'] : [$uploadedFiles['file']];
+        $mediaService = $this->serviceManager->getService(\ForwardFW\Service\MediaServiceInterface::class);
 
         foreach ($uploadedFilesArray as $uploadedFile) {
             try {
                 // Entity erstellen
                 $media = new Media();
 
-                $this->validateUploads($uploadedFile, $media);
+                $resolvedMimeInfo = $this->validateUploads($uploadedFile, $mediaService);
                 $tmpFile = $this->moveUploadToTmp($uploadedFile);
 
-                $targetFullName = $this->calculateTargetFilePathAndName($uploadedFile, $media);
-                $this->processFileToRealLocation($uploadedFile, $tmpFile, $targetFullName, $media);
-                unlink($tmpFile);
-                $this->persistMedia($media);
+                $media = $mediaService->addMedia($tmpFile, $uploadedFile->getClientFilename(), $this->config->getStorageIdentifier(), $resolvedMimeInfo);
             } catch (\Exception $e) {
                 $success = false;
+            } finally {
+                if (is_file($tmpFile)) {
+                    unlink($tmpFile);
+                }
             }
         }
 
