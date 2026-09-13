@@ -132,6 +132,12 @@ class FormBuilder
         $choices = [];
 
         if ($fieldMetadata->getUiType() === 'select') {
+            if (!($fieldMetadata->getConfig()['required'] ?? false)) {
+                $choices[] = [
+                    'id' => '',
+                    'label' => '',
+                ];
+            }
             $foreignEntityName = $fieldMetadata->getConfig()['foreign_entity'];
             $foreignEntities = $this->entityManager->getRepository($foreignEntityName)->findAll();
             // $foreignEntityMetadata = $this->entityManager->getMetadata($foreignEntityName);
