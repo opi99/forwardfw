@@ -39,7 +39,7 @@ class Templater
      */
     public static function factory(
         Config\Templater\AbstractTemplater $config,
-        Controller\Application $application
+        Controller\ApplicationInterface $application
     ): \ForwardFW\Templater\TemplaterInterface
     {
         if (is_null(self::$instance)) {
@@ -51,13 +51,13 @@ class Templater
     /**
      * Creation method of Templater from config.
      *
-     * @param ForwardFW\Controller\Application $application The running application
+     * @param ForwardFW\Controller\ApplicationInterface $application The running application
      *
      * @return ForwardFW\Templater
      */
     private static function createTemplater(
         Config\Templater\AbstractTemplater $config,
-        Controller\Application $application
+        Controller\ApplicationInterface $application
     ): \ForwardFW\Templater\TemplaterInterface
     {
         $templaterClassName = $config->getExecutionClassName();
