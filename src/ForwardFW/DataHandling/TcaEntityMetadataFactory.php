@@ -81,7 +81,7 @@ class TcaEntityMetadataFactory
             $uiType = $config['type'] ?? 'input';
             $phpType = $config['phpType'] ?? $this->resolvePhpType($uiType, $name, $ctrl);
             $dataType = $config['dataType'] ?? $this->resolveDataType($phpType, $name, $ctrl);
-            $isRelation = $this->isRelation($uiType);
+            $isRelation = $this->isRelation($uiType, $config);
             $isIdentifier = $this->isIdentifier($name, $ctrl);
 
             $fields['fields'][$name] = new FieldMetadata(
@@ -121,13 +121,21 @@ class TcaEntityMetadataFactory
         };
     }
 
-    private function isRelation(string $fieldType): bool
+    private function isRelation(string $fieldType, array $fieldConfig): bool
     {
-        return in_array(
-            $fieldType,
-            ['inline', 'select', 'group', 'media'],
-            true
-        );
+        switch ($fieldType) {
+            case 'inline':
+            case 'select':
+                if (isset($fieldConfig['foreign_entity'])) {
+                    return true;
+                }
+                return false;
+            case 'group':
+            case 'media':
+                return true;
+            default:
+                return false;
+        }
     }
 
     private function isIdentifier(string $fieldName, array $ctrl): bool

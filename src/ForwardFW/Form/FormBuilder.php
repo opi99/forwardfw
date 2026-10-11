@@ -132,21 +132,31 @@ class FormBuilder
         $choices = [];
 
         if ($fieldMetadata->getUiType() === 'select') {
-            if (!($fieldMetadata->getConfig()['required'] ?? false)) {
+
+            $selectConfig = $fieldMetadata->getConfig();
+
+            if (!($selectConfig['required'] ?? false)) {
                 $choices[] = [
-                    'id' => '',
                     'label' => '',
+                    'value' => '',
                 ];
             }
-            $foreignEntityName = $fieldMetadata->getConfig()['foreign_entity'];
-            $foreignEntities = $this->entityManager->getRepository($foreignEntityName)->findAll();
-            // $foreignEntityMetadata = $this->entityManager->getMetadata($foreignEntityName);
 
-            foreach ($foreignEntities as $foreignEntity) {
-                $choices[] = [
-                    'id' => $foreignEntity->getId(),
-                    'label' => $foreignEntity->getTitle(),
-                ];
+            if (isset($selectConfig['items'])) {
+                $choices = array_merge($choices, $selectConfig['items']);
+            }
+
+            if (isset($selectConfig['foreign_entity'])) {
+                $foreignEntityName = $selectConfig['foreign_entity'];
+                $foreignEntities = $this->entityManager->getRepository($foreignEntityName)->findAll();
+                // $foreignEntityMetadata = $this->entityManager->getMetadata($foreignEntityName);
+
+                foreach ($foreignEntities as $foreignEntity) {
+                    $choices[] = [
+                        'label' => $foreignEntity->getTitle(),
+                        'value' => $foreignEntity->getId(),
+                    ];
+                }
             }
         }
         return $choices;

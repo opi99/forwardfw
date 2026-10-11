@@ -20,7 +20,7 @@
                 {% elseif field.renderType == 'select' %}
                     <select name="{{ field.htmlName }}"{% if field.attributes.required %} required{% endif %}>
                         {% for option in field.choices %}
-                            <option value="{{ option.id }}" {% if option.id == field.value %}selected{% endif %}>
+                            <option value="{{ option.value }}" {% if option.value == field.value %}selected{% endif %}>
                                 {{ option.label }}
                             </option>
                         {% endfor %}
